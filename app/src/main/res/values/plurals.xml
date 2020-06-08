@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="images_modified">
+        <item quantity="zero">@string/images_modified_none</item>
+        <item quantity="one">@string/image_modified</item>
+        <item quantity="other">@string/images_modified</item>
+    </plurals>
+
+    <plurals name="images_skipped">
+        <item quantity="zero">@string/images_skipped_none</item>
+        <item quantity="one">@string/image_skipped</item>
+        <item quantity="other">@string/images_skipped</item>
+    </plurals>
+</resources>

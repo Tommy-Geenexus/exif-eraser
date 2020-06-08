@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/fragment_main"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/fragment_main"
+        android:name="com.none.tom.exiferaser.ui.main.MainFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/main_to_settings"
+            app:destination="@id/fragment_settings"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
+        <action
+            android:id="@+id/main_to_images"
+            app:destination="@id/fragment_images"
+            app:enterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_settings"
+        android:name="com.none.tom.exiferaser.ui.settings.SettingsFragment"
+        android:label="@string/settings" />
+
+    <fragment
+        android:id="@+id/fragment_images"
+        android:name="com.none.tom.exiferaser.ui.images.ImagesFragment"
+        tools:layout="@layout/fragment_images" />
+
+</navigation>

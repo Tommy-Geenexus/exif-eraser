@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.ExifEraser" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorAccent">@color/color_red</item>
+        <item name="colorSecondary">@color/color_red</item>
+    </style>
+
+    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
+        <item name="colorPrimary">@color/color_teal</item>
+        <item name="colorPrimaryDark">@color/color_teal_dark</item>
+        <item name="colorOnBackground">@color/color_teal_light</item>
+        <item name="colorDrawable">@color/csl_drawable_day</item>
+    </style>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
+        <item name="colorPrimary">@color/color_grey900</item>
+        <item name="colorPrimaryDark">@color/color_black</item>
+        <item name="colorOnBackground">@color/color_red</item>
+        <item name="colorDrawable">@color/csl_drawable_night</item>
+    </style>
+
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="TextAppearance.CardTitle" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/font_small</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.BoldTitle" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

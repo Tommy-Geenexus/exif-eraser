@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:key="@string/key_file_system"
+        app:title="@string/file_system">
+        <com.none.tom.exiferaser.ui.settings.ImageButtonPreference
+            app:icon="@drawable/ic_folder"
+            app:key="@string/key_default_path_open"
+            app:title="@string/default_path_open" />
+
+        <com.none.tom.exiferaser.ui.settings.ImageButtonPreference
+            app:icon="@drawable/ic_save_alt"
+            app:key="@string/key_default_path_save"
+            app:title="@string/default_path_save" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/image">
+        <CheckBoxPreference
+            app:icon="@drawable/ic_flip"
+            app:key="@string/key_image_orientation"
+            app:summaryOff="@string/disabled"
+            app:summaryOn="@string/enabled"
+            app:title="@string/image_orientation" />
+
+        <EditTextPreference
+            app:dialogTitle="@string/default_display_name_suffix"
+            app:icon="@drawable/ic_title"
+            app:key="@string/key_default_display_name_suffix"
+            app:title="@string/default_display_name_suffix" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/ui">
+        <com.none.tom.exiferaser.ui.settings.NightModeListPreference
+            app:icon="@drawable/ic_theme_night"
+            app:key="@string/key_night_mode"
+            app:title="@string/night_mode" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/about">
+        <Preference
+            app:icon="@drawable/ic_bug_report"
+            app:key="@string/key_bug_report"
+            app:title="@string/report_bug" />
+        <Preference
+            app:icon="@drawable/ic_info"
+            app:key="@string/key_version"
+            app:title="@string/version" />
+    </PreferenceCategory>
+</PreferenceScreen>
