@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@color/color_teal_500</item>
+        <item name="colorPrimarySurface">@android:color/white</item>
+        <item name="colorSecondary">@android:color/white</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnSurface">@color/color_teal_500</item>
+        <item name="colorOk">@color/color_green</item>
+        <item name="colorDrawable">@color/csl_drawable_day</item>
+        <item name="colorDrawableInverse">@color/csl_drawable_night</item>
+        <item name="colorLogo">@color/color_teal_500</item>
+        <item name="colorLogoDark">@color/color_teal_500_dark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarDividerColor">@color/csl_divider</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <style name="Theme.ExifEraser.Launcher">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/color_teal_500</item>
+        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
+
+    <style name="ThemeOverlay.ExifEraser.Sheet.Bottom" parent="ThemeOverlay.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+</resources>

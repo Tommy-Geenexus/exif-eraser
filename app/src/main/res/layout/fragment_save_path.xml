@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_item_heigth"
+        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginTop="@dimen/spacing_normal"
+        android:layout_marginEnd="@dimen/spacing_normal"
+        android:gravity="center_vertical"
+        android:text="@string/path_save_choose" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/path_save_default"
+        style="@style/Widget.ExifEraser.Button.Sheet.Bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_item_heigth"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:text="@string/path_save_default"
+        app:icon="@drawable/ic_save_alt_default" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/path_save_custom"
+        style="@style/Widget.ExifEraser.Button.Sheet.Bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_sheet_item_heigth"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_normal"
+        android:text="@string/path_save_custom"
+        app:icon="@drawable/ic_launch" />
+</LinearLayout>

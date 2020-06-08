@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/fragment_main">
+
+    <fragment
+        android:id="@+id/fragment_main"
+        android:name="com.none.tom.exiferaser.main.ui.MainFragment"
+        tools:layout="@layout/fragment_main">
+
+        <argument
+            android:name="shortcutIntent"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/main_to_settings"
+            app:destination="@id/fragment_settings" />
+
+        <action
+            android:id="@+id/main_to_selection_save_path"
+            app:destination="@id/fragment_selection_save_path" />
+
+        <action
+            android:id="@+id/main_to_selection"
+            app:destination="@id/fragment_selection"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/fragment_selection_save_path"
+        android:name="com.none.tom.exiferaser.savepath.ui.SavePathFragment">
+
+        <action
+            android:id="@+id/selection_save_path_to_selection"
+            app:destination="@id/fragment_selection" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/fragment_settings"
+        android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment" />
+
+    <fragment
+        android:id="@+id/fragment_selection"
+        android:name="com.none.tom.exiferaser.selection.ui.SelectionFragment"
+        tools:layout="@layout/fragment_selection">
+
+        <argument
+            android:name="save_path"
+            app:argType="android.net.Uri"
+            app:nullable="false" />
+    </fragment>
+
+</navigation>

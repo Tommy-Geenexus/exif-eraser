@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.ExifEraser" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="alertDialogTheme">@style/ThemeOverlay.ExifEraser.Dialog.Alert</item>
+        <item name="preferenceTheme">@style/ThemeOverlay.ExifEraser.Preference</item>
+    </style>
+
+    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@color/color_teal_500</item>
+        <item name="colorPrimarySurface">@android:color/white</item>
+        <item name="colorSecondary">@android:color/white</item>
+        <item name="colorOnPrimary">@android:color/black</item>
+        <item name="colorOnSurface">@color/color_teal_500</item>
+        <item name="colorOk">@color/color_green</item>
+        <item name="colorDrawable">@color/csl_drawable_day</item>
+        <item name="colorDrawableInverse">@color/csl_drawable_night</item>
+        <item name="colorLogo">@color/color_teal_500</item>
+        <item name="colorLogoDark">@color/color_teal_500_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.ExifEraser.Launcher">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="ThemeOverlay.ExifEraser.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">?attr/colorAccent</item>
+    </style>
+
+    <style name="ThemeOverlay.ExifEraser.Preference" parent="@style/PreferenceThemeOverlay">
+        <item name="android:layout">@layout/fragment_settings</item>
+    </style>
+
+    <style name="ThemeOverlay.ExifEraser.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:colorControlActivated">?attr/colorAccent</item>
+    </style>
+</resources>

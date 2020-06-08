@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="action_image_source_select_camera" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_CAMERA</string>
+    <string name="action_image_source_select_image" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE</string>
+    <string name="action_image_source_select_image_directory" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE_DIRECTORY</string>
+    <string name="action_image_source_select_images" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE</string>
+    <string name="action_shortcut_choose_image" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE</string>
+    <string name="action_shortcut_choose_image_directory" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE_DIRECTORY</string>
+    <string name="action_shortcut_choose_images" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGES</string>
+    <string name="action_shortcut_launch_camera" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_LAUNCH_CAMERA</string>
+
+    <string name="all_done">All done!</string>
+
+    <string name="always">Always</string>
+
+    <string name="app_name" translatable="false">ExifEraser</string>
+
+    <string name="automatically">Automatically</string>
+
+    <string name="become_translator">Help Translate</string>
+
+    <string name="camera">Camera</string>
+
+    <string name="choose_image">Choose image</string>
+    <string name="choose_image_directory">Choose image directory</string>
+    <string name="choose_image_source">Choose your\npreferred image source</string>
+    <string name="choose_images">Choose images</string>
+
+    <string name="confirm">Confirm</string>
+
+    <string name="custom">Custom</string>
+
+    <string name="default_display_name_suffix">Default Display Name Suffix</string>
+    <string name="default_path_open">Default Open Path</string>
+    <string name="default_path_save">Default Save Path</string>
+
+    <string name="details">Details</string>
+
+    <string name="file_provider_package" translatable="false">com.none.tom.exiferaser.fileprovider</string>
+    <string name="file_system">Filesystem</string>
+
+    <string name="github">Github</string>
+
+    <string name="id_shortcut_choose_image" tools:keep="@string/id_shortcut_choose_image" translatable="false">choose_image</string>
+    <string name="id_shortcut_choose_image_directory" tools:keep="@string/id_shortcut_choose_image_directory" translatable="false">choose_image_directory</string>
+    <string name="id_shortcut_choose_images" tools:keep="@string/id_shortcut_choose_images" translatable="false">choose_images</string>
+    <string name="id_shortcut_launch_camera" tools:keep="@string/id_shortcut_launch_camera" translatable="false">launch_camera</string>
+
+    <string name="image">Image</string>
+    <string name="image_directory">Image\nDirectory</string>
+    <string name="image_file">Image\nFile</string>
+    <string name="image_files">Image\nFiles</string>
+    <string name="image_orientation">Preserve Orientation</string>
+    <string name="image_share_by_default">Share By Default</string>
+    <string name="image_supported_formats">Supported Image Formats</string>
+
+    <string name="images_modified" tools:ignore="PluralsCandidate">Modified %d of %d images</string>
+
+    <string name="key_batch_image_processing" translatable="false">batch_image_processing</string>
+    <string name="key_bug_report" translatable="false">bug_report</string>
+    <string name="key_default_display_name_suffix" translatable="false">default_display_name_suffix</string>
+    <string name="key_default_path_open" translatable="false">default_path_open</string>
+    <string name="key_default_path_save" translatable="false">default_path_save</string>
+    <string name="key_file_system" translatable="false">file_system</string>
+    <string name="key_image_orientation" translatable="false">image_orientation</string>
+    <string name="key_image_share_by_default" translatable="false">image_share_by_default</string>
+    <string name="key_image_supported_formats" translatable="false">image_supported_formats</string>
+    <string name="key_night_mode" translatable="false">night_mode</string>
+    <string name="key_translate" translatable="false">translate</string>
+    <string name="key_version" translatable="false">version</string>
+
+    <string name="low_batt_only">Low Battery Only</string>
+
+    <string name="miscellaneous">Miscellaneous</string>
+
+    <string name="modified">Modified</string>
+
+    <string name="never">Never</string>
+
+    <string name="night_mode">Night Mode</string>
+
+    <string name="none">None</string>
+
+    <string name="onesky">OneSky</string>
+
+    <string name="path_save_choose">Choose Save Path</string>
+    <string name="path_save_custom">Custom Save Path</string>
+    <string name="path_save_default">Default Save Path</string>
+
+    <string name="preserve_image_orientation_off">Don\'t preserve the original image orientation</string>
+    <string name="preserve_image_orientation_on">Preserve the original image orientation</string>
+
+    <string name="reorder">Reorder</string>
+
+    <string name="report_bug">Report Issue</string>
+
+    <string name="saved">Saved</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="share">Share</string>
+    <string name="share_images_by_default_off">Don\'t share images by default after modification</string>
+    <string name="share_images_by_default_on">Share images by default after modification</string>
+    <string name="share_via">Share via</string>
+
+    <string name="suffix">Suffix</string>
+
+    <string name="summary">Summary</string>
+
+    <string name="take_picture">Take Picture</string>
+
+    <string name="ui">UI</string>
+
+    <string name="unmodified">Unmodified</string>
+
+    <string name="unsaved">Unsaved</string>
+
+    <string name="url_issue" translatable="false">https://github.com/Tommy-Geenexus/exif-eraser/issues</string>
+
+    <string name="version">Version</string>
+</resources>

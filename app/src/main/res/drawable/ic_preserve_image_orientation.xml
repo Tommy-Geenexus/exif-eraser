@@ -1,0 +1,26 @@
+<!--
+    Copyright 2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+    Copyright Google LLC
+
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+    in compliance with the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License
+    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+    or implied. See the License for the specific language governing permissions and limitations under
+    the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="?attr/colorDrawable"
+        android:pathData="m12.0508,0c-0.23,0 -0.4402,0.0191 -0.6602,0.0391l3.8086,3.8105 1.3301,-1.3301C19.7993,4.0695 22.14,7.24 22.5,11H24C23.49,4.84 18.3408,0 12.0508,0ZM0,13c0.51,6.16 5.6592,11 11.9492,11 0.23,0 0.4402,-0.0193 0.6602,-0.0293L8.8008,20.1504 7.4707,21.4902C4.2007,19.9302 1.86,16.76 1.5,13Z" />
+    <path
+        android:fillColor="?attr/colorDrawable"
+        android:pathData="m15.5,12l0,3.5L8.5,15.5L8.5,12L7.5,12l0,3.5c0,0.55 0.45,1 1,1l7,0c0.55,0 1,-0.45 1,-1l0,-3.5zM12.5,12.335 L13.795,11.045 14.5,11.75 12,14.25 9.5,11.75 10.205,11.045 11.5,12.335L11.5,7.5l1,0z" />
+</vector>

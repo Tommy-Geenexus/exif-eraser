@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="Widget.ExifEraser.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.ExifEraser.TextInputEditText.OutlinedBox
+        </item>
+        <item name="boxStrokeColor">?attr/colorAccent</item>
+        <item name="hintTextColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="Widget.ExifEraser.Button.Sheet.Bottom" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?android:textColorPrimaryNoDisable</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="iconPadding">@dimen/spacing_large</item>
+        <item name="iconTint">?attr/colorDrawable</item>
+        <item name="iconTintMode">src_in</item>
+    </style>
+</resources>

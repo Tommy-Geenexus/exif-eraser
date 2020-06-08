@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="all_done">Alles erledigt!</string>
+
+    <string name="always">Immer</string>
+
+    <string name="automatically">Automatisch</string>
+
+    <string name="become_translator">Übersetzen helfen</string>
+
+    <string name="camera">Kamera</string>
+
+    <string name="choose_image">Wähle Bild</string>
+    <string name="choose_image_directory">Wähle Bildordner</string>
+    <string name="choose_image_source">Wähle deine bevorzugte Bildquelle</string>
+    <string name="choose_images">Wähle Bilder</string>
+
+    <string name="confirm">Übernehmen</string>
+
+    <string name="custom">Benutzerdefiniert</string>
+
+    <string name="default_display_name_suffix">Standard-Anzeigename-Zusatz</string>
+    <string name="default_path_open">Standard-Öffnungspfad</string>
+    <string name="default_path_save">Standard-Speicherpfad</string>
+
+    <string name="details">Details</string>
+
+    <string name="file_system">Dateisystem</string>
+
+    <string name="github">Github</string>
+
+    <string name="image">Bild</string>
+    <string name="image_directory">Bildordner</string>
+    <string name="image_file">Bilddatei</string>
+    <string name="image_files">Bilddateien</string>
+    <string name="image_orientation">Ausrichtung beibehalten</string>
+    <string name="image_share_by_default">Standardmäßig teilen</string>
+    <string name="image_supported_formats">Unterstützte Bildformate</string>
+
+    <string name="images_modified">%d von %d Bilder modifiziert</string>
+
+    <string name="low_batt_only">Bei niedrigem Akkustand</string>
+
+    <string name="miscellaneous">Sonstiges</string>
+
+    <string name="modified">Modifiziert</string>
+
+    <string name="never">Niemals</string>
+
+    <string name="night_mode">Dunkles Design</string>
+
+    <string name="none">Nicht festgelegt</string>
+
+    <string name="onesky">OneSky</string>
+
+    <string name="path_save_choose">Wähle Speicherpfad</string>
+    <string name="path_save_custom">Benutzerdefinierter Speicherpfad</string>
+    <string name="path_save_default">Standard-Speicherpfad</string>
+
+    <string name="preserve_image_orientation_off">Verwerfe die ursprüngliche Bildausrichtung</string>
+    <string name="preserve_image_orientation_on">Behalte die ursprüngliche Bildausrichtung bei</string>
+
+    <string name="reorder">Neu anordnen</string>
+
+    <string name="report_bug">Fehler melden</string>
+
+    <string name="saved">Gespeichert</string>
+
+    <string name="settings">Einstellungen</string>
+
+    <string name="share">Teilen</string>
+    <string name="share_images_by_default_off">Bilder nach Modifikation nicht teilen</string>
+    <string name="share_images_by_default_on">Bilder nach Modifikation teilen</string>
+    <string name="share_via">Teile mit</string>
+
+    <string name="suffix">Zusatz</string>
+
+    <string name="summary">Bericht</string>
+
+    <string name="take_picture">Bild aufnehmen</string>
+
+    <string name="ui">Benutzeroberfläche</string>
+
+    <string name="unmodified">Unmodifiziert</string>
+
+    <string name="unsaved">Ungespeichert</string>
+
+    <string name="version">Version</string>
+</resources>

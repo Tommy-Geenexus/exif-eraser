@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.ExifEraser.Title.Toolbar" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextAppearance.ExifEraser.Title.Small" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/font_small</item>
+    </style>
+
+    <style name="TextAppearance.ExifEraser.Title.Large" parent="@style/TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/font_large</item>
+    </style>
+
+    <style name="TextAppearance.ExifEraser.Button" parent="@style/TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">?android:textColorPrimaryInverseNoDisable</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

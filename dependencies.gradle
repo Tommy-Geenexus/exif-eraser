@@ -1,0 +1,86 @@
+ext {
+    kotlin_version = "1.4.21"
+    dagger_version = "2.30.1-alpha"
+    detekt_version = "1.14.2"
+    exhaustive_version = "0.1.1"
+    ktlint_version = "9.4.1"
+    nav_version = "2.3.2"
+    versions_version = "0.36.0"
+    wire_version = "3.3.0"
+
+    def activity_version = "1.2.0-beta02"
+    def app_compat_version = "1.2.0"
+    def coil_version = "1.1.0"
+    def constraint_layout_version = "2.0.4"
+    def core_version = "1.3.2"
+    def corner_sheet_version = "v1.0.1"
+    def dagger_vm_version = "1.0.0-alpha02"
+    def data_store_version = "1.0.0-alpha05"
+    def desugar_version = "1.0.10"
+    def fragment_version = "1.3.0-beta02"
+    def lifecycle_version = "2.2.0"
+    def material_version = "1.3.0-alpha04"
+    def orbit_version = "2.1.0"
+    def preference_version = "1.1.1"
+    def recycler_view_version = "1.2.0-beta01"
+    def timber_version = "4.7.1"
+    def wire_version = "3.5.0"
+
+    def leak_canary_version = "2.5"
+
+    def junit_version = "4.13.1"
+
+    def junit_ext_version = "1.1.2"
+    def espresso_version = "3.3.0"
+
+    android_test_dependencies = [
+            "junit_ext": "androidx.test.ext:junit:$junit_ext_version",
+            "espresso" : "androidx.test.espresso:espresso-core:$espresso_version"
+    ]
+
+    implementation_dependencies = [
+            "activity"            : "androidx.activity:activity-ktx:$activity_version",
+            "app_compat"          : "androidx.appcompat:appcompat:$app_compat_version",
+            "coil"                : "io.coil-kt:coil:$coil_version",
+            "constraint_layout"   : "androidx.constraintlayout:constraintlayout:$constraint_layout_version",
+            "core"                : "androidx.core:core-ktx:$core_version",
+            "corner_sheet"        : "com.github.heyalex.cornersheet:core:$corner_sheet_version",
+            "dagger_hilt"         : "com.google.dagger:hilt-android:$dagger_version",
+            "dagger_vm"           : "androidx.hilt:hilt-lifecycle-viewmodel:$dagger_vm_version",
+            "data_store_prefs"    : "androidx.datastore:datastore-preferences:$data_store_version",
+            "data_store_proto"    : "androidx.datastore:datastore-core:$data_store_version",
+            "fragment"            : "androidx.fragment:fragment-ktx:$fragment_version",
+            "kotlin"              : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+            "lifecycle_extensions": "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            "lifecycle_vm"        : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
+            "livedata"            : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version",
+            "material"            : "com.google.android.material:material:$material_version",
+            "navigation_fragment" : "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            "navigation_ui"       : "androidx.navigation:navigation-ui-ktx:$nav_version",
+            "orbit_coroutines"    : "com.babylon.orbit2:orbit-coroutines:$orbit_version",
+            "orbit_livedata"      : "com.babylon.orbit2:orbit-livedata:$orbit_version",
+            "orbit_vm"            : "com.babylon.orbit2:orbit-viewmodel:$orbit_version",
+            "preference"          : "androidx.preference:preference-ktx:$preference_version",
+            "recycler_view"       : "androidx.recyclerview:recyclerview:$recycler_view_version",
+            "timber"              : "com.jakewharton.timber:timber:$timber_version",
+            "wire"                : "com.squareup.wire:wire-runtime:$wire_version"
+
+    ]
+
+    core_library_desugaring_dependencies = [
+            desugar: "com.android.tools:desugar_jdk_libs:$desugar_version"
+    ]
+
+    debug_implementation_dependencies = [
+            "leak_canary": "com.squareup.leakcanary:leakcanary-android:$leak_canary_version"
+    ]
+
+    kapt_dependencies = [
+            "dagger_hilt_compiler": "com.google.dagger:hilt-android-compiler:$dagger_version",
+            "dagger_vm_compiler"  : "androidx.hilt:hilt-compiler:$dagger_vm_version"
+    ]
+
+    test_dependencies = [
+            "junit": "junit:junit:$junit_version"
+    ]
+}

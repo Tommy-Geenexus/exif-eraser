@@ -1,0 +1,3 @@
+include ':exifinterfaceextended'
+include ':app'
+rootProject.name = "ExifEraser"

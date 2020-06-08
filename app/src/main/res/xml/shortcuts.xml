@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_choose_image"
+        android:shortcutId="choose_image"
+        android:shortcutLongLabel="@string/choose_image"
+        android:shortcutShortLabel="@string/choose_image"
+        tools:targetApi="n_mr1">
+
+        <intent
+            android:action="com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE"
+            android:targetClass="com.none.tom.exiferaser.ExifEraserActivity"
+            android:targetPackage="com.none.tom.exiferaser" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_choose_images"
+        android:shortcutId="choose_images"
+        android:shortcutLongLabel="@string/choose_images"
+        android:shortcutShortLabel="@string/choose_images"
+        tools:targetApi="n_mr1">
+
+        <intent
+            android:action="com.none.tom.exiferaser.ACTION_CHOOSE_IMAGES"
+            android:targetClass="com.none.tom.exiferaser.ExifEraserActivity"
+            android:targetPackage="com.none.tom.exiferaser" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_choose_image_directory"
+        android:shortcutId="choose_image_directory"
+        android:shortcutLongLabel="@string/choose_image_directory"
+        android:shortcutShortLabel="@string/choose_image_directory"
+        tools:targetApi="n_mr1">
+
+        <intent
+            android:action="com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE_DIRECTORY"
+            android:targetClass="com.none.tom.exiferaser.ExifEraserActivity"
+            android:targetPackage="com.none.tom.exiferaser" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_shortcut_launch_camera"
+        android:shortcutId="launch_camera"
+        android:shortcutLongLabel="@string/take_picture"
+        android:shortcutShortLabel="@string/take_picture"
+        tools:targetApi="n_mr1">
+
+        <intent
+            android:action="com.none.tom.exiferaser.ACTION_LAUNCH_CAMERA"
+            android:targetClass="com.none.tom.exiferaser.ExifEraserActivity"
+            android:targetPackage="com.none.tom.exiferaser" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

@@ -1,0 +1,38 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: "dependencies.gradle"
+
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.android.tools.build:gradle:4.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-parcelize-compiler:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_version"
+        classpath "com.squareup.wire:wire-gradle-plugin:$wire_version"
+        classpath "app.cash.exhaustive:exhaustive-gradle:$exhaustive_version"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$versions_version"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlint_version"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

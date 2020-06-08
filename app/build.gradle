@@ -1,0 +1,93 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-parcelize"
+apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: "org.jetbrains.kotlin.kapt"
+apply plugin: "dagger.hilt.android.plugin"
+apply plugin: "com.squareup.wire"
+apply plugin: "app.cash.exhaustive"
+apply plugin: "com.github.ben-manes.versions"
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+apply from: "../dependencies.gradle"
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    defaultConfig {
+        applicationId "com.none.tom.exiferaser"
+        minSdkVersion 23
+        targetSdkVersion 30
+        versionCode 11
+        versionName "4.0.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        main.java.srcDirs += "$buildDir/generated/source/wire"
+    }
+}
+
+wire {
+    kotlin {
+        android = true
+    }
+}
+
+tasks.named("dependencyUpdates").configure {
+    def isNonStable = { String version ->
+        def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { keyword ->
+            version.toUpperCase().contains(keyword)
+        }
+        def regex = /^[0-9,.v-]+(-r)?$/
+        return !stableKeyword && !(version ==~ regex)
+    }
+    rejectVersionIf {
+        isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+    }
+}
+
+tasks.detekt.jvmTarget = "1.8"
+
+ktlint {
+    android.set(true)
+    ignoreFailures.set(true)
+    filter {
+        exclude("**/generated/**")
+        include("**/kotlin/**")
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(":exifinterfaceextended")
+    androidTestImplementation android_test_dependencies.values()
+    implementation implementation_dependencies.values()
+    coreLibraryDesugaring core_library_desugaring_dependencies.values()
+    debugImplementation debug_implementation_dependencies.values()
+    kapt kapt_dependencies.values()
+    testImplementation test_dependencies.values()
+}
