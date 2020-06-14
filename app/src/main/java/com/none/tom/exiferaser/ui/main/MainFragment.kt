@@ -18,7 +18,7 @@
 
 package com.none.tom.exiferaser.ui.main
 
-import android.graphics.drawable.Animatable2
+import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
@@ -29,6 +29,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.ui.BaseFragment
@@ -55,7 +57,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
         findNavController().navigate(MainFragmentDirections.mainToImages())
     }
     private var itemTouchHelper: ItemTouchHelper? = null
-    private var animationCallback: Animatable2.AnimationCallback? = null
+    private var animationCallback: Animatable2Compat.AnimationCallback? = null
     private var reorder = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +78,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
                 setHasFixedSize(true)
             }
             reorder.apply {
-                setOnClickListener { (drawable as Animatable2).start() }
+                setOnClickListener { (drawable as Animatable).start() }
                 setImageResource(
                     if (this@MainFragment.reorder) {
                         R.drawable.avd_done_all_to_drag
@@ -97,7 +99,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
         super.onStart()
         getBindingSafe().apply {
             AnimationCallback().also { callback ->
-                (reorder.drawable as Animatable2).registerAnimationCallback(callback)
+                AnimatedVectorDrawableCompat.registerAnimationCallback(reorder.drawable, callback)
                 animationCallback = callback
             }
             ItemTouchHelper(SimpleItemTouchHelperCallback(imageSource.adapter as MainAdapter) {
@@ -133,11 +135,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
 
     override fun onStop() {
         super.onStop()
-        itemTouchHelper?.attachToRecyclerView(null)
-        with((getBindingSafe().reorder.drawable as Animatable2)) {
-            stop()
-            unregisterAnimationCallback(animationCallback!!)
+        getBindingSafe().reorder.drawable.let { drawable ->
+            (drawable as Animatable).stop()
+            AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawable, animationCallback)
         }
+        itemTouchHelper?.attachToRecyclerView(null)
         itemTouchHelper = null
         animationCallback = null
     }
@@ -156,13 +158,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
         selectImageDirectory.launch(viewModel.getDefaultOpenPath())
     }
 
-    private inner class AnimationCallback : Animatable2.AnimationCallback() {
+    private inner class AnimationCallback : Animatable2Compat.AnimationCallback() {
         override fun onAnimationEnd(drawableOld: Drawable?) {
             reorder = !reorder
             if (!reorder) {
                 viewModel.putPreliminaryImageSourcePositions()
             }
-            (drawableOld as Animatable2).unregisterAnimationCallback(this)
+            AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableOld, this)
             getBindingSafe().reorder.apply {
                 setImageResource(
                     if (reorder) {
@@ -171,7 +173,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
                         R.drawable.avd_drag_to_done_all
                     }
                 )
-                (drawable as Animatable2).registerAnimationCallback(this@AnimationCallback)
+                AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this@AnimationCallback)
             }
         }
     }

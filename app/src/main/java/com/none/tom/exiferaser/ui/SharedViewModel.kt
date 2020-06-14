@@ -26,15 +26,15 @@ import com.none.tom.exiferaser.data.ImageRepository
 import com.none.tom.exiferaser.data.SharedPrefsDelegate
 import com.none.tom.exiferaser.data.SharedPrefsRepository
 import com.none.tom.exiferaser.launchIfNotActive
-import com.none.tom.exiferaser.reactive.images.EmptySelection
 import com.none.tom.exiferaser.reactive.Event
+import com.none.tom.exiferaser.reactive.images.EmptySelection
 import com.none.tom.exiferaser.reactive.images.ImageDirectorySelection
-import com.none.tom.exiferaser.reactive.images.ImageSelection
-import com.none.tom.exiferaser.reactive.images.ImagesSelection
-import com.none.tom.exiferaser.reactive.images.Selection
 import com.none.tom.exiferaser.reactive.images.ImageModifyResult
 import com.none.tom.exiferaser.reactive.images.ImageSaveResult
+import com.none.tom.exiferaser.reactive.images.ImageSelection
 import com.none.tom.exiferaser.reactive.images.ImagesModifiedResult
+import com.none.tom.exiferaser.reactive.images.ImagesSelection
+import com.none.tom.exiferaser.reactive.images.Selection
 import kotlinx.coroutines.Job
 
 class SharedViewModel(
@@ -62,22 +62,25 @@ class SharedViewModel(
 
     private fun modifyImageSelection() {
         if (selection is ImageSelection) {
-            if (!(selection as ImageSelection).handled) {
-                job = viewModelScope.launchIfNotActive(job) {
-                    val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
-                    imageRepository
-                        .modifyImage(selection as ImageSelection, preserveOrientation)
-                        .let { result ->
-                            imageModified.postValue(Event(result))
-                            if (result.image == null) {
-                                imagesModified.postValue(Event(ImagesModifiedResult(0, 1)))
-                            }
+            (selection as ImageSelection)
+                .let { selection ->
+                    if (!selection.handled) {
+                        job = viewModelScope.launchIfNotActive(job) {
+                            val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
+                            imageRepository
+                                .modifyImage(selection, preserveOrientation)
+                                .let { result ->
+                                    imageModified.postValue(Event(result))
+                                    if (result.image == null) {
+                                        imagesModified.postValue(Event(ImagesModifiedResult(0, 1)))
+                                    }
+                                }
                         }
+                    } else {
+                        val modified = if (selection.modified) 1 else 0
+                        imagesModified.postValue(Event(ImagesModifiedResult(modified, 1)))
+                    }
                 }
-            } else {
-                val modified = if ((selection as ImageSelection).modified) 1 else 0
-                imagesModified.postValue(Event(ImagesModifiedResult(modified, 1)))
-            }
         }
     }
 
@@ -91,15 +94,12 @@ class SharedViewModel(
                         .let { firstOrNextImage ->
                             if (firstOrNextImage != null) {
                                 job = viewModelScope.launchIfNotActive(job, force = force) {
-                                    val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
+                                    val preserveOrientation =
+                                        sharedPrefsRepository.shouldPreserveImageOrientation()
                                     imageRepository
                                         .modifyImage(firstOrNextImage, preserveOrientation)
                                         .let { result ->
-                                            imageModified.postValue(
-                                                Event(
-                                                    result
-                                                )
-                                            )
+                                            imageModified.postValue(Event(result))
                                             if (result.image == null) {
                                                 modifyImagesSelection(true)
                                             }
