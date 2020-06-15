@@ -60,12 +60,12 @@ class SharedViewModel(
         }
     }
 
-    private fun modifyImageSelection() {
+    private fun modifyImageSelection(force: Boolean = false) {
         if (selection is ImageSelection) {
             (selection as ImageSelection)
                 .let { selection ->
                     if (!selection.handled) {
-                        job = viewModelScope.launchIfNotActive(job) {
+                        job = viewModelScope.launchIfNotActive(job, force = force) {
                             val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
                             imageRepository
                                 .modifyImage(selection, preserveOrientation)
@@ -123,7 +123,7 @@ class SharedViewModel(
                         selection = result
                         when (selection) {
                             is EmptySelection -> imagesModified.postValue(Event(ImagesModifiedResult(0, 0)))
-                            is ImageSelection -> modifyImageSelection()
+                            is ImageSelection -> modifyImageSelection(true)
                             is ImagesSelection -> modifyImagesSelection(true)
                         }
                     }

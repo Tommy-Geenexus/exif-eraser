@@ -98,13 +98,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
     override fun onStart() {
         super.onStart()
         getBindingSafe().apply {
-            AnimationCallback().also { callback ->
+            AnimationCallback().let { callback ->
                 AnimatedVectorDrawableCompat.registerAnimationCallback(reorder.drawable, callback)
                 animationCallback = callback
             }
             ItemTouchHelper(SimpleItemTouchHelperCallback(imageSource.adapter as MainAdapter) {
                 this@MainFragment.reorder
-            }).also { helper ->
+            }).let { helper ->
                 helper.attachToRecyclerView(imageSource)
                 itemTouchHelper = helper
             }

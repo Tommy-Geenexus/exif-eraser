@@ -209,11 +209,7 @@ class ImageRepository(
                                                 cursor.getString(index)
                                             ).let { uri ->
                                                 if (getType(uri) == MIME_TYPE_JPEG) {
-                                                    selectedImages.add(
-                                                        ImageSelection(
-                                                            uri
-                                                        )
-                                                    )
+                                                    selectedImages.add(ImageSelection(uri))
                                                 }
                                             }
                                         }
