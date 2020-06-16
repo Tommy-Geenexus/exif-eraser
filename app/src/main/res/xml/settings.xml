@@ -22,7 +22,7 @@
             app:summaryOn="@string/enabled"
             app:title="@string/image_orientation" />
 
-        <EditTextPreference
+        <com.none.tom.exiferaser.ui.settings.TextInputEditTextPreference
             app:dialogTitle="@string/default_display_name_suffix"
             app:icon="@drawable/ic_title"
             app:key="@string/key_default_display_name_suffix"

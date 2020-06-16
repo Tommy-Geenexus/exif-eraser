@@ -11,4 +11,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Widget.ExifEraser.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.ExifEraser.TextInputEditText.OutlinedBox</item>
+        <item name="boxStrokeColor">?attr/colorSecondary</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
+    </style>
 </resources>

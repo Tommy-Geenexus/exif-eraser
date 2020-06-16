@@ -41,6 +41,11 @@ import com.none.tom.exiferaser.ui.main.ViewUrl
 import kotlinx.coroutines.Dispatchers
 
 class SettingsFragment : PreferenceFragmentCompat() {
+
+    companion object {
+        const val TAG_PREFERENCE_TEXT_INPUT_EDIT_TEXT = "text_preference_text_input_edit_text"
+    }
+
     private val viewModel: SharedViewModel by activityViewModels {
         requireContext().applicationContext.let { context ->
             SharedViewModelFactory(
@@ -149,9 +154,28 @@ class SettingsFragment : PreferenceFragmentCompat() {
             nightModePreference = preference
         }
         findPreference<Preference>(getString(R.string.key_version))?.let { preference ->
-            preference.summary = requireContext().packageManager
-                .getPackageInfo(requireContext().packageName, 0)
-                .versionName
+            preference.summary = with(requireContext()) {
+                packageManager
+                    .getPackageInfo(packageName, 0)
+                    .versionName
+            }
+        }
+    }
+
+    override fun onDisplayPreferenceDialog(preference: Preference?) {
+        if (preference is TextInputEditTextPreference) {
+            if (parentFragmentManager.findFragmentByTag(TAG_PREFERENCE_TEXT_INPUT_EDIT_TEXT) == null) {
+                TextInputEditTextPreferenceDialogFragmentCompat
+                    .newInstance(preference.getKey())
+                    .let { fragment ->
+                        // TODO: Fix deprecation once upstream gets updated
+                        @Suppress("DEPRECATION")
+                        fragment.setTargetFragment(this, 0)
+                        fragment.show(parentFragmentManager, TAG_PREFERENCE_TEXT_INPUT_EDIT_TEXT)
+                    }
+            }
+        } else {
+            super.onDisplayPreferenceDialog(preference)
         }
     }
 

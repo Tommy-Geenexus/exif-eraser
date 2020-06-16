@@ -12,4 +12,8 @@
         <item name="colorOnBackground">@color/color_teal_light</item>
         <item name="colorDrawable">@color/csl_drawable_day</item>
     </style>
+
+    <style name="ThemeOverlay.ExifEraser.TextInputEditText.OutlinedBox" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:colorControlActivated">?attr/colorSecondary</item>
+    </style>
 </resources>
