@@ -26,18 +26,20 @@ import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContract
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
 
-class CreateDocument : ActivityResultContract<Pair<String, Uri?>, Uri>() {
+class CreateDocument : ActivityResultContract<Pair<String, Uri>?, Uri>() {
 
     override fun createIntent(
         context: Context,
-        input: Pair<String, Uri?>?
+        input: Pair<String, Uri>?
     ): Intent {
         return Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             type = MIME_TYPE_JPEG
             putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(MIME_TYPE_JPEG))
             if (input != null) {
                 putExtra(Intent.EXTRA_TITLE, input.first)
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && input.second != null) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
+                    input.second != Uri.EMPTY
+                ) {
                     putExtra(DocumentsContract.EXTRA_INITIAL_URI, input.second)
                 }
             }
@@ -47,11 +49,11 @@ class CreateDocument : ActivityResultContract<Pair<String, Uri?>, Uri>() {
     override fun parseResult(
         resultCode: Int,
         intent: Intent?
-    ): Uri? {
-        return if (resultCode != Activity.RESULT_OK || intent == null) {
-            null
+    ): Uri {
+        return if (resultCode != Activity.RESULT_OK || intent == null || intent.data == null) {
+            Uri.EMPTY
         } else {
-            return intent.data
+            return intent.data!!
         }
     }
 }

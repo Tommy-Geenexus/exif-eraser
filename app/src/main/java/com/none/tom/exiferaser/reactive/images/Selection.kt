@@ -33,10 +33,6 @@ class ImageSelection(
     var modified: Boolean = false
 ) : Selection()
 
-class ImagesSelection(
-    val images: List<ImageSelection>
-) : Selection()
+class ImagesSelection(val images: List<ImageSelection>) : Selection()
 
-class ImageDirectorySelection(
-    val treeUri: Uri
-) : Selection()
+class ImageDirectorySelection(val treeUri: Uri) : Selection()

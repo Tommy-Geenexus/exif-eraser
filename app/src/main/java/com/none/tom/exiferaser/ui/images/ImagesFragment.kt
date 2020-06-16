@@ -24,7 +24,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentImagesBinding
 import com.none.tom.exiferaser.reactive.images.ImageSelection
@@ -36,13 +35,7 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
 
     private val shareImage = registerForActivityResult(ShareImage()) {}
     private val shareImages = registerForActivityResult(ShareImages()) {}
-    private val createDocument = registerForActivityResult(CreateDocument()) { uri ->
-        if (uri != null) {
-            viewModel.saveImage(uri)
-        } else {
-            findNavController().navigateUp()
-        }
-    }
+    private val createDocument = registerForActivityResult(CreateDocument()) { uri -> viewModel.saveImage(uri) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
