@@ -45,7 +45,7 @@ class OpenDocumentTree : ActivityResultContract<Uri, Selection>() {
     override fun parseResult(
         resultCode: Int,
         intent: Intent?
-    ): Selection? {
+    ): Selection {
         return if (resultCode != Activity.RESULT_OK || intent == null || intent.data == null) {
             EmptySelection
         } else {
