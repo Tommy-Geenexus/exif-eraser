@@ -92,7 +92,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main), 
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let { state -> reorder = state.getBoolean(KEY_REORDER, false) }
+        savedInstanceState?.let { state ->
+            if (state.getBoolean(KEY_REORDER, false)) {
+                (getBindingSafe().reorder.drawable as Animatable).start()
+            }
+        }
     }
 
     override fun onStart() {
