@@ -25,12 +25,12 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.activityViewModels
-import androidx.preference.CheckBoxPreference
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.URL_ISSUE
 import com.none.tom.exiferaser.data.ImageRepository
@@ -77,7 +77,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val viewUrl = registerForActivityResult(ViewUrl()) {}
     private var defaultOpenPathPreference: ImageButtonPreference? = null
     private var defaultSavePathPreference: ImageButtonPreference? = null
-    private var imageOrientationPreference: CheckBoxPreference? = null
+    private var imageOrientationPreference: SwitchPreference? = null
     private var defaultDisplayNameSuffixPreference: EditTextPreference? = null
     private var nightModePreference: ListPreference? = null
 
@@ -122,7 +122,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             defaultSavePathPreference = preference
         }
-        findPreference<CheckBoxPreference>(getString(R.string.key_image_orientation))?.let { preference ->
+        findPreference<SwitchPreference>(getString(R.string.key_image_orientation))?.let { preference ->
             preference.setOnPreferenceChangeListener { _, newValue ->
                 viewModel.putPreserveImageOrientation(newValue as Boolean)
                 true

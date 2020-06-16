@@ -149,6 +149,10 @@ class SharedPrefsRepository(
         }
     }
 
+    override fun shouldShareImagesByDefault(): Boolean {
+        return defaultSharedPrefs.getBoolean(context.getString(R.string.key_image_share_by_default), false)
+    }
+
     fun getDefaultDisplayNameSuffix(): String {
         return defaultSharedPrefs.getString(
             context.getString(R.string.key_default_display_name_suffix),

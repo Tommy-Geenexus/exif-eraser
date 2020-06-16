@@ -15,12 +15,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/image">
-        <CheckBoxPreference
+        <SwitchPreference
             app:icon="@drawable/ic_flip"
             app:key="@string/key_image_orientation"
             app:summaryOff="@string/disabled"
             app:summaryOn="@string/enabled"
             app:title="@string/image_orientation" />
+
+        <SwitchPreference
+            app:icon="@drawable/ic_share_image_by_default"
+            app:key="@string/key_image_share_by_default"
+            app:summaryOff="@string/disabled"
+            app:summaryOn="@string/enabled"
+            app:title="@string/image_share_by_default" />
 
         <com.none.tom.exiferaser.ui.settings.TextInputEditTextPreference
             app:dialogTitle="@string/default_display_name_suffix"

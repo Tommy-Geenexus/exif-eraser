@@ -29,6 +29,7 @@
     <string name="image_modified" tools:ignore="PluralsCandidate">Modified %d image</string>
     <string name="image_orientation">Preserve Image Orientation</string>
     <string name="image_save_failed">Failed to save image</string>
+    <string name="image_share_by_default">Share Images By Default</string>
     <string name="image_skipped" tools:ignore="PluralsCandidate">Skipped %d image</string>
 
     <string name="images">Images</string>
@@ -43,6 +44,7 @@
     <string name="key_default_path_save" translatable="false">default_path_save</string>
     <string name="key_file_system" translatable="false">file_system</string>
     <string name="key_image_orientation" translatable="false">image_orientation</string>
+    <string name="key_image_share_by_default">image_share_by_default</string>
     <string name="key_night_mode" translatable="false">night_mode</string>
     <string name="key_version" translatable="false">version</string>
 

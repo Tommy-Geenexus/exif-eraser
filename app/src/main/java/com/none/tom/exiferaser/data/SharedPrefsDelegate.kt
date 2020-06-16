@@ -32,4 +32,5 @@ interface SharedPrefsDelegate {
     fun getDefaultSavePathSummary(): String
     fun shouldPreserveImageOrientation(): Boolean
     fun putPreserveImageOrientation(preserveOrientation: Boolean)
+    fun shouldShareImagesByDefault(): Boolean
 }

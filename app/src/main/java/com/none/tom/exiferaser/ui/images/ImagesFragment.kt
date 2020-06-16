@@ -82,6 +82,12 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
                     done.visibility = View.VISIBLE
                 }
                 requireActivity().invalidateOptionsMenu()
+                if (viewModel.shouldShareImagesByDefault() &&
+                    viewModel.isFinishedAndModifiedImageOrImages() &&
+                    savedInstanceState == null
+                ) {
+                    shareImageOrImages()
+                }
             }
         })
         viewModel.modifyImageOrImagesSelectionOrResolveImageDirectory()
@@ -102,16 +108,25 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.action_share) {
-            when (val selection = viewModel.selection) {
-                is ImageSelection -> shareImage.launch(selection.uriModified)
-                is ImagesSelection -> shareImages.launch(selection.images.map { image -> image.uriModified })
-                else -> return false
-            }
-            true
+            shareImageOrImages()
         } else {
             super.onOptionsItemSelected(item)
         }
     }
 
     override fun bindLayout(view: View): FragmentImagesBinding = FragmentImagesBinding.bind(view)
+
+    private fun shareImageOrImages(): Boolean {
+        return when (val selection = viewModel.selection) {
+            is ImageSelection -> {
+                shareImage.launch(selection.uriModified)
+                true
+            }
+            is ImagesSelection -> {
+                shareImages.launch(selection.images.map { image -> image.uriModified })
+                true
+            }
+            else -> false
+        }
+    }
 }
