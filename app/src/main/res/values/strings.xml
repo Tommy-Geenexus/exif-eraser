@@ -6,7 +6,7 @@
 
     <string name="always">Always</string>
 
-    <string name="app_name">ExifEraser</string>
+    <string name="app_name" translatable="false">ExifEraser</string>
 
     <string name="automatically">Automatically</string>
 
@@ -44,7 +44,7 @@
     <string name="key_default_path_save" translatable="false">default_path_save</string>
     <string name="key_file_system" translatable="false">file_system</string>
     <string name="key_image_orientation" translatable="false">image_orientation</string>
-    <string name="key_image_share_by_default">image_share_by_default</string>
+    <string name="key_image_share_by_default" translatable="false">image_share_by_default</string>
     <string name="key_night_mode" translatable="false">night_mode</string>
     <string name="key_version" translatable="false">version</string>
 

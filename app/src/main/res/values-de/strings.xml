@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="about">Über</string>
+
+    <string name="all_done">Alles erledigt!</string>
+
+    <string name="always">Immer</string>
+
+    <string name="automatically">Automatisch</string>
+
+    <string name="choose_image_source">Wähle deine bevorzugte Bildquelle</string>
+
+    <string name="custom">Benutzerdefiniert</string>
+
+    <string name="default_display_name_suffix">Standard-Anzeigename-Zusatz</string>
+    <string name="default_path_open">Standard-Öffnungspfad</string>
+    <string name="default_path_save">Standard-Speicherpfad</string>
+
+    <string name="disabled">Deaktiviert</string>
+
+    <string name="enabled">Aktiviert</string>
+
+    <string name="file_system">Dateisystem</string>
+
+    <string name="image">Bild</string>
+    <string name="image_directory">Bildordner</string>
+    <string name="image_modified">%d Bild modifiziert</string>
+    <string name="image_orientation">Behalte Ausrichtung</string>
+    <string name="image_save_failed">Bild konnte nicht gespeichert werden</string>
+    <string name="image_share_by_default">Standardmäßig Teilen</string>
+    <string name="image_skipped">%d Bild übersprungen</string>
+
+    <string name="images">Bilder</string>
+    <string name="images_modified">%d von %d Bilder modifiziert</string>
+    <string name="images_modified_none">%d Bilder modifiziert</string>
+    <string name="images_skipped">%d von %d Bilder übersprungen</string>
+    <string name="images_skipped_none">%d Bilder übersprungen</string>
+
+    <string name="low_batt_only">Bei niedrigem Akkustand</string>
+
+    <string name="mime_type_unsupported">Nicht unterstützter MIME-Typ</string>
+
+    <string name="never">Niemals</string>
+
+    <string name="night_mode">Dunkles Design</string>
+
+    <string name="none">Nicht festgelegt</string>
+
+    <string name="report_bug">Melde Fehler</string>
+
+    <string name="settings">Einstellungen</string>
+
+    <string name="share">Teilen</string>
+    <string name="share_via">Teile mit</string>
+
+    <string name="suffix">Zusatz</string>
+
+    <string name="ui">Benutzeroberfläche</string>
+
+    <string name="version">Version</string>
+</resources>
