@@ -25,7 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.none.tom.exiferaser.data.ImageRepository
 import com.none.tom.exiferaser.data.SharedPrefsDelegate
 import com.none.tom.exiferaser.data.SharedPrefsRepository
-import com.none.tom.exiferaser.launchIfNotActive
+import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.reactive.Event
 import com.none.tom.exiferaser.reactive.images.EmptySelection
 import com.none.tom.exiferaser.reactive.images.ImageDirectorySelection
@@ -36,6 +36,7 @@ import com.none.tom.exiferaser.reactive.images.ImagesModifiedResult
 import com.none.tom.exiferaser.reactive.images.ImagesSelection
 import com.none.tom.exiferaser.reactive.images.Selection
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class SharedViewModel(
     private val imageRepository: ImageRepository,
@@ -52,83 +53,107 @@ class SharedViewModel(
     lateinit var selection: Selection
 
     fun modifyImageOrImagesSelectionOrResolveImageDirectory() {
-        when (selection) {
-            is EmptySelection -> imagesModified.postValue(Event(ImagesModifiedResult(0, 0)))
-            is ImageSelection -> modifyImageSelection()
-            is ImagesSelection -> modifyImagesSelection()
-            is ImageDirectorySelection -> resolveImageDirectory()
-        }
+        selection.isStarted = true
+            .also {
+                when (selection) {
+                    is EmptySelection -> imageOrImagesModified()
+                    is ImageSelection -> modifyImageSelection()
+                    is ImagesSelection -> modifyImagesSelection()
+                    is ImageDirectorySelection -> resolveImageDirectory()
+                }
+            }
     }
 
-    private fun modifyImageSelection(force: Boolean = false) {
-        if (selection is ImageSelection) {
-            (selection as ImageSelection)
-                .let { selection ->
-                    if (!selection.handled) {
-                        job = viewModelScope.launchIfNotActive(job, force = force) {
+    private fun modifyImageSelection() {
+        (selection as ImageSelection)
+            .let { selection ->
+                if (!selection.handled) {
+                    job = viewModelScope.launch {
+                        val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
+                        imageRepository
+                            .modifyImage(selection, preserveOrientation)
+                            .let { result ->
+                                imageModified.postValue(Event(result))
+                                if (result.image != null) {
+                                    selection.isSaving = !selection.isSaving
+                                } else {
+                                    imageOrImagesModified()
+                                }
+                            }
+                    }
+                } else if (!selection.isSaving) {
+                    imageOrImagesModified()
+                }
+            }
+    }
+
+    private fun modifyImagesSelection() {
+        (selection as ImagesSelection)
+            .images
+            .let { imageSelections ->
+                imageSelections
+                    .firstOrNull { image -> !image.handled }
+                    ?.let { firstOrNextImage ->
+                        job = viewModelScope.launch {
                             val preserveOrientation = sharedPrefsRepository.shouldPreserveImageOrientation()
                             imageRepository
-                                .modifyImage(selection, preserveOrientation)
+                                .modifyImage(firstOrNextImage, preserveOrientation)
                                 .let { result ->
                                     imageModified.postValue(Event(result))
-                                    if (result.image == null) {
-                                        imagesModified.postValue(Event(ImagesModifiedResult(0, 1)))
+                                    if (result.image != null) {
+                                        firstOrNextImage.isSaving = !firstOrNextImage.isSaving
+                                    } else {
+                                        modifyImagesSelection()
                                     }
                                 }
                         }
-                    } else {
-                        val modified = if (selection.modified) 1 else 0
-                        imagesModified.postValue(Event(ImagesModifiedResult(modified, 1)))
                     }
-                }
-        }
-    }
-
-    private fun modifyImagesSelection(force: Boolean = false) {
-        if (selection is ImagesSelection) {
-            (selection as ImagesSelection)
-                .images
-                .let { imageSelections ->
-                    imageSelections
-                        .firstOrNull { image -> !image.handled }
-                        .let { firstOrNextImage ->
-                            if (firstOrNextImage != null) {
-                                job = viewModelScope.launchIfNotActive(job, force = force) {
-                                    val preserveOrientation =
-                                        sharedPrefsRepository.shouldPreserveImageOrientation()
-                                    imageRepository
-                                        .modifyImage(firstOrNextImage, preserveOrientation)
-                                        .let { result ->
-                                            imageModified.postValue(Event(result))
-                                            if (result.image == null) {
-                                                modifyImagesSelection(true)
-                                            }
-                                        }
-                                }
-                            } else {
-                                val modified = imageSelections.filter { image -> image.modified }.count()
-                                imagesModified.postValue(Event(ImagesModifiedResult(modified, imageSelections.size)))
+                    ?: imageSelections
+                        .lastOrNull { image -> image.handled }
+                        ?.let { lastImage ->
+                            if (!lastImage.isSaving) {
+                                imageOrImagesModified()
                             }
                         }
-                }
-        }
+            }
     }
 
     private fun resolveImageDirectory() {
-        if (selection is ImageDirectorySelection) {
-            job = viewModelScope.launchIfNotActive(job) {
-                imageRepository
-                    .resolveImageDirectory((selection as ImageDirectorySelection).treeUri)
-                    .let { result ->
-                        selection = result
-                        when (selection) {
-                            is EmptySelection -> imagesModified.postValue(Event(ImagesModifiedResult(0, 0)))
-                            is ImageSelection -> modifyImageSelection(true)
-                            is ImagesSelection -> modifyImagesSelection(true)
-                        }
+        job = viewModelScope.launch {
+            imageRepository
+                .resolveImageDirectory((selection as ImageDirectorySelection).treeUri)
+                .let { result ->
+                    selection = result
+                    when (selection) {
+                        is EmptySelection -> imageOrImagesModified()
+                        is ImageSelection -> modifyImageSelection()
+                        is ImagesSelection -> modifyImagesSelection()
                     }
-            }
+                }
         }
+    }
+
+    private fun imageOrImagesModified() {
+        selection.isFinished = true
+            .also {
+                imagesModified.postValue(Event((when (selection) {
+                    is EmptySelection -> ImagesModifiedResult(0, 0)
+                    is ImageSelection -> ImagesModifiedResult(if ((selection as ImageSelection).modified) 1 else 0, 1)
+                    is ImagesSelection -> {
+                        (selection as ImagesSelection)
+                            .images
+                            .let { images ->
+                                images
+                                    .filter { image -> image.modified }
+                                    .count()
+                                    .let { modified ->
+                                        ImagesModifiedResult(modified, images.size)
+                                    }
+                            }
+                    }
+                    is ImageDirectorySelection -> ImagesModifiedResult(0, 0)
+                })))
+            }
     }
 
     fun saveImage(destination: Uri) {
@@ -136,51 +161,67 @@ class SharedViewModel(
             ?.peekContent()
             ?.image
             ?.let { saveImage ->
-                job = viewModelScope.launchIfNotActive(job) {
+                job = viewModelScope.launch {
                     imageSaved.postValue(Event(imageRepository.saveImage(destination, saveImage)))
                     if (selection is ImageSelection) {
                         (selection as ImageSelection)
                             .let { selection ->
-                                selection.uriModified = destination
-                                val modified = if (selection.modified) 1 else 0
-                                imagesModified.postValue(Event(ImagesModifiedResult(modified, 1)))
+                                selection.run {
+                                    isSaving = !isSaving
+                                    uriModified = destination
+                                    imageOrImagesModified()
+                                }
                             }
                     } else if (selection is ImagesSelection) {
                         (selection as ImagesSelection)
                             .images
                             .lastOrNull { image -> image.handled }
                             ?.let { image ->
-                                image.uriModified = destination
-                                modifyImagesSelection(true)
+                                image.apply {
+                                    isSaving = !isSaving
+                                    uriModified = destination
+                                }
+                                modifyImagesSelection()
                             }
                     }
                 }
             }
     }
 
+    fun getImagesModifiedUris(): List<Uri> {
+        return (selection as ImagesSelection)
+            .images
+            .filter { image -> image.uriModified.isNotEmpty() }
+            .map { image -> image.uriModified }
+    }
+
     fun getImageDisplayNameAndSuffix(displayName: String): String {
         return sharedPrefsRepository.getDefaultDisplayNameSuffix()
             .takeIf { suffix -> suffix.isNotEmpty() }
-            ?.let { suffix -> displayName.plus('_'.plus(suffix)) }
+            ?.let { suffix ->
+                displayName
+                    .plus('_')
+                    .plus(suffix)
+            }
             ?: displayName
     }
 
     fun isFinishedAndModifiedImageOrImages(): Boolean {
         return when (selection) {
+            is EmptySelection -> false
             is ImageSelection -> {
-                (selection as ImageSelection).let { selection ->
-                    selection.handled && selection.modified
-                }
+                (selection as ImageSelection)
+                    .let { image -> image.handled && image.uriModified.isNotEmpty() }
             }
             is ImagesSelection -> {
                 (selection as ImagesSelection)
                     .images
-                    .let { selection ->
-                        selection.none { image -> !image.handled } && selection.any { image -> image.modified }
+                    .let { images ->
+                        images.none { image -> !image.handled } &&
+                                images.any { image -> image.uriModified.isNotEmpty() }
                     }
             }
             is ImageDirectorySelection -> false
-            is EmptySelection -> false
         }
     }
 

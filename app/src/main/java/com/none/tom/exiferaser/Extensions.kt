@@ -31,9 +31,6 @@ import com.none.tom.exiferaser.reactive.images.EmptySelection
 import com.none.tom.exiferaser.reactive.images.ImageSelection
 import com.none.tom.exiferaser.reactive.images.ImagesSelection
 import com.none.tom.exiferaser.reactive.images.Selection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 fun Activity.showLongToast(
     @StringRes id: Int
@@ -105,14 +102,4 @@ fun Uri.revokePermissions(
     )
 }
 
-fun CoroutineScope.launchIfNotActive(
-    job: Job?,
-    force: Boolean = false,
-    block: suspend CoroutineScope.() -> Unit
-): Job? {
-    return if (force || job == null || !job.isActive) {
-        launch { block() }
-    } else {
-        null
-    }
-}
+fun Uri.isNotEmpty() = this != Uri.EMPTY

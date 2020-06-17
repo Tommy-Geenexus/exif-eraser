@@ -227,7 +227,7 @@ class ImageRepository(
                     when {
                         selections.isEmpty() -> EmptySelection
                         selections.size < 2 -> selections[0]
-                        else -> ImagesSelection(selections)
+                        else -> ImagesSelection(selections, isStarted = true)
                     }
                 }
             } else {

@@ -21,7 +21,10 @@ package com.none.tom.exiferaser.reactive.images
 import android.net.Uri
 import com.none.tom.exiferaser.EMPTY_STRING
 
-sealed class Selection
+sealed class Selection(
+    open var isStarted: Boolean = false,
+    var isFinished: Boolean = false
+)
 
 object EmptySelection : Selection()
 
@@ -30,9 +33,13 @@ class ImageSelection(
     var uriModified: Uri = Uri.EMPTY,
     var displayName: String = EMPTY_STRING,
     var handled: Boolean = false,
-    var modified: Boolean = false
+    var modified: Boolean = false,
+    var isSaving: Boolean = false
 ) : Selection()
 
-class ImagesSelection(val images: List<ImageSelection>) : Selection()
+class ImagesSelection(
+    val images: List<ImageSelection>,
+    override var isStarted: Boolean = false
+) : Selection()
 
 class ImageDirectorySelection(val treeUri: Uri) : Selection()

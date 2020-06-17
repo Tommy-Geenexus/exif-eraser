@@ -27,9 +27,9 @@
     <string name="image">Image</string>
     <string name="image_directory">Image Directory</string>
     <string name="image_modified" tools:ignore="PluralsCandidate">Modified %d image</string>
-    <string name="image_orientation">Preserve Image Orientation</string>
+    <string name="image_orientation">Preserve Orientation</string>
     <string name="image_save_failed">Failed to save image</string>
-    <string name="image_share_by_default">Share Images By Default</string>
+    <string name="image_share_by_default">Share By Default</string>
     <string name="image_skipped" tools:ignore="PluralsCandidate">Skipped %d image</string>
 
     <string name="images">Images</string>

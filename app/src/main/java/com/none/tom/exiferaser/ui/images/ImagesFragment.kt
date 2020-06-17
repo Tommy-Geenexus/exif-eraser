@@ -33,9 +33,15 @@ import com.none.tom.exiferaser.ui.BaseFragment
 
 class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_images) {
 
+    companion object {
+        const val KEY_HAS_SHARED_IMAGES = "has_shared_images"
+    }
+
     private val shareImage = registerForActivityResult(ShareImage()) {}
     private val shareImages = registerForActivityResult(ShareImages()) {}
     private val createDocument = registerForActivityResult(CreateDocument()) { uri -> viewModel.saveImage(uri) }
+
+    private var hasSharedImages: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +53,9 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        savedInstanceState?.let { state ->
+            hasSharedImages = state.getBoolean(KEY_HAS_SHARED_IMAGES, false)
+        }
         viewModel.imageModified.observe(viewLifecycleOwner, Observer { event ->
             event.getContentOrNull()?.let { result ->
                 if (result.image != null) {
@@ -84,13 +93,17 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
                 requireActivity().invalidateOptionsMenu()
                 if (viewModel.shouldShareImagesByDefault() &&
                     viewModel.isFinishedAndModifiedImageOrImages() &&
-                    savedInstanceState == null
+                    !hasSharedImages
                 ) {
                     shareImageOrImages()
                 }
             }
         })
-        viewModel.modifyImageOrImagesSelectionOrResolveImageDirectory()
+        with(viewModel.selection) {
+            if (!isStarted || isFinished) {
+                viewModel.modifyImageOrImagesSelectionOrResolveImageDirectory()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(
@@ -114,16 +127,23 @@ class ImagesFragment : BaseFragment<FragmentImagesBinding>(R.layout.fragment_ima
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_HAS_SHARED_IMAGES, hasSharedImages)
+    }
+
     override fun bindLayout(view: View): FragmentImagesBinding = FragmentImagesBinding.bind(view)
 
     private fun shareImageOrImages(): Boolean {
         return when (val selection = viewModel.selection) {
             is ImageSelection -> {
                 shareImage.launch(selection.uriModified)
+                hasSharedImages = true
                 true
             }
             is ImagesSelection -> {
-                shareImages.launch(selection.images.map { image -> image.uriModified })
+                shareImages.launch(viewModel.getImagesModifiedUris())
+                hasSharedImages = true
                 true
             }
             else -> false

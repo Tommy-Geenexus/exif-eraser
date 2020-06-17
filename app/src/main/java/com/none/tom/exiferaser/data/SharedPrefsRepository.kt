@@ -25,6 +25,7 @@ import androidx.annotation.StringRes
 import androidx.preference.PreferenceManager
 import com.none.tom.exiferaser.EMPTY_STRING
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.revokePermissions
 
 class SharedPrefsRepository(
@@ -92,7 +93,7 @@ class SharedPrefsRepository(
     }
 
     override fun getDefaultOpenPath(): Uri {
-        return if (openPath != Uri.EMPTY) {
+        return if (openPath.isNotEmpty()) {
             openPath
         } else {
             getUri(R.string.key_default_path_open).also { uri -> openPath = uri }
@@ -119,7 +120,7 @@ class SharedPrefsRepository(
     }
 
     override fun getDefaultSavePath(): Uri {
-        return if (savePath != Uri.EMPTY) {
+        return if (savePath.isNotEmpty()) {
             savePath
         } else {
             getUri(R.string.key_default_path_save).also { uri -> savePath = uri }
