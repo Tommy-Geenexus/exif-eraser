@@ -22,6 +22,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import com.none.tom.exiferaser.EMPTY_STRING
 import com.none.tom.exiferaser.R
@@ -86,10 +87,21 @@ class SharedPrefsRepository(
     }
 
     override fun putDefaultOpenPath(uri: Uri) {
-        putUri(R.string.key_default_path_open, uri).also {
-            uri.revokePermissions(context)
-            openPath = uri
-        }
+        putUri(
+            R.string.key_default_path_open,
+            if (uri.isNotEmpty()) {
+                DocumentFile
+                    .fromTreeUri(context, uri)
+                    ?.uri
+                    ?: Uri.EMPTY
+            } else {
+                uri
+            }
+        )
+            .also {
+                uri.revokePermissions(context)
+                openPath = uri
+            }
     }
 
     override fun getDefaultOpenPath(): Uri {
@@ -101,22 +113,34 @@ class SharedPrefsRepository(
     }
 
     override fun getDefaultOpenPathSummary(): String {
-        return getDefaultOpenPath().let { path ->
-            context.getString(
-                if (path == Uri.EMPTY) {
-                    R.string.none
-                } else {
-                    R.string.custom
-                }
-            )
-        }
+        return getDefaultOpenPath()
+            .let { path ->
+                context.getString(
+                    if (path.isNotEmpty()) {
+                        R.string.custom
+                    } else {
+                        R.string.none
+                    }
+                )
+            }
     }
 
     override fun putDefaultSavePath(uri: Uri) {
-        putUri(R.string.key_default_path_save, uri).also {
-            uri.revokePermissions(context)
-            savePath = uri
-        }
+        putUri(
+            R.string.key_default_path_save,
+            if (uri.isNotEmpty()) {
+                DocumentFile
+                    .fromTreeUri(context, uri)
+                    ?.uri
+                    ?: Uri.EMPTY
+            } else {
+                uri
+            }
+        )
+            .also {
+                uri.revokePermissions(context)
+                savePath = uri
+            }
     }
 
     override fun getDefaultSavePath(): Uri {
@@ -130,10 +154,10 @@ class SharedPrefsRepository(
     override fun getDefaultSavePathSummary(): String {
         return getDefaultSavePath().let { path ->
             context.getString(
-                if (path == Uri.EMPTY) {
-                    R.string.none
-                } else {
+                if (path.isNotEmpty()) {
                     R.string.custom
+                } else {
+                    R.string.none
                 }
             )
         }
