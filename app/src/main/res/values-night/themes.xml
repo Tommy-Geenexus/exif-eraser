@@ -7,7 +7,6 @@
         <item name="colorAccent">@color/color_teal_200</item>
         <item name="colorPrimarySurface">@color/color_grey_elevation_01</item>
         <item name="colorOnPrimary">@color/design_default_color_on_primary</item>
-        <item name="colorOnSurface">@color/color_teal_200</item>
         <item name="colorOk">@color/color_green_light</item>
         <item name="colorDrawable">@color/csl_drawable_night</item>
         <item name="colorDrawableInverse">@color/csl_drawable_day</item>

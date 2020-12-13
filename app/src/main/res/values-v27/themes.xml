@@ -8,7 +8,6 @@
         <item name="colorPrimarySurface">@android:color/white</item>
         <item name="colorSecondary">@android:color/white</item>
         <item name="colorOnPrimary">@android:color/black</item>
-        <item name="colorOnSurface">@color/color_teal_500</item>
         <item name="colorOk">@color/color_green</item>
         <item name="colorDrawable">@color/csl_drawable_day</item>
         <item name="colorDrawableInverse">@color/csl_drawable_night</item>

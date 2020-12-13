@@ -6,6 +6,7 @@
     <dimen name="spacing_large">24dp</dimen>
 
     <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_micro">4dp</dimen>
 
     <dimen name="corner_radius_none">0dp</dimen>
     <dimen name="corner_radius_large">24dp</dimen>
