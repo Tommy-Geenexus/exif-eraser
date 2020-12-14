@@ -37,6 +37,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 @Singleton
 class SettingsRepository @Inject constructor(
     @ApplicationContext private val context: Context

@@ -55,12 +55,12 @@ class SelectionViewModel @ViewModelInject constructor(
     override val container = container<SelectionState, SelectionSideEffect>(
         savedStateHandle = savedStateHandle,
         initialState = SelectionState(),
-        onCreate = { readSelection() }
+        onCreate = { state -> readSelection(state.imagesTotal) }
     )
 
-    private fun readSelection() = orbit {
+    private fun readSelection(dropFirstN: Int) = orbit {
         transformFlow {
-            selectionRepository.getSelection()
+            selectionRepository.getSelection(dropFirstN)
         }.sideEffect {
             post(SelectionSideEffect.ReadComplete(event))
         }
@@ -80,37 +80,34 @@ class SelectionViewModel @ViewModelInject constructor(
         sideEffect {
             post(
                 SelectionSideEffect.ShareImages(
-                    imagePaths = ArrayList(container.currentState.imagePaths.filterNotNull())
+                    imageUris = ArrayList(container.currentState.imagePaths.filterNotNull())
                 )
             )
         }
     }
 
     fun handleSelection(
-        message: AnyMessage?,
-        parentDirectoryPath: Uri
+        selection: AnyMessage?,
+        treeUri: Uri
     ) = orbit {
         transformSuspend {
-            if (message == null) {
+            if (selection == null) {
                 handleUnsupportedSelection()
                 return@transformSuspend
             }
-            when (message.typeUrl) {
+            when (selection.typeUrl) {
                 UserImageSelectionProto.ADAPTER.typeUrl -> {
                     handleUserImageSelection(
-                        proto = listOf(message.unpack(UserImageSelectionProto.ADAPTER))
-                            .drop(state.imagesTotal)
-                            .firstOrNull()
-                            ?: UserImageSelectionProto(),
-                        parentDirectoryPath = parentDirectoryPath
+                        selection = selection.unpack(UserImageSelectionProto.ADAPTER),
+                        treeUri = treeUri
                     )
                 }
                 UserImagesSelectionProto.ADAPTER.typeUrl -> {
                     handleUserImagesSelection(
-                        protos = (message.unpack(UserImagesSelectionProto.ADAPTER))
-                            .user_images_selection
-                            .drop(state.imagesTotal),
-                        parentDirectoryPath = parentDirectoryPath
+                        selection = selection
+                            .unpack(UserImagesSelectionProto.ADAPTER)
+                            .user_images_selection,
+                        treeUri = treeUri
                     )
                 }
                 else -> {
@@ -121,13 +118,13 @@ class SelectionViewModel @ViewModelInject constructor(
     }
 
     private fun handleUserImageSelection(
-        proto: UserImageSelectionProto,
-        parentDirectoryPath: Uri
+        selection: UserImageSelectionProto,
+        treeUri: Uri
     ) = orbit {
         transformFlow {
-            imageRepository.removeMetaDataSingle(
-                proto = proto,
-                parentDirectoryPath = parentDirectoryPath,
+            imageRepository.removeMetadataSingle(
+                selection = selection,
+                treeUri = treeUri,
                 displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
                 preserveOrientation = settingsRepository.shouldPreserveImageOrientation()
             )
@@ -162,13 +159,13 @@ class SelectionViewModel @ViewModelInject constructor(
     }
 
     private fun handleUserImagesSelection(
-        protos: List<UserImageSelectionProto>,
-        parentDirectoryPath: Uri
+        selection: List<UserImageSelectionProto>,
+        treeUri: Uri
     ) = orbit {
         transformFlow {
-            imageRepository.removeMetaDataBulk(
-                protos = protos,
-                parentDirectoryPath = parentDirectoryPath,
+            imageRepository.removeMetadataBulk(
+                selection = selection,
+                treeUri = treeUri,
                 displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
                 preserveOrientation = settingsRepository.shouldPreserveImageOrientation(),
             )

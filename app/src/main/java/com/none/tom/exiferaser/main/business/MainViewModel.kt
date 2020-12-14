@@ -40,6 +40,7 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
 import java.util.Collections
 
+@Suppress("TooManyFunctions")
 class MainViewModel @ViewModelInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
     private val imageRepository: ImageRepository,
@@ -136,15 +137,15 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun putImageSelection(
-        imagePath: Uri?,
+        imageUri: Uri?,
         fromCamera: Boolean = false
     ) = orbit {
         transformSuspend {
             selectionRepository.putSelection(
-                imagePath = imagePath,
+                imageUri = imageUri,
                 fromCamera = fromCamera
             )
-            imagePath
+            imageUri
         }.reduce {
             state.copy(selectionPersisting = false)
         }.sideEffect {
@@ -154,10 +155,10 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun putImagesSelection(imagePaths: List<Uri>?) = orbit {
+    fun putImagesSelection(imageUris: List<Uri>?) = orbit {
         transformSuspend {
-            selectionRepository.putSelection(imagePaths)
-            imagePaths
+            selectionRepository.putSelection(imageUris)
+            imageUris
         }.reduce {
             state.copy(selectionPersisting = false)
         }.sideEffect {
@@ -167,14 +168,14 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun putImageDirectorySelection(parentDirectoryPath: Uri?) = orbit {
+    fun putImageDirectorySelection(treeUri: Uri?) = orbit {
         transformSuspend {
-            if (parentDirectoryPath != null) {
+            if (treeUri != null) {
                 imageRepository
-                    .getParentDirectoryAsMessageOrNull(parentDirectoryPath)
+                    .getDocumentTreeAsMessageOrNull(treeUri)
                     .also { message -> selectionRepository.putSelection(message) }
             } else {
-                parentDirectoryPath
+                treeUri
             }
         }.reduce {
             state.copy(selectionPersisting = false)
@@ -209,15 +210,13 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun launchCamera() = orbit {
+    fun launchCamera(displayName: String) = orbit {
         transformSuspend {
-            imageRepository.getExternalPicturesFileProviderUriOrNull(
-                displayName = System.currentTimeMillis().toString()
-            )
+            imageRepository.getExternalPicturesFileProviderUriOrNull(displayName = displayName)
         }.sideEffect {
-            val imagePath = event
-            if (imagePath != null) {
-                post(MainSideEffect.LaunchCamera(imagePath))
+            val imageUri = event
+            if (imageUri != null) {
+                post(MainSideEffect.LaunchCamera(imageUri))
             }
         }
     }

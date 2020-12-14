@@ -21,6 +21,7 @@
 package com.none.tom.exiferaser.main.data
 
 import android.net.Uri
+import androidx.annotation.IntRange
 import androidx.datastore.core.DataStore
 import com.none.tom.exiferaser.SelectionProto
 import com.none.tom.exiferaser.UserImageSelectionProto
@@ -37,7 +38,7 @@ class SelectionRepository @Inject constructor(
     @DataStoreSelection private val dataStore: DataStore<SelectionProto>
 ) {
 
-    suspend fun getSelection(): Flow<AnyMessage?> {
+    suspend fun getSelection(@IntRange(from = 0) dropFirstN: Int): Flow<AnyMessage?> {
         return dataStore
             .data
             .catch { exception ->
@@ -47,10 +48,29 @@ class SelectionRepository @Inject constructor(
             .map { proto ->
                 when {
                     proto.user_image_selection_proto != null -> {
-                        AnyMessage.pack(proto.user_image_selection_proto)
+                        if (dropFirstN == 0) {
+                            AnyMessage.pack(proto.user_image_selection_proto)
+                        } else {
+                            null
+                        }
                     }
                     proto.user_images_selection_proto != null -> {
-                        AnyMessage.pack(proto.user_images_selection_proto)
+                        val selection = proto.user_images_selection_proto.user_images_selection
+                        when {
+                            dropFirstN == 0 -> {
+                                AnyMessage.pack(proto.user_images_selection_proto)
+                            }
+                            dropFirstN < selection.size -> {
+                                AnyMessage.pack(
+                                    UserImagesSelectionProto(
+                                        user_images_selection = selection.drop(dropFirstN)
+                                    )
+                                )
+                            }
+                            else -> {
+                                null
+                            }
+                        }
                     }
                     else -> {
                         null
@@ -60,16 +80,16 @@ class SelectionRepository @Inject constructor(
     }
 
     suspend fun putSelection(
-        imagePath: Uri?,
+        imageUri: Uri?,
         fromCamera: Boolean = false
     ) {
-        if (imagePath == null) {
+        if (imageUri == null) {
             return
         }
         dataStore.updateData { proto ->
             proto.copy(
                 user_image_selection_proto = UserImageSelectionProto(
-                    image_path = imagePath.toString(),
+                    image_path = imageUri.toString(),
                     from_camera = fromCamera
                 ),
                 user_images_selection_proto = null
@@ -77,16 +97,16 @@ class SelectionRepository @Inject constructor(
         }
     }
 
-    suspend fun putSelection(imagePaths: List<Uri>?) {
-        if (imagePaths == null) {
+    suspend fun putSelection(imageUris: List<Uri>?) {
+        if (imageUris == null) {
             return
         }
         dataStore.updateData { proto ->
             proto.copy(
                 user_image_selection_proto = null,
                 user_images_selection_proto = UserImagesSelectionProto(
-                    user_images_selection = imagePaths.map { imagePath ->
-                        UserImageSelectionProto(image_path = imagePath.toString())
+                    user_images_selection = imageUris.map { imageUri ->
+                        UserImageSelectionProto(image_path = imageUri.toString())
                     }
                 )
             )

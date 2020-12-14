@@ -42,13 +42,13 @@ class ReportViewHolder(
     }
 
     fun bindItem(
-        imagePath: Uri,
+        imageUri: Uri,
         imageModified: Boolean,
         imageSaved: Boolean
     ) {
         binding.apply {
             imageCropped.run {
-                load(imagePath) {
+                load(imageUri) {
                     listener(
                         onError = { _, _ ->
                             scaleType = ImageView.ScaleType.CENTER

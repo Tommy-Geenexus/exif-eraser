@@ -43,6 +43,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+    }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }

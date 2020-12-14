@@ -35,11 +35,11 @@ sealed class SelectionSideEffect : Parcelable {
 
     @Parcelize
     data class ReadComplete(
-        val message: AnyMessage?
+        val selection: AnyMessage?
     ) : SelectionSideEffect()
 
     @Parcelize
     data class ShareImages(
-        val imagePaths: ArrayList<Uri>
+        val imageUris: ArrayList<Uri>
     ) : SelectionSideEffect()
 }

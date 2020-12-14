@@ -63,6 +63,7 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@Suppress("TooManyFunctions")
 @AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
@@ -81,25 +82,26 @@ class MainFragment :
     private val viewModel: MainViewModel by viewModels()
     private val chooseImage = registerForActivityResult(OpenDocument()) { result ->
         viewModel.preparePutSelection(result)
-        viewModel.putImageSelection(imagePath = result)
+        viewModel.putImageSelection(imageUri = result)
     }
     private val chooseImages = registerForActivityResult(OpenMultipleDocuments()) { result ->
         viewModel.preparePutSelection(result)
-        viewModel.putImagesSelection(imagePaths = result)
+        viewModel.putImagesSelection(imageUris = result)
     }
     private val chooseImageDirectory =
         registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { result ->
             viewModel.preparePutSelection(result)
-            viewModel.putImageDirectorySelection(parentDirectoryPath = result)
+            viewModel.putImageDirectorySelection(treeUri = result)
         }
     private val launchCamera = registerForActivityResult(TakePicture()) { result ->
         viewModel.preparePutSelection(result)
         viewModel.putImageSelection(
-            imagePath = result,
+            imageUri = result,
             fromCamera = true
         )
     }
 
+    @Suppress("LongMethod")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -119,12 +121,12 @@ class MainFragment :
         setFragmentResultListener(ExifEraserActivity.KEY_IMAGE_SELECTION) { _, args: Bundle ->
             val result = args.getParcelableArrayList<Uri>(ExifEraserActivity.KEY_IMAGE_SELECTION)
             viewModel.preparePutSelection(result)
-            viewModel.putImageSelection(imagePath = result?.firstOrNull())
+            viewModel.putImageSelection(imageUri = result?.firstOrNull())
         }
         setFragmentResultListener(ExifEraserActivity.KEY_IMAGES_SELECTION) { _, args: Bundle ->
             val result = args.getParcelableArrayList<Uri>(ExifEraserActivity.KEY_IMAGES_SELECTION)
             viewModel.preparePutSelection(result)
-            viewModel.putImagesSelection(imagePaths = result)
+            viewModel.putImagesSelection(imageUris = result)
         }
         binding.imageSources.apply {
             layoutManager = StaggeredGridLayoutManager(
@@ -210,7 +212,7 @@ class MainFragment :
     }
 
     override fun onCameraItemSelected() {
-        viewModel.launchCamera()
+        viewModel.launchCamera(displayName = System.currentTimeMillis().toString())
     }
 
     override fun onImageSourceMoved(
@@ -221,6 +223,7 @@ class MainFragment :
         viewModel.reorderImageSources(imageSources, oldIndex, newIndex)
     }
 
+    @Suppress("ComplexCondition")
     private fun renderState(state: MainState) {
         binding.run {
             imageSources.apply {

@@ -35,7 +35,9 @@ class ExifEraserApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(settingsRepository.getDefaultNightMode())
+        if (::settingsRepository.isInitialized) {
+            AppCompatDelegate.setDefaultNightMode(settingsRepository.getDefaultNightMode())
+        }
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

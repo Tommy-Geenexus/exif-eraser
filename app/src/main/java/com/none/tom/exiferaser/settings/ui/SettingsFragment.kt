@@ -47,6 +47,7 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportImageFormatShortcuts
 import dagger.hilt.android.AndroidEntryPoint
 
+@Suppress("TooManyFunctions")
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -98,6 +99,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
     }
 
+    @Suppress("ComplexMethod", "NestedBlockDepth")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?

@@ -51,7 +51,7 @@ class ReportViewModel @ViewModelInject constructor(
         sideEffect {
             post(
                 ReportSideEffect.ViewImage(
-                    imagePath = state.imageSummaries.getOrNull(absolutePosition)?.imagePath
+                    imageUri = state.imageSummaries.getOrNull(absolutePosition)?.imageUri
                 )
             )
         }

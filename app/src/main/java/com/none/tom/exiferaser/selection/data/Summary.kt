@@ -30,5 +30,5 @@ data class Summary(
     val displayName: String = String.Empty,
     val imageModified: Boolean = false,
     val imageSaved: Boolean = false,
-    val imagePath: Uri = Uri.EMPTY
+    val imageUri: Uri = Uri.EMPTY
 ) : Parcelable

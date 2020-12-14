@@ -18,16 +18,22 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.report.business
+package com.none.tom.exiferaser.di
 
-import android.net.Uri
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import android.content.ContentResolver
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 
-sealed class ReportSideEffect : Parcelable {
+@Module
+@InstallIn(SingletonComponent::class)
+object ContextModule {
 
-    @Parcelize
-    data class ViewImage(
-        val imageUri: Uri?
-    ) : ReportSideEffect()
+    @Provides
+    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
+        return context.contentResolver
+    }
 }

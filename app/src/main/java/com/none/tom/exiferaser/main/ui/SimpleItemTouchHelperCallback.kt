@@ -43,6 +43,7 @@ class SimpleItemTouchHelperCallback(
         )
     }
 
+    @Suppress("ComplexCondition")
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,

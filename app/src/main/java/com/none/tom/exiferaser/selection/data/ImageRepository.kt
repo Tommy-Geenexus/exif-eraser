@@ -21,6 +21,7 @@
 package com.none.tom.exiferaser.selection.data
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
@@ -55,46 +56,48 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val contentResolver: ContentResolver,
     @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
     @Suppress("MagicNumber")
-    suspend fun removeMetaDataBulk(
-        protos: List<UserImageSelectionProto>,
-        parentDirectoryPath: Uri = Uri.EMPTY,
+    suspend fun removeMetadataBulk(
+        selection: List<UserImageSelectionProto>,
+        treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
         return flow {
-            protos.forEachIndexed { index, imageProto ->
+            selection.forEachIndexed { index, imageSelection ->
                 emit(
                     removeMetaData(
-                        proto = imageProto,
-                        parentDirectoryPath = parentDirectoryPath,
+                        selection = imageSelection,
+                        treeUri = treeUri,
                         displayNameSuffix = displayNameSuffix,
                         preserveOrientation = preserveOrientation
                     )
                 )
-                emit(Result.Handled(progress = ((index + 1) * 100) / protos.size))
+                emit(Result.Handled(progress = ((index + 1) * 100) / selection.size))
             }
         }
             .buffer()
             .flowOn(dispatcher)
     }
 
-    suspend fun removeMetaDataSingle(
-        proto: UserImageSelectionProto,
-        parentDirectoryPath: Uri = Uri.EMPTY,
+    suspend fun removeMetadataSingle(
+        selection: UserImageSelectionProto,
+        treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
         return flow {
             emit(
                 removeMetaData(
-                    proto = proto,
-                    parentDirectoryPath = parentDirectoryPath,
+                    selection = selection,
+                    treeUri = treeUri,
                     displayNameSuffix = displayNameSuffix,
                     preserveOrientation = preserveOrientation
                 )
@@ -105,16 +108,16 @@ class ImageRepository @Inject constructor(
             .flowOn(dispatcher)
     }
 
-    suspend fun getParentDirectoryAsMessageOrNull(parentDirectoryPath: Uri): AnyMessage? {
+    suspend fun getDocumentTreeAsMessageOrNull(treeUri: Uri): AnyMessage? {
         return withContext(dispatcher) {
             runCatching {
                 val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                    parentDirectoryPath,
-                    DocumentsContract.getTreeDocumentId(parentDirectoryPath)
+                    treeUri,
+                    DocumentsContract.getTreeDocumentId(treeUri)
                 )
                 queryOrThrow(childDocumentsUri).use { cursor ->
                     if (cursor.moveToFirst()) {
-                        getChildDocumentsAsMessageOrNull(cursor, parentDirectoryPath)
+                        getChildDocumentsAsMessageOrNull(cursor, treeUri)
                     } else {
                         null
                     }
@@ -129,28 +132,28 @@ class ImageRepository @Inject constructor(
     @WorkerThread
     private fun getChildDocumentsAsMessageOrNull(
         cursor: Cursor,
-        parentDirectoryPath: Uri
+        treeUri: Uri
     ): AnyMessage? {
         return runCatching {
-            val protos = mutableListOf<UserImageSelectionProto>()
+            val selection = mutableListOf<UserImageSelectionProto>()
             while (!cursor.isAfterLast) {
                 val columnName = DocumentsContract.Document.COLUMN_DOCUMENT_ID
                 val documentId = cursor.getString(cursor.getColumnIndexOrThrow(columnName))
                 val documentUri =
-                    DocumentsContract.buildDocumentUriUsingTree(parentDirectoryPath, documentId)
+                    DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
                 if (supportedMimeTypes.contains(getMimeTypeOrNull(documentUri))) {
-                    protos.add(UserImageSelectionProto(documentUri.toString()))
+                    selection.add(UserImageSelectionProto(documentUri.toString()))
                 }
                 if (!cursor.moveToNext() && !cursor.isAfterLast) {
                     throw IllegalStateException("Failed to move cursor to next row")
                 }
             }
             when {
-                protos.size > 2 -> {
-                    AnyMessage.pack(UserImagesSelectionProto(user_images_selection = protos))
+                selection.size > 2 -> {
+                    AnyMessage.pack(UserImagesSelectionProto(user_images_selection = selection))
                 }
-                protos.size == 1 -> {
-                    AnyMessage.pack(protos.first())
+                selection.size == 1 -> {
+                    AnyMessage.pack(selection.first())
                 }
                 else -> {
                     null
@@ -164,39 +167,42 @@ class ImageRepository @Inject constructor(
 
     @WorkerThread
     private fun removeMetaData(
-        proto: UserImageSelectionProto,
-        parentDirectoryPath: Uri = Uri.EMPTY,
+        selection: UserImageSelectionProto,
+        treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Result.Report {
-        val imagePath = proto.image_path.toUri()
+        val imageUri = selection.image_path.toUri()
         var displayName = String.Empty
         var containsMetadata = false
         var imageSaved = false
         runCatching {
             val exif: ExifInterfaceExtended
-            openInputStreamOrThrow(imagePath).use { source ->
+            openInputStreamOrThrow(imageUri).use { source ->
                 exif = ExifInterfaceExtended(source)
                 containsMetadata = exif.hasMetadata()
             }
-            displayName = getDisplayNameOrNull(imagePath).orEmpty()
+            displayName = getDisplayNameOrNull(imageUri).orEmpty()
             val endIndex = displayName.indexOfFirst { c -> c == '.' }
             displayName = displayName.substring(
                 startIndex = 0,
                 endIndex = if (endIndex > 0) endIndex else displayName.length
-            ) + '_' + displayNameSuffix
+            )
+            if (displayNameSuffix.isNotEmpty()) {
+                displayName = displayName.plus('_').plus(displayNameSuffix)
+            }
             if (!containsMetadata) {
                 return@runCatching
             }
-            val mimeType = getMimeTypeOrNull(imagePath)
+            val mimeType = getMimeTypeOrNull(imageUri)
             val childDocumentPath = getChildDocumentPathOrNull(
-                documentPath = imagePath,
-                parentDirectoryPath = parentDirectoryPath,
+                documentPath = imageUri,
+                treeUri = treeUri,
                 displayName = displayName,
                 mimeType = mimeType
             )
             if (childDocumentPath != null) {
-                openInputStreamOrThrow(imagePath).use { source ->
+                openInputStreamOrThrow(imageUri).use { source ->
                     openOutputStreamOrThrow(childDocumentPath).use { sink ->
                         exif.saveIgnoringAttributes(source, sink, preserveOrientation)
                         imageSaved = true
@@ -211,7 +217,7 @@ class ImageRepository @Inject constructor(
                 displayName = displayName,
                 imageModified = containsMetadata,
                 imageSaved = imageSaved,
-                imagePath = imagePath
+                imageUri = imageUri
             )
         )
     }
@@ -219,24 +225,26 @@ class ImageRepository @Inject constructor(
     @WorkerThread
     private fun getChildDocumentPathOrNull(
         documentPath: Uri,
-        parentDirectoryPath: Uri = Uri.EMPTY,
+        treeUri: Uri = Uri.EMPTY,
         displayName: String?,
         mimeType: String?
     ): Uri? {
-        val treeUri = if (parentDirectoryPath.isNotEmpty()) {
-            parentDirectoryPath
-        } else {
-            documentPath
-        }
         return runCatching {
-            val parentDocumentUri = DocumentFile.fromTreeUri(context, treeUri)?.uri
-            if (parentDocumentUri != null &&
+            val documentTreeUri = DocumentFile.fromTreeUri(
+                context,
+                if (treeUri.isNotEmpty()) {
+                    treeUri
+                } else {
+                    documentPath
+                }
+            )?.uri
+            if (documentTreeUri != null &&
                 !displayName.isNullOrEmpty() &&
                 !mimeType.isNullOrEmpty()
             ) {
                 DocumentsContract.createDocument(
-                    context.contentResolver,
-                    parentDocumentUri,
+                    contentResolver,
+                    documentTreeUri,
                     mimeType,
                     displayName
                 )
@@ -269,7 +277,7 @@ class ImageRepository @Inject constructor(
     @WorkerThread
     private fun getMimeTypeOrNull(documentPath: Uri): String? {
         return runCatching {
-            context.contentResolver.getType(documentPath)
+            contentResolver.getType(documentPath)
         }.getOrElse { exception ->
             Timber.e(exception)
             null
@@ -299,20 +307,18 @@ class ImageRepository @Inject constructor(
 
     @WorkerThread
     private fun openInputStreamOrThrow(documentPath: Uri): InputStream {
-        return context.contentResolver.openInputStream(documentPath)
-            ?: throw IllegalStateException()
+        return contentResolver.openInputStream(documentPath) ?: throw IllegalStateException()
     }
 
     @WorkerThread
     private fun openOutputStreamOrThrow(documentPath: Uri): OutputStream {
-        return context.contentResolver.openOutputStream(documentPath)
-            ?: throw IllegalStateException()
+        return contentResolver.openOutputStream(documentPath) ?: throw IllegalStateException()
     }
 
     @SuppressLint("Recycle")
     @WorkerThread
     private fun queryOrThrow(documentPath: Uri): Cursor {
-        return context.contentResolver.query(documentPath, null, null, null, null)
+        return contentResolver.query(documentPath, null, null, null, null)
             ?: throw IllegalStateException()
     }
 }

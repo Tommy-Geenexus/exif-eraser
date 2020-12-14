@@ -68,7 +68,7 @@ class ReportAdapter(
     ) {
         currentList.getOrNull(position)?.let { summary ->
             holder.bindItem(
-                imagePath = summary.imagePath,
+                imageUri = summary.imageUri,
                 imageModified = summary.imageModified,
                 imageSaved = summary.imageSaved
             )

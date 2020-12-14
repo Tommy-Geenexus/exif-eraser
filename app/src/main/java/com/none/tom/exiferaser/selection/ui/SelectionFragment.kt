@@ -52,6 +52,7 @@ import com.none.tom.exiferaser.setupToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@Suppress("TooManyFunctions")
 @AndroidEntryPoint
 class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragment_selection) {
 
@@ -150,12 +151,12 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             }
             is SelectionSideEffect.ReadComplete -> {
                 viewModel.handleSelection(
-                    message = sideEffect.message,
-                    parentDirectoryPath = args.savePath
+                    selection = sideEffect.selection,
+                    treeUri = args.savePath
                 )
             }
             is SelectionSideEffect.ShareImages -> {
-                shareImages.launch(getString(R.string.share_via) to sideEffect.imagePaths)
+                shareImages.launch(getString(R.string.share_via) to sideEffect.imageUris)
             }
         }
     }
