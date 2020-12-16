@@ -36,7 +36,6 @@ import com.babylon.orbit2.viewmodel.container
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.main.data.SelectionRepository
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Result
 import com.none.tom.exiferaser.selection.setOrSkip
@@ -55,7 +54,11 @@ class SelectionViewModel @ViewModelInject constructor(
     override val container = container<SelectionState, SelectionSideEffect>(
         savedStateHandle = savedStateHandle,
         initialState = SelectionState(),
-        onCreate = { state -> readSelection(state.imagesTotal) }
+        onCreate = { state ->
+            if (!state.handledAll) {
+                readSelection(state.imagesTotal)
+            }
+        }
     )
 
     private fun readSelection(dropFirstN: Int) = orbit {
@@ -68,23 +71,33 @@ class SelectionViewModel @ViewModelInject constructor(
 
     fun prepareReport() = orbit {
         sideEffect {
-            post(
-                SelectionSideEffect.PrepareReport(
-                    imageSummaries = container.currentState.imageSummaries.filterNotNull()
-                )
-            )
+            val imageSummaries = container.currentState.imageSummaries.filterNotNull()
+            if (imageSummaries.isNotEmpty()) {
+                post(SelectionSideEffect.PrepareReport(imageSummaries))
+            }
         }
     }
 
     fun shareImages() = orbit {
         sideEffect {
-            post(
-                SelectionSideEffect.ShareImages(
-                    imageUris = ArrayList(container.currentState.imagePaths.filterNotNull())
-                )
-            )
+            val imageUris = container.currentState.imageUris.filterNotNull()
+            if (imageUris.isNotEmpty()) {
+                post(SelectionSideEffect.ShareImages(ArrayList(imageUris)))
+            }
         }
     }
+
+    fun shareImagesByDefault() = orbit {
+        transformSuspend {
+            settingsRepository.shouldShareImagesByDefault()
+        }.sideEffect {
+            if (event) {
+                shareImages()
+            }
+        }
+    }
+
+    fun hasSavedImages() = container.currentState.imagesSaved > 0
 
     fun handleSelection(
         selection: AnyMessage?,
@@ -135,14 +148,18 @@ class SelectionViewModel @ViewModelInject constructor(
                     state.copy(imageResult = result)
                 }
                 is Result.Report -> {
-                    val summaries = state.imageSummaries.apply {
+                    val imageSummaries = state.imageSummaries.apply {
                         setOrSkip(state.imagesTotal, result.summary)
+                    }
+                    val imageUris = state.imageUris.apply {
+                        setOrSkip(state.imagesTotal, result.summary.imageUri)
                     }
                     val modified = state.imagesModified + result.summary.imageModified.toInt()
                     val saved = state.imagesSaved + result.summary.imageSaved.toInt()
                     state.copy(
                         imageResult = result,
-                        imageSummaries = summaries,
+                        imageSummaries = imageSummaries,
+                        imageUris = imageUris,
                         imagesModified = modified,
                         imagesSaved = saved
                     )
@@ -154,6 +171,13 @@ class SelectionViewModel @ViewModelInject constructor(
                         progress = result.progress
                     )
                 }
+                is Result.HandledAll -> {
+                    state.copy(handledAll = true)
+                }
+            }
+        }.sideEffect {
+            if (event is Result.HandledAll) {
+                post(SelectionSideEffect.SelectionHandled)
             }
         }
     }
@@ -176,14 +200,18 @@ class SelectionViewModel @ViewModelInject constructor(
                     state.copy(imageResult = result)
                 }
                 is Result.Report -> {
-                    val summaries = state.imageSummaries.apply {
+                    val imageSummaries = state.imageSummaries.apply {
                         setOrSkip(state.imagesTotal, result.summary)
+                    }
+                    val imageUris = state.imageUris.apply {
+                        setOrSkip(state.imagesTotal, result.summary.imageUri)
                     }
                     val modified = state.imagesModified + result.summary.imageModified.toInt()
                     val saved = state.imagesSaved + result.summary.imageSaved.toInt()
                     state.copy(
                         imageResult = result,
-                        imageSummaries = summaries,
+                        imageSummaries = imageSummaries,
+                        imageUris = imageUris,
                         imagesModified = modified,
                         imagesSaved = saved
                     )
@@ -195,13 +223,22 @@ class SelectionViewModel @ViewModelInject constructor(
                         progress = result.progress
                     )
                 }
+                is Result.HandledAll -> {
+                    state.copy(handledAll = true)
+                }
+            }
+        }.sideEffect {
+            if (event is Result.HandledAll) {
+                if (event is Result.HandledAll) {
+                    post(SelectionSideEffect.SelectionHandled)
+                }
             }
         }
     }
 
     private fun handleUnsupportedSelection() = orbit {
         reduce {
-            state.copy(progress = PROGRESS_MAX)
+            state.copy(handledAll = true)
         }
     }
 }

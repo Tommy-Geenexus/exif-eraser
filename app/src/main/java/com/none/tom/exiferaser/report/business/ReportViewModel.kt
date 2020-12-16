@@ -41,19 +41,18 @@ class ReportViewModel @ViewModelInject constructor(
         initialState = ReportState()
     )
 
-    fun handleImageSummaries(summaries: List<Summary>) = orbit {
+    fun handleImageSummaries(imageSummaries: List<Summary>) = orbit {
         reduce {
-            state.copy(imageSummaries = summaries)
+            state.copy(imageSummaries = imageSummaries)
         }
     }
 
     fun handleViewImage(absolutePosition: Int) = orbit {
         sideEffect {
-            post(
-                ReportSideEffect.ViewImage(
-                    imageUri = state.imageSummaries.getOrNull(absolutePosition)?.imageUri
-                )
-            )
+            val imageUri = state.imageSummaries.getOrNull(absolutePosition)?.imageUri
+            if (imageUri != null) {
+                post(ReportSideEffect.ViewImage(imageUri))
+            }
         }
     }
 }

@@ -20,7 +20,7 @@
 
 package com.none.tom.exiferaser
 
-const val TOP_LEVEL_PACKAGE_NAME = "com.none.tom.exiferaser"
+const val TOP_LEVEL_PACKAGE_NAME = "com.none.tom.exiferaser."
 const val URL_LOCALISATION = "https://tomgappdev.oneskyapp.com/collaboration/project?id=375350"
 const val MIME_TYPE_IMAGE = "image/*"
 const val EXTENSION_JPEG = ".jpg"

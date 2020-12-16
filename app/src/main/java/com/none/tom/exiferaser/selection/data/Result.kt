@@ -41,4 +41,7 @@ sealed class Result : Parcelable {
         @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong())
         val progress: Int = PROGRESS_MIN
     ) : Result()
+
+    @Parcelize
+    object HandledAll : Result()
 }

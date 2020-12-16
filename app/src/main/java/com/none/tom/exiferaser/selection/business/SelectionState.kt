@@ -34,12 +34,13 @@ import kotlinx.parcelize.Parcelize
 data class SelectionState(
     val imageResult: Result = Result.Empty,
     val imageSummaries: Array<Summary?> = arrayOfNulls(HISTORY_SIZE),
-    val imagePaths: Array<Uri?> = arrayOfNulls(HISTORY_SIZE),
+    val imageUris: Array<Uri?> = arrayOfNulls(HISTORY_SIZE),
     val imagesModified: Int = 0,
     val imagesSaved: Int = 0,
     val imagesTotal: Int = 0,
     @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong())
-    val progress: Int = PROGRESS_MIN
+    val progress: Int = PROGRESS_MIN,
+    val handledAll: Boolean = false
 ) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
@@ -50,11 +51,12 @@ data class SelectionState(
 
         if (imageResult != other.imageResult) return false
         if (!imageSummaries.contentEquals(other.imageSummaries)) return false
-        if (!imagePaths.contentEquals(other.imagePaths)) return false
+        if (!imageUris.contentEquals(other.imageUris)) return false
         if (imagesModified != other.imagesModified) return false
         if (imagesSaved != other.imagesSaved) return false
         if (imagesTotal != other.imagesTotal) return false
         if (progress != other.progress) return false
+        if (handledAll != other.handledAll) return false
 
         return true
     }
@@ -62,11 +64,12 @@ data class SelectionState(
     override fun hashCode(): Int {
         var result = imageResult.hashCode()
         result = 31 * result + imageSummaries.contentHashCode()
-        result = 31 * result + imagePaths.contentHashCode()
+        result = 31 * result + imageUris.contentHashCode()
         result = 31 * result + imagesModified
         result = 31 * result + imagesSaved
         result = 31 * result + imagesTotal
         result = 31 * result + progress
+        result = 31 * result + handledAll.hashCode()
         return result
     }
 }

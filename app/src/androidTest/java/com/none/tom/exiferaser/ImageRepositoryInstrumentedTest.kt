@@ -182,6 +182,9 @@ class ImageRepositoryInstrumentedTest {
                             expectThat(result).isA<Result.Handled>()
                             expectThat((result as Result.Handled).progress).isEqualTo(PROGRESS_MAX)
                         }
+                        2 -> {
+                            expectThat(result).isA<Result.HandledAll>()
+                        }
                         else -> {
                             throw IllegalStateException()
                         }
@@ -206,22 +209,29 @@ class ImageRepositoryInstrumentedTest {
                 )
             )
         }
+        val lastIndex = expectedSummaries.size * 2
         testRepository.removeMetadataBulk(
             selection = selection,
             preserveOrientation = false
         ).collectIndexed { index: Int, result: Result ->
-            if (index / 2 > expectedSummaries.lastIndex) {
+            if (index > lastIndex) {
                 throw IllegalStateException()
             }
-            if (index % 2 == 0) {
-                expectThat(result).isA<Result.Report>()
-                expectThat((result as Result.Report).summary) {
-                    isEqualTo(expectedSummaries[if (index > 0) index / 2 else index])
+            when {
+                index == lastIndex -> {
+                    expectThat(result).isA<Result.HandledAll>()
                 }
-            } else {
-                expectThat(result).isA<Result.Handled>()
-                expectThat((result as Result.Handled).progress) {
-                    isEqualTo(((((index - 1) / 2) + 1) * 100) / selection.size)
+                index % 2 == 0 -> {
+                    expectThat(result).isA<Result.Report>()
+                    expectThat((result as Result.Report).summary) {
+                        isEqualTo(expectedSummaries[if (index > 0) index / 2 else index])
+                    }
+                }
+                else -> {
+                    expectThat(result).isA<Result.Handled>()
+                    expectThat((result as Result.Handled).progress) {
+                        isEqualTo(((((index - 1) / 2) + 1) * 100) / selection.size)
+                    }
                 }
             }
         }

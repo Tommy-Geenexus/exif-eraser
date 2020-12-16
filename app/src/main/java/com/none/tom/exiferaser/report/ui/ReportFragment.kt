@@ -186,14 +186,12 @@ class ReportFragment :
 
     private fun handleSideEffect(sideEffect: ReportSideEffect) {
         if (sideEffect is ReportSideEffect.ViewImage) {
-            if (sideEffect.imageUri != null) {
-                startActivity(
-                    Intent(Intent.ACTION_VIEW).apply {
-                        setDataAndTypeAndNormalize(sideEffect.imageUri, "image/*")
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
-                )
-            }
+            startActivity(
+                Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndTypeAndNormalize(sideEffect.imageUri, "image/*")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+            )
         }
     }
 

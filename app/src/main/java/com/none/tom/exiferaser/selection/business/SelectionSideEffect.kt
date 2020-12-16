@@ -39,6 +39,9 @@ sealed class SelectionSideEffect : Parcelable {
     ) : SelectionSideEffect()
 
     @Parcelize
+    object SelectionHandled : SelectionSideEffect()
+
+    @Parcelize
     data class ShareImages(
         val imageUris: ArrayList<Uri>
     ) : SelectionSideEffect()

@@ -82,6 +82,7 @@ class ImageRepository @Inject constructor(
                 )
                 emit(Result.Handled(progress = ((index + 1) * 100) / selection.size))
             }
+            emit(Result.HandledAll)
         }
             .buffer()
             .flowOn(dispatcher)
@@ -103,6 +104,7 @@ class ImageRepository @Inject constructor(
                 )
             )
             emit(Result.Handled(progress = PROGRESS_MAX))
+            emit(Result.HandledAll)
         }
             .buffer()
             .flowOn(dispatcher)
@@ -173,6 +175,7 @@ class ImageRepository @Inject constructor(
         preserveOrientation: Boolean = false
     ): Result.Report {
         val imageUri = selection.image_path.toUri()
+        var modifiedImageUri = Uri.EMPTY
         var displayName = String.Empty
         var containsMetadata = false
         var imageSaved = false
@@ -195,15 +198,15 @@ class ImageRepository @Inject constructor(
                 return@runCatching
             }
             val mimeType = getMimeTypeOrNull(imageUri)
-            val childDocumentPath = getChildDocumentPathOrNull(
+            modifiedImageUri = getChildDocumentPathOrNull(
                 documentPath = imageUri,
                 treeUri = treeUri,
                 displayName = displayName,
                 mimeType = mimeType
             )
-            if (childDocumentPath != null) {
+            if (modifiedImageUri != null) {
                 openInputStreamOrThrow(imageUri).use { source ->
-                    openOutputStreamOrThrow(childDocumentPath).use { sink ->
+                    openOutputStreamOrThrow(modifiedImageUri).use { sink ->
                         exif.saveIgnoringAttributes(source, sink, preserveOrientation)
                         imageSaved = true
                     }
@@ -217,7 +220,7 @@ class ImageRepository @Inject constructor(
                 displayName = displayName,
                 imageModified = containsMetadata,
                 imageSaved = imageSaved,
-                imageUri = imageUri
+                imageUri = if (imageSaved) modifiedImageUri else imageUri
             )
         )
     }

@@ -28,6 +28,6 @@ sealed class ReportSideEffect : Parcelable {
 
     @Parcelize
     data class ViewImage(
-        val imageUri: Uri?
+        val imageUri: Uri
     ) : ReportSideEffect()
 }

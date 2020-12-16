@@ -39,7 +39,6 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
 import com.none.tom.exiferaser.report.ui.ReportFragment
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.ShareImages
 import com.none.tom.exiferaser.selection.business.SelectionSideEffect
 import com.none.tom.exiferaser.selection.business.SelectionState
@@ -117,8 +116,9 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_share).isVisible =
-            binding.done.isVisible && viewModel.container.currentState.imagesSaved > 0
+        menu.findItem(R.id.action_share).apply {
+            isVisible = binding.done.isVisible && viewModel.hasSavedImages()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -134,7 +134,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
 
     private fun renderState(state: SelectionState) {
         showProgress(state.progress)
-        if (state.progress >= PROGRESS_MAX) {
+        if (state.handledAll) {
             showReport(state.imagesModified, state.imagesTotal)
         }
     }
@@ -154,6 +154,9 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                     selection = sideEffect.selection,
                     treeUri = args.savePath
                 )
+            }
+            is SelectionSideEffect.SelectionHandled -> {
+                viewModel.shareImagesByDefault()
             }
             is SelectionSideEffect.ShareImages -> {
                 shareImages.launch(getString(R.string.share_via) to sideEffect.imageUris)
