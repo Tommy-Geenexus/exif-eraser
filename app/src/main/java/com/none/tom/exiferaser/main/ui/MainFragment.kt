@@ -227,7 +227,6 @@ class MainFragment :
         viewModel.reorderImageSources(imageSources, oldIndex, newIndex)
     }
 
-    @Suppress("ComplexCondition")
     private fun renderState(state: MainState) {
         binding.run {
             spinner.isVisible = state.imageSourcesFetching ||
@@ -238,12 +237,11 @@ class MainFragment :
                 (adapter as? MainAdapter)?.submitList(state.imageSources)
                 isVisible = !spinner.isVisible
             }
-            if ((state.imageSourcesReorder && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_PUT) ||
-                (
-                    state.imageSourcesPersisted &&
-                        imageSourcesReorder.tag != IMAGE_SOURCES_AVD_REORDER
-                    )
-            ) {
+            val reorder =
+                state.imageSourcesReorder && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_PUT
+            val putReorder =
+                state.imageSourcesPersisted && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_REORDER
+            if (reorder || putReorder) {
                 (binding.imageSourcesReorder.icon as? Animatable)?.start()
             }
         }
@@ -293,16 +291,13 @@ class MainFragment :
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     private fun reportShortcutUsed(action: String) {
-        (
-            requireContext()
-                .getSystemService(Context.SHORTCUT_SERVICE) as? ShortcutManager
-            )
-            ?.let { shortcutManager ->
-                shortcutManager
-                    .manifestShortcuts
-                    .find { shortcutInfo -> shortcutInfo.intent?.action == action }
-                    ?.let { shortcutInfo -> shortcutManager.reportShortcutUsed(shortcutInfo.id) }
-            }
+        val sm = requireContext().getSystemService(Context.SHORTCUT_SERVICE) as? ShortcutManager
+        if (sm != null) {
+            sm
+                .manifestShortcuts
+                .find { shortcutInfo -> shortcutInfo.intent?.action == action }
+                ?.let { shortcutInfo -> sm.reportShortcutUsed(shortcutInfo.id) }
+        }
     }
 
     private fun handleShortcutIntent(action: String) {

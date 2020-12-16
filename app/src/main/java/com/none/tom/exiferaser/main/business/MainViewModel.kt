@@ -162,7 +162,7 @@ class MainViewModel @ViewModelInject constructor(
         }.reduce {
             state.copy(selectionPersisting = false)
         }.sideEffect {
-            if (event != null) {
+            if (!event.isNullOrEmpty()) {
                 post(MainSideEffect.NavigateToSelectionSavePath)
             }
         }
