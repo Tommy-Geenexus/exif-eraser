@@ -32,5 +32,6 @@ data class MainState(
     val imageSourcesPersisted: Boolean = false,
     val imageSourcesReordering: Boolean = false,
     val imageSourcesReorder: Boolean = false,
-    val selectionPersisting: Boolean = false
+    val selectionPersisting: Boolean = false,
+    val accessingPreferences: Boolean = false
 ) : Parcelable

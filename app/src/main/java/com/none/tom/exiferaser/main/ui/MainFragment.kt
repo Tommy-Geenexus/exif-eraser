@@ -200,18 +200,22 @@ class MainFragment :
     override fun bindLayout(view: View) = FragmentMainBinding.bind(view)
 
     override fun onImageItemSelected() {
+        viewModel.prepareChooseImagesOrLaunchCamera()
         viewModel.chooseImage()
     }
 
     override fun onImagesItemSelected() {
+        viewModel.prepareChooseImagesOrLaunchCamera()
         viewModel.chooseImages()
     }
 
     override fun onImageDirectoryItemSelected() {
+        viewModel.prepareChooseImagesOrLaunchCamera()
         viewModel.chooseImageDirectory()
     }
 
     override fun onCameraItemSelected() {
+        viewModel.prepareChooseImagesOrLaunchCamera()
         viewModel.launchCamera(displayName = System.currentTimeMillis().toString())
     }
 
@@ -226,15 +230,14 @@ class MainFragment :
     @Suppress("ComplexCondition")
     private fun renderState(state: MainState) {
         binding.run {
-            imageSources.apply {
-                (adapter as? MainAdapter)?.submitList(state.imageSources)
-                isVisible = !state.imageSourcesFetching &&
-                    !state.imageSourcesPersisting &&
-                    !state.selectionPersisting
-            }
             spinner.isVisible = state.imageSourcesFetching ||
                 state.imageSourcesPersisting ||
-                state.selectionPersisting
+                state.selectionPersisting ||
+                state.accessingPreferences
+            imageSources.apply {
+                (adapter as? MainAdapter)?.submitList(state.imageSources)
+                isVisible = !spinner.isVisible
+            }
             if ((state.imageSourcesReorder && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_PUT) ||
                 (
                     state.imageSourcesPersisted &&

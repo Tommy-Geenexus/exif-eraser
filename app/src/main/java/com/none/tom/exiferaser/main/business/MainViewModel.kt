@@ -192,27 +192,47 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
-    fun chooseImage(openPath: Uri = settingsRepository.getDefaultOpenPath()) = orbit {
-        sideEffect {
-            post(MainSideEffect.ChooseImage(openPath))
+    fun prepareChooseImagesOrLaunchCamera() = orbit {
+        reduce {
+            state.copy(accessingPreferences = true)
         }
     }
 
-    fun chooseImages(openPath: Uri = settingsRepository.getDefaultOpenPath()) = orbit {
-        sideEffect {
-            post(MainSideEffect.ChooseImages(openPath))
+    fun chooseImage() = orbit {
+        transformSuspend {
+            settingsRepository.getDefaultOpenPath()
+        }.reduce {
+            state.copy(accessingPreferences = false)
+        }.sideEffect {
+            post(MainSideEffect.ChooseImage(event))
         }
     }
 
-    fun chooseImageDirectory(openPath: Uri = settingsRepository.getDefaultOpenPath()) = orbit {
-        sideEffect {
-            post(MainSideEffect.ChooseImageDirectory(openPath))
+    fun chooseImages() = orbit {
+        transformSuspend {
+            settingsRepository.getDefaultOpenPath()
+        }.reduce {
+            state.copy(accessingPreferences = false)
+        }.sideEffect {
+            post(MainSideEffect.ChooseImages(event))
+        }
+    }
+
+    fun chooseImageDirectory() = orbit {
+        transformSuspend {
+            settingsRepository.getDefaultOpenPath()
+        }.reduce {
+            state.copy(accessingPreferences = false)
+        }.sideEffect {
+            post(MainSideEffect.ChooseImageDirectory(event))
         }
     }
 
     fun launchCamera(displayName: String) = orbit {
         transformSuspend {
             imageRepository.getExternalPicturesFileProviderUriOrNull(displayName = displayName)
+        }.reduce {
+            state.copy(accessingPreferences = false)
         }.sideEffect {
             val imageUri = event
             if (imageUri != null) {
