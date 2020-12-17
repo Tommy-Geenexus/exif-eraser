@@ -59,13 +59,16 @@ class ExifEraserActivity : AppCompatActivity() {
         }
         intent.putExtra(INTENT_EXTRA_CONSUMED, true)
         if (isSupportedSendImageIntent()) {
-            val imagePaths = intent.getClipDataUris()
-            val resultKey = if (imagePaths.size > 1) KEY_IMAGES_SELECTION else KEY_IMAGE_SELECTION
+            val imageUris = intent.getClipDataUris()
+            if (imageUris.isEmpty()) {
+                return
+            }
+            val resultKey = if (imageUris.size > 1) KEY_IMAGES_SELECTION else KEY_IMAGE_SELECTION
             supportFragmentManager
                 .fragments
                 .getOrNull(0)
                 ?.childFragmentManager
-                ?.setFragmentResult(resultKey, bundleOf(resultKey to imagePaths))
+                ?.setFragmentResult(resultKey, bundleOf(resultKey to imageUris))
         }
     }
 
