@@ -167,7 +167,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
     private fun showProgress(currentProgress: Int) {
         binding.apply {
             progress.text = currentProgress.toPercent()
-            progressIndicator.setProgressCompat(currentProgress, false)
+            progressIndicator.setProgressCompat(currentProgress, true)
         }
     }
 
