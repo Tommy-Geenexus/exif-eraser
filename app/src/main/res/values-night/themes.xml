@@ -10,7 +10,5 @@
         <item name="colorOk">@color/color_green_light</item>
         <item name="colorDrawable">@color/csl_drawable_night</item>
         <item name="colorDrawableInverse">@color/csl_drawable_day</item>
-        <item name="colorLogo">@color/color_teal_200</item>
-        <item name="colorLogoDark">@color/color_teal_200_dark</item>
     </style>
 </resources>

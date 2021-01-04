@@ -3,6 +3,4 @@
     <attr name="colorOk" format="color" />
     <attr name="colorDrawable" format="reference" />
     <attr name="colorDrawableInverse" format="reference" />
-    <attr name="colorLogo" format="reference" />
-    <attr name="colorLogoDark" format="reference" />
 </resources>

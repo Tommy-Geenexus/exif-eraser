@@ -11,8 +11,6 @@
         <item name="colorOk">@color/color_green</item>
         <item name="colorDrawable">@color/csl_drawable_day</item>
         <item name="colorDrawableInverse">@color/csl_drawable_night</item>
-        <item name="colorLogo">@color/color_teal_500</item>
-        <item name="colorLogoDark">@color/color_teal_500_dark</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>

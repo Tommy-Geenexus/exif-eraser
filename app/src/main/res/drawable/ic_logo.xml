@@ -9,22 +9,22 @@
         android:scaleY="0.05">
 
         <path
-            android:fillColor="?attr/colorLogoDark"
+            android:fillColor="@color/color_teal_500"
             android:pathData="m202.583,114.333h223.75v223.75h-223.75z" />
         <path
             android:fillColor="@android:color/white"
             android:pathData="m231.52,143.271h165.875v165.875h-165.875z" />
         <path
-            android:fillColor="?attr/colorLogo"
+            android:fillColor="@color/color_teal_500"
             android:pathData="m397.395,251.373 l-43.937,-50.473 -45.96,57.433 -29,-33 -46.978,59.667v24.146h165.875z" />
         <path
-            android:fillColor="?attr/colorLogo"
+            android:fillColor="@color/color_teal_500"
             android:pathData="M297.175,186.95m-23.283,0a23.283,23.283 0,1 1,46.566 0a23.283,23.283 0,1 1,-46.566 0" />
         <path
-            android:fillColor="?attr/colorLogo"
+            android:fillColor="@color/color_teal_500"
             android:pathData="m149,132.271 l-72,70v206.767h144v-206.767zM149,208.537c-11.736,0 -21.25,-9.514 -21.25,-21.25s9.514,-21.25 21.25,-21.25 21.25,9.514 21.25,21.25 -9.514,21.25 -21.25,21.25z" />
         <path
-            android:fillColor="?attr/colorLogoDark"
+            android:fillColor="@color/color_teal_500"
             android:pathData="m149,201.95c-8.284,0 -15,-6.716 -15,-15v-68.45c0,-37.771 30.729,-68.5 68.5,-68.5s68.5,30.729 68.5,68.5v31.5c0,8.284 -6.716,15 -15,15s-15,-6.716 -15,-15v-31.5c0,-21.229 -17.271,-38.5 -38.5,-38.5s-38.5,17.271 -38.5,38.5v68.45c0,8.284 -6.716,15 -15,15z" />
     </group>
 </vector>
