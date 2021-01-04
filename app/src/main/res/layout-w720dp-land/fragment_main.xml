@@ -29,7 +29,6 @@
         android:layout_marginStart="@dimen/spacing_normal"
         android:layout_marginEnd="@dimen/spacing_normal"
         android:gravity="end"
-        android:text="@string/choose_image_source"
         android:textAppearance="@style/TextAppearance.ExifEraser.Title.Large"
         app:layout_constraintTop_toBottomOf="@id/guideline_title" />
 

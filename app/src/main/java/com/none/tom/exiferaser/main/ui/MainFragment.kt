@@ -128,6 +128,11 @@ class MainFragment :
             viewModel.preparePutSelection(result)
             viewModel.putImagesSelection(imageUris = result)
         }
+        binding.title.text = getString(
+            R.string.choose_your_preferred_image_source_placeholder,
+            getString(R.string.choose_your),
+            getString(R.string.preferred_image_source)
+        )
         binding.imageSources.apply {
             layoutManager = StaggeredGridLayoutManager(
                 GRID_LAYOUT_SPAN_CNT,

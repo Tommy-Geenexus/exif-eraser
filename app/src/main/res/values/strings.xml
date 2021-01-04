@@ -17,29 +17,30 @@
 
     <string name="automatically">Automatically</string>
 
-    <string name="become_translator">Help Translate</string>
+    <string name="become_translator">Help translate</string>
 
     <string name="camera">Camera</string>
 
     <string name="choose_image">Choose image</string>
     <string name="choose_image_directory">Choose image directory</string>
-    <string name="choose_image_source">Choose your\npreferred image source</string>
     <string name="choose_images">Choose images</string>
+    <string name="choose_your">Choose your</string>
+    <string name="choose_your_preferred_image_source_placeholder" translatable="false">%s\n%s</string>
 
     <string name="confirm">Confirm</string>
 
     <string name="custom">Custom</string>
 
-    <string name="default_display_name_suffix">Default Display Name Suffix</string>
-    <string name="default_path_open">Default Open Path</string>
-    <string name="default_path_save">Default Save Path</string>
+    <string name="default_display_name_suffix">Default display name suffix</string>
+    <string name="default_path_open">Default open path</string>
+    <string name="default_path_save">Default save path</string>
 
     <string name="details">Details</string>
 
     <string name="file_provider_package" translatable="false">com.none.tom.exiferaser.fileprovider</string>
     <string name="file_system">Filesystem</string>
 
-    <string name="github">Github</string>
+    <string name="github" translatable="false">GitHub</string>
 
     <string name="id_shortcut_choose_image" tools:keep="@string/id_shortcut_choose_image" translatable="false">choose_image</string>
     <string name="id_shortcut_choose_image_directory" tools:keep="@string/id_shortcut_choose_image_directory" translatable="false">choose_image_directory</string>
@@ -47,14 +48,15 @@
     <string name="id_shortcut_launch_camera" tools:keep="@string/id_shortcut_launch_camera" translatable="false">launch_camera</string>
 
     <string name="image">Image</string>
-    <string name="image_directory">Image\nDirectory</string>
-    <string name="image_file">Image\nFile</string>
-    <string name="image_files">Image\nFiles</string>
-    <string name="image_orientation">Preserve Orientation</string>
-    <string name="image_share_by_default">Share By Default</string>
-    <string name="image_supported_formats">Supported Image Formats</string>
+    <string name="image_directory">Image directory</string>
+    <string name="image_file">Image file</string>
+    <string name="image_files">Image files</string>
+    <string name="image_orientation">Preserve orientation</string>
+    <string name="image_share_by_default">Share by default</string>
+    <string name="image_supported_formats">Supported image formats</string>
 
-    <string name="images_modified" tools:ignore="PluralsCandidate">Modified %d of %d images</string>
+    <string name="images_modified">images modified</string>
+    <string name="images_modified_placeholder" translatable="false">%d %s %d %s</string>
 
     <string name="key_batch_image_processing" translatable="false">batch_image_processing</string>
     <string name="key_bug_report" translatable="false">bug_report</string>
@@ -69,7 +71,7 @@
     <string name="key_translate" translatable="false">translate</string>
     <string name="key_version" translatable="false">version</string>
 
-    <string name="low_batt_only">Low Battery Only</string>
+    <string name="low_batt_only">Low battery only</string>
 
     <string name="miscellaneous">Miscellaneous</string>
 
@@ -77,22 +79,26 @@
 
     <string name="never">Never</string>
 
-    <string name="night_mode">Night Mode</string>
+    <string name="night_mode">Night mode</string>
 
     <string name="none">None</string>
 
-    <string name="onesky">OneSky</string>
+    <string name="of">of</string>
 
-    <string name="path_save_choose">Choose Save Path</string>
-    <string name="path_save_custom">Custom Save Path</string>
-    <string name="path_save_default">Default Save Path</string>
+    <string name="onesky" translatable="false">OneSky</string>
+
+    <string name="path_save_choose">Choose save path</string>
+    <string name="path_save_custom">Custom save path</string>
+    <string name="path_save_default">Default save path</string>
+
+    <string name="preferred_image_source">preferred image source</string>
 
     <string name="preserve_image_orientation_off">Don\'t preserve the original image orientation</string>
     <string name="preserve_image_orientation_on">Preserve the original image orientation</string>
 
     <string name="reorder">Reorder</string>
 
-    <string name="report_bug">Report Issue</string>
+    <string name="report_bug">Report issue</string>
 
     <string name="saved">Saved</string>
 
@@ -107,7 +113,7 @@
 
     <string name="summary">Summary</string>
 
-    <string name="take_picture">Take Picture</string>
+    <string name="take_picture">Take picture</string>
 
     <string name="ui">UI</string>
 

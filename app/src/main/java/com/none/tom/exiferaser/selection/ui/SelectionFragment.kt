@@ -176,7 +176,13 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         total: Int
     ) {
         binding.run {
-            subheading.text = getString(R.string.images_modified, modified, total)
+            subheading.text = getString(
+                R.string.images_modified_placeholder,
+                modified,
+                getString(R.string.of),
+                total,
+                getString(R.string.images_modified)
+            )
             done.crossfade(progressLayout)
             if (total > 0) {
                 viewModel.prepareReport()
