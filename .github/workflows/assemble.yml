@@ -1,0 +1,13 @@
+name: Assemble
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Assemble app
+        run: ./gradlew assemble

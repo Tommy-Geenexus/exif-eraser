@@ -1,0 +1,19 @@
+name: Instrumentation Tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  instrumentation-tests:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Instrumentation tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          script: ./gradlew connectedDebugAndroidTest
