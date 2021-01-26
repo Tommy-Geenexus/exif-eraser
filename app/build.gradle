@@ -92,7 +92,6 @@ ktlint {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(":exifinterfaceextended")
     androidTestImplementation android_test_dependencies.values()
     implementation implementation_dependencies.values()
     coreLibraryDesugaring core_library_desugaring_dependencies.values()

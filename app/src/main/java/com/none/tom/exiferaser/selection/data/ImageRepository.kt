@@ -180,10 +180,13 @@ class ImageRepository @Inject constructor(
         var containsMetadata = false
         var imageSaved = false
         runCatching {
-            val exif: ExifInterfaceExtended
+            val exifInterfaceExtended: ExifInterfaceExtended
             openInputStreamOrThrow(imageUri).use { source ->
-                exif = ExifInterfaceExtended(source)
-                containsMetadata = exif.hasMetadata()
+                exifInterfaceExtended = ExifInterfaceExtended(source)
+                containsMetadata = exifInterfaceExtended.hasAttributes(true) ||
+                        exifInterfaceExtended.hasExtendedXmp() ||
+                        exifInterfaceExtended.hasIccProfile() ||
+                        exifInterfaceExtended.hasPhotoshopImageResources()
             }
             displayName = getDisplayNameOrNull(imageUri).orEmpty()
             val endIndex = displayName.indexOfFirst { c -> c == '.' }
@@ -207,7 +210,7 @@ class ImageRepository @Inject constructor(
             if (modifiedImageUri != null) {
                 openInputStreamOrThrow(imageUri).use { source ->
                     openOutputStreamOrThrow(modifiedImageUri).use { sink ->
-                        exif.saveIgnoringAttributes(source, sink, preserveOrientation)
+                        exifInterfaceExtended.saveExclusive(source, sink, preserveOrientation)
                         imageSaved = true
                     }
                 }
