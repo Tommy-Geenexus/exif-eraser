@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -28,7 +28,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Summary(
     val displayName: String = String.Empty,
+    val mimeType: String = String.Empty,
+    val imageUri: Uri = Uri.EMPTY,
     val imageModified: Boolean = false,
     val imageSaved: Boolean = false,
-    val imageUri: Uri = Uri.EMPTY
+    val containsIccProfile: Boolean = false,
+    val containsExif: Boolean = false,
+    val containsPhotoshopImageResources: Boolean = false,
+    val containsXmp: Boolean = false,
+    val containsExtendedXmp: Boolean = false
 ) : Parcelable

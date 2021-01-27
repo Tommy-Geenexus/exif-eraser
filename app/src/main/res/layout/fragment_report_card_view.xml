@@ -36,12 +36,11 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/modified"
-            style="@style/Widget.MaterialComponents.Chip.Action"
+            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_normal"
-            android:textColor="?android:textColorPrimary"
-            app:chipStrokeWidth="@dimen/stroke_width_nano"
+            app:chipIconTint="?attr/colorOk"
             app:layout_constraintBottom_toTopOf="@+id/saved"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
@@ -50,12 +49,12 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/saved"
-            style="@style/Widget.MaterialComponents.Chip.Action"
+            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_normal"
-            android:textColor="?android:textColorPrimary"
-            app:chipStrokeWidth="@dimen/stroke_width_nano"
+            android:clickable="false"
+            android:focusable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"

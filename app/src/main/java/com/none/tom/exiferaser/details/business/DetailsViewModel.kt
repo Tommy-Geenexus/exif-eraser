@@ -18,8 +18,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.report.business
+package com.none.tom.exiferaser.details.business
 
+import android.webkit.MimeTypeMap
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
@@ -27,51 +28,38 @@ import androidx.lifecycle.ViewModel
 import com.babylon.orbit2.ContainerHost
 import com.babylon.orbit2.syntax.strict.orbit
 import com.babylon.orbit2.syntax.strict.reduce
-import com.babylon.orbit2.syntax.strict.sideEffect
 import com.babylon.orbit2.viewmodel.container
-import com.none.tom.exiferaser.selection.data.Summary
+import com.none.tom.exiferaser.MIME_TYPE_JPEG
 
-class ReportViewModel @ViewModelInject constructor(
+class DetailsViewModel @ViewModelInject constructor(
     @Assisted savedStateHandle: SavedStateHandle,
-) : ContainerHost<ReportState, ReportSideEffect>,
+) : ContainerHost<DetailsState, Nothing>,
     ViewModel() {
 
-    override val container = container<ReportState, ReportSideEffect>(
+    override val container = container<DetailsState, Nothing>(
         savedStateHandle = savedStateHandle,
-        initialState = ReportState()
+        initialState = DetailsState()
     )
 
-    fun handleImageSummaries(imageSummaries: List<Summary>) = orbit {
+    @Suppress("LongParameterList")
+    fun handleImageDetails(
+        mimeType: String,
+        containsIccProfile: Boolean,
+        containsExif: Boolean,
+        containsPhotoshopImageResources: Boolean,
+        containsXmp: Boolean,
+        containsExtendedXmp: Boolean
+    ) = orbit {
         reduce {
-            state.copy(imageSummaries = imageSummaries)
-        }
-    }
-
-    fun handleViewImage(position: Int) = orbit {
-        sideEffect {
-            val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
-            if (imageUri != null) {
-                post(ReportSideEffect.ViewImage(imageUri))
-            }
-        }
-    }
-
-    fun handleImageDetails(position: Int) = orbit {
-        sideEffect {
-            val summary = state.imageSummaries.getOrNull(position)
-            if (summary != null) {
-                post(
-                    ReportSideEffect.NavigateToDetails(
-                        displayName = summary.displayName,
-                        mimeType = summary.mimeType,
-                        containsIccProfile = summary.containsIccProfile,
-                        containsExif = summary.containsExif,
-                        containsPhotoshopImageResources = summary.containsPhotoshopImageResources,
-                        containsXmp = summary.containsXmp,
-                        containsExtendedXmp = summary.containsExtendedXmp,
-                    )
-                )
-            }
+            state.copy(
+                extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty(),
+                jpegImage = mimeType == MIME_TYPE_JPEG,
+                containsIccProfile = containsIccProfile,
+                containsExif = containsExif,
+                containsPhotoshopImageResources = containsPhotoshopImageResources,
+                containsXmp = containsXmp,
+                containsExtendedXmp = containsExtendedXmp
+            )
         }
     }
 }

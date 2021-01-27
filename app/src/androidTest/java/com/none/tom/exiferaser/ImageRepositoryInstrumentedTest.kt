@@ -83,39 +83,75 @@ class ImageRepositoryInstrumentedTest {
     private val expectedSummaries = listOf(
         Summary(
             displayName = JPEG_WITH_EXIF_WITH_XMP,
+            mimeType = MIME_TYPE_JPEG,
+            imageUri = expectedImagePaths[0],
             imageModified = true,
             imageSaved = false, // FIXME: Missing uri write permissions
-            imageUri = expectedImagePaths[0]
+            containsIccProfile = false,
+            containsExif = true,
+            containsPhotoshopImageResources = false,
+            containsXmp = true,
+            containsExtendedXmp = false
         ),
         Summary(
             displayName = JPEG_WITHOUT_EXIF_WITHOUT_XMP,
+            mimeType = MIME_TYPE_JPEG,
+            imageUri = expectedImagePaths[1],
             imageModified = false,
             imageSaved = false,
-            imageUri = expectedImagePaths[1]
+            containsIccProfile = false,
+            containsExif = false,
+            containsPhotoshopImageResources = false,
+            containsXmp = false,
+            containsExtendedXmp = false
         ),
         Summary(
             displayName = PNG_WITH_EXIF,
+            mimeType = MIME_TYPE_PNG,
+            imageUri = expectedImagePaths[2],
             imageModified = true,
             imageSaved = false,
-            imageUri = expectedImagePaths[2]
+            containsIccProfile = false,
+            containsExif = true,
+            containsPhotoshopImageResources = false,
+            containsXmp = true,
+            containsExtendedXmp = false
         ),
         Summary(
             displayName = PNG_WITHOUT_EXIF,
+            mimeType = MIME_TYPE_PNG,
+            imageUri = expectedImagePaths[3],
             imageModified = false,
             imageSaved = false,
-            imageUri = expectedImagePaths[3]
+            containsIccProfile = false,
+            containsExif = false,
+            containsPhotoshopImageResources = false,
+            containsXmp = false,
+            containsExtendedXmp = false
         ),
         Summary(
             displayName = WEBP_WITH_EXIF,
+            mimeType = MIME_TYPE_WEBP,
+            imageUri = expectedImagePaths[4],
             imageModified = true,
             imageSaved = false,
-            imageUri = expectedImagePaths[4]
+            containsIccProfile = false,
+            containsExif = true,
+            containsPhotoshopImageResources = false,
+            containsXmp = false,
+            containsExtendedXmp = false
         ),
         Summary(
             displayName = WEBP_WITHOUT_EXIF_WITH_MAKE,
-            imageModified = true, // FIXME: Contains maker notes
+            mimeType = MIME_TYPE_WEBP,
+            imageUri = expectedImagePaths[5],
+            imageModified = true,
             imageSaved = false,
-            imageUri = expectedImagePaths[5]
+            containsIccProfile = false,
+            containsExif = true,
+            containsPhotoshopImageResources = false,
+            containsXmp = false,
+            containsExtendedXmp = false
         )
     )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -39,15 +39,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import app.cash.exhaustive.Exhaustive
 import com.github.heyalex.cornersheet.behavior.CornerSheetBehavior
 import com.github.heyalex.cornersheet.interpolate
 import com.github.heyalex.cornersheet.interpolateArgb
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.BaseFragment
+import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentReportBinding
+import com.none.tom.exiferaser.details.ui.DetailsFragment
 import com.none.tom.exiferaser.report.business.ReportSideEffect
 import com.none.tom.exiferaser.report.business.ReportState
 import com.none.tom.exiferaser.report.business.ReportViewModel
@@ -180,18 +183,36 @@ class ReportFragment :
         viewModel.handleViewImage(position)
     }
 
+    override fun onModifiedSelected(position: Int) {
+        viewModel.handleImageDetails(position)
+    }
+
     private fun renderState(state: ReportState) {
         (binding.report.adapter as? ReportAdapter)?.submitList(state.imageSummaries)
     }
 
     private fun handleSideEffect(sideEffect: ReportSideEffect) {
-        if (sideEffect is ReportSideEffect.ViewImage) {
-            startActivity(
-                Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndTypeAndNormalize(sideEffect.imageUri, "image/*")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-            )
+        @Exhaustive
+        when (sideEffect) {
+            is ReportSideEffect.ViewImage -> {
+                startActivity(
+                    Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndTypeAndNormalize(sideEffect.imageUri, MIME_TYPE_IMAGE)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                )
+            }
+            is ReportSideEffect.NavigateToDetails -> {
+                DetailsFragment.newInstance(
+                    displayName = sideEffect.displayName,
+                    mimeType = sideEffect.mimeType,
+                    containsIccProfile = sideEffect.containsIccProfile,
+                    containsExif = sideEffect.containsExif,
+                    containsPhotoshopImageResources = sideEffect.containsPhotoshopImageResources,
+                    containsXmp = sideEffect.containsXmp,
+                    containsExtendedXmp = sideEffect.containsExtendedXmp
+                ).show(childFragmentManager, DetailsFragment.TAG)
+            }
         }
     }
 

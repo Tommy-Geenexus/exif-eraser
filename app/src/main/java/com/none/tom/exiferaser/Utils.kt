@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -23,6 +23,9 @@ package com.none.tom.exiferaser
 const val TOP_LEVEL_PACKAGE_NAME = "com.none.tom.exiferaser."
 const val URL_LOCALISATION = "https://tomgappdev.oneskyapp.com/collaboration/project?id=375350"
 const val MIME_TYPE_IMAGE = "image/*"
+const val MIME_TYPE_JPEG = "image/jpeg"
+const val MIME_TYPE_PNG = "image/png"
+const val MIME_TYPE_WEBP = "image/webp"
 const val EXTENSION_JPEG = ".jpg"
 
 val String.Companion.Empty: String get() = ""

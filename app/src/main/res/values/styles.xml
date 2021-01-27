@@ -16,4 +16,11 @@
         <item name="iconTint">?attr/colorDrawable</item>
         <item name="iconTintMode">src_in</item>
     </style>
+
+    <style name="Widget.ExifEraser.Chip.Action.Outlined" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="chipBackgroundColor">?android:colorBackground</item>
+        <item name="chipIconTint">?attr/colorDrawable</item>
+        <item name="chipStrokeWidth">@dimen/stroke_width_nano</item>
+    </style>
 </resources>

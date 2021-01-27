@@ -18,27 +18,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.report.business
+package com.none.tom.exiferaser.details.business
 
-import android.net.Uri
 import android.os.Parcelable
+import com.none.tom.exiferaser.Empty
 import kotlinx.parcelize.Parcelize
 
-sealed class ReportSideEffect : Parcelable {
-
-    @Parcelize
-    data class ViewImage(
-        val imageUri: Uri
-    ) : ReportSideEffect()
-
-    @Parcelize
-    data class NavigateToDetails(
-        val displayName: String,
-        val mimeType: String,
-        val containsIccProfile: Boolean = false,
-        val containsExif: Boolean = false,
-        val containsPhotoshopImageResources: Boolean = false,
-        val containsXmp: Boolean = false,
-        val containsExtendedXmp: Boolean = false
-    ) : ReportSideEffect()
-}
+@Parcelize
+data class DetailsState(
+    val extension: String = String.Empty,
+    val jpegImage: Boolean = false,
+    val containsIccProfile: Boolean = false,
+    val containsExif: Boolean = false,
+    val containsPhotoshopImageResources: Boolean = false,
+    val containsXmp: Boolean = false,
+    val containsExtendedXmp: Boolean = false
+) : Parcelable

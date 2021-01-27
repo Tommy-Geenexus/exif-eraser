@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -46,34 +46,40 @@ class ReportViewHolder(
         imageModified: Boolean,
         imageSaved: Boolean
     ) {
-        binding.apply {
-            imageCropped.run {
-                load(imageUri) {
-                    listener(
-                        onError = { _, _ ->
-                            scaleType = ImageView.ScaleType.CENTER
-                        }
-                    )
-                    error(R.drawable.ic_image_not_supported)
-                }
-                modified.apply {
+        binding.imageCropped.run {
+            load(imageUri) {
+                listener(
+                    onError = { _, _ ->
+                        scaleType = ImageView.ScaleType.CENTER
+                    }
+                )
+                error(R.drawable.ic_image_not_supported)
+            }
+            binding.modified.apply {
+                if (imageModified) {
                     chipStrokeColor = ColorStateList.valueOf(
-                        MaterialColors.getColor(
-                            root,
-                            if (imageModified) R.attr.colorOk else R.attr.colorError
-                        )
+                        MaterialColors.getColor(binding.root, R.attr.colorOk)
                     )
-                    setText(if (imageModified) R.string.modified else R.string.unmodified)
-                }
-                saved.apply {
+                    setText(R.string.modified)
+                    setChipIconResource(R.drawable.ic_flaky)
+                    setOnClickListener {
+                        listener.onModifiedSelected(absoluteAdapterPosition)
+                    }
+                } else {
                     chipStrokeColor = ColorStateList.valueOf(
-                        MaterialColors.getColor(
-                            root,
-                            if (imageSaved) R.attr.colorOk else R.attr.colorError
-                        )
+                        MaterialColors.getColor(binding.root, R.attr.colorError)
                     )
-                    setText(if (imageSaved) R.string.saved else R.string.unsaved)
+                    setText(R.string.unmodified)
                 }
+            }
+            binding.saved.apply {
+                chipStrokeColor = ColorStateList.valueOf(
+                    MaterialColors.getColor(
+                        binding.root,
+                        if (imageSaved) R.attr.colorOk else R.attr.colorError
+                    )
+                )
+                setText(if (imageSaved) R.string.saved else R.string.unsaved)
             }
         }
     }

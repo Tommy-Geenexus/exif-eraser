@@ -37,10 +37,16 @@
 
     <string name="details">Details</string>
 
+    <string name="exif" translatable="false">EXIF</string>
+
+    <string name="extendedxmp" translatable="false">ExtendedXMP</string>
+
     <string name="file_provider_package" translatable="false">com.none.tom.exiferaser.fileprovider</string>
     <string name="file_system">Filesystem</string>
 
     <string name="github" translatable="false">GitHub</string>
+
+    <string name="icc_profile" translatable="false">ICC Profile</string>
 
     <string name="id_shortcut_choose_image" tools:keep="@string/id_shortcut_choose_image" translatable="false">choose_image</string>
     <string name="id_shortcut_choose_image_directory" tools:keep="@string/id_shortcut_choose_image_directory" translatable="false">choose_image_directory</string>
@@ -91,6 +97,8 @@
     <string name="path_save_custom">Custom save path</string>
     <string name="path_save_default">Default save path</string>
 
+    <string name="photoshop" translatable="false">Photoshop</string>
+
     <string name="preferred_image_source">preferred image source</string>
 
     <string name="preserve_image_orientation_off">Don\'t preserve the original image orientation</string>
@@ -124,4 +132,6 @@
     <string name="url_issue" translatable="false">https://github.com/Tommy-Geenexus/exif-eraser/issues</string>
 
     <string name="version">Version</string>
+
+    <string name="xmp" translatable="false">XMP</string>
 </resources>

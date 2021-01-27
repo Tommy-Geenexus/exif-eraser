@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -167,6 +167,7 @@ class ImageRepository @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     @WorkerThread
     private fun removeMetaData(
         selection: UserImageSelectionProto,
@@ -174,19 +175,31 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Result.Report {
+        var displayName = String.Empty
         val imageUri = selection.image_path.toUri()
         var modifiedImageUri = Uri.EMPTY
-        var displayName = String.Empty
         var containsMetadata = false
         var imageSaved = false
+        var containsIccProfile = false
+        var containsExif = false
+        var containsPhotoshopImageResources = false
+        var containsXmp = false
+        var containsExtendedXmp = false
+        val mimeType = getMimeTypeOrNull(imageUri).orEmpty()
         runCatching {
             val exifInterfaceExtended: ExifInterfaceExtended
             openInputStreamOrThrow(imageUri).use { source ->
                 exifInterfaceExtended = ExifInterfaceExtended(source)
-                containsMetadata = exifInterfaceExtended.hasAttributes(true) ||
-                        exifInterfaceExtended.hasExtendedXmp() ||
-                        exifInterfaceExtended.hasIccProfile() ||
-                        exifInterfaceExtended.hasPhotoshopImageResources()
+                containsIccProfile = exifInterfaceExtended.hasIccProfile()
+                containsExif = exifInterfaceExtended.hasAttributes(true)
+                containsPhotoshopImageResources = exifInterfaceExtended.hasPhotoshopImageResources()
+                containsXmp = exifInterfaceExtended.hasXmp()
+                containsExtendedXmp = exifInterfaceExtended.hasExtendedXmp()
+                containsMetadata = containsIccProfile ||
+                    containsExif ||
+                    containsPhotoshopImageResources ||
+                    containsXmp ||
+                    containsExtendedXmp
             }
             displayName = getDisplayNameOrNull(imageUri).orEmpty()
             val endIndex = displayName.indexOfFirst { c -> c == '.' }
@@ -200,7 +213,6 @@ class ImageRepository @Inject constructor(
             if (!containsMetadata) {
                 return@runCatching
             }
-            val mimeType = getMimeTypeOrNull(imageUri)
             modifiedImageUri = getChildDocumentPathOrNull(
                 documentPath = imageUri,
                 treeUri = treeUri,
@@ -221,9 +233,15 @@ class ImageRepository @Inject constructor(
         return Result.Report(
             summary = Summary(
                 displayName = displayName,
+                mimeType = mimeType,
                 imageModified = containsMetadata,
                 imageSaved = imageSaved,
-                imageUri = if (imageSaved) modifiedImageUri else imageUri
+                imageUri = if (imageSaved) modifiedImageUri else imageUri,
+                containsExif = containsExif,
+                containsIccProfile = containsIccProfile,
+                containsPhotoshopImageResources = containsPhotoshopImageResources,
+                containsXmp = containsXmp,
+                containsExtendedXmp = containsExtendedXmp
             )
         )
     }
