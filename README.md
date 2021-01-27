@@ -1,11 +1,15 @@
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://Tommy-Geenexus.mit-license.org)
+[![License](https://img.shields.io/github/license/Tommy-Geenexus/exif-eraser)](https://mit-license.org/)
+[![CI status](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Assemble/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AAssemble)
 
 # ExifEraser
 ExifEraser is a modern, permissionless image metadata erasing application for Android 6.0+.
 
-## Features
-- Supports JPEG, PNG and WebP image formats including swift image processing
-- Highly configurable UI including [App shortcuts](https://developer.android.com/guide/topics/ui/shortcuts/) support
+It relies on [exif-interface-extended](https://github.com/Tommy-Geenexus/exif-interface-extended) under the hood.
+
+## Currently Supported Image Formates
+- **JPEG**: Images will be saved excluding the embedded *ICC Profile, EXIF, Photoshop Image Resources* and *XMP/ExtendedXMP* metadata
+- **PNG**: Images will be saved excluding the embedded *ICC Profile, EXIF* and *XMP* metadata
+- **WebP**: Images will be saved excluding the embedded *ICC Profile, EXIF* and *XMP* metadata
 
 ## Translations
 - [Help translate this application into the language of your preference](https://tomgappdev.oneskyapp.com/collaboration/project?id=375350)
