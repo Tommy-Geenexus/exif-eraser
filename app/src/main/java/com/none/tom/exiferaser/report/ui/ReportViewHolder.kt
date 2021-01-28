@@ -55,31 +55,44 @@ class ReportViewHolder(
                 )
                 error(R.drawable.ic_image_not_supported)
             }
+            val colorOk = ColorStateList.valueOf(
+                MaterialColors.getColor(binding.root, R.attr.colorOk)
+            )
+            val colorError = ColorStateList.valueOf(
+                MaterialColors.getColor(binding.root, R.attr.colorError)
+            )
             binding.modified.apply {
                 if (imageModified) {
-                    chipStrokeColor = ColorStateList.valueOf(
-                        MaterialColors.getColor(binding.root, R.attr.colorOk)
-                    )
-                    setText(R.string.modified)
+                    chipStrokeColor = colorOk
+                    chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_flaky)
+                    setTextColor(colorOk)
+                    setText(R.string.modified)
                     setOnClickListener {
                         listener.onModifiedSelected(absoluteAdapterPosition)
                     }
                 } else {
-                    chipStrokeColor = ColorStateList.valueOf(
-                        MaterialColors.getColor(binding.root, R.attr.colorError)
-                    )
+                    chipStrokeColor = colorError
+                    chipIconTint = colorError
+                    setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                     setText(R.string.unmodified)
                 }
             }
             binding.saved.apply {
-                chipStrokeColor = ColorStateList.valueOf(
-                    MaterialColors.getColor(
-                        binding.root,
-                        if (imageSaved) R.attr.colorOk else R.attr.colorError
-                    )
-                )
-                setText(if (imageSaved) R.string.saved else R.string.unsaved)
+                if (imageSaved) {
+                    chipStrokeColor = colorOk
+                    chipIconTint = colorOk
+                    setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
+                    setText(R.string.saved)
+                } else {
+                    chipStrokeColor = colorError
+                    chipIconTint = colorError
+                    setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
+                    setText(R.string.unsaved)
+                }
             }
         }
     }

@@ -133,10 +133,12 @@ class DetailsFragment : DialogFragment() {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
                     setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                 }
             }
             exif.apply {
@@ -144,10 +146,12 @@ class DetailsFragment : DialogFragment() {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
                     setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                 }
             }
             xmp.apply {
@@ -155,10 +159,12 @@ class DetailsFragment : DialogFragment() {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
                     setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                 }
             }
             photoshop.apply {
@@ -166,10 +172,12 @@ class DetailsFragment : DialogFragment() {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
                     setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                 }
                 isVisible = state.jpegImage
             }
@@ -178,10 +186,12 @@ class DetailsFragment : DialogFragment() {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
                     setChipIconResource(R.drawable.ic_check)
+                    setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
                     setChipIconResource(R.drawable.ic_clear)
+                    setTextColor(colorError)
                 }
                 isVisible = state.jpegImage
             }
