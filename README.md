@@ -1,5 +1,8 @@
 [![License](https://img.shields.io/github/license/Tommy-Geenexus/exif-eraser)](https://mit-license.org/)
-[![CI status](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Assemble/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AAssemble)
+[![Assemble](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Assemble/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AAssemble)
+[![Instrumentation Tests](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Instrumentation%20Tests/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3A%22Instrumentation+Tests%22)
+[![Detekt](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Detekt/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3ADetekt)
+[![Ktlint](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Ktlint/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AKtlint)
 
 # ExifEraser
 ExifEraser is a modern, permissionless image metadata erasing application for Android 6.0+.
