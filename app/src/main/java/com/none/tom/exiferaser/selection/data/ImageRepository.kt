@@ -63,7 +63,6 @@ class ImageRepository @Inject constructor(
     @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
-    @Suppress("MagicNumber")
     suspend fun removeMetadataBulk(
         selection: List<UserImageSelectionProto>,
         treeUri: Uri = Uri.EMPTY,
@@ -80,7 +79,7 @@ class ImageRepository @Inject constructor(
                         preserveOrientation = preserveOrientation
                     )
                 )
-                emit(Result.Handled(progress = ((index + 1) * 100) / selection.size))
+                emit(Result.Handled(progress = ((index + 1) * PROGRESS_MAX) / selection.size))
             }
             emit(Result.HandledAll)
         }

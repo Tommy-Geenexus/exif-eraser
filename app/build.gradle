@@ -85,7 +85,7 @@ ktlint {
     android.set(true)
     ignoreFailures.set(true)
     filter {
-        exclude("**/generated/**")
+        exclude { element -> element.file.path.contains("generated/") }
         include("**/kotlin/**")
     }
 }
