@@ -6,12 +6,17 @@ on:
 jobs:
   instrumentation-tests:
     runs-on: macos-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     strategy:
       fail-fast: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Setup JDK 11
+        id: setup-java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - name: Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:

@@ -1,10 +1,10 @@
-name: Assemble
+name: Detekt
 on:
   push:
     branches:
       - main
 jobs:
-  build:
+  static-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,5 +14,5 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Assemble app
-        run: ./gradlew assemble
+      - name: Run detekt
+        run: ./gradlew detekt
