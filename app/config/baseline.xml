@@ -6,8 +6,8 @@
     <ID>LongMethod:DetailsFragment.kt$DetailsFragment$private fun renderState(state: DetailsState)</ID>
     <ID>LongMethod:ImageRepository.kt$ImageRepository$@WorkerThread private fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
-    <ID>LongParameterList:DetailsFragment.kt$DetailsFragment.Companion$( displayName: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
-    <ID>LongParameterList:DetailsViewModel.kt$DetailsViewModel$( mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
+    <ID>LongParameterList:DetailsFragment.kt$DetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
+    <ID>LongParameterList:DetailsViewModel.kt$DetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>NestedBlockDepth:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>

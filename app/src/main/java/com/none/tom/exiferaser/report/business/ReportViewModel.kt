@@ -64,6 +64,7 @@ class ReportViewModel @Inject constructor(
                 post(
                     ReportSideEffect.NavigateToDetails(
                         displayName = summary.displayName,
+                        extension = summary.extension,
                         mimeType = summary.mimeType,
                         containsIccProfile = summary.containsIccProfile,
                         containsExif = summary.containsExif,

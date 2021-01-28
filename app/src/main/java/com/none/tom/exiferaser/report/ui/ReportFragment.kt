@@ -205,6 +205,7 @@ class ReportFragment :
             is ReportSideEffect.NavigateToDetails -> {
                 DetailsFragment.newInstance(
                     displayName = sideEffect.displayName,
+                    extension = sideEffect.extension,
                     mimeType = sideEffect.mimeType,
                     containsIccProfile = sideEffect.containsIccProfile,
                     containsExif = sideEffect.containsExif,

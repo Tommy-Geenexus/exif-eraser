@@ -34,6 +34,7 @@ sealed class ReportSideEffect : Parcelable {
     @Parcelize
     data class NavigateToDetails(
         val displayName: String,
+        val extension: String,
         val mimeType: String,
         val containsIccProfile: Boolean = false,
         val containsExif: Boolean = false,

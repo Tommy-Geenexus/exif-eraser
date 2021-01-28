@@ -37,5 +37,7 @@ const val MIME_TYPE_PNG = "image/png"
 const val MIME_TYPE_WEBP = "image/webp"
 
 const val EXTENSION_JPEG = ".jpg"
+const val EXTENSION_PNG = ".png"
+const val EXTENSION_WEBP = ".webp"
 
 val String.Companion.Empty: String get() = ""

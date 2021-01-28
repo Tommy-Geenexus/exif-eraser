@@ -32,6 +32,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.Empty
+import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentDetailsBinding
@@ -46,16 +47,19 @@ class DetailsFragment : DialogFragment() {
     companion object {
 
         const val TAG = "DetailsFragment"
-        const val KEY_DISPLAY_NAME = TOP_LEVEL_PACKAGE_NAME + "display_name"
-        const val KEY_MIME_TYPE = TOP_LEVEL_PACKAGE_NAME + "mime_type"
-        const val KEY_ICCP = TOP_LEVEL_PACKAGE_NAME + "iccp"
-        const val KEY_EXIF = TOP_LEVEL_PACKAGE_NAME + "exif"
-        const val KEY_PHOTOSHOP = TOP_LEVEL_PACKAGE_NAME + "photoshop"
-        const val KEY_XMP = TOP_LEVEL_PACKAGE_NAME + "xmp"
-        const val KEY_EXTENDED_XMP = TOP_LEVEL_PACKAGE_NAME + "extended_xmp"
+
+        const val KEY_DISPLAY_NAME = TOP_LEVEL_PACKAGE_NAME + "DISPLAY_NAME"
+        const val KEY_EXTENSION = TOP_LEVEL_PACKAGE_NAME + "EXTENSION"
+        const val KEY_MIME_TYPE = TOP_LEVEL_PACKAGE_NAME + "MIME_TYPE"
+        const val KEY_ICCP = TOP_LEVEL_PACKAGE_NAME + "ICCP"
+        const val KEY_EXIF = TOP_LEVEL_PACKAGE_NAME + "EXIF"
+        const val KEY_PHOTOSHOP = TOP_LEVEL_PACKAGE_NAME + "PHOTOSHOP"
+        const val KEY_XMP = TOP_LEVEL_PACKAGE_NAME + "XMP"
+        const val KEY_EXTENDED_XMP = TOP_LEVEL_PACKAGE_NAME + "EXTENDED_XMP"
 
         fun newInstance(
             displayName: String,
+            extension: String,
             mimeType: String,
             containsIccProfile: Boolean,
             containsExif: Boolean,
@@ -65,6 +69,7 @@ class DetailsFragment : DialogFragment() {
         ) = DetailsFragment().apply {
             arguments = bundleOf(
                 KEY_DISPLAY_NAME to displayName,
+                KEY_EXTENSION to extension,
                 KEY_MIME_TYPE to mimeType,
                 KEY_ICCP to containsIccProfile,
                 KEY_EXIF to containsExif,
@@ -95,6 +100,7 @@ class DetailsFragment : DialogFragment() {
                 setOnShowListener {
                     arguments?.let { args ->
                         viewModel.handleImageDetails(
+                            extension = args.getString(KEY_EXTENSION, String.Empty),
                             mimeType = args.getString(KEY_MIME_TYPE, String.Empty),
                             containsIccProfile = args.getBoolean(KEY_ICCP),
                             containsExif = args.getBoolean(KEY_EXIF),
@@ -177,7 +183,7 @@ class DetailsFragment : DialogFragment() {
                     setChipIconResource(R.drawable.ic_clear)
                     setTextColor(colorError)
                 }
-                isVisible = state.jpegImage
+                isVisible = state.mimeType == MIME_TYPE_JPEG
             }
             extendedXmp.apply {
                 if (state.containsExtendedXmp) {
@@ -191,7 +197,7 @@ class DetailsFragment : DialogFragment() {
                     setChipIconResource(R.drawable.ic_clear)
                     setTextColor(colorError)
                 }
-                isVisible = state.jpegImage
+                isVisible = state.mimeType == MIME_TYPE_JPEG
             }
         }
     }

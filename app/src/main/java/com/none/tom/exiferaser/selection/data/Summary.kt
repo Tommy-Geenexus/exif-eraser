@@ -28,6 +28,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Summary(
     val displayName: String = String.Empty,
+    val extension: String = String.Empty,
     val mimeType: String = String.Empty,
     val imageUri: Uri = Uri.EMPTY,
     val imageModified: Boolean = false,

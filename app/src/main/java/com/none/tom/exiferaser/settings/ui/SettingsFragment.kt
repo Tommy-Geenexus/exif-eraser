@@ -46,7 +46,7 @@ import com.none.tom.exiferaser.settings.ImageButtonPreference
 import com.none.tom.exiferaser.settings.ViewUrl
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import com.none.tom.exiferaser.setupToolbar
-import com.none.tom.exiferaser.supportImageFormatShortcuts
+import com.none.tom.exiferaser.supportImageFormats
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -249,7 +249,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun setupPreferenceImageSupportedFormats(preference: Preference) {
-        preference.summary = supportImageFormatShortcuts.joinToString()
+        preference.summary = supportImageFormats.joinToString()
     }
 
     private fun setupPreferenceVersion(preference: Preference) {

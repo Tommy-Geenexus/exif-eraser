@@ -28,6 +28,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.annotation.WorkerThread
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -185,6 +186,8 @@ class ImageRepository @Inject constructor(
         var containsXmp = false
         var containsExtendedXmp = false
         val mimeType = getMimeTypeOrNull(imageUri).orEmpty()
+        val extension =
+            '.' + MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty()
         runCatching {
             val exifInterfaceExtended: ExifInterfaceExtended
             openInputStreamOrThrow(imageUri).use { source ->
@@ -232,6 +235,7 @@ class ImageRepository @Inject constructor(
         return Result.Report(
             summary = Summary(
                 displayName = displayName,
+                extension = extension,
                 mimeType = mimeType,
                 imageModified = containsMetadata,
                 imageSaved = imageSaved,

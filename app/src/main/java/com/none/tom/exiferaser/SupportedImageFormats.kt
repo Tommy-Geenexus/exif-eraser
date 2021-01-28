@@ -25,7 +25,7 @@ val supportedMimeTypes = arrayOf(
     MIME_TYPE_PNG,
     MIME_TYPE_WEBP
 )
-val supportImageFormatShortcuts = listOf(
+val supportImageFormats = listOf(
     "JPEG",
     "PNG",
     "WebP"

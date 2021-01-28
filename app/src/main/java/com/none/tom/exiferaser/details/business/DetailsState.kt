@@ -27,7 +27,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class DetailsState(
     val extension: String = String.Empty,
-    val jpegImage: Boolean = false,
+    val mimeType: String = String.Empty,
     val containsIccProfile: Boolean = false,
     val containsExif: Boolean = false,
     val containsPhotoshopImageResources: Boolean = false,

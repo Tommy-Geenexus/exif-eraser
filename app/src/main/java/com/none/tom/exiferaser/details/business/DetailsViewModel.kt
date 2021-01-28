@@ -20,10 +20,8 @@
 
 package com.none.tom.exiferaser.details.business
 
-import android.webkit.MimeTypeMap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.strict.orbit
@@ -43,6 +41,7 @@ class DetailsViewModel @Inject constructor(
     )
 
     fun handleImageDetails(
+        extension: String,
         mimeType: String,
         containsIccProfile: Boolean,
         containsExif: Boolean,
@@ -52,8 +51,8 @@ class DetailsViewModel @Inject constructor(
     ) = orbit {
         reduce {
             state.copy(
-                extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty(),
-                jpegImage = mimeType == MIME_TYPE_JPEG,
+                extension = extension,
+                mimeType = mimeType,
                 containsIccProfile = containsIccProfile,
                 containsExif = containsExif,
                 containsPhotoshopImageResources = containsPhotoshopImageResources,

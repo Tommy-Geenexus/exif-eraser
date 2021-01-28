@@ -53,9 +53,6 @@ class ImageRepositoryInstrumentedTest {
 
     private companion object {
         const val CONTENT_URI_PREFIX = "content://com.none.tom.exiferaser.fileprovider/my_images/"
-        const val EXTENSION_JPEG = ".jpg"
-        const val EXTENSION_PNG = ".png"
-        const val EXTENSION_WEBP = ".webp"
         const val JPEG_WITH_EXIF_WITH_XMP = "jpeg_with_exif_with_xmp"
         const val JPEG_WITHOUT_EXIF_WITHOUT_XMP = "jpeg_without_exif_without_xmp"
         const val PNG_WITH_EXIF = "png_with_exif_byte_order_ii"
@@ -83,6 +80,7 @@ class ImageRepositoryInstrumentedTest {
     private val expectedSummaries = listOf(
         Summary(
             displayName = JPEG_WITH_EXIF_WITH_XMP,
+            extension = EXTENSION_JPEG,
             mimeType = MIME_TYPE_JPEG,
             imageUri = expectedImagePaths[0],
             imageModified = true,
@@ -95,6 +93,7 @@ class ImageRepositoryInstrumentedTest {
         ),
         Summary(
             displayName = JPEG_WITHOUT_EXIF_WITHOUT_XMP,
+            extension = EXTENSION_JPEG,
             mimeType = MIME_TYPE_JPEG,
             imageUri = expectedImagePaths[1],
             imageModified = false,
@@ -107,6 +106,7 @@ class ImageRepositoryInstrumentedTest {
         ),
         Summary(
             displayName = PNG_WITH_EXIF,
+            extension = EXTENSION_PNG,
             mimeType = MIME_TYPE_PNG,
             imageUri = expectedImagePaths[2],
             imageModified = true,
@@ -119,6 +119,7 @@ class ImageRepositoryInstrumentedTest {
         ),
         Summary(
             displayName = PNG_WITHOUT_EXIF,
+            extension = EXTENSION_PNG,
             mimeType = MIME_TYPE_PNG,
             imageUri = expectedImagePaths[3],
             imageModified = false,
@@ -131,6 +132,7 @@ class ImageRepositoryInstrumentedTest {
         ),
         Summary(
             displayName = WEBP_WITH_EXIF,
+            extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
             imageUri = expectedImagePaths[4],
             imageModified = true,
@@ -143,6 +145,7 @@ class ImageRepositoryInstrumentedTest {
         ),
         Summary(
             displayName = WEBP_WITHOUT_EXIF_WITH_MAKE,
+            extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
             imageUri = expectedImagePaths[5],
             imageModified = true,
