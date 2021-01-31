@@ -25,13 +25,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.coroutines.transformSuspend
 import org.orbitmvi.orbit.syntax.strict.orbit
 import org.orbitmvi.orbit.syntax.strict.reduce
 import org.orbitmvi.orbit.syntax.strict.sideEffect
 import org.orbitmvi.orbit.viewmodel.container
-import javax.inject.Inject
 
 @HiltViewModel
 class SavePathViewModel @Inject constructor(
@@ -62,7 +62,7 @@ class SavePathViewModel @Inject constructor(
 
     fun navigateToSelection(savePath: Uri = settingsRepository.getDefaultSavePath()) = orbit {
         sideEffect {
-            post(SavePathSideEffect.NavigateTo(savePath))
+            post(SavePathSideEffect.NavigateToSelection(savePath))
         }
     }
 }

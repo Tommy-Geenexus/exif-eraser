@@ -10,10 +10,22 @@
         tools:layout="@layout/fragment_main">
 
         <argument
-            android:name="shortcutIntent"
+            android:name="shortcut"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <argument
+            android:name="image_selection"
+            app:argType="android.net.Uri"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="images_selection"
+            app:argType="android.net.Uri[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
 
         <action
             android:id="@+id/main_to_settings"

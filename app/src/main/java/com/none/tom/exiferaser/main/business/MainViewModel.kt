@@ -29,6 +29,8 @@ import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.Collections
+import javax.inject.Inject
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.coroutines.transformFlow
 import org.orbitmvi.orbit.coroutines.transformSuspend
@@ -36,8 +38,6 @@ import org.orbitmvi.orbit.syntax.strict.orbit
 import org.orbitmvi.orbit.syntax.strict.reduce
 import org.orbitmvi.orbit.syntax.strict.sideEffect
 import org.orbitmvi.orbit.viewmodel.container
-import java.util.*
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -144,7 +144,6 @@ class MainViewModel @Inject constructor(
                 imageUri = imageUri,
                 fromCamera = fromCamera
             )
-            imageUri
         }.reduce {
             state.copy(selectionPersisting = false)
         }.sideEffect {
@@ -154,10 +153,15 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun putImagesSelection(imageUris: List<Uri>?) = orbit {
+    fun putImagesSelection(
+        imageUris: List<Uri>? = null,
+        intentImageUris: Array<Uri>? = null
+    ) = orbit {
         transformSuspend {
-            selectionRepository.putSelection(imageUris)
-            imageUris
+            selectionRepository.putSelection(
+                imageUris = imageUris,
+                intentImageUris = intentImageUris
+            )
         }.reduce {
             state.copy(selectionPersisting = false)
         }.sideEffect {
@@ -170,9 +174,8 @@ class MainViewModel @Inject constructor(
     fun putImageDirectorySelection(treeUri: Uri?) = orbit {
         transformSuspend {
             if (treeUri != null) {
-                imageRepository
-                    .getDocumentTreeAsMessageOrNull(treeUri)
-                    .also { message -> selectionRepository.putSelection(message) }
+                val message = imageRepository.getDocumentTreeAsMessageOrNull(treeUri)
+                selectionRepository.putSelection(message)
             } else {
                 treeUri
             }

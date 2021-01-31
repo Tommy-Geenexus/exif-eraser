@@ -20,21 +20,27 @@
 
 package com.none.tom.exiferaser
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
 
-    companion object {
-        const val KEY_IMAGE_SELECTION = TOP_LEVEL_PACKAGE_NAME + "IMAGE_SELECTION"
-        const val KEY_IMAGES_SELECTION = TOP_LEVEL_PACKAGE_NAME + "IMAGES_SELECTION"
-        const val KEY_SHORTCUT = TOP_LEVEL_PACKAGE_NAME + "SHORTCUT"
-        const val INTENT_EXTRA_CONSUMED = TOP_LEVEL_PACKAGE_NAME + "EXTRA_CONSUMED"
+    private companion object {
+        // See MainFragmentArgs
+        const val KEY_IMAGE_SELECTION = "image_selection"
+
+        // See MainFragmentArgs
+        const val KEY_IMAGES_SELECTION = "images_selection"
+
+        // See MainFragmentArgs
+        const val KEY_SHORTCUT = "shortcut"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,46 +48,55 @@ class ExifEraserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        consumeSendIntent()
-        consumeShortcutIntent()
+        handleSendIntent()
+        handleShortcutIntent()
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
-        consumeSendIntent()
-        consumeShortcutIntent()
+        handleSendIntent()
+        handleShortcutIntent()
     }
 
-    private fun consumeSendIntent() {
+    private fun handleSendIntent() {
         if (!isSendIntent() || intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
             return
         }
-        intent.putExtra(INTENT_EXTRA_CONSUMED, true)
         if (isSupportedSendImageIntent()) {
             val imageUris = intent.getClipDataUris()
             if (imageUris.isEmpty()) {
                 return
             }
-            val resultKey = if (imageUris.size > 1) KEY_IMAGES_SELECTION else KEY_IMAGE_SELECTION
-            supportFragmentManager
-                .fragments
-                .getOrNull(0)
-                ?.childFragmentManager
-                ?.setFragmentResult(resultKey, bundleOf(resultKey to imageUris))
+            val args = if (imageUris.size > 1) {
+                KEY_IMAGES_SELECTION to imageUris
+            } else {
+                KEY_IMAGE_SELECTION to imageUris.first()
+            }
+            sendPendingIntent(bundleOf(args))
         }
     }
 
-    private fun consumeShortcutIntent() {
+    private fun handleShortcutIntent() {
         if (!isShortcutIntent() || intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
             return
         }
-        intent.putExtra(INTENT_EXTRA_CONSUMED, true)
-        supportFragmentManager
-            .fragments
-            .getOrNull(0)
-            ?.childFragmentManager
-            ?.setFragmentResult(KEY_SHORTCUT, bundleOf(KEY_SHORTCUT to intent.action))
+        sendPendingIntent(bundleOf(KEY_SHORTCUT to intent.action))
+    }
+
+    private fun sendPendingIntent(args: Bundle) {
+        NavDeepLinkBuilder(this)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.fragment_main)
+            .setArguments(args)
+            .createPendingIntent()
+            .send(
+                this,
+                Activity.RESULT_OK,
+                Intent().apply {
+                    fillIn(intent, 0)
+                }
+            )
     }
 
     private fun isSendIntent(): Boolean {

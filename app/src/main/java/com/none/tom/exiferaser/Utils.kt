@@ -28,6 +28,8 @@ const val INTENT_ACTION_CHOOSE_IMAGE_DIR =
     TOP_LEVEL_PACKAGE_NAME + "ACTION_CHOOSE_IMAGE_DIRECTORY"
 const val INTENT_ACTION_LAUNCH_CAM = TOP_LEVEL_PACKAGE_NAME + "ACTION_LAUNCH_CAMERA"
 
+const val INTENT_EXTRA_CONSUMED = TOP_LEVEL_PACKAGE_NAME + "EXTRA_CONSUMED"
+
 const val URL_ISSUES = "https://github.com/Tommy-Geenexus/exif-eraser/issues"
 const val URL_LOCALISATION = "https://tomgappdev.oneskyapp.com/collaboration/project?id=375350"
 

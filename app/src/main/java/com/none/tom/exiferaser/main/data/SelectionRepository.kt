@@ -84,9 +84,9 @@ class SelectionRepository @Inject constructor(
     suspend fun putSelection(
         imageUri: Uri?,
         fromCamera: Boolean = false
-    ) {
+    ): Uri? {
         if (imageUri == null) {
-            return
+            return null
         }
         dataStore.updateData { proto ->
             proto.copy(
@@ -97,27 +97,30 @@ class SelectionRepository @Inject constructor(
                 user_images_selection_proto = null
             )
         }
+        return imageUri
     }
 
-    suspend fun putSelection(imageUris: List<Uri>?) {
-        if (imageUris == null) {
-            return
-        }
+    suspend fun putSelection(
+        imageUris: List<Uri>? = null,
+        intentImageUris: Array<Uri>? = null
+    ): List<Uri>? {
+        val uris = imageUris ?: intentImageUris?.toList() ?: return null
         dataStore.updateData { proto ->
             proto.copy(
                 user_image_selection_proto = null,
                 user_images_selection_proto = UserImagesSelectionProto(
-                    user_images_selection = imageUris.map { imageUri ->
+                    user_images_selection = uris.map { imageUri ->
                         UserImageSelectionProto(image_path = imageUri.toString())
                     }
                 )
             )
         }
+        return uris
     }
 
-    suspend fun putSelection(message: AnyMessage?) {
+    suspend fun putSelection(message: AnyMessage?): AnyMessage? {
         if (message == null) {
-            return
+            return null
         }
         dataStore.updateData { proto ->
             var imageProto: UserImageSelectionProto? = null
@@ -133,5 +136,6 @@ class SelectionRepository @Inject constructor(
                 user_images_selection_proto = imagesProto
             )
         }
+        return message
     }
 }

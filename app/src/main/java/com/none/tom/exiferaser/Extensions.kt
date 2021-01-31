@@ -72,7 +72,7 @@ fun Fragment.setTransitions(
     }
 }
 
-fun Intent.getClipDataUris(): List<Uri> {
+fun Intent.getClipDataUris(): Array<Uri> {
     val resultSet = linkedSetOf<Uri>()
     val d = data
     if (d != null) {
@@ -80,7 +80,7 @@ fun Intent.getClipDataUris(): List<Uri> {
     }
     val c = clipData
     if (c == null && resultSet.isEmpty()) {
-        return emptyList()
+        return emptyArray()
     } else if (c != null) {
         for (i in 0 until c.itemCount) {
             val uri = c.getItemAt(i).uri
@@ -89,7 +89,7 @@ fun Intent.getClipDataUris(): List<Uri> {
             }
         }
     }
-    return ArrayList(resultSet)
+    return resultSet.toTypedArray()
 }
 
 fun Uri?.isNotNullOrEmpty() = this != null && isNotEmpty()

@@ -28,8 +28,8 @@ import com.none.tom.exiferaser.settings.data.SettingsDelegate
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(

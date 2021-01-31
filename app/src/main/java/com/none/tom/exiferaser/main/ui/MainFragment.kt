@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.main.ui
 import android.content.Context
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Animatable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -34,20 +33,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
+import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.main.MarginItemDecoration
@@ -81,6 +80,7 @@ class MainFragment :
         const val IMAGE_SOURCES_AVD_PUT = R.drawable.avd_done_all_to_drag
     }
 
+    private val args: MainFragmentArgs by navArgs()
     private val viewModel: MainViewModel by viewModels()
     private val chooseImage = registerForActivityResult(OpenDocument()) { result ->
         viewModel.preparePutSelection(result)
@@ -114,21 +114,6 @@ class MainFragment :
             toolbar = binding.toolbar,
             titleRes = R.string.app_name
         )
-        setFragmentResultListener(ExifEraserActivity.KEY_SHORTCUT) { _, args: Bundle ->
-            val result = args.getString(ExifEraserActivity.KEY_SHORTCUT).orEmpty()
-            viewModel.reportShortcutUsed(result)
-            viewModel.handleShortcut(shortcutAction = result)
-        }
-        setFragmentResultListener(ExifEraserActivity.KEY_IMAGE_SELECTION) { _, args: Bundle ->
-            val result = args.getParcelableArrayList<Uri>(ExifEraserActivity.KEY_IMAGE_SELECTION)
-            viewModel.preparePutSelection(result)
-            viewModel.putImageSelection(imageUri = result?.firstOrNull())
-        }
-        setFragmentResultListener(ExifEraserActivity.KEY_IMAGES_SELECTION) { _, args: Bundle ->
-            val result = args.getParcelableArrayList<Uri>(ExifEraserActivity.KEY_IMAGES_SELECTION)
-            viewModel.preparePutSelection(result)
-            viewModel.putImagesSelection(imageUris = result)
-        }
         binding.title.text = getString(
             R.string.choose_your_preferred_image_source_placeholder,
             getString(R.string.choose_your),
@@ -184,6 +169,7 @@ class MainFragment :
                 handleSideEffect(sideEffect)
             }
         }
+        consumeDeepLinkIfPresent()
     }
 
     override fun onCreateOptionsMenu(
@@ -295,15 +281,40 @@ class MainFragment :
         }
     }
 
+    private fun consumeDeepLinkIfPresent() {
+        if (requireActivity().intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
+            return
+        }
+        val shortcut = args.shortcut
+        val imageSelection = args.imageSelection
+        val imagesSelection = args.imagesSelection
+        when {
+            shortcut != null -> {
+                requireActivity().intent.putExtra(INTENT_EXTRA_CONSUMED, true)
+                viewModel.reportShortcutUsed(shortcut)
+                viewModel.handleShortcut(shortcutAction = shortcut)
+            }
+            imageSelection != null -> {
+                requireActivity().intent.putExtra(INTENT_EXTRA_CONSUMED, true)
+                viewModel.preparePutSelection(imageSelection)
+                viewModel.putImageSelection(imageUri = imageSelection)
+            }
+            imagesSelection != null -> {
+                requireActivity().intent.putExtra(INTENT_EXTRA_CONSUMED, true)
+                viewModel.preparePutSelection(imagesSelection)
+                viewModel.putImagesSelection(intentImageUris = imagesSelection)
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.N_MR1)
     private fun reportShortcutUsed(action: String) {
-        val sm = requireContext().getSystemService(Context.SHORTCUT_SERVICE) as? ShortcutManager
-        if (sm != null) {
-            sm
-                .manifestShortcuts
-                .find { shortcutInfo -> shortcutInfo.intent?.action == action }
-                ?.let { shortcutInfo -> sm.reportShortcutUsed(shortcutInfo.id) }
-        }
+        val shortcutManager =
+            (requireContext().getSystemService(Context.SHORTCUT_SERVICE) as? ShortcutManager)
+        shortcutManager
+            ?.manifestShortcuts
+            ?.find { shortcutInfo -> shortcutInfo.intent?.action == action }
+            ?.let { shortcutInfo -> shortcutManager.reportShortcutUsed(shortcutInfo.id) }
     }
 
     private fun handleShortcutIntent(action: String) {
