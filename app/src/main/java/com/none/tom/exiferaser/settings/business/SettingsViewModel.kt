@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,22 +22,24 @@ package com.none.tom.exiferaser.settings.business
 
 import android.app.Application
 import android.content.Context
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.settings.data.SettingsDelegate
 import com.none.tom.exiferaser.settings.data.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
+import javax.inject.Inject
 
-@Suppress("StaticFieldLeak")
-class SettingsViewModel @ViewModelInject constructor(
-    @ApplicationContext private val context: Context,
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    @ApplicationContext context: Context,
     private val settingsRepository: SettingsRepository
 ) : AndroidViewModel(context as Application),
     SettingsDelegate by settingsRepository {
 
     fun getPackageVersionName(): String {
+        val context = getApplication<Application>()
         return context
             .packageManager
             .runCatching {

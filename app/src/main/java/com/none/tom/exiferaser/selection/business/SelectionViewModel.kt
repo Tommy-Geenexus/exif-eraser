@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,18 +21,9 @@
 package com.none.tom.exiferaser.selection.business
 
 import android.net.Uri
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import app.cash.exhaustive.Exhaustive
-import com.babylon.orbit2.ContainerHost
-import com.babylon.orbit2.coroutines.transformFlow
-import com.babylon.orbit2.coroutines.transformSuspend
-import com.babylon.orbit2.syntax.strict.orbit
-import com.babylon.orbit2.syntax.strict.reduce
-import com.babylon.orbit2.syntax.strict.sideEffect
-import com.babylon.orbit2.viewmodel.container
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.main.data.SelectionRepository
@@ -42,9 +33,19 @@ import com.none.tom.exiferaser.selection.setOrSkip
 import com.none.tom.exiferaser.selection.toInt
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
+import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.coroutines.transformFlow
+import org.orbitmvi.orbit.coroutines.transformSuspend
+import org.orbitmvi.orbit.syntax.strict.orbit
+import org.orbitmvi.orbit.syntax.strict.reduce
+import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
-class SelectionViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class SelectionViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val imageRepository: ImageRepository,
     private val selectionRepository: SelectionRepository,
     private val settingsRepository: SettingsRepository

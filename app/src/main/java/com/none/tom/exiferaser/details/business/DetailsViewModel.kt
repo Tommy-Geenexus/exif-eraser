@@ -21,18 +21,19 @@
 package com.none.tom.exiferaser.details.business
 
 import android.webkit.MimeTypeMap
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.babylon.orbit2.ContainerHost
-import com.babylon.orbit2.syntax.strict.orbit
-import com.babylon.orbit2.syntax.strict.reduce
-import com.babylon.orbit2.viewmodel.container
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.strict.orbit
+import org.orbitmvi.orbit.syntax.strict.reduce
+import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
-class DetailsViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class DetailsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
 ) : ContainerHost<DetailsState, Nothing>,
     ViewModel() {
 
@@ -41,7 +42,6 @@ class DetailsViewModel @ViewModelInject constructor(
         initialState = DetailsState()
     )
 
-    @Suppress("LongParameterList")
     fun handleImageDetails(
         mimeType: String,
         containsIccProfile: Boolean,

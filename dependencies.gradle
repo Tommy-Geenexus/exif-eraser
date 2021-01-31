@@ -1,12 +1,12 @@
 ext {
     kotlin_version = "1.4.21"
     dagger_version = "2.31.2-alpha"
-    detekt_version = "1.14.2"
+    detekt_version = "1.15.0"
     exhaustive_version = "0.1.1"
     ktlint_version = "9.4.1"
-    nav_version = "2.3.2"
+    nav_version = "2.3.3"
     versions_version = "0.36.0"
-    wire_version = "3.3.0"
+    wire_version = "3.5.0"
 
     def activity_version = "1.2.0-rc01"
     def app_compat_version = "1.2.0"
@@ -15,18 +15,17 @@ ext {
     def core_version = "1.3.2"
     def corner_sheet_version = "v1.0.1"
     def coroutines_test_version = "1.4.2"
-    def dagger_vm_version = "1.0.0-alpha02"
+    def dagger_androidx_version = "1.0.0-alpha03"
     def data_store_version = "1.0.0-alpha06"
     def desugar_version = "1.0.10"
     def exif_interface_version = "1.0.0"
-    def fragment_version = "1.3.0-rc01"
-    def lifecycle_version = "2.2.0"
+    def fragment_version = "1.3.0-rc02"
     def material_version = "1.3.0-rc01"
-    def orbit_version = "2.1.0"
+    def orbit_version = "2.2.0"
     def preference_version = "1.1.1"
     def recycler_view_version = "1.2.0-beta01"
     def roboelectric_version = "4.5"
-    def strikt_version = "0.28.1"
+    def strikt_version = "0.28.2"
     def test_version = "1.3.0"
     def timber_version = "4.7.1"
     def wire_version = "3.5.0"
@@ -54,21 +53,17 @@ ext {
             "core"                : "androidx.core:core-ktx:$core_version",
             "corner_sheet"        : "com.github.heyalex.cornersheet:core:$corner_sheet_version",
             "dagger_hilt"         : "com.google.dagger:hilt-android:$dagger_version",
-            "dagger_vm"           : "androidx.hilt:hilt-lifecycle-viewmodel:$dagger_vm_version",
+            "dagger_vm"           : "androidx.hilt:hilt-lifecycle-viewmodel:$dagger_androidx_version",
             "data_store_prefs"    : "androidx.datastore:datastore-preferences:$data_store_version",
             "data_store_proto"    : "androidx.datastore:datastore-core:$data_store_version",
             "exif_interface"      : "io.github.tommy-geenexus:exif-interface-extended:$exif_interface_version",
             "fragment"            : "androidx.fragment:fragment-ktx:$fragment_version",
             "kotlin"              : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
-            "lifecycle_extensions": "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
-            "lifecycle_vm"        : "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version",
-            "livedata"            : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version",
             "material"            : "com.google.android.material:material:$material_version",
             "navigation_fragment" : "androidx.navigation:navigation-fragment-ktx:$nav_version",
             "navigation_ui"       : "androidx.navigation:navigation-ui-ktx:$nav_version",
-            "orbit_coroutines"    : "com.babylon.orbit2:orbit-coroutines:$orbit_version",
-            "orbit_livedata"      : "com.babylon.orbit2:orbit-livedata:$orbit_version",
-            "orbit_vm"            : "com.babylon.orbit2:orbit-viewmodel:$orbit_version",
+            "orbit_coroutines"    : "org.orbit-mvi:orbit-coroutines:$orbit_version",
+            "orbit_vm"            : "org.orbit-mvi:orbit-viewmodel:$orbit_version",
             "preference"          : "androidx.preference:preference-ktx:$preference_version",
             "recycler_view"       : "androidx.recyclerview:recyclerview:$recycler_view_version",
             "timber"              : "com.jakewharton.timber:timber:$timber_version",
@@ -86,7 +81,7 @@ ext {
 
     kapt_dependencies = [
             "dagger_hilt_compiler": "com.google.dagger:hilt-android-compiler:$dagger_version",
-            "dagger_vm_compiler"  : "androidx.hilt:hilt-compiler:$dagger_vm_version"
+            "dagger_vm_compiler"  : "androidx.hilt:hilt-compiler:$dagger_androidx_version"
     ]
 
     test_dependencies = [

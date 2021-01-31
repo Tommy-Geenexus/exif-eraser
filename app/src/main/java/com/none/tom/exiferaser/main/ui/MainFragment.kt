@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -45,6 +45,9 @@ import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.ExifEraserActivity
+import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
+import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
+import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.main.MarginItemDecoration
@@ -63,7 +66,6 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
-@Suppress("TooManyFunctions")
 @AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
@@ -101,7 +103,6 @@ class MainFragment :
         )
     }
 
-    @Suppress("LongMethod")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -307,13 +308,13 @@ class MainFragment :
 
     private fun handleShortcutIntent(action: String) {
         when (action) {
-            getString(R.string.action_shortcut_choose_image) -> {
+            INTENT_ACTION_CHOOSE_IMAGE -> {
                 onImageItemSelected()
             }
-            getString(R.string.action_shortcut_choose_images) -> {
+            INTENT_ACTION_CHOOSE_IMAGES -> {
                 onImagesItemSelected()
             }
-            getString(R.string.action_shortcut_choose_image_directory) -> {
+            INTENT_ACTION_CHOOSE_IMAGE_DIR -> {
                 onImageDirectoryItemSelected()
             }
             else -> {

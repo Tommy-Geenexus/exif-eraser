@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,31 +21,30 @@
 package com.none.tom.exiferaser.savepath.business
 
 import android.net.Uri
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.babylon.orbit2.Container
-import com.babylon.orbit2.ContainerHost
-import com.babylon.orbit2.coroutines.transformSuspend
-import com.babylon.orbit2.syntax.strict.orbit
-import com.babylon.orbit2.syntax.strict.reduce
-import com.babylon.orbit2.syntax.strict.sideEffect
-import com.babylon.orbit2.viewmodel.container
 import com.none.tom.exiferaser.settings.data.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.coroutines.transformSuspend
+import org.orbitmvi.orbit.syntax.strict.orbit
+import org.orbitmvi.orbit.syntax.strict.reduce
+import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
-class SavePathViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class SavePathViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository
 ) : ContainerHost<SavePathState, SavePathSideEffect>,
     ViewModel() {
 
-    override val container: Container<SavePathState, SavePathSideEffect> =
-        container(
-            initialState = SavePathState(),
-            savedStateHandle = savedStateHandle,
-            onCreate = { verifyHasPrivilegedDefaultSavePath() }
-        )
+    override val container = container<SavePathState, SavePathSideEffect>(
+        initialState = SavePathState(),
+        savedStateHandle = savedStateHandle,
+        onCreate = { verifyHasPrivilegedDefaultSavePath() }
+    )
 
     private fun verifyHasPrivilegedDefaultSavePath() = orbit {
         transformSuspend {

@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="action_image_source_select_camera" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_CAMERA</string>
-    <string name="action_image_source_select_image" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE</string>
-    <string name="action_image_source_select_image_directory" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE_DIRECTORY</string>
-    <string name="action_image_source_select_images" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_IMAGE_SOURCE_SELECT_IMAGE</string>
-    <string name="action_shortcut_choose_image" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE</string>
-    <string name="action_shortcut_choose_image_directory" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGE_DIRECTORY</string>
-    <string name="action_shortcut_choose_images" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_CHOOSE_IMAGES</string>
-    <string name="action_shortcut_launch_camera" tools:ignore="UnusedResources" tools:keep="@string/action_image_source_select_camera" translatable="false">com.none.tom.exiferaser.ACTION_LAUNCH_CAMERA</string>
-
+<resources>
     <string name="all_done">All done!</string>
 
     <string name="always">Always</string>
@@ -47,11 +38,6 @@
     <string name="github" translatable="false">GitHub</string>
 
     <string name="icc_profile" translatable="false">ICC Profile</string>
-
-    <string name="id_shortcut_choose_image" tools:keep="@string/id_shortcut_choose_image" translatable="false">choose_image</string>
-    <string name="id_shortcut_choose_image_directory" tools:keep="@string/id_shortcut_choose_image_directory" translatable="false">choose_image_directory</string>
-    <string name="id_shortcut_choose_images" tools:keep="@string/id_shortcut_choose_images" translatable="false">choose_images</string>
-    <string name="id_shortcut_launch_camera" tools:keep="@string/id_shortcut_launch_camera" translatable="false">launch_camera</string>
 
     <string name="image">Image</string>
     <string name="image_directory">Image directory</string>
@@ -128,8 +114,6 @@
     <string name="unmodified">Unmodified</string>
 
     <string name="unsaved">Unsaved</string>
-
-    <string name="url_issue" translatable="false">https://github.com/Tommy-Geenexus/exif-eraser/issues</string>
 
     <string name="version">Version</string>
 

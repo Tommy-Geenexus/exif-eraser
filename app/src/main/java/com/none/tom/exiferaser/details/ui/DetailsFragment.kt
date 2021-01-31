@@ -54,7 +54,6 @@ class DetailsFragment : DialogFragment() {
         const val KEY_XMP = TOP_LEVEL_PACKAGE_NAME + "xmp"
         const val KEY_EXTENDED_XMP = TOP_LEVEL_PACKAGE_NAME + "extended_xmp"
 
-        @Suppress("LongParameterList")
         fun newInstance(
             displayName: String,
             mimeType: String,
@@ -113,7 +112,6 @@ class DetailsFragment : DialogFragment() {
         _binding = null
     }
 
-    @Suppress("LongMethod")
     private fun renderState(state: DetailsState) {
         binding.apply {
             extension.apply {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,11 +29,13 @@ import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.di.DataStoreSelection
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
+@Singleton
 class SelectionRepository @Inject constructor(
     @DataStoreSelection private val dataStore: DataStore<SelectionProto>
 ) {

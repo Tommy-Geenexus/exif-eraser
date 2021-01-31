@@ -81,6 +81,10 @@ tasks.named("dependencyUpdates").configure {
 
 tasks.detekt.jvmTarget = "1.8"
 
+detekt {
+    baseline = file("$projectDir/config/baseline.xml")
+}
+
 ktlint {
     android.set(true)
     ignoreFailures.set(true)

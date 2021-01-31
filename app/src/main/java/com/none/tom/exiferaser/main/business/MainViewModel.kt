@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,28 +21,27 @@
 package com.none.tom.exiferaser.main.business
 
 import android.net.Uri
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.babylon.orbit2.Container
-import com.babylon.orbit2.ContainerHost
-import com.babylon.orbit2.coroutines.transformFlow
-import com.babylon.orbit2.coroutines.transformSuspend
-import com.babylon.orbit2.syntax.strict.orbit
-import com.babylon.orbit2.syntax.strict.reduce
-import com.babylon.orbit2.syntax.strict.sideEffect
-import com.babylon.orbit2.viewmodel.container
 import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
-import java.util.Collections
+import dagger.hilt.android.lifecycle.HiltViewModel
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.coroutines.transformFlow
+import org.orbitmvi.orbit.coroutines.transformSuspend
+import org.orbitmvi.orbit.syntax.strict.orbit
+import org.orbitmvi.orbit.syntax.strict.reduce
+import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.viewmodel.container
+import java.util.*
+import javax.inject.Inject
 
-@Suppress("TooManyFunctions")
-class MainViewModel @ViewModelInject constructor(
-    @Assisted savedStateHandle: SavedStateHandle,
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val imageRepository: ImageRepository,
     private val imageSourceRepository: ImageSourceRepository,
     private val selectionRepository: SelectionRepository,
@@ -50,7 +49,7 @@ class MainViewModel @ViewModelInject constructor(
 ) : ContainerHost<MainState, MainSideEffect>,
     ViewModel() {
 
-    override val container: Container<MainState, MainSideEffect> = container(
+    override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),
         savedStateHandle = savedStateHandle,
         onCreate = {

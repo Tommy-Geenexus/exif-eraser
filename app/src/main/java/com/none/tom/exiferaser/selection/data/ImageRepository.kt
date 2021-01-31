@@ -48,6 +48,7 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
@@ -56,7 +57,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@Suppress("TooManyFunctions")
+@Singleton
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val contentResolver: ContentResolver,
@@ -166,7 +167,6 @@ class ImageRepository @Inject constructor(
         }
     }
 
-    @Suppress("LongMethod")
     @WorkerThread
     private fun removeMetaData(
         selection: UserImageSelectionProto,

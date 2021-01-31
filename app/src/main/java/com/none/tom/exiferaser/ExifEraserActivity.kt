@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -95,9 +95,9 @@ class ExifEraserActivity : AppCompatActivity() {
     }
 
     private fun isShortcutIntent(): Boolean {
-        return intent.action == getString(R.string.action_shortcut_choose_image) ||
-            intent.action == getString(R.string.action_shortcut_choose_images) ||
-            intent.action == getString(R.string.action_shortcut_choose_image_directory) ||
-            intent.action == getString(R.string.action_shortcut_launch_camera)
+        return intent.action == INTENT_ACTION_CHOOSE_IMAGE ||
+            intent.action == INTENT_ACTION_CHOOSE_IMAGES ||
+            intent.action == INTENT_ACTION_CHOOSE_IMAGE_DIR ||
+            intent.action == INTENT_ACTION_LAUNCH_CAM
     }
 }

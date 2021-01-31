@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -35,6 +36,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.get
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.URL_ISSUES
 import com.none.tom.exiferaser.URL_LOCALISATION
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
 import com.none.tom.exiferaser.isNotEmpty
@@ -47,7 +49,6 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportImageFormatShortcuts
 import dagger.hilt.android.AndroidEntryPoint
 
-@Suppress("TooManyFunctions")
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -99,7 +100,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
     }
 
-    @Suppress("ComplexMethod", "NestedBlockDepth")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -243,7 +243,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private fun setupPreferenceBugReport(preference: Preference) {
         preference.setOnPreferenceClickListener {
-            viewUrl.launch(Uri.parse(getString(R.string.url_issue)))
+            viewUrl.launch(URL_ISSUES.toUri())
             true
         }
     }
