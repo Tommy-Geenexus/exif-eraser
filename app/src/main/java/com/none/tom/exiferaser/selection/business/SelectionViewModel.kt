@@ -71,19 +71,31 @@ class SelectionViewModel @Inject constructor(
     }
 
     fun prepareReport() = orbit {
-        sideEffect {
-            val imageSummaries = container.currentState.imageSummaries.filterNotNull()
-            if (imageSummaries.isNotEmpty()) {
-                post(SelectionSideEffect.PrepareReport(imageSummaries))
+        transformSuspend {
+            state.imageSummaries.filterNotNull()
+        }.sideEffect {
+            val result = event
+            if (result.isNotEmpty()) {
+                post(SelectionSideEffect.PrepareReport(result))
             }
         }
     }
 
     fun shareImages() = orbit {
-        sideEffect {
-            val imageUris = container.currentState.imageUris.filterNotNull()
-            if (imageUris.isNotEmpty()) {
-                post(SelectionSideEffect.ShareImages(ArrayList(imageUris)))
+        transformSuspend {
+            state
+                .imageSummaries
+                .filterNotNull()
+                .filter { summary ->
+                    summary.imageModified && summary.imageSaved
+                }
+                .map { summary ->
+                    summary.imageUri
+                }
+        }.sideEffect {
+            val result = event
+            if (!result.isNullOrEmpty()) {
+                post(SelectionSideEffect.ShareImages(ArrayList(result)))
             }
         }
     }
