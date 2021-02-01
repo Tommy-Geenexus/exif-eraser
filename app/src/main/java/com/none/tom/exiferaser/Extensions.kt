@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -27,7 +27,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialSharedAxis
 
 fun FragmentActivity.setupToolbar(
@@ -50,6 +52,14 @@ fun FragmentActivity.setupToolbar(
                 }
             }
         }
+}
+
+fun Fragment.navigate(navDirections: NavDirections) {
+    val navController = findNavController()
+    val action = navController.currentDestination?.getAction(navDirections.actionId)
+    if (action != null && action.destinationId != 0) {
+        navController.navigate(navDirections)
+    }
 }
 
 fun Fragment.setTransitions(

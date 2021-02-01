@@ -36,7 +36,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -59,6 +58,7 @@ import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
 import com.none.tom.exiferaser.main.setupScaleAndIconAnimation
+import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportedMimeTypes
@@ -267,14 +267,14 @@ class MainFragment :
                     transitionExit = MaterialSharedAxis(MaterialSharedAxis.X, true),
                     transitionReenter = MaterialSharedAxis(MaterialSharedAxis.X, false)
                 )
-                findNavController().navigate(MainFragmentDirections.mainToSelectionSavePath())
+                navigate(MainFragmentDirections.mainToSelectionSavePath())
             }
             is MainSideEffect.NavigateToSettings -> {
                 setTransitions(
                     transitionExit = MaterialSharedAxis(MaterialSharedAxis.Z, true),
                     transitionReenter = MaterialSharedAxis(MaterialSharedAxis.Z, false)
                 )
-                findNavController().navigate(MainFragmentDirections.mainToSettings())
+                navigate(MainFragmentDirections.mainToSettings())
             }
             is MainSideEffect.ShortcutHandle -> {
                 handleShortcutIntent(sideEffect.shortcutAction)

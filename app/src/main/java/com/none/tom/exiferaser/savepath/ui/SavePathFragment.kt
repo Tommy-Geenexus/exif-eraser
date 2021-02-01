@@ -29,11 +29,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import app.cash.exhaustive.Exhaustive
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentSavePathBinding
+import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
 import com.none.tom.exiferaser.savepath.business.SavePathState
 import com.none.tom.exiferaser.savepath.business.SavePathViewModel
@@ -111,10 +111,8 @@ class SavePathFragment : BottomSheetDialogFragment() {
                 chooseSavePath.launch(sideEffect.openPath)
             }
             is SavePathSideEffect.NavigateToSelection -> {
-                findNavController().navigate(
-                    SavePathFragmentDirections.selectionSavePathToSelection(
-                        sideEffect.savePath
-                    )
+                navigate(
+                    SavePathFragmentDirections.selectionSavePathToSelection(sideEffect.savePath)
                 )
             }
         }
