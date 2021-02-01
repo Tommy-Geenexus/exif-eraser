@@ -8,6 +8,8 @@
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongParameterList:DetailsFragment.kt$DetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:DetailsViewModel.kt$DetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
+    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
+    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>NestedBlockDepth:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>

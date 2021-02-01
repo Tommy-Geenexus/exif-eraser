@@ -210,7 +210,10 @@ class ImageRepository @Inject constructor(
                 endIndex = if (endIndex > 0) endIndex else displayName.length
             )
             if (displayNameSuffix.isNotEmpty()) {
-                displayName = displayName.plus('_').plus(displayNameSuffix)
+                val displayNameWithSuffix = displayName + '_' + displayNameSuffix
+                if (FileUtilsKt.isValidExtFilename(displayNameWithSuffix)) {
+                    displayName = displayNameWithSuffix
+                }
             }
             if (!containsMetadata) {
                 return@runCatching
@@ -257,14 +260,8 @@ class ImageRepository @Inject constructor(
         mimeType: String?
     ): Uri? {
         return runCatching {
-            val documentTreeUri = DocumentFile.fromTreeUri(
-                context,
-                if (treeUri.isNotEmpty()) {
-                    treeUri
-                } else {
-                    documentPath
-                }
-            )?.uri
+            val realTreeUri = if (treeUri.isNotEmpty()) treeUri else documentPath
+            val documentTreeUri = DocumentFile.fromTreeUri(context, realTreeUri)?.uri
             if (documentTreeUri != null &&
                 !displayName.isNullOrEmpty() &&
                 !mimeType.isNullOrEmpty()
