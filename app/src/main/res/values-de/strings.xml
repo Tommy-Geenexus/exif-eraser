@@ -17,8 +17,6 @@
 
     <string name="confirm">Übernehmen</string>
 
-    <string name="custom">Benutzerdefiniert</string>
-
     <string name="default_display_name_suffix">Standard-Anzeigename-Zusatz</string>
     <string name="default_path_open">Standard-Öffnungspfad</string>
     <string name="default_path_save">Standard-Speicherpfad</string>
@@ -51,6 +49,7 @@
 
     <string name="of">von</string>
 
+    <string name="path_error">Pfadname konnte nicht ermittelt werden</string>
     <string name="path_save_choose">Wähle Speicherpfad</string>
     <string name="path_save_custom">Benutzerdefinierter Speicherpfad</string>
     <string name="path_save_default">Standard-Speicherpfad</string>

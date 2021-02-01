@@ -55,7 +55,14 @@ class SettingsRepository @Inject constructor(
         path: Uri,
         releaseUriPermissions: Boolean
     ) {
-        if (releaseUriPermissions) {
+        if (path.isNotEmpty()) {
+            takePersistablePermissions(
+                resolver = context.contentResolver,
+                uri = path,
+                read = true,
+                write = false
+            )
+        } else if (releaseUriPermissions) {
             releasePersistablePermissions(
                 resolver = context.contentResolver,
                 uri = getDefaultOpenPath(),
@@ -72,13 +79,14 @@ class SettingsRepository @Inject constructor(
         val path = getDefaultOpenPath()
         return runCatching {
             if (path.isNotEmpty()) {
-                DocumentFile.fromTreeUri(context, path)?.name ?: context.getString(R.string.custom)
+                DocumentFile.fromTreeUri(context, path)?.name
+                    ?: context.getString(R.string.path_error)
             } else {
                 context.getString(R.string.none)
             }
         }.getOrElse { exception ->
             Timber.e(exception)
-            context.getString(R.string.custom)
+            context.getString(R.string.path_error)
         }
     }
 
@@ -110,13 +118,14 @@ class SettingsRepository @Inject constructor(
         val path = getDefaultSavePath()
         return runCatching {
             if (path.isNotEmpty()) {
-                DocumentFile.fromTreeUri(context, path)?.name ?: context.getString(R.string.custom)
+                DocumentFile.fromTreeUri(context, path)?.name
+                    ?: context.getString(R.string.path_error)
             } else {
                 context.getString(R.string.none)
             }
         }.getOrElse { exception ->
             Timber.e(exception)
-            context.getString(R.string.custom)
+            context.getString(R.string.path_error)
         }
     }
 

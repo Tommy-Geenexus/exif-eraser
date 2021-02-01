@@ -20,8 +20,6 @@
 
     <string name="confirm">Confirm</string>
 
-    <string name="custom">Custom</string>
-
     <string name="default_display_name_suffix">Default display name suffix</string>
     <string name="default_path_open">Default open path</string>
     <string name="default_path_save">Default save path</string>
@@ -79,6 +77,7 @@
 
     <string name="onesky" translatable="false">OneSky</string>
 
+    <string name="path_error">Failed to obtain path name</string>
     <string name="path_save_choose">Choose save path</string>
     <string name="path_save_custom">Custom save path</string>
     <string name="path_save_default">Default save path</string>
