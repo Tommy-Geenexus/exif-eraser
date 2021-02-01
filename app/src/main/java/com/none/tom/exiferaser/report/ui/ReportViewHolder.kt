@@ -78,6 +78,8 @@ class ReportViewHolder(
                     setTextColor(colorError)
                     setText(R.string.unmodified)
                 }
+                isFocusable = imageModified
+                isClickable = imageModified
             }
             binding.saved.apply {
                 if (imageSaved) {

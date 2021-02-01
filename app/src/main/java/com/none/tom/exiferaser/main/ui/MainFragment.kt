@@ -22,6 +22,7 @@ package com.none.tom.exiferaser.main.ui
 
 import android.content.Context
 import android.content.pm.ShortcutManager
+import android.content.res.Configuration
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
@@ -114,11 +115,16 @@ class MainFragment :
             toolbar = binding.toolbar,
             titleRes = R.string.app_name
         )
-        binding.title.text = getString(
-            R.string.choose_your_preferred_image_source_placeholder,
-            getString(R.string.choose_your),
-            getString(R.string.preferred_image_source)
-        )
+        val orientation = resources.configuration.orientation
+        binding.title.text = if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            getString(
+                R.string.choose_your_preferred_image_source_placeholder,
+                getString(R.string.choose_your),
+                getString(R.string.preferred_image_source)
+            )
+        } else {
+            getString(R.string.choose_your) + ' ' + getString(R.string.preferred_image_source)
+        }
         binding.imageSources.apply {
             layoutManager = StaggeredGridLayoutManager(
                 GRID_LAYOUT_SPAN_CNT,

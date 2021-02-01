@@ -15,38 +15,27 @@
         app:logo="@drawable/ic_logo"
         app:titleTextAppearance="@style/TextAppearance.ExifEraser.Title.Toolbar" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
         android:layout_marginEnd="@dimen/spacing_normal"
-        android:gravity="end"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textAppearance="@style/TextAppearance.ExifEraser.Title.Large"
-        app:layout_constraintTop_toBottomOf="@id/guideline_title" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_image_sources"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.375" />
+        app:layout_constraintBottom_toTopOf="@id/image_sources"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image_sources"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_normal"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/spacing_normal"
         android:transitionGroup="true"
-        app:layout_constraintTop_toBottomOf="@id/guideline_image_sources" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/spinner"
