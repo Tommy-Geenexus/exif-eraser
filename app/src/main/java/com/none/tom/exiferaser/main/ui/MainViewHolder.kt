@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,6 +20,8 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainCardViewBinding
@@ -42,31 +44,71 @@ class MainViewHolder(
         }
     }
 
-    fun bindSelectImageItem() {
+    fun bindSelectImageItem(screenHeightRatio: Float) {
         binding.apply {
-            image.setImageResource(R.drawable.ic_image)
             method.setText(R.string.image_file)
+            bindItemByScreenHeightRatio(
+                screenHeightRatio = screenHeightRatio,
+                drawableRes = R.drawable.ic_image,
+                drawableResXLarge = R.drawable.ic_image_xlarge
+            )
         }
     }
 
-    fun bindSelectImagesItem() {
+    fun bindSelectImagesItem(screenHeightRatio: Float) {
         binding.apply {
-            image.setImageResource(R.drawable.ic_photo_library)
             method.setText(R.string.image_files)
+            bindItemByScreenHeightRatio(
+                screenHeightRatio = screenHeightRatio,
+                drawableRes = R.drawable.ic_photo_library,
+                drawableResXLarge = R.drawable.ic_photo_library_xlarge
+            )
         }
     }
 
-    fun bindSelectImageDirectoryItem() {
+    fun bindSelectImageDirectoryItem(screenHeightRatio: Float) {
         binding.apply {
-            image.setImageResource(R.drawable.ic_photo_album)
             method.setText(R.string.image_directory)
+            bindItemByScreenHeightRatio(
+                screenHeightRatio = screenHeightRatio,
+                drawableRes = R.drawable.ic_photo_album,
+                drawableResXLarge = R.drawable.ic_photo_album_xlarge
+            )
         }
     }
 
-    fun bindCameraItem() {
+    fun bindCameraItem(screenHeightRatio: Float) {
         binding.apply {
-            image.setImageResource(R.drawable.ic_camera)
             method.setText(R.string.camera)
+            bindItemByScreenHeightRatio(
+                screenHeightRatio = screenHeightRatio,
+                drawableRes = R.drawable.ic_camera,
+                drawableResXLarge = R.drawable.ic_camera_xlarge
+            )
         }
+    }
+
+    private fun bindItemByScreenHeightRatio(
+        screenHeightRatio: Float,
+        @DrawableRes drawableRes: Int,
+        @DrawableRes drawableResXLarge: Int
+    ) {
+        val margin: Int
+        if (screenHeightRatio <= MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY) {
+            margin = itemView.context.resources.getDimension(R.dimen.spacing_small).toInt()
+            binding.image.setImageResource(drawableRes)
+        } else if (screenHeightRatio > MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY &&
+            screenHeightRatio <= MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT
+        ) {
+            margin = itemView.context.resources.getDimension(R.dimen.spacing_normal).toInt()
+            binding.image.setImageResource(drawableRes)
+        } else {
+            margin = itemView.context.resources.getDimension(R.dimen.spacing_normal).toInt()
+            binding.image.setImageResource(drawableResXLarge)
+        }
+        (binding.image.layoutParams as? ConstraintLayout.LayoutParams)
+            ?.setMargins(margin, margin, margin, margin)
+        (binding.method.layoutParams as? ConstraintLayout.LayoutParams)
+            ?.setMargins(margin, margin, margin, margin)
     }
 }

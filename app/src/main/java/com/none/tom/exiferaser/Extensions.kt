@@ -22,6 +22,7 @@ package com.none.tom.exiferaser
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -80,6 +81,10 @@ fun Fragment.setTransitions(
     reenterTransition = transitionReenter?.apply {
         duration = resources.getInteger(R.integer.anim_time_medium).toLong()
     }
+}
+
+fun Fragment.isActivityInMultiWindowMode(): Boolean {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && requireActivity().isInMultiWindowMode
 }
 
 fun Intent.getClipDataUris(): Array<Uri> {

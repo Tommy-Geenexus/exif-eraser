@@ -10,6 +10,12 @@
         <item name="android:textSize">@dimen/font_small</item>
     </style>
 
+    <style name="TextAppearance.ExifEraser.Title.Medium" parent="@style/TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/font_medium</item>
+    </style>
+
     <style name="TextAppearance.ExifEraser.Title.Large" parent="@style/TextAppearance.MaterialComponents.Headline4">
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textStyle">bold</item>

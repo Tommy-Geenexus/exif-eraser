@@ -18,5 +18,6 @@
     <dimen name="bottom_sheet_item_heigth">56dp</dimen>
 
     <dimen name="font_small">14sp</dimen>
+    <dimen name="font_medium">20sp</dimen>
     <dimen name="font_large">30sp</dimen>
 </resources>

@@ -26,6 +26,7 @@ import android.content.res.Configuration
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -33,6 +34,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -49,9 +51,8 @@ import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
+import com.none.tom.exiferaser.isActivityInMultiWindowMode
 import com.none.tom.exiferaser.main.MarginItemDecoration
-import com.none.tom.exiferaser.main.OpenDocument
-import com.none.tom.exiferaser.main.OpenMultipleDocuments
 import com.none.tom.exiferaser.main.TakePicture
 import com.none.tom.exiferaser.main.addItemTouchHelper
 import com.none.tom.exiferaser.main.business.MainSideEffect
@@ -64,6 +65,7 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.max
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -71,23 +73,30 @@ class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
     MainAdapter.Listener {
 
-    private companion object {
-        const val GRID_LAYOUT_SPAN_CNT = 2
+    companion object {
+        private const val GRID_LAYOUT_SPAN_CNT = 2
 
         @DrawableRes
-        const val IMAGE_SOURCES_AVD_REORDER = R.drawable.avd_drag_to_done_all
+        private const val IMAGE_SOURCES_AVD_REORDER = R.drawable.avd_drag_to_done_all
 
         @DrawableRes
-        const val IMAGE_SOURCES_AVD_PUT = R.drawable.avd_done_all_to_drag
+        private const val IMAGE_SOURCES_AVD_DRAG = R.drawable.avd_done_all_to_drag
+        const val RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY = 0.33f
+        const val RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT = 0.50f
+        const val RATIO_SCREEN_HEIGHT_EXPANDED = 1f
     }
 
     private val args: MainFragmentArgs by navArgs()
     private val viewModel: MainViewModel by viewModels()
-    private val chooseImage = registerForActivityResult(OpenDocument()) { result ->
+    private val chooseImage = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { result ->
         viewModel.preparePutSelection(result)
         viewModel.putImageSelection(imageUri = result)
     }
-    private val chooseImages = registerForActivityResult(OpenMultipleDocuments()) { result ->
+    private val chooseImages = registerForActivityResult(
+        ActivityResultContracts.OpenMultipleDocuments()
+    ) { result ->
         viewModel.preparePutSelection(result)
         viewModel.putImagesSelection(imageUris = result)
     }
@@ -115,8 +124,7 @@ class MainFragment :
             toolbar = binding.toolbar,
             titleRes = R.string.app_name
         )
-        val orientation = resources.configuration.orientation
-        binding.title.text = if (orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        binding.title.text = if (isOrientationPortrait()) {
             getString(
                 R.string.choose_your_preferred_image_source_placeholder,
                 getString(R.string.choose_your),
@@ -138,7 +146,7 @@ class MainFragment :
                     SimpleItemTouchHelperCallback(
                         callback = adapter as MainAdapter,
                         canMoveItem = {
-                            binding.imageSourcesReorder.tag == IMAGE_SOURCES_AVD_PUT
+                            binding.imageSourcesReorder.tag == IMAGE_SOURCES_AVD_DRAG
                         }
                     )
                 )
@@ -148,7 +156,7 @@ class MainFragment :
             setupScaleAndIconAnimation(
                 viewLifecycleOwner,
                 iconResStart = IMAGE_SOURCES_AVD_REORDER,
-                iconResEnd = IMAGE_SOURCES_AVD_PUT,
+                iconResEnd = IMAGE_SOURCES_AVD_DRAG,
                 textResStart = R.string.reorder,
                 textResEnd = R.string.confirm
             )
@@ -195,6 +203,10 @@ class MainFragment :
         }
     }
 
+    override fun onMultiWindowModeChanged(isInMultiWindowMode: Boolean) {
+        viewModel.handleMultiWindowMode(isInMultiWindowMode)
+    }
+
     override fun bindLayout(view: View) = FragmentMainBinding.bind(view)
 
     override fun onImageItemSelected() {
@@ -226,22 +238,33 @@ class MainFragment :
     }
 
     private fun renderState(state: MainState) {
-        binding.run {
-            spinner.isVisible = state.imageSourcesFetching ||
-                state.imageSourcesPersisting ||
-                state.selectionPersisting ||
-                state.accessingPreferences
-            imageSources.apply {
-                (adapter as? MainAdapter)?.submitList(state.imageSources)
-                isVisible = !spinner.isVisible
+        val isActivityInMultiWindowMode = isActivityInMultiWindowMode()
+        val accessingStorage = state.imageSourcesFetching ||
+            state.imageSourcesPersisting ||
+            state.selectionPersisting ||
+            state.accessingPreferences
+        val currentScreenHeightRatio = calculateScreenHeightRatio(isActivityInMultiWindowMode)
+        binding.apply {
+            spinner.isVisible = accessingStorage
+            title.setTextAppearance(
+                getTitleTextAppearance(
+                    screenHeightRatio = currentScreenHeightRatio,
+                    isActivityInMultiWindowMode = isActivityInMultiWindowMode
+                )
+            )
+            (imageSources.adapter as? MainAdapter?)?.run {
+                screenHeightRatio = currentScreenHeightRatio
+                submitList(state.imageSources)
             }
-            val reorder =
-                state.imageSourcesReorder && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_PUT
-            val putReorder =
-                state.imageSourcesPersisted && imageSourcesReorder.tag != IMAGE_SOURCES_AVD_REORDER
-            if (reorder || putReorder) {
-                (binding.imageSourcesReorder.icon as? Animatable)?.start()
-            }
+            imageSources.isVisible = !binding.spinner.isVisible
+            imageSourcesReorder.isVisible = !isActivityInMultiWindowMode
+        }
+        val isReorderShown = binding.imageSourcesReorder.tag == IMAGE_SOURCES_AVD_REORDER
+        val isDragShown = binding.imageSourcesReorder.tag == IMAGE_SOURCES_AVD_DRAG
+        val animateImageSources = (state.imageSourcesReorder && isReorderShown) ||
+            (state.imageSourcesPersisted && isDragShown)
+        if (animateImageSources) {
+            (binding.imageSourcesReorder.icon as? Animatable)?.start()
         }
     }
 
@@ -249,11 +272,9 @@ class MainFragment :
         @Exhaustive
         when (sideEffect) {
             is MainSideEffect.ChooseImage -> {
-                (chooseImage.contract as? OpenDocument)?.initialUri = sideEffect.openPath
                 chooseImage.launch(supportedMimeTypes)
             }
             is MainSideEffect.ChooseImages -> {
-                (chooseImages.contract as? OpenMultipleDocuments)?.initialUri = sideEffect.openPath
                 chooseImages.launch(supportedMimeTypes)
             }
             is MainSideEffect.ChooseImageDirectory -> {
@@ -311,6 +332,50 @@ class MainFragment :
                 viewModel.putImagesSelection(intentImageUris = imagesSelection)
             }
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun calculateScreenHeightRatio(isActivityInMultiWindowMode: Boolean): Float {
+        if (!isActivityInMultiWindowMode) {
+            return RATIO_SCREEN_HEIGHT_EXPANDED
+        }
+        val wm = requireActivity().windowManager
+        val currentPx: Int
+        val maxPx: Int
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            currentPx = wm.currentWindowMetrics.bounds.height()
+            val bounds = wm.maximumWindowMetrics.bounds
+            maxPx = max(bounds.height(), bounds.width())
+        } else {
+            val metrics = DisplayMetrics()
+            val defaultDisplay = wm.defaultDisplay
+            defaultDisplay.getMetrics(metrics)
+            currentPx = metrics.heightPixels
+            defaultDisplay.getRealMetrics(metrics)
+            maxPx = max(metrics.heightPixels, metrics.widthPixels)
+        }
+        return currentPx.toFloat() / maxPx.toFloat()
+    }
+
+    @StyleRes
+    private fun getTitleTextAppearance(
+        screenHeightRatio: Float,
+        isActivityInMultiWindowMode: Boolean
+    ): Int {
+        val isActivityCollapsed = screenHeightRatio <= RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY ||
+            (
+                screenHeightRatio > RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY &&
+                    screenHeightRatio <= RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT
+                )
+        return if (isActivityInMultiWindowMode && isActivityCollapsed) {
+            R.style.TextAppearance_ExifEraser_Title_Medium
+        } else {
+            R.style.TextAppearance_ExifEraser_Title_Large
+        }
+    }
+
+    private fun isOrientationPortrait(): Boolean {
+        return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)

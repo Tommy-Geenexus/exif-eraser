@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -60,6 +60,8 @@ class MainAdapter(
         )
     }
 
+    var screenHeightRatio: Float = MainFragment.RATIO_SCREEN_HEIGHT_EXPANDED
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -79,10 +81,18 @@ class MainAdapter(
         position: Int
     ) {
         when (currentList.getOrNull(position)?.typeUrl) {
-            ImageFileProto.ADAPTER.typeUrl -> holder.bindSelectImageItem()
-            ImageFilesProto.ADAPTER.typeUrl -> holder.bindSelectImagesItem()
-            ImageDirectoryProto.ADAPTER.typeUrl -> holder.bindSelectImageDirectoryItem()
-            else -> holder.bindCameraItem()
+            ImageFileProto.ADAPTER.typeUrl -> {
+                holder.bindSelectImageItem(screenHeightRatio)
+            }
+            ImageFilesProto.ADAPTER.typeUrl -> {
+                holder.bindSelectImagesItem(screenHeightRatio)
+            }
+            ImageDirectoryProto.ADAPTER.typeUrl -> {
+                holder.bindSelectImageDirectoryItem(screenHeightRatio)
+            }
+            else -> {
+                holder.bindCameraItem(screenHeightRatio)
+            }
         }
     }
 

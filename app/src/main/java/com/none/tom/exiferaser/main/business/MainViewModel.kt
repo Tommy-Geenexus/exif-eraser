@@ -254,4 +254,10 @@ class MainViewModel @Inject constructor(
             post(MainSideEffect.ShortcutReportUsed(shortcutAction))
         }
     }
+
+    fun handleMultiWindowMode(isInMultiWindowMode: Boolean) = orbit {
+        reduce {
+            state.copy(isInMultiWindowMode = isInMultiWindowMode)
+        }
+    }
 }
