@@ -60,7 +60,7 @@ class MainAdapter(
         )
     }
 
-    var screenHeightRatio: Float = MainFragment.RATIO_SCREEN_HEIGHT_EXPANDED
+    var screenHeightRatio: Float = MainFragment.ACTIVITY_EXPANDED
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -94,11 +94,11 @@ class MainViewHolder(
         @DrawableRes drawableResXLarge: Int
     ) {
         val margin: Int
-        if (screenHeightRatio <= MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY) {
+        if (screenHeightRatio <= MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX) {
             margin = itemView.context.resources.getDimension(R.dimen.spacing_small).toInt()
             binding.image.setImageResource(drawableRes)
-        } else if (screenHeightRatio > MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY &&
-            screenHeightRatio <= MainFragment.RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT
+        } else if (screenHeightRatio > MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX &&
+            screenHeightRatio <= MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
         ) {
             margin = itemView.context.resources.getDimension(R.dimen.spacing_normal).toInt()
             binding.image.setImageResource(drawableRes)

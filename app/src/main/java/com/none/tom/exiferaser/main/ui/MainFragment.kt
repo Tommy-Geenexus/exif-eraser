@@ -30,6 +30,7 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.Surface
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
@@ -65,7 +66,6 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.max
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
@@ -81,9 +81,15 @@ class MainFragment :
 
         @DrawableRes
         private const val IMAGE_SOURCES_AVD_DRAG = R.drawable.avd_done_all_to_drag
-        const val RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY = 0.33f
-        const val RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT = 0.50f
-        const val RATIO_SCREEN_HEIGHT_EXPANDED = 1f
+
+        // The activity is collapsed to one third of the screen height
+        const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX = 0.33f
+
+        // The activity is collapsed to half the screen height
+        const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT = 0.50f
+
+        // The activity is fully expanded
+        const val ACTIVITY_EXPANDED = 1f
     }
 
     private val args: MainFragmentArgs by navArgs()
@@ -334,27 +340,36 @@ class MainFragment :
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun calculateScreenHeightRatio(isActivityInMultiWindowMode: Boolean): Float {
         if (!isActivityInMultiWindowMode) {
-            return RATIO_SCREEN_HEIGHT_EXPANDED
+            return ACTIVITY_EXPANDED
         }
+        return if (isRotationNormalOrInversed()) {
+            // The activity is fully resizeable, calculate the relative size
+            calculateMultiWindowModeRatioPortrait()
+        } else {
+            // The activity is fully expandable or collapsible only
+            MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun calculateMultiWindowModeRatioPortrait(): Float {
         val wm = requireActivity().windowManager
-        val currentPx: Int
-        val maxPx: Int
+        val currentHeightPx: Int
+        val maxHeightPx: Int
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            currentPx = wm.currentWindowMetrics.bounds.height()
-            val bounds = wm.maximumWindowMetrics.bounds
-            maxPx = max(bounds.height(), bounds.width())
+            currentHeightPx = wm.currentWindowMetrics.bounds.height()
+            maxHeightPx = wm.maximumWindowMetrics.bounds.height()
         } else {
             val metrics = DisplayMetrics()
             val defaultDisplay = wm.defaultDisplay
             defaultDisplay.getMetrics(metrics)
-            currentPx = metrics.heightPixels
+            currentHeightPx = metrics.heightPixels
             defaultDisplay.getRealMetrics(metrics)
-            maxPx = max(metrics.heightPixels, metrics.widthPixels)
+            maxHeightPx = metrics.heightPixels
         }
-        return currentPx.toFloat() / maxPx.toFloat()
+        return currentHeightPx.toFloat() / maxHeightPx.toFloat()
     }
 
     @StyleRes
@@ -362,11 +377,7 @@ class MainFragment :
         screenHeightRatio: Float,
         isActivityInMultiWindowMode: Boolean
     ): Int {
-        val isActivityCollapsed = screenHeightRatio <= RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY ||
-            (
-                screenHeightRatio > RATIO_SCREEN_HEIGHT_COLLAPSED_FULLY &&
-                    screenHeightRatio <= RATIO_SCREEN_HEIGHT_COLLAPSED_DEFAULT
-                )
+        val isActivityCollapsed = screenHeightRatio <= MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
         return if (isActivityInMultiWindowMode && isActivityCollapsed) {
             R.style.TextAppearance_ExifEraser_Title_Medium
         } else {
@@ -376,6 +387,16 @@ class MainFragment :
 
     private fun isOrientationPortrait(): Boolean {
         return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    }
+
+    @Suppress("DEPRECATION")
+    private fun isRotationNormalOrInversed(): Boolean {
+        val rotation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireActivity().display?.rotation
+        } else {
+            requireActivity().windowManager.defaultDisplay.rotation
+        }
+        return rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180
     }
 
     @RequiresApi(Build.VERSION_CODES.N_MR1)
