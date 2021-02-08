@@ -131,27 +131,28 @@ class ReportFragment :
         }
         _behaviour =
             BottomSheetBehavior.from(binding.layout) as CornerSheetBehavior<ConstraintLayout>
-        behaviour.apply {
-            addBottomSheetCallback(reportCallback)
-            binding.unfold.apply {
-                doOnLayout {
-                    setHorizontalPeekHeight(width + marginStart + marginEnd, false)
-                    setPeekHeight(height + marginBottom + marginTop, false)
-                    savedInstanceState?.let { savedState ->
-                        state = savedState.getInt(KEY_STATE_BEHAVIOUR)
-                    }
-                }
+        binding.layout.doOnLayout {
+            behaviour.apply {
+                val width = with(binding.details) { width + marginStart + marginEnd }
+                val peekHeight = with(binding.details) { height + marginBottom + marginTop }
+                setHorizontalPeekHeight(width, false)
+                setPeekHeight(peekHeight, false)
+                addBottomSheetCallback(reportCallback)
+                state = savedInstanceState
+                    ?.getInt(KEY_STATE_BEHAVIOUR)
+                    ?: CornerSheetBehavior.STATE_COLLAPSED
             }
         }
-        binding.apply {
-            report.apply {
-                addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = ReportAdapter(listener = this@ReportFragment)
-                toolbar.setNavigationOnClickListener {
-                    backCallback.handleOnBackPressed()
-                }
-            }
+        binding.expand.setOnClickListener {
+            behaviour.state = CornerSheetBehavior.STATE_EXPANDED
+        }
+        binding.report.apply {
+            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = ReportAdapter(listener = this@ReportFragment)
+        }
+        binding.toolbar.setNavigationOnClickListener {
+            backCallback.handleOnBackPressed()
         }
         lifecycleScope.launchWhenCreated {
             viewModel.container.stateFlow.collect { state ->
@@ -219,7 +220,17 @@ class ReportFragment :
 
     private fun handleReportSlide(slideOffset: Float) {
         binding.apply {
-            unfold.apply {
+            details.apply {
+                alpha = interpolate(
+                    startValue = MaterialColors.ALPHA_FULL,
+                    endValue = MaterialColor.ALPHA_TRANSPARENT,
+                    startFraction = FRACTION_OUT_START,
+                    endFraction = FRACTION_OUT_END,
+                    fraction = slideOffset
+                )
+                isVisible = slideOffset <= FRACTION_OUT_END
+            }
+            expand.apply {
                 alpha = interpolate(
                     startValue = MaterialColors.ALPHA_FULL,
                     endValue = MaterialColor.ALPHA_TRANSPARENT,

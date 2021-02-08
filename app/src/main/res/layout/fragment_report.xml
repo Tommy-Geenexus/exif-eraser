@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,11 +10,10 @@
         android:layout_height="match_parent"
         android:backgroundTint="?colorAccent"
         app:layout_behavior="com.github.heyalex.cornersheet.behavior.CornerSheetBehavior"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round"
-        tools:ignore="MissingPrefix">
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/unfold"
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_normal"
@@ -39,6 +37,16 @@
             app:navigationIcon="@drawable/ic_expand_more"
             app:title="@string/details"
             app:titleTextColor="?attr/colorOnPrimary" />
+
+        <View
+            android:id="@+id/expand"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/report_expand"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/report"
