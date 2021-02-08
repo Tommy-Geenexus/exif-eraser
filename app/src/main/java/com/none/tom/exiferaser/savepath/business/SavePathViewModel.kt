@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.savepath.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -60,9 +61,11 @@ class SavePathViewModel @Inject constructor(
         }
     }
 
-    fun navigateToSelection(savePath: Uri = settingsRepository.getDefaultSavePath()) = orbit {
+    fun navigateToSelection(savePath: Uri? = settingsRepository.getDefaultSavePath()) = orbit {
         sideEffect {
-            post(SavePathSideEffect.NavigateToSelection(savePath))
+            if (savePath != null && savePath.isNotEmpty()) {
+                post(SavePathSideEffect.NavigateToSelection(savePath))
+            }
         }
     }
 }
