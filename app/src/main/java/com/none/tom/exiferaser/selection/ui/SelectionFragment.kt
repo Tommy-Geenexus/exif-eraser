@@ -32,12 +32,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import app.cash.exhaustive.Exhaustive
-import com.github.heyalex.cornersheet.interpolate
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
+import com.none.tom.exiferaser.report.lerp
 import com.none.tom.exiferaser.report.ui.ReportFragment
 import com.none.tom.exiferaser.selection.ShareImages
 import com.none.tom.exiferaser.selection.business.SelectionSideEffect
@@ -194,7 +194,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         endFraction: Float,
         slideOffset: Float
     ) {
-        binding.toolbarInclude.toolbar.elevation = interpolate(
+        binding.toolbarInclude.toolbar.elevation = lerp(
             startValue = elevationToolbar,
             endValue = elevationNone,
             startFraction = ReportFragment.FRACTION_OUT_START,

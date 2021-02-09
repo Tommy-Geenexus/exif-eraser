@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.none.tom.exiferaser.report.DispatchingConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="?colorAccent"
-        app:layout_behavior="com.github.heyalex.cornersheet.behavior.CornerSheetBehavior"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round">
+        app:layout_behavior=".report.ui.ReportFragmentBehaviour"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/details"
@@ -60,5 +60,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.none.tom.exiferaser.report.DispatchingConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

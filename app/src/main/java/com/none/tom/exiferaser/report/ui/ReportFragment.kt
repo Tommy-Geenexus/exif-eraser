@@ -25,7 +25,6 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
@@ -40,9 +39,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import app.cash.exhaustive.Exhaustive
-import com.github.heyalex.cornersheet.behavior.CornerSheetBehavior
-import com.github.heyalex.cornersheet.interpolate
-import com.github.heyalex.cornersheet.interpolateArgb
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.BaseFragment
@@ -51,9 +47,12 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentReportBinding
 import com.none.tom.exiferaser.details.ui.DetailsFragment
+import com.none.tom.exiferaser.report.DispatchingConstraintLayout
 import com.none.tom.exiferaser.report.business.ReportSideEffect
 import com.none.tom.exiferaser.report.business.ReportState
 import com.none.tom.exiferaser.report.business.ReportViewModel
+import com.none.tom.exiferaser.report.lerp
+import com.none.tom.exiferaser.report.lerpArgb
 import com.none.tom.exiferaser.report.resolveThemeAttr
 import com.none.tom.exiferaser.selection.MaterialColor
 import com.none.tom.exiferaser.selection.data.Summary
@@ -99,7 +98,7 @@ class ReportFragment :
     }
     private var _reportCallback: BottomSheetBehavior.BottomSheetCallback? = null
     private val reportCallback get() = _reportCallback!!
-    private var _behaviour: CornerSheetBehavior<ConstraintLayout>? = null
+    private var _behaviour: ReportFragmentBehaviour<DispatchingConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
     override fun onViewCreated(
@@ -114,6 +113,24 @@ class ReportFragment :
                     .orEmpty()
             )
         }
+        _behaviour = BottomSheetBehavior.from(binding.layout) as
+            ReportFragmentBehaviour<DispatchingConstraintLayout>
+        var translationMax = 0f
+        binding.layout.apply {
+            doOnLayout {
+                behaviour.apply {
+                    val peekWidth = with(binding.details) { width + marginStart + marginEnd }
+                    val peekHeight = with(binding.details) { height + marginBottom + marginTop }
+                    translationMax = (width - peekWidth).toFloat()
+                    translationX = translationMax
+                    setPeekHeight(peekHeight)
+                    addBottomSheetCallback(reportCallback)
+                    state = savedInstanceState
+                        ?.getInt(KEY_STATE_BEHAVIOUR)
+                        ?: BottomSheetBehavior.STATE_COLLAPSED
+                }
+            }
+        }
         _reportCallback = object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(
                 bottomSheet: View,
@@ -126,25 +143,11 @@ class ReportFragment :
                 bottomSheet: View,
                 slideOffset: Float
             ) {
-                handleReportSlide(slideOffset)
-            }
-        }
-        _behaviour =
-            BottomSheetBehavior.from(binding.layout) as CornerSheetBehavior<ConstraintLayout>
-        binding.layout.doOnLayout {
-            behaviour.apply {
-                val width = with(binding.details) { width + marginStart + marginEnd }
-                val peekHeight = with(binding.details) { height + marginBottom + marginTop }
-                setHorizontalPeekHeight(width, false)
-                setPeekHeight(peekHeight, false)
-                addBottomSheetCallback(reportCallback)
-                state = savedInstanceState
-                    ?.getInt(KEY_STATE_BEHAVIOUR)
-                    ?: CornerSheetBehavior.STATE_COLLAPSED
+                handleReportSlide(slideOffset, translationMax)
             }
         }
         binding.expand.setOnClickListener {
-            behaviour.state = CornerSheetBehavior.STATE_EXPANDED
+            behaviour.state = BottomSheetBehavior.STATE_EXPANDED
         }
         binding.report.apply {
             addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
@@ -218,65 +221,75 @@ class ReportFragment :
         }
     }
 
-    private fun handleReportSlide(slideOffset: Float) {
-        binding.apply {
-            details.apply {
-                alpha = interpolate(
-                    startValue = MaterialColors.ALPHA_FULL,
-                    endValue = MaterialColor.ALPHA_TRANSPARENT,
-                    startFraction = FRACTION_OUT_START,
-                    endFraction = FRACTION_OUT_END,
-                    fraction = slideOffset
-                )
-                isVisible = slideOffset <= FRACTION_OUT_END
-            }
-            expand.apply {
-                alpha = interpolate(
-                    startValue = MaterialColors.ALPHA_FULL,
-                    endValue = MaterialColor.ALPHA_TRANSPARENT,
-                    startFraction = FRACTION_OUT_START,
-                    endFraction = FRACTION_OUT_END,
-                    fraction = slideOffset
-                )
-                isVisible = slideOffset <= FRACTION_OUT_END
-            }
-            toolbar.apply {
-                alpha = interpolate(
-                    startValue = MaterialColor.ALPHA_TRANSPARENT,
-                    endValue = MaterialColors.ALPHA_FULL,
-                    startFraction = FRACTION_IN_START,
-                    endFraction = endFraction,
-                    fraction = slideOffset
-                )
-                isVisible = slideOffset >= FRACTION_IN_START
-            }
-            report.apply {
-                alpha = interpolate(
-                    startValue = MaterialColor.ALPHA_TRANSPARENT,
-                    endValue = MaterialColors.ALPHA_FULL,
-                    startFraction = FRACTION_OUT_START,
-                    endFraction = endFraction,
-                    fraction = slideOffset
-                )
-                isVisible = slideOffset >= FRACTION_IN_START
-            }
-            layout.backgroundTintList = ColorStateList.valueOf(
-                interpolateArgb(
-                    startColor = colorBackgroundStart,
-                    endColor = colorBackgroundEnd,
-                    startFraction = FRACTION_OUT_START,
-                    endFraction = FRACTION_OUT_END,
-                    fraction = slideOffset
-                )
-            )
-            requireParentFragment().parentFragmentManager.setFragmentResult(
-                KEY_REPORT_SLIDE,
-                bundleOf(
-                    KEY_FRACTION_END to endFraction,
-                    KEY_OFFSET_SLIDE to slideOffset
-                )
+    private fun handleReportSlide(
+        slideOffset: Float,
+        translationMax: Float
+    ) {
+        binding.layout.apply {
+            translationX = lerp(
+                startValue = translationMax,
+                endValue = FRACTION_OUT_START,
+                startFraction = FRACTION_OUT_START,
+                endFraction = FRACTION_OUT_END,
+                fraction = slideOffset
             )
         }
+        binding.details.apply {
+            alpha = lerp(
+                startValue = MaterialColors.ALPHA_FULL,
+                endValue = MaterialColor.ALPHA_TRANSPARENT,
+                startFraction = FRACTION_OUT_START,
+                endFraction = FRACTION_OUT_END,
+                fraction = slideOffset
+            )
+            isVisible = slideOffset <= FRACTION_OUT_END
+        }
+        binding.expand.apply {
+            alpha = lerp(
+                startValue = MaterialColors.ALPHA_FULL,
+                endValue = MaterialColor.ALPHA_TRANSPARENT,
+                startFraction = FRACTION_OUT_START,
+                endFraction = FRACTION_OUT_END,
+                fraction = slideOffset
+            )
+            isVisible = slideOffset <= FRACTION_OUT_END
+        }
+        binding.toolbar.apply {
+            alpha = lerp(
+                startValue = MaterialColor.ALPHA_TRANSPARENT,
+                endValue = MaterialColors.ALPHA_FULL,
+                startFraction = FRACTION_IN_START,
+                endFraction = endFraction,
+                fraction = slideOffset
+            )
+            isVisible = slideOffset >= FRACTION_IN_START
+        }
+        binding.report.apply {
+            alpha = lerp(
+                startValue = MaterialColor.ALPHA_TRANSPARENT,
+                endValue = MaterialColors.ALPHA_FULL,
+                startFraction = FRACTION_OUT_START,
+                endFraction = endFraction,
+                fraction = slideOffset
+            )
+            isVisible = slideOffset >= FRACTION_IN_START
+        }
+        binding.layout.backgroundTintList = ColorStateList.valueOf(
+            lerpArgb(
+                startColor = colorBackgroundStart,
+                endColor = colorBackgroundEnd,
+                startFraction = FRACTION_OUT_START,
+                endFraction = FRACTION_OUT_END,
+                fraction = slideOffset
+            )
+        )
+        requireParentFragment().parentFragmentManager.setFragmentResult(
+            KEY_REPORT_SLIDE,
+            bundleOf(
+                KEY_FRACTION_END to endFraction,
+                KEY_OFFSET_SLIDE to slideOffset
+            )
+        )
     }
 
     private fun handleReportStateChanged(newState: Int) {
