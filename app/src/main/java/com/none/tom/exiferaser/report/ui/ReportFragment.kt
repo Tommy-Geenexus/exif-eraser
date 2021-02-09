@@ -68,6 +68,7 @@ class ReportFragment :
 
     companion object {
         private const val KEY_STATE_BEHAVIOUR = TOP_LEVEL_PACKAGE_NAME + "STATE_BEHAVIOUR"
+        private const val KEY_STATE_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
         const val KEY_REPORT_SLIDE = TOP_LEVEL_PACKAGE_NAME + "REPORT_SLIDE"
         const val KEY_OFFSET_SLIDE = TOP_LEVEL_PACKAGE_NAME + "OFFSET_SLIDE"
         const val KEY_FRACTION_END = TOP_LEVEL_PACKAGE_NAME + "FRACTION_END"
@@ -131,6 +132,12 @@ class ReportFragment :
                 }
             }
         }
+        binding.report.apply {
+            doOnLayout {
+                (layoutManager as? LinearLayoutManager)
+                    ?.onRestoreInstanceState(savedInstanceState?.getBundle(KEY_STATE_REPORT))
+            }
+        }
         _reportCallback = object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(
                 bottomSheet: View,
@@ -171,7 +178,13 @@ class ReportFragment :
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(KEY_STATE_BEHAVIOUR, behaviour.state)
+        outState.apply {
+            putInt(KEY_STATE_BEHAVIOUR, behaviour.state)
+            putParcelable(
+                KEY_STATE_REPORT,
+                (binding.report.layoutManager as? LinearLayoutManager)?.onSaveInstanceState()
+            )
+        }
     }
 
     override fun onDestroyView() {
