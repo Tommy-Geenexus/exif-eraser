@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.main.ui
 import android.content.Context
 import android.content.pm.ShortcutManager
 import android.content.res.Configuration
+import android.graphics.Point
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
@@ -32,6 +33,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.Surface
 import android.view.View
+import android.view.WindowInsets
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -359,14 +361,18 @@ class MainFragment :
         val currentHeightPx: Int
         val maxHeightPx: Int
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            currentHeightPx = wm.currentWindowMetrics.bounds.height()
+            val metrics = wm.currentWindowMetrics
+            val mask = WindowInsets.Type.navigationBars() or WindowInsets.Type.displayCutout()
+            val insets = metrics.windowInsets.getInsetsIgnoringVisibility(mask)
+            currentHeightPx = metrics.bounds.height() - insets.top - insets.bottom
             maxHeightPx = wm.maximumWindowMetrics.bounds.height()
         } else {
+            val point = Point()
             val metrics = DisplayMetrics()
             val defaultDisplay = wm.defaultDisplay
-            defaultDisplay.getMetrics(metrics)
-            currentHeightPx = metrics.heightPixels
+            defaultDisplay.getSize(point)
             defaultDisplay.getRealMetrics(metrics)
+            currentHeightPx = point.y
             maxHeightPx = metrics.heightPixels
         }
         return currentHeightPx.toFloat() / maxHeightPx.toFloat()
