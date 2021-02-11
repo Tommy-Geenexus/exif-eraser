@@ -189,6 +189,19 @@ class MainFragment :
         consumeDeepLinkIfPresent()
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val transition = when (viewModel.sharedTransitionAxis) {
+            MaterialSharedAxis.X -> MaterialSharedAxis(MaterialSharedAxis.X, false)
+            MaterialSharedAxis.Y -> MaterialSharedAxis(MaterialSharedAxis.Y, false)
+            MaterialSharedAxis.Z -> MaterialSharedAxis(MaterialSharedAxis.Z, false)
+            else -> null
+        }
+        if (transition != null) {
+            setTransitions(transitionReenter = transition)
+        }
+    }
+
     override fun onCreateOptionsMenu(
         menu: Menu,
         inflater: MenuInflater
@@ -302,6 +315,7 @@ class MainFragment :
                     transitionExit = MaterialSharedAxis(MaterialSharedAxis.X, true),
                     transitionReenter = MaterialSharedAxis(MaterialSharedAxis.X, false)
                 )
+                viewModel.sharedTransitionAxis = MaterialSharedAxis.X
                 navigate(MainFragmentDirections.mainToSelectionSavePath())
             }
             is MainSideEffect.NavigateToSettings -> {
@@ -309,6 +323,7 @@ class MainFragment :
                     transitionExit = MaterialSharedAxis(MaterialSharedAxis.Z, true),
                     transitionReenter = MaterialSharedAxis(MaterialSharedAxis.Z, false)
                 )
+                viewModel.sharedTransitionAxis = MaterialSharedAxis.Z
                 navigate(MainFragmentDirections.mainToSettings())
             }
             is MainSideEffect.ShortcutHandle -> {

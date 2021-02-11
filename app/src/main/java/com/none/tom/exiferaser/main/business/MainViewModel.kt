@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.main.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
@@ -41,13 +42,17 @@ import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val imageRepository: ImageRepository,
     private val imageSourceRepository: ImageSourceRepository,
     private val selectionRepository: SelectionRepository,
     private val settingsRepository: SettingsRepository
 ) : ContainerHost<MainState, MainSideEffect>,
     ViewModel() {
+
+    private companion object {
+        const val KEY_TRANSITION = TOP_LEVEL_PACKAGE_NAME + "TRANSITION"
+    }
 
     override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),
@@ -57,6 +62,18 @@ class MainViewModel @Inject constructor(
             readImageSources()
         }
     )
+
+    var sharedTransitionAxis: Int
+        get() {
+            val axis = savedStateHandle.get<Int>(KEY_TRANSITION)
+            return if (axis != null) {
+                savedStateHandle.remove<Int>(KEY_TRANSITION)
+                axis
+            } else {
+                -1
+            }
+        }
+        set(value) = savedStateHandle.set(KEY_TRANSITION, value)
 
     private fun prepareReadImageSources() = orbit {
         reduce {
