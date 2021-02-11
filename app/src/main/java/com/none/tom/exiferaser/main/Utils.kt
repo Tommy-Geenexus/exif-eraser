@@ -18,52 +18,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.main.business
+package com.none.tom.exiferaser.main
 
-import android.net.Uri
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-sealed class MainSideEffect : Parcelable {
-
-    @Parcelize
-    data class ChooseImage(
-        val openPath: Uri
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class ChooseImages(
-        val openPath: Uri
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class ChooseImageDirectory(
-        val openPath: Uri
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class LaunchCamera(
-        val fileProviderImagePath: Uri
-    ) : MainSideEffect()
-
-    @Parcelize
-    object NavigateToSelectionSavePath : MainSideEffect()
-
-    @Parcelize
-    object NavigateToSettings : MainSideEffect()
-
-    @Parcelize
-    data class ShortcutHandle(
-        val shortcutAction: String
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class ShortcutReportUsed(
-        val shortcutAction: String
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class DraggedImage(
-        val uri: Uri
-    ) : MainSideEffect()
-}
+// The activity is collapsed to one third of the screen height
+const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX = 0.33f
+// The activity is collapsed to half the screen height
+const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT = 0.50f
+// The activity is fully expanded
+const val ACTIVITY_EXPANDED = 1f

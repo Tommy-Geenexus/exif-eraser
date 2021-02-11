@@ -260,4 +260,10 @@ class MainViewModel @Inject constructor(
             state.copy(isInMultiWindowMode = isInMultiWindowMode)
         }
     }
+
+    fun handleDraggedImage(uri: Uri) = orbit {
+        sideEffect {
+            post(MainSideEffect.DraggedImage(uri))
+        }
+    }
 }

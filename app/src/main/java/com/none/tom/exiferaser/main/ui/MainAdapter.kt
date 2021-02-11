@@ -20,6 +20,8 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import android.net.Uri
+import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,6 +30,7 @@ import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.databinding.FragmentMainCardViewBinding
+import com.none.tom.exiferaser.main.ACTIVITY_EXPANDED
 import com.squareup.wire.AnyMessage
 
 class MainAdapter(
@@ -58,9 +61,13 @@ class MainAdapter(
             oldIndex: Int,
             newIndex: Int
         )
+        fun onImageDragged(
+            dragEvent: DragEvent,
+            uri: Uri
+        )
     }
 
-    var screenHeightRatio: Float = MainFragment.ACTIVITY_EXPANDED
+    var screenHeightRatio: Float = ACTIVITY_EXPANDED
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -25,9 +25,11 @@ import android.content.pm.ShortcutManager
 import android.content.res.Configuration
 import android.graphics.Point
 import android.graphics.drawable.Animatable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.DragEvent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -55,6 +57,8 @@ import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.isActivityInMultiWindowMode
+import com.none.tom.exiferaser.main.ACTIVITY_EXPANDED
+import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
 import com.none.tom.exiferaser.main.MarginItemDecoration
 import com.none.tom.exiferaser.main.TakePicture
 import com.none.tom.exiferaser.main.addItemTouchHelper
@@ -75,23 +79,14 @@ class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
     MainAdapter.Listener {
 
-    companion object {
-        private const val GRID_LAYOUT_SPAN_CNT = 2
+    private companion object {
+        const val GRID_LAYOUT_SPAN_CNT = 2
 
         @DrawableRes
-        private const val IMAGE_SOURCES_AVD_REORDER = R.drawable.avd_drag_to_done_all
+        const val IMAGE_SOURCES_AVD_REORDER = R.drawable.avd_drag_to_done_all
 
         @DrawableRes
-        private const val IMAGE_SOURCES_AVD_DRAG = R.drawable.avd_done_all_to_drag
-
-        // The activity is collapsed to one third of the screen height
-        const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX = 0.33f
-
-        // The activity is collapsed to half the screen height
-        const val MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT = 0.50f
-
-        // The activity is fully expanded
-        const val ACTIVITY_EXPANDED = 1f
+        const val IMAGE_SOURCES_AVD_DRAG = R.drawable.avd_done_all_to_drag
     }
 
     private val args: MainFragmentArgs by navArgs()
@@ -245,6 +240,17 @@ class MainFragment :
         viewModel.reorderImageSources(imageSources, oldIndex, newIndex)
     }
 
+    override fun onImageDragged(
+        dragEvent: DragEvent,
+        uri: Uri
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+            requireActivity().requestDragAndDropPermissions(dragEvent) != null
+        ) {
+            viewModel.handleDraggedImage(uri)
+        }
+    }
+
     private fun renderState(state: MainState) {
         val isActivityInMultiWindowMode = isActivityInMultiWindowMode()
         val accessingStorage = state.imageSourcesFetching ||
@@ -271,7 +277,7 @@ class MainFragment :
         val isDragShown = binding.imageSourcesReorder.tag == IMAGE_SOURCES_AVD_DRAG
         val animateImageSources = (state.imageSourcesReorder && isReorderShown) ||
             (state.imageSourcesPersisted && isDragShown)
-        if (animateImageSources) {
+        if (animateImageSources && !isActivityInMultiWindowMode) {
             (binding.imageSourcesReorder.icon as? Animatable)?.start()
         }
     }
@@ -312,6 +318,10 @@ class MainFragment :
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     reportShortcutUsed(sideEffect.shortcutAction)
                 }
+            }
+            is MainSideEffect.DraggedImage -> {
+                viewModel.preparePutSelection(sideEffect.uri)
+                viewModel.putImageSelection(imageUri = sideEffect.uri)
             }
         }
     }

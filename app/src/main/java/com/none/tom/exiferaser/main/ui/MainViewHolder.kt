@@ -20,11 +20,19 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import android.content.res.ColorStateList
+import android.view.DragEvent
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentMainCardViewBinding
+import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
+import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX
+import com.none.tom.exiferaser.supportedMimeTypes
+import kotlin.math.roundToInt
 
 class MainViewHolder(
     private val binding: FragmentMainCardViewBinding,
@@ -42,49 +50,128 @@ class MainViewHolder(
                 }
             }
         }
+        setupDragAndDrop()
     }
 
     fun bindSelectImageItem(screenHeightRatio: Float) {
         binding.apply {
             method.setText(R.string.image_file)
-            bindItemByScreenHeightRatio(
-                screenHeightRatio = screenHeightRatio,
-                drawableRes = R.drawable.ic_image,
-                drawableResXLarge = R.drawable.ic_image_xlarge
-            )
+            imageSource.tag = binding.method.text
         }
+        bindItemByScreenHeightRatio(
+            screenHeightRatio = screenHeightRatio,
+            drawableRes = R.drawable.ic_image,
+            drawableResXLarge = R.drawable.ic_image_xlarge
+        )
     }
 
     fun bindSelectImagesItem(screenHeightRatio: Float) {
         binding.apply {
             method.setText(R.string.image_files)
-            bindItemByScreenHeightRatio(
-                screenHeightRatio = screenHeightRatio,
-                drawableRes = R.drawable.ic_photo_library,
-                drawableResXLarge = R.drawable.ic_photo_library_xlarge
-            )
+            imageSource.tag = method.text
         }
+        bindItemByScreenHeightRatio(
+            screenHeightRatio = screenHeightRatio,
+            drawableRes = R.drawable.ic_photo_library,
+            drawableResXLarge = R.drawable.ic_photo_library_xlarge
+        )
     }
 
     fun bindSelectImageDirectoryItem(screenHeightRatio: Float) {
         binding.apply {
             method.setText(R.string.image_directory)
-            bindItemByScreenHeightRatio(
-                screenHeightRatio = screenHeightRatio,
-                drawableRes = R.drawable.ic_photo_album,
-                drawableResXLarge = R.drawable.ic_photo_album_xlarge
-            )
+            imageSource.tag = method.text
         }
+        bindItemByScreenHeightRatio(
+            screenHeightRatio = screenHeightRatio,
+            drawableRes = R.drawable.ic_photo_album,
+            drawableResXLarge = R.drawable.ic_photo_album_xlarge
+        )
     }
 
     fun bindCameraItem(screenHeightRatio: Float) {
         binding.apply {
             method.setText(R.string.camera)
-            bindItemByScreenHeightRatio(
-                screenHeightRatio = screenHeightRatio,
-                drawableRes = R.drawable.ic_camera,
-                drawableResXLarge = R.drawable.ic_camera_xlarge
+            imageSource.tag = method.text
+        }
+        bindItemByScreenHeightRatio(
+            screenHeightRatio = screenHeightRatio,
+            drawableRes = R.drawable.ic_camera,
+            drawableResXLarge = R.drawable.ic_camera_xlarge
+        )
+    }
+
+    private fun setupDragAndDrop() {
+        binding.imageSource.setOnDragListener { view, event ->
+            val tag = view.tag as? String
+            val isDragAndDropSupported =
+                !tag.isNullOrEmpty() && tag == itemView.context.getString(R.string.image_file)
+            val alphaLow = (MaterialColors.ALPHA_LOW * 255).roundToInt()
+            val colorAccept = ColorStateList.valueOf(
+                MaterialColors.compositeARGBWithAlpha(
+                    MaterialColors.getColor(view, R.attr.colorAccept),
+                    alphaLow
+                )
             )
+            val colorOk = ColorStateList.valueOf(
+                MaterialColors.compositeARGBWithAlpha(
+                    MaterialColors.getColor(view, R.attr.colorOk),
+                    alphaLow
+                )
+            )
+            val colorError = ColorStateList.valueOf(
+                MaterialColors.compositeARGBWithAlpha(
+                    MaterialColors.getColor(view, R.attr.colorError),
+                    alphaLow
+                )
+            )
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    val isMimeTypeSupported = supportedMimeTypes.any { mimeType ->
+                        event.clipDescription.hasMimeType(mimeType)
+                    }
+                    if (isMimeTypeSupported) {
+                        binding.imageSource.setCardForegroundColor(
+                            if (isDragAndDropSupported) colorAccept else colorError
+                        )
+                        true
+                    } else {
+                        false
+                    }
+                }
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    if (isDragAndDropSupported) {
+                        binding.imageSource.setCardForegroundColor(colorOk)
+                    }
+                    isDragAndDropSupported
+                }
+                DragEvent.ACTION_DRAG_LOCATION -> {
+                    true
+                }
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    if (isDragAndDropSupported) {
+                        binding.imageSource.setCardForegroundColor(colorAccept)
+                    }
+                    true
+                }
+                DragEvent.ACTION_DROP -> {
+                    val clipData = event.clipData
+                    if (clipData != null && clipData.itemCount > 0) {
+                        val uri = clipData.getItemAt(0)?.uri
+                        if (uri != null && uri.isNotEmpty()) {
+                            listener.onImageDragged(event, uri)
+                        }
+                    }
+                    true
+                }
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    binding.imageSource.setCardForegroundColor(null)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 
@@ -94,11 +181,11 @@ class MainViewHolder(
         @DrawableRes drawableResXLarge: Int
     ) {
         val margin: Int
-        if (screenHeightRatio <= MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX) {
+        if (screenHeightRatio <= MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX) {
             margin = itemView.context.resources.getDimension(R.dimen.spacing_small).toInt()
             binding.image.setImageResource(drawableRes)
-        } else if (screenHeightRatio > MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX &&
-            screenHeightRatio <= MainFragment.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
+        } else if (screenHeightRatio > MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX &&
+            screenHeightRatio <= MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
         ) {
             margin = itemView.context.resources.getDimension(R.dimen.spacing_normal).toInt()
             binding.image.setImageResource(drawableRes)

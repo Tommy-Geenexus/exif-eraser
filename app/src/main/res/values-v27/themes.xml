@@ -9,6 +9,7 @@
         <item name="colorSecondary">@android:color/white</item>
         <item name="colorOnPrimary">@android:color/black</item>
         <item name="colorOk">@color/color_green</item>
+        <item name="colorAccept">@color/color_blue</item>
         <item name="colorDrawable">@color/csl_drawable_day</item>
         <item name="colorDrawableInverse">@color/csl_drawable_night</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
