@@ -278,9 +278,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun handleDraggedImage(uri: Uri) = orbit {
+    fun handleReceivedImages(uris: List<Uri>) = orbit {
         sideEffect {
-            post(MainSideEffect.DraggedImage(uri))
+            if (uris.isNotEmpty()) {
+                post(
+                    if (uris.size > 1) {
+                        MainSideEffect.ReceivedImages(uris)
+                    } else {
+                        MainSideEffect.ReceivedImage(uris.first())
+                    }
+                )
+            }
+        }
+    }
+
+    fun handlePasteImages(uris: List<Uri>) = orbit {
+        sideEffect {
+            post(
+                if (uris.isNotEmpty()) {
+                    MainSideEffect.PasteImages(uris)
+                } else {
+                    MainSideEffect.PasteImagesNone
+                }
+            )
         }
     }
 }

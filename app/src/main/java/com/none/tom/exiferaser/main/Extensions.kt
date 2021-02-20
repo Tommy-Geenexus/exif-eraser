@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,8 +20,13 @@
 
 package com.none.tom.exiferaser.main
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
@@ -32,8 +37,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.addUrisToSet
+import com.none.tom.exiferaser.areMimeTypesSupported
 
-fun ExtendedFloatingActionButton.setupScaleAndIconAnimation(
+fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
     owner: LifecycleOwner,
     @DrawableRes iconResStart: Int,
     @DrawableRes iconResEnd: Int,
@@ -119,4 +127,25 @@ fun RecyclerView.addItemTouchHelper(
             }
         }
     )
+}
+
+fun View.canReceiveContent(): Boolean {
+    val tag = tag as? String
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+        !tag.isNullOrEmpty() &&
+        tag == context.getString(R.string.image_files)
+}
+
+fun Context.hasImageClip(): Boolean {
+    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    return cm.hasPrimaryClip() && cm.primaryClipDescription?.areMimeTypesSupported() == true
+}
+
+fun Context.getClipImages(): List<Uri> {
+    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val resultSet = linkedSetOf<Uri>()
+    if (hasImageClip()) {
+        cm.primaryClip?.addUrisToSet(resultSet)
+    }
+    return resultSet.toList()
 }

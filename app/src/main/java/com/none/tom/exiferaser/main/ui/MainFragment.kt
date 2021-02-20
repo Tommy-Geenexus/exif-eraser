@@ -48,6 +48,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.cash.exhaustive.Exhaustive
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
@@ -59,13 +60,16 @@ import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.isActivityInMultiWindowMode
 import com.none.tom.exiferaser.main.ACTIVITY_EXPANDED
 import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
+import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MarginItemDecoration
+import com.none.tom.exiferaser.main.SimpleItemTouchHelperCallback
 import com.none.tom.exiferaser.main.TakePicture
 import com.none.tom.exiferaser.main.addItemTouchHelper
+import com.none.tom.exiferaser.main.addScaleAndIconAnimation
 import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
-import com.none.tom.exiferaser.main.setupScaleAndIconAnimation
+import com.none.tom.exiferaser.main.getClipImages
 import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
@@ -77,7 +81,8 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
-    MainAdapter.Listener {
+    MainAdapter.Listener,
+    MainContentReceiver.Listener {
 
     private companion object {
         const val GRID_LAYOUT_SPAN_CNT = 2
@@ -141,7 +146,10 @@ class MainFragment :
                 GRID_LAYOUT_SPAN_CNT,
                 RecyclerView.HORIZONTAL
             )
-            adapter = MainAdapter(listener = this@MainFragment)
+            adapter = MainAdapter(
+                listener = this@MainFragment,
+                receiver = MainContentReceiver(this@MainFragment)
+            )
             addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_micro)))
             addItemTouchHelper(
                 viewLifecycleOwner,
@@ -156,8 +164,8 @@ class MainFragment :
             )
         }
         binding.imageSourcesReorder.apply {
-            setupScaleAndIconAnimation(
-                viewLifecycleOwner,
+            addScaleAndIconAnimation(
+                owner = viewLifecycleOwner,
                 iconResStart = IMAGE_SOURCES_AVD_REORDER,
                 iconResEnd = IMAGE_SOURCES_AVD_DRAG,
                 textResStart = R.string.reorder,
@@ -211,6 +219,10 @@ class MainFragment :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.content_paste -> {
+                viewModel.handlePasteImages(requireContext().getClipImages())
+                true
+            }
             R.id.action_settings -> {
                 viewModel.handleSettings()
                 true
@@ -253,14 +265,13 @@ class MainFragment :
         viewModel.reorderImageSources(imageSources, oldIndex, newIndex)
     }
 
-    override fun onImageDragged(
-        dragEvent: DragEvent,
-        uri: Uri
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onUrisReceived(
+        event: DragEvent,
+        uris: List<Uri>
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-            requireActivity().requestDragAndDropPermissions(dragEvent) != null
-        ) {
-            viewModel.handleDraggedImage(uri)
+        if (requireActivity().requestDragAndDropPermissions(event) != null) {
+            viewModel.handleReceivedImages(uris)
         }
     }
 
@@ -326,6 +337,26 @@ class MainFragment :
                 viewModel.sharedTransitionAxis = MaterialSharedAxis.Z
                 navigate(MainFragmentDirections.mainToSettings())
             }
+            is MainSideEffect.PasteImages -> {
+                viewModel.handleReceivedImages(sideEffect.uris)
+            }
+            is MainSideEffect.PasteImagesNone -> {
+                Snackbar.make(
+                    requireView(),
+                    R.string.clipboard_content_unsupported,
+                    Snackbar.LENGTH_SHORT
+                )
+                    .setAnchorView(binding.imageSourcesReorder)
+                    .show()
+            }
+            is MainSideEffect.ReceivedImage -> {
+                viewModel.preparePutSelection(sideEffect.uri)
+                viewModel.putImageSelection(sideEffect.uri)
+            }
+            is MainSideEffect.ReceivedImages -> {
+                viewModel.preparePutSelection(sideEffect.uris)
+                viewModel.putImagesSelection(sideEffect.uris)
+            }
             is MainSideEffect.ShortcutHandle -> {
                 handleShortcutIntent(sideEffect.shortcutAction)
             }
@@ -333,10 +364,6 @@ class MainFragment :
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                     reportShortcutUsed(sideEffect.shortcutAction)
                 }
-            }
-            is MainSideEffect.DraggedImage -> {
-                viewModel.preparePutSelection(sideEffect.uri)
-                viewModel.putImageSelection(imageUri = sideEffect.uri)
             }
         }
     }

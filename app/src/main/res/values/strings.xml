@@ -18,6 +18,9 @@
     <string name="choose_your">Choose your</string>
     <string name="choose_your_preferred_image_source_placeholder" translatable="false">%s\n%s</string>
 
+    <string name="clipboard_content_paste">Paste clipboard image</string>
+    <string name="clipboard_content_unsupported">Unsupported clipboard content</string>
+
     <string name="confirm">Confirm</string>
 
     <string name="default_display_name_suffix">Default display name suffix</string>

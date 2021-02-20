@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.none.tom.exiferaser.report.DispatchingConstraintLayout
+    <com.none.tom.exiferaser.report.ReportConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,5 +60,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    </com.none.tom.exiferaser.report.DispatchingConstraintLayout>
+    </com.none.tom.exiferaser.report.ReportConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

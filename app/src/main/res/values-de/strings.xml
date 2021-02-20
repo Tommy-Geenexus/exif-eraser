@@ -15,6 +15,9 @@
     <string name="choose_images">Wähle Bilder</string>
     <string name="choose_your">Wähle deine</string>
 
+    <string name="clipboard_content_paste">Zwischenablageninhalt einfügen</string>
+    <string name="clipboard_content_unsupported">Zwischenablageninhalt nicht unterstützt</string>
+
     <string name="confirm">Übernehmen</string>
 
     <string name="default_display_name_suffix">Standard-Anzeigename-Zusatz</string>

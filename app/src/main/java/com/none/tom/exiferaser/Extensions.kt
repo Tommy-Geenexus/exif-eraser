@@ -20,6 +20,8 @@
 
 package com.none.tom.exiferaser
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -96,15 +98,29 @@ fun Intent.getClipDataUris(): Array<Uri> {
     val c = clipData
     if (c == null && resultSet.isEmpty()) {
         return emptyArray()
-    } else if (c != null) {
-        for (i in 0 until c.itemCount) {
-            val uri = c.getItemAt(i).uri
-            if (uri != null) {
-                resultSet.add(uri)
-            }
-        }
+    } else if (c?.description?.areMimeTypesSupported() == true) {
+        c.addUrisToSet(resultSet)
     }
     return resultSet.toTypedArray()
+}
+
+fun ClipData.addUrisToSet(resultSet: LinkedHashSet<Uri>) {
+    for (i in 0 until itemCount) {
+        val uri = getItemAt(i)?.uri
+        if (uri != null) {
+            resultSet.add(uri)
+        }
+    }
+}
+
+fun ClipDescription.areMimeTypesSupported(): Boolean {
+    for (i in 0 until mimeTypeCount) {
+        val mimeType = getMimeType(i)
+        if (mimeType != MIME_TYPE_IMAGE && !supportedMimeTypes.contains(mimeType)) {
+            return false
+        }
+    }
+    return true
 }
 
 fun Uri?.isNotNullOrEmpty() = this != null && isNotEmpty()

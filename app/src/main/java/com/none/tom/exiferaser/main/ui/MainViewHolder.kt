@@ -24,19 +24,23 @@ import android.content.res.ColorStateList
 import android.view.DragEvent
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
+import androidx.core.view.ContentInfoCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.areMimeTypesSupported
 import com.none.tom.exiferaser.databinding.FragmentMainCardViewBinding
-import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
 import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX
-import com.none.tom.exiferaser.supportedMimeTypes
+import com.none.tom.exiferaser.main.MainContentReceiver
+import com.none.tom.exiferaser.main.canReceiveContent
 import kotlin.math.roundToInt
 
 class MainViewHolder(
     private val binding: FragmentMainCardViewBinding,
-    private val listener: MainAdapter.Listener
+    private val listener: MainAdapter.Listener,
+    private val receiver: MainContentReceiver
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -103,9 +107,7 @@ class MainViewHolder(
 
     private fun setupDragAndDrop() {
         binding.imageSource.setOnDragListener { view, event ->
-            val tag = view.tag as? String
-            val isDragAndDropSupported =
-                !tag.isNullOrEmpty() && tag == itemView.context.getString(R.string.image_file)
+            val isDragAndDropSupported = view.canReceiveContent()
             val alphaLow = (MaterialColors.ALPHA_LOW * 255).roundToInt()
             val colorAccept = ColorStateList.valueOf(
                 MaterialColors.compositeARGBWithAlpha(
@@ -127,10 +129,7 @@ class MainViewHolder(
             )
             when (event.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {
-                    val isMimeTypeSupported = supportedMimeTypes.any { mimeType ->
-                        event.clipDescription.hasMimeType(mimeType)
-                    }
-                    if (isMimeTypeSupported) {
+                    if (event.clipDescription.areMimeTypesSupported()) {
                         binding.imageSource.setCardForegroundColor(
                             if (isDragAndDropSupported) colorAccept else colorError
                         )
@@ -155,13 +154,15 @@ class MainViewHolder(
                     true
                 }
                 DragEvent.ACTION_DROP -> {
-                    val clipData = event.clipData
-                    if (clipData != null && clipData.itemCount > 0) {
-                        val uri = clipData.getItemAt(0)?.uri
-                        if (uri != null && uri.isNotEmpty()) {
-                            listener.onImageDragged(event, uri)
-                        }
-                    }
+                    receiver.onReceiveContent(
+                        view,
+                        ContentInfoCompat.Builder(
+                            event.clipData,
+                            ContentInfoCompat.SOURCE_DRAG_AND_DROP
+                        )
+                            .setExtras(bundleOf(DragEvent.ACTION_DROP.toString() to event))
+                            .build()
+                    )
                     true
                 }
                 DragEvent.ACTION_DRAG_ENDED -> {

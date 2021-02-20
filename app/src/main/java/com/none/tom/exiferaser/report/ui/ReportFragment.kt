@@ -47,7 +47,7 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentReportBinding
 import com.none.tom.exiferaser.details.ui.DetailsFragment
-import com.none.tom.exiferaser.report.DispatchingConstraintLayout
+import com.none.tom.exiferaser.report.ReportConstraintLayout
 import com.none.tom.exiferaser.report.business.ReportSideEffect
 import com.none.tom.exiferaser.report.business.ReportState
 import com.none.tom.exiferaser.report.business.ReportViewModel
@@ -99,7 +99,7 @@ class ReportFragment :
     }
     private var _reportCallback: BottomSheetBehavior.BottomSheetCallback? = null
     private val reportCallback get() = _reportCallback!!
-    private var _behaviour: ReportFragmentBehaviour<DispatchingConstraintLayout>? = null
+    private var _behaviour: ReportFragmentBehaviour<ReportConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
     override fun onViewCreated(
@@ -115,7 +115,7 @@ class ReportFragment :
             )
         }
         _behaviour = BottomSheetBehavior.from(binding.layout) as
-            ReportFragmentBehaviour<DispatchingConstraintLayout>
+            ReportFragmentBehaviour<ReportConstraintLayout>
         var translationMax = 0f
         binding.layout.apply {
             doOnLayout {

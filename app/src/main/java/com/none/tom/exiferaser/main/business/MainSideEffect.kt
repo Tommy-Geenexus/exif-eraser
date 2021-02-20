@@ -53,6 +53,24 @@ sealed class MainSideEffect : Parcelable {
     object NavigateToSettings : MainSideEffect()
 
     @Parcelize
+    data class PasteImages(
+        val uris: List<Uri>
+    ) : MainSideEffect()
+
+    @Parcelize
+    object PasteImagesNone : MainSideEffect()
+
+    @Parcelize
+    data class ReceivedImage(
+        val uri: Uri
+    ) : MainSideEffect()
+
+    @Parcelize
+    data class ReceivedImages(
+        val uris: List<Uri>
+    ) : MainSideEffect()
+
+    @Parcelize
     data class ShortcutHandle(
         val shortcutAction: String
     ) : MainSideEffect()
@@ -60,10 +78,5 @@ sealed class MainSideEffect : Parcelable {
     @Parcelize
     data class ShortcutReportUsed(
         val shortcutAction: String
-    ) : MainSideEffect()
-
-    @Parcelize
-    data class DraggedImage(
-        val uri: Uri
     ) : MainSideEffect()
 }

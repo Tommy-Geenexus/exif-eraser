@@ -28,7 +28,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.none.tom.exiferaser.R
 
-class DispatchingConstraintLayout(
+class ReportConstraintLayout(
     context: Context,
     attrs: AttributeSet?
 ) : ConstraintLayout(context, attrs) {
