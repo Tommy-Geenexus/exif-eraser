@@ -32,17 +32,18 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
 
 fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
-    owner: LifecycleOwner,
     @DrawableRes iconResStart: Int,
     @DrawableRes iconResEnd: Int,
     @StringRes textResStart: Int,
@@ -72,7 +73,8 @@ fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
             extend()
         }
     }
-    owner.lifecycle.addObserver(
+    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
+    lifecycle?.addObserver(
         object : LifecycleEventObserver {
 
             override fun onStateChanged(
@@ -90,7 +92,7 @@ fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
                         AnimatedVectorDrawableCompat.unregisterAnimationCallback(icon, callback)
                     }
                     Lifecycle.Event.ON_DESTROY -> {
-                        owner.lifecycle.removeObserver(this)
+                        lifecycle.removeObserver(this)
                     }
                     else -> {
                     }
@@ -100,11 +102,9 @@ fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
     )
 }
 
-fun RecyclerView.addItemTouchHelper(
-    owner: LifecycleOwner,
-    itemTouchHelper: ItemTouchHelper
-) {
-    owner.lifecycle.addObserver(
+fun RecyclerView.addItemTouchHelper(itemTouchHelper: ItemTouchHelper) {
+    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
+    lifecycle?.addObserver(
         object : LifecycleEventObserver {
 
             override fun onStateChanged(
@@ -119,7 +119,7 @@ fun RecyclerView.addItemTouchHelper(
                         itemTouchHelper.attachToRecyclerView(null)
                     }
                     Lifecycle.Event.ON_DESTROY -> {
-                        owner.lifecycle.removeObserver(this)
+                        lifecycle.removeObserver(this)
                     }
                     else -> {
                     }
@@ -127,6 +127,42 @@ fun RecyclerView.addItemTouchHelper(
             }
         }
     )
+}
+
+fun View.showSnackbar(
+    anchor: View,
+    @StringRes msg: Int,
+    length: Int = Snackbar.LENGTH_SHORT
+) {
+    var backingSnackbar: Snackbar? = Snackbar
+        .make(this, msg, length)
+        .setAnchorView(anchor)
+    val snackbar = backingSnackbar
+    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
+    if (snackbar != null && lifecycle != null) {
+        lifecycle.addObserver(
+            object : LifecycleEventObserver {
+
+                override fun onStateChanged(
+                    source: LifecycleOwner,
+                    event: Lifecycle.Event
+                ) {
+                    when (event) {
+                        Lifecycle.Event.ON_STOP -> {
+                            lifecycle.removeObserver(this)
+                            snackbar.dismiss()
+                            backingSnackbar = null
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            }
+        )
+        snackbar.show()
+    } else {
+        backingSnackbar = null
+    }
 }
 
 fun View.canReceiveContent(): Boolean {

@@ -48,7 +48,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.cash.exhaustive.Exhaustive
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
@@ -70,6 +69,7 @@ import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
 import com.none.tom.exiferaser.main.getClipImages
+import com.none.tom.exiferaser.main.showSnackbar
 import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
@@ -152,7 +152,6 @@ class MainFragment :
             )
             addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_micro)))
             addItemTouchHelper(
-                viewLifecycleOwner,
                 ItemTouchHelper(
                     SimpleItemTouchHelperCallback(
                         callback = adapter as MainAdapter,
@@ -165,7 +164,6 @@ class MainFragment :
         }
         binding.imageSourcesReorder.apply {
             addScaleAndIconAnimation(
-                owner = viewLifecycleOwner,
                 iconResStart = IMAGE_SOURCES_AVD_REORDER,
                 iconResEnd = IMAGE_SOURCES_AVD_DRAG,
                 textResStart = R.string.reorder,
@@ -341,13 +339,10 @@ class MainFragment :
                 viewModel.handleReceivedImages(sideEffect.uris)
             }
             is MainSideEffect.PasteImagesNone -> {
-                Snackbar.make(
-                    requireView(),
-                    R.string.clipboard_content_unsupported,
-                    Snackbar.LENGTH_SHORT
+                requireView().showSnackbar(
+                    anchor = binding.imageSourcesReorder,
+                    msg = R.string.clipboard_content_unsupported
                 )
-                    .setAnchorView(binding.imageSourcesReorder)
-                    .show()
             }
             is MainSideEffect.ReceivedImage -> {
                 viewModel.preparePutSelection(sideEffect.uri)

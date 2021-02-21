@@ -294,13 +294,19 @@ class MainViewModel @Inject constructor(
 
     fun handlePasteImages(uris: List<Uri>) = orbit {
         sideEffect {
-            post(
-                if (uris.isNotEmpty()) {
-                    MainSideEffect.PasteImages(uris)
-                } else {
-                    MainSideEffect.PasteImagesNone
-                }
-            )
+            val accessingStorage = state.imageSourcesFetching ||
+                state.imageSourcesPersisting ||
+                state.selectionPersisting ||
+                state.accessingPreferences
+            if (!accessingStorage) {
+                post(
+                    if (uris.isNotEmpty()) {
+                        MainSideEffect.PasteImages(uris)
+                    } else {
+                        MainSideEffect.PasteImagesNone
+                    }
+                )
+            }
         }
     }
 }
