@@ -4,7 +4,7 @@
         app:key="@string/key_file_system"
         app:title="@string/file_system">
         <com.none.tom.exiferaser.settings.ImageButtonPreference
-            app:icon="@drawable/ic_folder"
+            app:icon="@drawable/ic_folder_open"
             app:key="@string/key_default_path_open"
             app:title="@string/default_path_open" />
 
@@ -39,7 +39,7 @@
 
     <PreferenceCategory app:title="@string/ui">
         <com.none.tom.exiferaser.settings.NightModeListPreference
-            app:icon="@drawable/ic_theme_night"
+            app:icon="@drawable/ic_mode_night"
             app:key="@string/key_night_mode"
             app:title="@string/night_mode" />
     </PreferenceCategory>
