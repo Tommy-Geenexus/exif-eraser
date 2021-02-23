@@ -28,11 +28,4 @@
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
-
-    <style name="ThemeOverlay.ExifEraser.Sheet.Bottom" parent="ThemeOverlay.MaterialComponents.Light.BottomSheetDialog">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/white</item>
-        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
-        <item name="android:windowIsFloating">false</item>
-    </style>
 </resources>

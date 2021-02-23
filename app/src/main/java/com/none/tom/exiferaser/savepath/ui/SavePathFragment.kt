@@ -20,7 +20,6 @@
 
 package com.none.tom.exiferaser.savepath.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -89,16 +88,7 @@ class SavePathFragment : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    // Workaround for https://github.com/material-components/material-components-android/issues/267
-    override fun getTheme(): Int {
-        return if (resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-        ) {
-            super.getTheme()
-        } else {
-            R.style.ThemeOverlay_ExifEraser_Sheet_Bottom
-        }
-    }
+    override fun getTheme() = R.style.ThemeOverlay_ExifEraser_Sheet_Bottom
 
     private fun renderState(state: SavePathState) {
         binding.pathSaveDefault.isVisible = state.hasPrivilegedDefaultSavePath

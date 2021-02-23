@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.ExifEraser" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="materialAlertDialogTheme">@style/ThemeOverlay.ExifEraser.Dialog.Material.Alert</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.ExifEraser.Dialog.Material.Alert
+        </item>
         <item name="alertDialogTheme">@style/ThemeOverlay.ExifEraser.Dialog.Alert</item>
         <item name="preferenceTheme">@style/ThemeOverlay.ExifEraser.Preference</item>
     </style>
@@ -25,6 +26,12 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="ThemeOverlay.ExifEraser.Sheet.Bottom" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="android:navigationBarDividerColor" tools:targetApi="o_mr1">
+            @android:color/transparent
+        </item>
     </style>
 
     <style name="ThemeOverlay.ExifEraser.Dialog.Alert" parent="ThemeOverlay.AppCompat.Dialog.Alert">
