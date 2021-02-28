@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,7 +21,7 @@
 package com.none.tom.exiferaser.di
 
 import android.content.Context
-import androidx.datastore.createDataStore
+import androidx.datastore.dataStore
 import com.none.tom.exiferaser.main.data.ImageSourcesSerializer
 import com.none.tom.exiferaser.main.data.SelectionSerializer
 import dagger.Module
@@ -29,32 +29,28 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Qualifier
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
 
     @Provides
-    @DataStoreSelection
-    fun provideDataStoreSelection(@ApplicationContext context: Context) = context.createDataStore(
-        fileName = "selection.pb",
-        serializer = SelectionSerializer()
-    )
+    fun provideDataStoreSelection(
+        @ApplicationContext context: Context
+    ) = context.imageSourcesDataStore
 
     @Provides
-    @DataStoreImageSource
-    fun provideDataStoreImageSources(@ApplicationContext context: Context) =
-        context.createDataStore(
-            fileName = "image_sources.pb",
-            serializer = ImageSourcesSerializer()
-        )
+    fun provideDataStoreImageSources(
+        @ApplicationContext context: Context
+    ) = context.selectionDataStore
 }
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DataStoreSelection
+private val Context.imageSourcesDataStore by dataStore(
+    fileName = "image_sources.pb",
+    serializer = ImageSourcesSerializer()
+)
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class DataStoreImageSource
+private val Context.selectionDataStore by dataStore(
+    fileName = "selection.pb",
+    serializer = SelectionSerializer()
+)

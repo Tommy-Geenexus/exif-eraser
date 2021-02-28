@@ -26,7 +26,6 @@ import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
-import com.none.tom.exiferaser.di.DataStoreImageSource
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,7 +36,7 @@ import timber.log.Timber
 
 @Singleton
 class ImageSourceRepository @Inject constructor(
-    @DataStoreImageSource private val dataStore: DataStore<ImageSourcesProto>
+    private val dataStore: DataStore<ImageSourcesProto>
 ) {
 
     private companion object {

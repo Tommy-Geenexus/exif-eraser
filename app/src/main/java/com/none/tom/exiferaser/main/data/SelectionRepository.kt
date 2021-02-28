@@ -26,7 +26,6 @@ import androidx.datastore.core.DataStore
 import com.none.tom.exiferaser.SelectionProto
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
-import com.none.tom.exiferaser.di.DataStoreSelection
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNullOrEmpty
 import com.squareup.wire.AnyMessage
@@ -41,7 +40,7 @@ import timber.log.Timber
 @ExperimentalContracts
 @Singleton
 class SelectionRepository @Inject constructor(
-    @DataStoreSelection private val dataStore: DataStore<SelectionProto>
+    private val dataStore: DataStore<SelectionProto>
 ) {
 
     suspend fun getSelection(@IntRange(from = 0) dropFirstN: Int): Flow<AnyMessage?> {
