@@ -35,8 +35,10 @@ import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_DEFAULT
 import com.none.tom.exiferaser.main.MODE_MULTI_WINDOW_ACTIVITY_COLLAPSED_MAX
 import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.canReceiveContent
+import kotlin.contracts.ExperimentalContracts
 import kotlin.math.roundToInt
 
+@ExperimentalContracts
 class MainViewHolder(
     private val binding: FragmentMainCardViewBinding,
     private val listener: MainAdapter.Listener,

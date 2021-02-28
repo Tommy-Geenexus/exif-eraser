@@ -24,6 +24,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
@@ -32,6 +33,7 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Collections
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.coroutines.transformFlow
 import org.orbitmvi.orbit.coroutines.transformSuspend
@@ -40,6 +42,7 @@ import org.orbitmvi.orbit.syntax.strict.reduce
 import org.orbitmvi.orbit.syntax.strict.sideEffect
 import org.orbitmvi.orbit.viewmodel.container
 
+@ExperimentalContracts
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -190,11 +193,11 @@ class MainViewModel @Inject constructor(
 
     fun putImageDirectorySelection(treeUri: Uri?) = orbit {
         transformSuspend {
-            if (treeUri != null) {
-                val message = imageRepository.getDocumentTreeAsMessageOrNull(treeUri)
+            if (treeUri.isNotNullOrEmpty()) {
+                val message = imageRepository.packDocumentTreeToAnyMessageOrNull(treeUri)
                 selectionRepository.putSelection(message)
             } else {
-                treeUri
+                null
             }
         }.reduce {
             state.copy(selectionPersisting = false)
@@ -253,9 +256,9 @@ class MainViewModel @Inject constructor(
         }.reduce {
             state.copy(accessingPreferences = false)
         }.sideEffect {
-            val imageUri = event
-            if (imageUri != null) {
-                post(MainSideEffect.LaunchCamera(imageUri))
+            val uri = event
+            if (uri.isNotNullOrEmpty()) {
+                post(MainSideEffect.LaunchCamera(uri))
             }
         }
     }

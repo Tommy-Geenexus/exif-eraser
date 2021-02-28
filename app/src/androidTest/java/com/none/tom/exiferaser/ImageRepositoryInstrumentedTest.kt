@@ -34,12 +34,14 @@ import com.none.tom.exiferaser.selection.data.Result
 import com.none.tom.exiferaser.selection.data.Summary
 import java.io.File
 import java.io.FileOutputStream
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -47,12 +49,15 @@ import org.junit.runner.RunWith
 import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
+import strikt.assertions.isNotNull
 
+@ExperimentalContracts
 @RunWith(AndroidJUnit4::class)
 class ImageRepositoryInstrumentedTest {
 
     private companion object {
         const val CONTENT_URI_PREFIX = "content://com.none.tom.exiferaser.fileprovider/my_images/"
+        const val CONTENT_URI_SUFFIX = "_Modified"
         const val JPEG_WITH_EXIF_WITH_XMP = "jpeg_with_exif_with_xmp"
         const val JPEG_WITHOUT_EXIF_WITHOUT_XMP = "jpeg_without_exif_without_xmp"
         const val PNG_WITH_EXIF = "png_with_exif_byte_order_ii"
@@ -77,14 +82,26 @@ class ImageRepositoryInstrumentedTest {
         Uri.parse(CONTENT_URI_PREFIX + WEBP_WITH_EXIF + EXTENSION_WEBP),
         Uri.parse(CONTENT_URI_PREFIX + WEBP_WITHOUT_EXIF_WITH_MAKE + EXTENSION_WEBP)
     )
+    private val expectedImagePathsModified = listOf(
+        Uri.parse(
+            CONTENT_URI_PREFIX + JPEG_WITH_EXIF_WITH_XMP + CONTENT_URI_SUFFIX + EXTENSION_JPEG
+        ),
+        Uri.parse(CONTENT_URI_PREFIX + JPEG_WITHOUT_EXIF_WITHOUT_XMP + EXTENSION_JPEG),
+        Uri.parse(CONTENT_URI_PREFIX + PNG_WITH_EXIF + CONTENT_URI_SUFFIX + EXTENSION_PNG),
+        Uri.parse(CONTENT_URI_PREFIX + PNG_WITHOUT_EXIF + EXTENSION_PNG),
+        Uri.parse(CONTENT_URI_PREFIX + WEBP_WITH_EXIF + CONTENT_URI_SUFFIX + EXTENSION_WEBP),
+        Uri.parse(
+            CONTENT_URI_PREFIX + WEBP_WITHOUT_EXIF_WITH_MAKE + CONTENT_URI_SUFFIX + EXTENSION_WEBP
+        )
+    )
     private val expectedSummaries = listOf(
         Summary(
             displayName = JPEG_WITH_EXIF_WITH_XMP,
             extension = EXTENSION_JPEG,
             mimeType = MIME_TYPE_JPEG,
-            imageUri = expectedImagePaths[0],
+            imageUri = expectedImagePathsModified[0],
             imageModified = true,
-            imageSaved = false, // FIXME: Missing uri write permissions
+            imageSaved = true,
             containsIccProfile = false,
             containsExif = true,
             containsPhotoshopImageResources = false,
@@ -95,7 +112,7 @@ class ImageRepositoryInstrumentedTest {
             displayName = JPEG_WITHOUT_EXIF_WITHOUT_XMP,
             extension = EXTENSION_JPEG,
             mimeType = MIME_TYPE_JPEG,
-            imageUri = expectedImagePaths[1],
+            imageUri = expectedImagePathsModified[1],
             imageModified = false,
             imageSaved = false,
             containsIccProfile = false,
@@ -108,9 +125,9 @@ class ImageRepositoryInstrumentedTest {
             displayName = PNG_WITH_EXIF,
             extension = EXTENSION_PNG,
             mimeType = MIME_TYPE_PNG,
-            imageUri = expectedImagePaths[2],
+            imageUri = expectedImagePathsModified[2],
             imageModified = true,
-            imageSaved = false,
+            imageSaved = true,
             containsIccProfile = false,
             containsExif = true,
             containsPhotoshopImageResources = false,
@@ -121,7 +138,7 @@ class ImageRepositoryInstrumentedTest {
             displayName = PNG_WITHOUT_EXIF,
             extension = EXTENSION_PNG,
             mimeType = MIME_TYPE_PNG,
-            imageUri = expectedImagePaths[3],
+            imageUri = expectedImagePathsModified[3],
             imageModified = false,
             imageSaved = false,
             containsIccProfile = false,
@@ -134,9 +151,9 @@ class ImageRepositoryInstrumentedTest {
             displayName = WEBP_WITH_EXIF,
             extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
-            imageUri = expectedImagePaths[4],
+            imageUri = expectedImagePathsModified[4],
             imageModified = true,
-            imageSaved = false,
+            imageSaved = true,
             containsIccProfile = false,
             containsExif = true,
             containsPhotoshopImageResources = false,
@@ -147,9 +164,9 @@ class ImageRepositoryInstrumentedTest {
             displayName = WEBP_WITHOUT_EXIF_WITH_MAKE,
             extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
-            imageUri = expectedImagePaths[5],
+            imageUri = expectedImagePathsModified[5],
             imageModified = true,
-            imageSaved = false,
+            imageSaved = true,
             containsIccProfile = false,
             containsExif = true,
             containsPhotoshopImageResources = false,
@@ -171,7 +188,7 @@ class ImageRepositoryInstrumentedTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
         testDispatcher = TestCoroutineDispatcher()
-        testRepository = ImageRepository(context, context.contentResolver, testDispatcher)
+        testRepository = ImageRepository(context, testDispatcher)
         copyResourcesToPictures()
     }
 
@@ -189,8 +206,11 @@ class ImageRepositoryInstrumentedTest {
     fun test_getExternalPicturesFileProviderUriOrNull() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
             runBlockingTest {
-                val uri = getExternalPicturesFileProviderUriOrThrow(displayName, extension)
-                expectThat(uri).isEqualTo(expectedImagePaths[index])
+                val uri = getExternalPicturesFileProviderUri(displayName, extension)
+                expectThat(uri) {
+                    isNotNull()
+                    isEqualTo(expectedImagePaths[index])
+                }
             }
         }
     }
@@ -200,12 +220,11 @@ class ImageRepositoryInstrumentedTest {
     fun test_removeMetaDataSingle() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
             runBlockingTest {
+                val uri = getExternalPicturesFileProviderUri(displayName, extension)
+                expectThat(uri).isNotNull()
                 testRepository.removeMetadataSingle(
                     selection = UserImageSelectionProto(
-                        image_path = getExternalPicturesFileProviderUriOrThrow(
-                            displayName,
-                            extension
-                        ).toString(),
+                        image_path = uri.toString(),
                         from_camera = false
                     ),
                     preserveOrientation = false
@@ -225,7 +244,7 @@ class ImageRepositoryInstrumentedTest {
                             expectThat(result).isA<Result.HandledAll>()
                         }
                         else -> {
-                            throw IllegalStateException()
+                            Assert.fail("Index out of bounds")
                         }
                     }
                 }
@@ -238,12 +257,11 @@ class ImageRepositoryInstrumentedTest {
     fun test_removeMetaDataBulk() = runBlockingTest {
         val selection = mutableListOf<UserImageSelectionProto>()
         resources.forEach { (_, displayName, extension) ->
+            val uri = getExternalPicturesFileProviderUri(displayName, extension)
+            expectThat(uri).isNotNull()
             selection.add(
                 UserImageSelectionProto(
-                    image_path = getExternalPicturesFileProviderUriOrThrow(
-                        displayName,
-                        extension
-                    ).toString(),
+                    image_path = uri.toString(),
                     from_camera = false
                 )
             )
@@ -254,7 +272,7 @@ class ImageRepositoryInstrumentedTest {
             preserveOrientation = false
         ).collectIndexed { index: Int, result: Result ->
             if (index > lastIndex) {
-                throw IllegalStateException()
+                Assert.fail("Index out of bounds")
             }
             when {
                 index == lastIndex -> {
@@ -294,23 +312,19 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    private fun getExternalPicturesFileProviderUriOrThrow(
+    private fun getExternalPicturesFileProviderUri(
         displayName: String,
         extension: String
-    ): Uri {
-        return testRepository.getExternalPicturesFileProviderUriOrNull(
-            displayName = displayName,
-            extension = extension
-        ) ?: throw IllegalStateException()
-    }
+    ) = testRepository.getExternalPicturesFileProviderUriOrNull(
+        displayName = displayName,
+        extension = extension
+    )
 
     private fun getFileFromExternalDir(
         displayName: String,
         extension: String
-    ): File {
-        return File(
-            context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-            displayName.plus(extension)
-        )
-    }
+    ) = File(
+        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+        displayName.plus(extension)
+    )
 }

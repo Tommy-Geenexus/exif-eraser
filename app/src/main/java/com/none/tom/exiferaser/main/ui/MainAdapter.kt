@@ -32,7 +32,9 @@ import com.none.tom.exiferaser.main.ACTIVITY_EXPANDED
 import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.SimpleItemTouchHelperCallback
 import com.squareup.wire.AnyMessage
+import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 class MainAdapter(
     private val listener: Listener,
     private val receiver: MainContentReceiver

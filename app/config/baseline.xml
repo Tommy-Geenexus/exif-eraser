@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
+    <ID>ComplexMethod:ImageRepository.kt$ImageRepository$@WorkerThread private fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>ComplexMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:DetailsFragment.kt$DetailsFragment$private fun renderState(state: DetailsState)</ID>
     <ID>LongMethod:ImageRepository.kt$ImageRepository$@WorkerThread private fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
@@ -13,12 +14,12 @@
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:MainViewHolder.kt$MainViewHolder$255</ID>
-    <ID>NestedBlockDepth:MainContentReceiver.kt$MainContentReceiver$override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
+    <ID>NestedBlockDepth:MainContentReceiver.kt$MainContentReceiver$@ExperimentalContracts override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
     <ID>NestedBlockDepth:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>ReturnCount:AnimationUtils.kt$ @ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
     <ID>ReturnCount:AnimationUtils.kt$ fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
-    <ID>ReturnCount:MainContentReceiver.kt$MainContentReceiver$override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
-    <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
+    <ID>ReturnCount:MainContentReceiver.kt$MainContentReceiver$@ExperimentalContracts override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
+    <ID>ThrowsCount:ImageRepository.kt$ImageRepository$@WorkerThread private fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListenerListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:SelectionFragment.kt$SelectionFragment : BaseFragment</ID>

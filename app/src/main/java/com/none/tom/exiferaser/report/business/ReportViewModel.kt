@@ -22,9 +22,11 @@ package com.none.tom.exiferaser.report.business
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.selection.data.Summary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.strict.orbit
 import org.orbitmvi.orbit.syntax.strict.reduce
@@ -48,10 +50,11 @@ class ReportViewModel @Inject constructor(
         }
     }
 
+    @ExperimentalContracts
     fun handleViewImage(position: Int) = orbit {
         sideEffect {
             val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
-            if (imageUri != null) {
+            if (imageUri.isNotNullOrEmpty()) {
                 post(ReportSideEffect.ViewImage(imageUri))
             }
         }

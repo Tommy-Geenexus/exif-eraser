@@ -49,8 +49,10 @@ import com.none.tom.exiferaser.selection.toPercent
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
 
+@ExperimentalContracts
 @AndroidEntryPoint
 class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragment_selection) {
 

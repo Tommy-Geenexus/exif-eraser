@@ -20,7 +20,6 @@
 
 package com.none.tom.exiferaser.selection.data
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -28,7 +27,6 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.webkit.MimeTypeMap
 import androidx.annotation.WorkerThread
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -39,17 +37,21 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.di.DispatcherIo
-import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.isNotNullOrEmpty
+import com.none.tom.exiferaser.isNullOrEmpty
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
+import com.none.tom.exiferaser.selection.getExtensionFromMimeTypeOrEmpty
+import com.none.tom.exiferaser.selection.openInputStreamOrThrow
+import com.none.tom.exiferaser.selection.openOutputStreamOrThrow
+import com.none.tom.exiferaser.selection.queryOrThrow
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import com.tomg.exifinterfaceextended.ExifInterfaceExtended
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
@@ -58,10 +60,10 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
+@ExperimentalContracts
 @Singleton
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val contentResolver: ContentResolver,
     @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
@@ -111,18 +113,18 @@ class ImageRepository @Inject constructor(
             .flowOn(dispatcher)
     }
 
-    suspend fun getDocumentTreeAsMessageOrNull(treeUri: Uri): AnyMessage? {
+    suspend fun packDocumentTreeToAnyMessageOrNull(treeUri: Uri): AnyMessage? {
         return withContext(dispatcher) {
             runCatching {
                 val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                     treeUri,
                     DocumentsContract.getTreeDocumentId(treeUri)
                 )
-                queryOrThrow(childDocumentsUri).use { cursor ->
+                context.contentResolver.queryOrThrow(childDocumentsUri).use { cursor ->
                     if (cursor.moveToFirst()) {
-                        getChildDocumentsAsMessageOrNull(cursor, treeUri)
+                        packChildDocumentsToAnyMessageOrNull(cursor, treeUri)
                     } else {
-                        null
+                        throw IllegalStateException("Empty cursor")
                     }
                 }
             }.getOrElse { exception ->
@@ -133,7 +135,7 @@ class ImageRepository @Inject constructor(
     }
 
     @WorkerThread
-    private fun getChildDocumentsAsMessageOrNull(
+    private fun packChildDocumentsToAnyMessageOrNull(
         cursor: Cursor,
         treeUri: Uri
     ): AnyMessage? {
@@ -142,8 +144,7 @@ class ImageRepository @Inject constructor(
             while (!cursor.isAfterLast) {
                 val columnName = DocumentsContract.Document.COLUMN_DOCUMENT_ID
                 val documentId = cursor.getString(cursor.getColumnIndexOrThrow(columnName))
-                val documentUri =
-                    DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+                val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
                 if (supportedMimeTypes.contains(getMimeTypeOrNull(documentUri))) {
                     selection.add(UserImageSelectionProto(documentUri.toString()))
                 }
@@ -159,7 +160,7 @@ class ImageRepository @Inject constructor(
                     AnyMessage.pack(selection.first())
                 }
                 else -> {
-                    null
+                    throw IllegalStateException("No child documents found")
                 }
             }
         }.getOrElse { exception ->
@@ -175,9 +176,11 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Result.Report {
+        var uri = Uri.EMPTY
+        var modifiedUri = Uri.EMPTY
         var displayName = String.Empty
-        val imageUri = selection.image_path.toUri()
-        var modifiedImageUri = Uri.EMPTY
+        var mimeType = String.Empty
+        var extension = String.Empty
         var containsMetadata = false
         var imageSaved = false
         var containsIccProfile = false
@@ -185,12 +188,12 @@ class ImageRepository @Inject constructor(
         var containsPhotoshopImageResources = false
         var containsXmp = false
         var containsExtendedXmp = false
-        val mimeType = getMimeTypeOrNull(imageUri).orEmpty()
-        val extension =
-            '.' + MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).orEmpty()
         runCatching {
+            uri = selection.image_path.toUri()
+            mimeType = getMimeTypeOrNull(uri).orEmpty()
+            extension = mimeType.getExtensionFromMimeTypeOrEmpty()
             val exifInterfaceExtended: ExifInterfaceExtended
-            openInputStreamOrThrow(imageUri).use { source ->
+            context.contentResolver.openInputStreamOrThrow(uri).use { source ->
                 exifInterfaceExtended = ExifInterfaceExtended(source)
                 containsIccProfile = exifInterfaceExtended.hasIccProfile()
                 containsExif = exifInterfaceExtended.hasAttributes(true)
@@ -203,12 +206,9 @@ class ImageRepository @Inject constructor(
                     containsXmp ||
                     containsExtendedXmp
             }
-            displayName = getDisplayNameOrNull(imageUri).orEmpty()
-            val endIndex = displayName.indexOfFirst { c -> c == '.' }
-            displayName = displayName.substring(
-                startIndex = 0,
-                endIndex = if (endIndex > 0) endIndex else displayName.length
-            )
+            displayName = getDisplayNameOrNull(uri).orEmpty()
+                .replaceAfter(delimiter = '.', replacement = "")
+                .trimEnd { c -> c == '.' }
             if (displayNameSuffix.isNotEmpty()) {
                 val displayNameWithSuffix = displayName + '_' + displayNameSuffix
                 if (FileUtilsKt.isValidExtFilename(displayNameWithSuffix)) {
@@ -218,15 +218,16 @@ class ImageRepository @Inject constructor(
             if (!containsMetadata) {
                 return@runCatching
             }
-            modifiedImageUri = getChildDocumentPathOrNull(
-                documentPath = imageUri,
-                treeUri = treeUri,
+            modifiedUri = createDocument(
+                uri = uri,
+                defaultTreeUri = treeUri,
                 displayName = displayName,
-                mimeType = mimeType
+                mimeType = mimeType,
+                extension = extension
             )
-            if (modifiedImageUri != null) {
-                openInputStreamOrThrow(imageUri).use { source ->
-                    openOutputStreamOrThrow(modifiedImageUri).use { sink ->
+            if (modifiedUri.isNotNullOrEmpty()) {
+                context.contentResolver.openInputStreamOrThrow(uri).use { source ->
+                    context.contentResolver.openOutputStreamOrThrow(modifiedUri).use { sink ->
                         exifInterfaceExtended.saveExclusive(source, sink, preserveOrientation)
                         imageSaved = true
                     }
@@ -242,7 +243,7 @@ class ImageRepository @Inject constructor(
                 mimeType = mimeType,
                 imageModified = containsMetadata,
                 imageSaved = imageSaved,
-                imageUri = if (imageSaved) modifiedImageUri else imageUri,
+                imageUri = if (imageSaved) modifiedUri else uri,
                 containsExif = containsExif,
                 containsIccProfile = containsIccProfile,
                 containsPhotoshopImageResources = containsPhotoshopImageResources,
@@ -253,27 +254,52 @@ class ImageRepository @Inject constructor(
     }
 
     @WorkerThread
-    private fun getChildDocumentPathOrNull(
-        documentPath: Uri,
-        treeUri: Uri = Uri.EMPTY,
-        displayName: String?,
-        mimeType: String?
+    private fun createDocument(
+        uri: Uri,
+        defaultTreeUri: Uri = Uri.EMPTY,
+        displayName: String = String.Empty,
+        mimeType: String = String.Empty,
+        extension: String = String.Empty
     ): Uri? {
         return runCatching {
-            val realTreeUri = if (treeUri.isNotEmpty()) treeUri else documentPath
-            val documentTreeUri = DocumentFile.fromTreeUri(context, realTreeUri)?.uri
-            if (documentTreeUri != null &&
-                !displayName.isNullOrEmpty() &&
-                !mimeType.isNullOrEmpty()
-            ) {
-                DocumentsContract.createDocument(
-                    contentResolver,
-                    documentTreeUri,
-                    mimeType,
-                    displayName
-                )
+            if (uri.scheme != ContentResolver.SCHEME_CONTENT) {
+                throw IllegalArgumentException("Invalid uri")
+            }
+            if (DocumentFile.isDocumentUri(context, uri)) {
+                if (displayName.isEmpty() || mimeType.isEmpty()) {
+                    throw IllegalArgumentException("Invalid displayName or mimeType")
+                }
+                var treeUri: Uri? = null
+                if (defaultTreeUri.isNotNullOrEmpty()) {
+                    val file = DocumentFile.fromTreeUri(context, defaultTreeUri)
+                    if (file != null && file.isDirectory && file.canWrite()) {
+                        treeUri = file.uri
+                    }
+                }
+                if (treeUri.isNullOrEmpty()) {
+                    val file = DocumentFile.fromSingleUri(context, uri)
+                    if (file != null && file.isFile && file.exists()) {
+                        treeUri = file.uri
+                    }
+                }
+                if (treeUri.isNotNullOrEmpty()) {
+                    DocumentsContract.createDocument(
+                        context.contentResolver,
+                        treeUri,
+                        mimeType,
+                        displayName
+                    )
+                } else {
+                    throw IllegalStateException("Failed to resolve tree uri")
+                }
             } else {
-                null
+                if (displayName.isEmpty() || extension.isEmpty()) {
+                    throw IllegalArgumentException("Invalid displayName or extension")
+                }
+                getExternalPicturesFileProviderUriOrNull(
+                    displayName = displayName + '_' + context.getString(R.string.modified),
+                    extension = extension
+                )
             }
         }.getOrElse { exception ->
             Timber.e(exception)
@@ -282,14 +308,14 @@ class ImageRepository @Inject constructor(
     }
 
     @WorkerThread
-    private fun getDisplayNameOrNull(documentPath: Uri): String? {
+    private fun getDisplayNameOrNull(uri: Uri): String? {
         return runCatching {
-            queryOrThrow(documentPath).use { cursor ->
+            context.contentResolver.queryOrThrow(uri).use { cursor ->
                 if (cursor.moveToFirst()) {
                     val columnName = MediaStore.Images.ImageColumns.DISPLAY_NAME
                     cursor.getString(cursor.getColumnIndexOrThrow(columnName))
                 } else {
-                    null
+                    throw IllegalStateException("Empty cursor")
                 }
             }
         }.getOrElse { exception ->
@@ -299,9 +325,9 @@ class ImageRepository @Inject constructor(
     }
 
     @WorkerThread
-    private fun getMimeTypeOrNull(documentPath: Uri): String? {
+    private fun getMimeTypeOrNull(uri: Uri): String? {
         return runCatching {
-            contentResolver.getType(documentPath)
+            context.contentResolver.getType(uri)
         }.getOrElse { exception ->
             Timber.e(exception)
             null
@@ -320,29 +346,12 @@ class ImageRepository @Inject constructor(
                 fileProviderPackage,
                 File(
                     context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                    displayName.plus(extension)
+                    displayName + extension
                 )
             )
         }.getOrElse { exception ->
             Timber.e(exception)
             null
         }
-    }
-
-    @WorkerThread
-    private fun openInputStreamOrThrow(documentPath: Uri): InputStream {
-        return contentResolver.openInputStream(documentPath) ?: throw IllegalStateException()
-    }
-
-    @WorkerThread
-    private fun openOutputStreamOrThrow(documentPath: Uri): OutputStream {
-        return contentResolver.openOutputStream(documentPath) ?: throw IllegalStateException()
-    }
-
-    @SuppressLint("Recycle")
-    @WorkerThread
-    private fun queryOrThrow(documentPath: Uri): Cursor {
-        return contentResolver.query(documentPath, null, null, null, null)
-            ?: throw IllegalStateException()
     }
 }

@@ -30,6 +30,7 @@ import androidx.core.view.OnReceiveContentListener
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
 import com.none.tom.exiferaser.isNotNullOrEmpty
+import kotlin.contracts.ExperimentalContracts
 
 class MainContentReceiver(
     private val listener: Listener
@@ -44,6 +45,7 @@ class MainContentReceiver(
         )
     }
 
+    @ExperimentalContracts
     override fun onReceiveContent(
         view: View,
         payload: ContentInfoCompat

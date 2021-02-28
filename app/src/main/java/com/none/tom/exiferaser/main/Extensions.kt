@@ -42,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
+import kotlin.contracts.ExperimentalContracts
 
 fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
     @DrawableRes iconResStart: Int,
@@ -177,6 +178,7 @@ fun Context.hasImageClip(): Boolean {
     return cm.hasPrimaryClip() && cm.primaryClipDescription?.areMimeTypesSupported() == true
 }
 
+@ExperimentalContracts
 fun Context.getClipImages(): List<Uri> {
     val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val resultSet = linkedSetOf<Uri>()

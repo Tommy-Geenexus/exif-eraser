@@ -28,7 +28,9 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
 

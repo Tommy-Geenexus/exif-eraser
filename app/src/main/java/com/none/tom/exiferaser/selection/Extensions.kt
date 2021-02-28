@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,8 +22,23 @@ package com.none.tom.exiferaser.selection
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.database.Cursor
+import android.net.Uri
 import android.view.View
+import androidx.annotation.WorkerThread
 import androidx.core.view.isVisible
+import com.none.tom.exiferaser.EXTENSION_JPEG
+import com.none.tom.exiferaser.EXTENSION_PNG
+import com.none.tom.exiferaser.EXTENSION_WEBP
+import com.none.tom.exiferaser.Empty
+import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import com.none.tom.exiferaser.MIME_TYPE_PNG
+import com.none.tom.exiferaser.MIME_TYPE_WEBP
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 fun View.fadeIn() {
     alpha = 0f
@@ -64,4 +79,29 @@ fun <E> Array<E>.setOrSkip(
     if (index in 0..lastIndex) {
         set(index, element)
     }
+}
+
+fun String.getExtensionFromMimeTypeOrEmpty(): String {
+    return when (this) {
+        MIME_TYPE_JPEG -> EXTENSION_JPEG
+        MIME_TYPE_PNG -> EXTENSION_PNG
+        MIME_TYPE_WEBP -> EXTENSION_WEBP
+        else -> String.Empty
+    }
+}
+
+@WorkerThread
+fun ContentResolver.openInputStreamOrThrow(uri: Uri): InputStream {
+    return openInputStream(uri) ?: throw IOException()
+}
+
+@WorkerThread
+fun ContentResolver.openOutputStreamOrThrow(uri: Uri): OutputStream {
+    return openOutputStream(uri) ?: throw IOException()
+}
+
+@SuppressLint("Recycle")
+@WorkerThread
+fun ContentResolver.queryOrThrow(uri: Uri): Cursor {
+    return query(uri, null, null, null, null) ?: throw IOException()
 }

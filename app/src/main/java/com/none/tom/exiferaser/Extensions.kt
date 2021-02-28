@@ -34,6 +34,8 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialSharedAxis
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 fun FragmentActivity.setupToolbar(
     fragment: Fragment,
@@ -89,6 +91,7 @@ fun Fragment.isActivityInMultiWindowMode(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && requireActivity().isInMultiWindowMode
 }
 
+@ExperimentalContracts
 fun Intent.getClipDataUris(): Array<Uri> {
     val resultSet = linkedSetOf<Uri>()
     val d = data
@@ -104,10 +107,11 @@ fun Intent.getClipDataUris(): Array<Uri> {
     return resultSet.toTypedArray()
 }
 
+@ExperimentalContracts
 fun ClipData.addUrisToSet(resultSet: LinkedHashSet<Uri>) {
     for (i in 0 until itemCount) {
         val uri = getItemAt(i)?.uri
-        if (uri != null) {
+        if (uri.isNotNullOrEmpty()) {
             resultSet.add(uri)
         }
     }
@@ -123,6 +127,14 @@ fun ClipDescription.areMimeTypesSupported(): Boolean {
     return true
 }
 
-fun Uri?.isNotNullOrEmpty() = this != null && isNotEmpty()
+fun Uri?.isNullOrEmpty() = this == null || this == Uri.EMPTY
+
+@ExperimentalContracts
+fun Uri?.isNotNullOrEmpty(): Boolean {
+    contract {
+        returns(true) implies (this@isNotNullOrEmpty != null)
+    }
+    return this != null && isNotEmpty()
+}
 
 fun Uri.isNotEmpty() = this != Uri.EMPTY

@@ -27,14 +27,18 @@ import com.none.tom.exiferaser.SelectionProto
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.di.DataStoreSelection
+import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.isNullOrEmpty
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
+@ExperimentalContracts
 @Singleton
 class SelectionRepository @Inject constructor(
     @DataStoreSelection private val dataStore: DataStore<SelectionProto>
@@ -85,7 +89,7 @@ class SelectionRepository @Inject constructor(
         imageUri: Uri?,
         fromCamera: Boolean = false
     ): Uri? {
-        if (imageUri == null) {
+        if (imageUri.isNullOrEmpty()) {
             return null
         }
         dataStore.updateData { proto ->
@@ -109,9 +113,11 @@ class SelectionRepository @Inject constructor(
             proto.copy(
                 user_image_selection_proto = null,
                 user_images_selection_proto = UserImagesSelectionProto(
-                    user_images_selection = uris.map { imageUri ->
-                        UserImageSelectionProto(image_path = imageUri.toString())
-                    }
+                    user_images_selection = uris
+                        .filter { imageUri -> imageUri.isNotEmpty() }
+                        .map { imageUri ->
+                            UserImageSelectionProto(image_path = imageUri.toString())
+                        }
                 )
             )
         }

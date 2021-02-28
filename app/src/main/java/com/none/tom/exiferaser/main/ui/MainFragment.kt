@@ -76,8 +76,10 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
 
+@ExperimentalContracts
 @AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),

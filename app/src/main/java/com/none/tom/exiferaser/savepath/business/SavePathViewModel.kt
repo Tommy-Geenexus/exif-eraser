@@ -23,10 +23,11 @@ package com.none.tom.exiferaser.savepath.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.coroutines.transformSuspend
 import org.orbitmvi.orbit.syntax.strict.orbit
@@ -61,9 +62,10 @@ class SavePathViewModel @Inject constructor(
         }
     }
 
+    @ExperimentalContracts
     fun navigateToSelection(savePath: Uri? = settingsRepository.getDefaultSavePath()) = orbit {
         sideEffect {
-            if (savePath != null && savePath.isNotEmpty()) {
+            if (savePath.isNotNullOrEmpty()) {
                 post(SavePathSideEffect.NavigateToSelection(savePath))
             }
         }

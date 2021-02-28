@@ -37,8 +37,10 @@ import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
 import com.none.tom.exiferaser.savepath.business.SavePathState
 import com.none.tom.exiferaser.savepath.business.SavePathViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
 
+@ExperimentalContracts
 @AndroidEntryPoint
 class SavePathFragment : BottomSheetDialogFragment() {
 

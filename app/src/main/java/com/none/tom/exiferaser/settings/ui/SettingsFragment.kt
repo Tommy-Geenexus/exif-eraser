@@ -48,7 +48,9 @@ import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.supportImageFormats
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
