@@ -44,6 +44,7 @@ import com.none.tom.exiferaser.selection.getExtensionFromMimeTypeOrEmpty
 import com.none.tom.exiferaser.selection.openInputStreamOrThrow
 import com.none.tom.exiferaser.selection.openOutputStreamOrThrow
 import com.none.tom.exiferaser.selection.queryOrThrow
+import com.none.tom.exiferaser.selection.toProgress
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import com.tomg.exifinterfaceextended.ExifInterfaceExtended
@@ -83,7 +84,7 @@ class ImageRepository @Inject constructor(
                         preserveOrientation = preserveOrientation
                     )
                 )
-                emit(Result.Handled(progress = ((index + 1) * PROGRESS_MAX) / selection.size))
+                emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
             }
             emit(Result.HandledAll)
         }

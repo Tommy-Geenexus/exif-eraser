@@ -20,6 +20,7 @@
     <ID>ReturnCount:AnimationUtils.kt$ fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
     <ID>ReturnCount:MainContentReceiver.kt$MainContentReceiver$@ExperimentalContracts override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
     <ID>ThrowsCount:ImageRepository.kt$ImageRepository$@WorkerThread private fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
+    <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListenerListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:SelectionFragment.kt$SelectionFragment : BaseFragment</ID>

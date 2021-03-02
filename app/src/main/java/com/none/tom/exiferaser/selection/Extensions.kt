@@ -72,6 +72,8 @@ fun Boolean.toInt() = if (this) 1 else 0
 
 fun Int.toPercent() = toString().plus('%')
 
+fun Int.toProgress(max: Int) = (this * PROGRESS_MAX) / max
+
 fun <E> Array<E>.setOrSkip(
     index: Int,
     element: E

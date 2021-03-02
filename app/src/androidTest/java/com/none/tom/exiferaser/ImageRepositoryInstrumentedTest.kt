@@ -24,24 +24,28 @@ import android.Manifest
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
+import androidx.annotation.IntRange
 import androidx.annotation.RawRes
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
+import app.cash.turbine.FlowTurbine
+import app.cash.turbine.test
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
+import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Result
 import com.none.tom.exiferaser.selection.data.Summary
+import com.none.tom.exiferaser.selection.toProgress
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.contracts.ExperimentalContracts
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -51,6 +55,8 @@ import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
+@ExperimentalCoroutinesApi
+@ExperimentalTime
 @ExperimentalContracts
 @RunWith(AndroidJUnit4::class)
 class ImageRepositoryInstrumentedTest {
@@ -183,7 +189,6 @@ class ImageRepositoryInstrumentedTest {
     val permissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
-    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
@@ -201,7 +206,6 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun test_getExternalPicturesFileProviderUriOrNull() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
@@ -215,7 +219,6 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun test_removeMetaDataSingle() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
@@ -228,31 +231,18 @@ class ImageRepositoryInstrumentedTest {
                         from_camera = false
                     ),
                     preserveOrientation = false
-                ).collectIndexed { i: Int, result: Result ->
-                    when (i) {
-                        0 -> {
-                            expectThat(result).isA<Result.Report>()
-                            expectThat((result as Result.Report).summary) {
-                                isEqualTo(expectedSummaries[index])
-                            }
-                        }
-                        1 -> {
-                            expectThat(result).isA<Result.Handled>()
-                            expectThat((result as Result.Handled).progress).isEqualTo(PROGRESS_MAX)
-                        }
-                        2 -> {
-                            expectThat(result).isA<Result.HandledAll>()
-                        }
-                        else -> {
-                            Assert.fail("Index out of bounds")
-                        }
-                    }
+                ).test {
+                    expectImageHandled(
+                        summary = expectedSummaries[index],
+                        progress = PROGRESS_MAX
+                    )
+                    expectThat(expectItem()).isA<Result.HandledAll>()
+                    expectComplete()
                 }
             }
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun test_removeMetaDataBulk() = runBlockingTest {
         val selection = mutableListOf<UserImageSelectionProto>()
@@ -266,31 +256,34 @@ class ImageRepositoryInstrumentedTest {
                 )
             )
         }
-        val lastIndex = expectedSummaries.size * 2
         testRepository.removeMetadataBulk(
             selection = selection,
             preserveOrientation = false
-        ).collectIndexed { index: Int, result: Result ->
-            if (index > lastIndex) {
-                Assert.fail("Index out of bounds")
+        ).test {
+            for (index in 0 until selection.size) {
+                expectImageHandled(
+                    summary = expectedSummaries[index],
+                    progress = (index + 1).toProgress(selection.size)
+                )
             }
-            when {
-                index == lastIndex -> {
-                    expectThat(result).isA<Result.HandledAll>()
-                }
-                index % 2 == 0 -> {
-                    expectThat(result).isA<Result.Report>()
-                    expectThat((result as Result.Report).summary) {
-                        isEqualTo(expectedSummaries[if (index > 0) index / 2 else index])
-                    }
-                }
-                else -> {
-                    expectThat(result).isA<Result.Handled>()
-                    expectThat((result as Result.Handled).progress) {
-                        isEqualTo(((((index - 1) / 2) + 1) * 100) / selection.size)
-                    }
-                }
+            expectThat(expectItem()).isA<Result.HandledAll>()
+            expectComplete()
+        }
+    }
+
+    private suspend fun FlowTurbine<Result>.expectImageHandled(
+        summary: Summary,
+        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) progress: Int
+    ) {
+        with(expectItem()) {
+            expectThat(this).isA<Result.Report>()
+            expectThat((this as Result.Report).summary) {
+                isEqualTo(summary)
             }
+        }
+        with(expectItem()) {
+            expectThat(this).isA<Result.Handled>()
+            expectThat((this as Result.Handled).progress).isEqualTo(progress)
         }
     }
 
