@@ -26,17 +26,21 @@ import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
+import com.none.tom.exiferaser.di.DispatcherIo
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Singleton
 class ImageSourceRepository @Inject constructor(
-    private val dataStore: DataStore<ImageSourcesProto>
+    private val dataStore: DataStore<ImageSourcesProto>,
+    @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
     private companion object {
@@ -47,86 +51,91 @@ class ImageSourceRepository @Inject constructor(
     }
 
     suspend fun getImageSources(): Flow<MutableList<AnyMessage>> {
-        return dataStore
-            .data
-            .catch { exception ->
-                Timber.e(exception)
-                emit(
-                    ImageSourcesProto(
-                        image_file_proto = ImageFileProto(INDEX_DEFAULT_IMAGE_FILE),
-                        image_files_proto = ImageFilesProto(INDEX_DEFAULT_IMAGE_FILES),
-                        image_directory_proto = ImageDirectoryProto(INDEX_DEFAULT_IMAGE_DIRECTORY),
-                        camera_proto = CameraProto(INDEX_DEFAULT_CAMERA)
+        return withContext(dispatcher) {
+            dataStore
+                .data
+                .catch { exception ->
+                    Timber.e(exception)
+                    emit(
+                        ImageSourcesProto(
+                            image_file_proto = ImageFileProto(INDEX_DEFAULT_IMAGE_FILE),
+                            image_files_proto = ImageFilesProto(INDEX_DEFAULT_IMAGE_FILES),
+                            image_directory_proto =
+                            ImageDirectoryProto(INDEX_DEFAULT_IMAGE_DIRECTORY),
+                            camera_proto = CameraProto(INDEX_DEFAULT_CAMERA)
+                        )
                     )
-                )
-            }
-            .map { proto ->
-                val imageFileProto =
-                    proto.image_file_proto ?: ImageFileProto(INDEX_DEFAULT_IMAGE_FILE)
-                val imageFilesProto =
-                    proto.image_files_proto ?: ImageFilesProto(INDEX_DEFAULT_IMAGE_FILES)
-                val imageDirectoryProto =
-                    proto.image_directory_proto
-                        ?: ImageDirectoryProto(INDEX_DEFAULT_IMAGE_DIRECTORY)
-                val cameraProto = proto.camera_proto ?: CameraProto(INDEX_DEFAULT_CAMERA)
-                val packedImageSources = mutableListOf(
-                    AnyMessage.pack(imageFileProto),
-                    AnyMessage.pack(imageFilesProto),
-                    AnyMessage.pack(imageDirectoryProto),
-                    AnyMessage.pack(cameraProto)
-                )
-                Array(
-                    size = packedImageSources.size,
-                    init = { index -> packedImageSources[index] }
-                )
-                    .apply {
-                        set(
-                            index = imageFileProto.index,
-                            value = packedImageSources[INDEX_DEFAULT_IMAGE_FILE]
-                        )
-                        set(
-                            index = imageFilesProto.index,
-                            value = packedImageSources[INDEX_DEFAULT_IMAGE_FILES]
-                        )
-                        set(
-                            index = imageDirectoryProto.index,
-                            value = packedImageSources[INDEX_DEFAULT_IMAGE_DIRECTORY]
-                        )
-                        set(
-                            index = cameraProto.index,
-                            value = packedImageSources[INDEX_DEFAULT_CAMERA]
-                        )
-                    }
-                    .toMutableList()
-            }
+                }
+                .map { proto ->
+                    val imageFileProto =
+                        proto.image_file_proto ?: ImageFileProto(INDEX_DEFAULT_IMAGE_FILE)
+                    val imageFilesProto =
+                        proto.image_files_proto ?: ImageFilesProto(INDEX_DEFAULT_IMAGE_FILES)
+                    val imageDirectoryProto =
+                        proto.image_directory_proto
+                            ?: ImageDirectoryProto(INDEX_DEFAULT_IMAGE_DIRECTORY)
+                    val cameraProto = proto.camera_proto ?: CameraProto(INDEX_DEFAULT_CAMERA)
+                    val packedImageSources = mutableListOf(
+                        AnyMessage.pack(imageFileProto),
+                        AnyMessage.pack(imageFilesProto),
+                        AnyMessage.pack(imageDirectoryProto),
+                        AnyMessage.pack(cameraProto)
+                    )
+                    Array(
+                        size = packedImageSources.size,
+                        init = { index -> packedImageSources[index] }
+                    )
+                        .apply {
+                            set(
+                                index = imageFileProto.index,
+                                value = packedImageSources[INDEX_DEFAULT_IMAGE_FILE]
+                            )
+                            set(
+                                index = imageFilesProto.index,
+                                value = packedImageSources[INDEX_DEFAULT_IMAGE_FILES]
+                            )
+                            set(
+                                index = imageDirectoryProto.index,
+                                value = packedImageSources[INDEX_DEFAULT_IMAGE_DIRECTORY]
+                            )
+                            set(
+                                index = cameraProto.index,
+                                value = packedImageSources[INDEX_DEFAULT_CAMERA]
+                            )
+                        }
+                        .toMutableList()
+                }
+        }
     }
 
     suspend fun putImageSources(imageSources: List<AnyMessage>) {
-        dataStore.updateData { proto ->
-            var imageFileProto: ImageFileProto? = null
-            var imageFilesProto: ImageFilesProto? = null
-            var imageDirectoryProto: ImageDirectoryProto? = null
-            var cameraProto: CameraProto? = null
-            imageSources.forEachIndexed { newIndex: Int, imageSource: AnyMessage ->
-                when (imageSource.typeUrl) {
-                    ImageFileProto.ADAPTER.typeUrl -> {
-                        imageFileProto = ImageFileProto(index = newIndex)
+        withContext(dispatcher) {
+            dataStore.updateData { proto ->
+                var imageFileProto: ImageFileProto? = null
+                var imageFilesProto: ImageFilesProto? = null
+                var imageDirectoryProto: ImageDirectoryProto? = null
+                var cameraProto: CameraProto? = null
+                imageSources.forEachIndexed { newIndex: Int, imageSource: AnyMessage ->
+                    when (imageSource.typeUrl) {
+                        ImageFileProto.ADAPTER.typeUrl -> {
+                            imageFileProto = ImageFileProto(index = newIndex)
+                        }
+                        ImageFilesProto.ADAPTER.typeUrl -> {
+                            imageFilesProto = ImageFilesProto(index = newIndex)
+                        }
+                        ImageDirectoryProto.ADAPTER.typeUrl -> {
+                            imageDirectoryProto = ImageDirectoryProto(index = newIndex)
+                        }
+                        else -> cameraProto = CameraProto(index = newIndex)
                     }
-                    ImageFilesProto.ADAPTER.typeUrl -> {
-                        imageFilesProto = ImageFilesProto(index = newIndex)
-                    }
-                    ImageDirectoryProto.ADAPTER.typeUrl -> {
-                        imageDirectoryProto = ImageDirectoryProto(index = newIndex)
-                    }
-                    else -> cameraProto = CameraProto(index = newIndex)
                 }
+                proto.copy(
+                    image_file_proto = imageFileProto,
+                    image_files_proto = imageFilesProto,
+                    image_directory_proto = imageDirectoryProto,
+                    camera_proto = cameraProto
+                )
             }
-            proto.copy(
-                image_file_proto = imageFileProto,
-                image_files_proto = imageFilesProto,
-                image_directory_proto = imageDirectoryProto,
-                camera_proto = cameraProto
-            )
         }
     }
 }

@@ -25,8 +25,8 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.strict.orbit
-import org.orbitmvi.orbit.syntax.strict.reduce
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
@@ -48,7 +48,7 @@ class DetailsViewModel @Inject constructor(
         containsPhotoshopImageResources: Boolean,
         containsXmp: Boolean,
         containsExtendedXmp: Boolean
-    ) = orbit {
+    ) = intent {
         reduce {
             state.copy(
                 extension = extension,

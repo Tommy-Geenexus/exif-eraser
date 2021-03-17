@@ -55,6 +55,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    lintOptions {
+        disable 'InvalidFragmentVersionForActivityResult'
+    }
     sourceSets {
         main.java.srcDirs += "$buildDir/generated/source/wire"
     }

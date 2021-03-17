@@ -23,16 +23,15 @@ package com.none.tom.exiferaser.savepath.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.isNotNullOrEmpty
+import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.coroutines.transformSuspend
-import org.orbitmvi.orbit.syntax.strict.orbit
-import org.orbitmvi.orbit.syntax.strict.reduce
-import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
@@ -48,26 +47,37 @@ class SavePathViewModel @Inject constructor(
         onCreate = { verifyHasPrivilegedDefaultSavePath() }
     )
 
-    private fun verifyHasPrivilegedDefaultSavePath() = orbit {
-        transformSuspend {
-            settingsRepository.hasPrivilegedDefaultSavePath()
-        }.reduce {
-            state.copy(hasPrivilegedDefaultSavePath = event)
+    private fun verifyHasPrivilegedDefaultSavePath() = intent {
+        val result = settingsRepository.hasPrivilegedDefaultSavePath()
+        reduce {
+            state.copy(hasPrivilegedDefaultSavePath = result)
         }
     }
 
-    fun chooseSelectionSavePath(openPath: Uri = settingsRepository.getDefaultOpenPath()) = orbit {
-        sideEffect {
-            post(SavePathSideEffect.ChooseSavePath(openPath))
-        }
+    fun chooseSelectionSavePath(openPath: Uri = Uri.EMPTY) = intent {
+        postSideEffect(
+            SavePathSideEffect.ChooseSavePath(
+                openPath = if (openPath.isNotEmpty()) {
+                    openPath
+                } else {
+                    settingsRepository.getDefaultOpenPathSuspending()
+                }
+            )
+        )
     }
 
     @ExperimentalContracts
-    fun navigateToSelection(savePath: Uri? = settingsRepository.getDefaultSavePath()) = orbit {
-        sideEffect {
-            if (savePath.isNotNullOrEmpty()) {
-                post(SavePathSideEffect.NavigateToSelection(savePath))
-            }
+    fun navigateToSelection(savePath: Uri? = null) = intent {
+        if (savePath != null) {
+            postSideEffect(
+                SavePathSideEffect.NavigateToSelection(
+                    savePath = if (savePath.isNotEmpty()) {
+                        savePath
+                    } else {
+                        settingsRepository.getDefaultSavePathSuspending()
+                    }
+                )
+            )
         }
     }
 }

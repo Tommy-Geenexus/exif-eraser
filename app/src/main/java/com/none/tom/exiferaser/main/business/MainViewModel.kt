@@ -34,12 +34,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Collections
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.coroutines.transformFlow
-import org.orbitmvi.orbit.coroutines.transformSuspend
-import org.orbitmvi.orbit.syntax.strict.orbit
-import org.orbitmvi.orbit.syntax.strict.reduce
-import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @ExperimentalContracts
@@ -78,24 +77,24 @@ class MainViewModel @Inject constructor(
         }
         set(value) = savedStateHandle.set(KEY_TRANSITION, value)
 
-    private fun prepareReadImageSources() = orbit {
+    private fun prepareReadImageSources() = intent {
         reduce {
             state.copy(imageSourcesFetching = true)
         }
     }
 
-    private fun readImageSources() = orbit {
-        transformFlow {
-            imageSourceRepository.getImageSources()
-        }.reduce {
-            state.copy(
-                imageSources = event,
-                imageSourcesFetching = false
-            )
+    private fun readImageSources() = intent {
+        imageSourceRepository.getImageSources().collect { imageSources ->
+            reduce {
+                state.copy(
+                    imageSources = imageSources,
+                    imageSourcesFetching = false
+                )
+            }
         }
     }
 
-    fun prepareReorderImageSources() = orbit {
+    fun prepareReorderImageSources() = intent {
         reduce {
             state.copy(
                 imageSourcesPersisting = false,
@@ -110,13 +109,11 @@ class MainViewModel @Inject constructor(
         imageSources: MutableList<AnyMessage>,
         oldIndex: Int,
         newIndex: Int
-    ) = orbit {
-        transformSuspend {
-            Collections.swap(imageSources, newIndex, oldIndex)
-            imageSources
-        }.reduce {
+    ) = intent {
+        Collections.swap(imageSources, newIndex, oldIndex)
+        reduce {
             state.copy(
-                imageSources = event,
+                imageSources = imageSources,
                 imageSourcesPersisting = false,
                 imageSourcesPersisted = false,
                 imageSourcesReordering = true,
@@ -125,7 +122,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun preparePutImageSources() = orbit {
+    fun preparePutImageSources() = intent {
         reduce {
             state.copy(
                 imageSourcesPersisting = true,
@@ -136,10 +133,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun putImageSources(imageSources: MutableList<AnyMessage>) = orbit {
-        transformSuspend {
-            imageSourceRepository.putImageSources(imageSources)
-        }.reduce {
+    fun putImageSources(imageSources: MutableList<AnyMessage>) = intent {
+        imageSourceRepository.putImageSources(imageSources)
+        reduce {
             state.copy(
                 imageSourcesPersisting = false,
                 imageSourcesPersisted = true,
@@ -149,7 +145,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun <T> preparePutSelection(result: T?) = orbit {
+    fun <T> preparePutSelection(result: T?) = intent {
         reduce {
             state.copy(selectionPersisting = result != null)
         }
@@ -158,164 +154,140 @@ class MainViewModel @Inject constructor(
     fun putImageSelection(
         imageUri: Uri?,
         fromCamera: Boolean = false
-    ) = orbit {
-        transformSuspend {
-            selectionRepository.putSelection(
-                imageUri = imageUri,
-                fromCamera = fromCamera
-            )
-        }.reduce {
+    ) = intent {
+        val uri = selectionRepository.putSelection(
+            imageUri = imageUri,
+            fromCamera = fromCamera
+        )
+        reduce {
             state.copy(selectionPersisting = false)
-        }.sideEffect {
-            if (event != null) {
-                post(
-                    if (fromCamera) {
-                        MainSideEffect.NavigateToSelection
-                    } else {
-                        MainSideEffect.NavigateToSelectionSavePath
-                    }
-                )
-            }
+        }
+        if (uri.isNotNullOrEmpty()) {
+            postSideEffect(
+                if (fromCamera) {
+                    MainSideEffect.NavigateToSelection
+                } else {
+                    MainSideEffect.NavigateToSelectionSavePath
+                }
+            )
         }
     }
 
     fun putImagesSelection(
         imageUris: List<Uri>? = null,
         intentImageUris: Array<Uri>? = null
-    ) = orbit {
-        transformSuspend {
-            selectionRepository.putSelection(
-                imageUris = imageUris,
-                intentImageUris = intentImageUris
-            )
-        }.reduce {
+    ) = intent {
+        val uris = selectionRepository.putSelection(
+            imageUris = imageUris,
+            intentImageUris = intentImageUris
+        )
+        reduce {
             state.copy(selectionPersisting = false)
-        }.sideEffect {
-            if (!event.isNullOrEmpty()) {
-                post(MainSideEffect.NavigateToSelectionSavePath)
-            }
+        }
+        if (!uris.isNullOrEmpty()) {
+            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
-    fun putImageDirectorySelection(treeUri: Uri?) = orbit {
-        transformSuspend {
-            if (treeUri.isNotNullOrEmpty()) {
-                val message = imageRepository.packDocumentTreeToAnyMessageOrNull(treeUri)
-                selectionRepository.putSelection(message)
-            } else {
-                null
-            }
-        }.reduce {
+    fun putImageDirectorySelection(treeUri: Uri?) = intent {
+        val selection = if (treeUri.isNotNullOrEmpty()) {
+            val message = imageRepository.packDocumentTreeToAnyMessageOrNull(treeUri)
+            selectionRepository.putSelection(message)
+        } else {
+            null
+        }
+        reduce {
             state.copy(selectionPersisting = false)
-        }.sideEffect {
-            if (event != null) {
-                post(MainSideEffect.NavigateToSelectionSavePath)
-            }
+        }
+        if (selection != null) {
+            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
-    fun handleSettings() = orbit {
-        sideEffect {
-            post(MainSideEffect.NavigateToSettings)
-        }
+    fun handleSettings() = intent {
+        postSideEffect(MainSideEffect.NavigateToSettings)
     }
 
-    fun prepareChooseImagesOrLaunchCamera() = orbit {
+    fun prepareChooseImagesOrLaunchCamera() = intent {
         reduce {
             state.copy(accessingPreferences = true)
         }
     }
 
-    fun chooseImage() = orbit {
-        transformSuspend {
-            settingsRepository.getDefaultOpenPath()
-        }.reduce {
+    fun chooseImage() = intent {
+        val path = settingsRepository.getDefaultOpenPathSuspending()
+        reduce {
             state.copy(accessingPreferences = false)
-        }.sideEffect {
-            post(MainSideEffect.ChooseImage(event))
         }
+        postSideEffect(MainSideEffect.ChooseImage(path))
     }
 
-    fun chooseImages() = orbit {
-        transformSuspend {
-            settingsRepository.getDefaultOpenPath()
-        }.reduce {
+    fun chooseImages() = intent {
+        val path = settingsRepository.getDefaultOpenPathSuspending()
+        reduce {
             state.copy(accessingPreferences = false)
-        }.sideEffect {
-            post(MainSideEffect.ChooseImages(event))
         }
+        postSideEffect(MainSideEffect.ChooseImages(path))
     }
 
-    fun chooseImageDirectory() = orbit {
-        transformSuspend {
-            settingsRepository.getDefaultOpenPath()
-        }.reduce {
+    fun chooseImageDirectory() = intent {
+        val path = settingsRepository.getDefaultOpenPathSuspending()
+        reduce {
             state.copy(accessingPreferences = false)
-        }.sideEffect {
-            post(MainSideEffect.ChooseImageDirectory(event))
         }
+        postSideEffect(MainSideEffect.ChooseImageDirectory(path))
     }
 
-    fun launchCamera(displayName: String) = orbit {
-        transformSuspend {
+    fun launchCamera(displayName: String) = intent {
+        val uri =
             imageRepository.getExternalPicturesFileProviderUriOrNull(displayName = displayName)
-        }.reduce {
+        reduce {
             state.copy(accessingPreferences = false)
-        }.sideEffect {
-            val uri = event
-            if (uri.isNotNullOrEmpty()) {
-                post(MainSideEffect.LaunchCamera(uri))
-            }
+        }
+        if (uri.isNotNullOrEmpty()) {
+            postSideEffect(MainSideEffect.LaunchCamera(uri))
         }
     }
 
-    fun handleShortcut(shortcutAction: String) = orbit {
-        sideEffect {
-            post(MainSideEffect.ShortcutHandle(shortcutAction))
-        }
+    fun handleShortcut(shortcutAction: String) = intent {
+        postSideEffect(MainSideEffect.ShortcutHandle(shortcutAction))
     }
 
-    fun reportShortcutUsed(shortcutAction: String) = orbit {
-        sideEffect {
-            post(MainSideEffect.ShortcutReportUsed(shortcutAction))
-        }
+    fun reportShortcutUsed(shortcutAction: String) = intent {
+        postSideEffect(MainSideEffect.ShortcutReportUsed(shortcutAction))
     }
 
-    fun handleMultiWindowMode(isInMultiWindowMode: Boolean) = orbit {
+    fun handleMultiWindowMode(isInMultiWindowMode: Boolean) = intent {
         reduce {
             state.copy(isInMultiWindowMode = isInMultiWindowMode)
         }
     }
 
-    fun handleReceivedImages(uris: List<Uri>) = orbit {
-        sideEffect {
-            if (uris.isNotEmpty()) {
-                post(
-                    if (uris.size > 1) {
-                        MainSideEffect.ReceivedImages(uris)
-                    } else {
-                        MainSideEffect.ReceivedImage(uris.first())
-                    }
-                )
-            }
+    fun handleReceivedImages(uris: List<Uri>) = intent {
+        if (uris.isNotEmpty()) {
+            postSideEffect(
+                if (uris.size > 1) {
+                    MainSideEffect.ReceivedImages(uris)
+                } else {
+                    MainSideEffect.ReceivedImage(uris.first())
+                }
+            )
         }
     }
 
-    fun handlePasteImages(uris: List<Uri>) = orbit {
-        sideEffect {
-            val accessingStorage = state.imageSourcesFetching ||
-                state.imageSourcesPersisting ||
-                state.selectionPersisting ||
-                state.accessingPreferences
-            if (!accessingStorage) {
-                post(
-                    if (uris.isNotEmpty()) {
-                        MainSideEffect.PasteImages(uris)
-                    } else {
-                        MainSideEffect.PasteImagesNone
-                    }
-                )
-            }
+    fun handlePasteImages(uris: List<Uri>) = intent {
+        val accessingStorage = state.imageSourcesFetching ||
+            state.imageSourcesPersisting ||
+            state.selectionPersisting ||
+            state.accessingPreferences
+        if (!accessingStorage) {
+            postSideEffect(
+                if (uris.isNotEmpty()) {
+                    MainSideEffect.PasteImages(uris)
+                } else {
+                    MainSideEffect.PasteImagesNone
+                }
+            )
         }
     }
 }

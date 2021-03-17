@@ -305,7 +305,7 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    private fun getExternalPicturesFileProviderUri(
+    private suspend fun getExternalPicturesFileProviderUri(
         displayName: String,
         extension: String
     ) = testRepository.getExternalPicturesFileProviderUriOrNull(

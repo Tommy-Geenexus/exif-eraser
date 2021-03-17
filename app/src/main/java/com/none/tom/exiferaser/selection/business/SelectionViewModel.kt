@@ -36,12 +36,11 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.coroutines.transformFlow
-import org.orbitmvi.orbit.coroutines.transformSuspend
-import org.orbitmvi.orbit.syntax.strict.orbit
-import org.orbitmvi.orbit.syntax.strict.reduce
-import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @ExperimentalContracts
@@ -64,51 +63,37 @@ class SelectionViewModel @Inject constructor(
         }
     )
 
-    private fun readSelection(dropFirstN: Int) = orbit {
-        transformFlow {
-            selectionRepository.getSelection(dropFirstN)
-        }.sideEffect {
-            post(SelectionSideEffect.ReadComplete(event))
+    private fun readSelection(dropFirstN: Int) = intent {
+        selectionRepository.getSelection(dropFirstN).collect { selection ->
+            postSideEffect(SelectionSideEffect.ReadComplete(selection))
         }
     }
 
-    fun prepareReport() = orbit {
-        transformSuspend {
-            state.imageSummaries.filterNotNull()
-        }.sideEffect {
-            val result = event
-            if (result.isNotEmpty()) {
-                post(SelectionSideEffect.PrepareReport(result))
-            }
+    fun prepareReport() = intent {
+        val result = state.imageSummaries.filterNotNull()
+        if (result.isNotEmpty()) {
+            postSideEffect(SelectionSideEffect.PrepareReport(result))
         }
     }
 
-    fun shareImages() = orbit {
-        transformSuspend {
-            state
-                .imageSummaries
-                .filterNotNull()
-                .filter { summary ->
-                    summary.imageModified && summary.imageSaved
-                }
-                .map { summary ->
-                    summary.imageUri
-                }
-        }.sideEffect {
-            val result = event
-            if (!result.isNullOrEmpty()) {
-                post(SelectionSideEffect.ShareImages(ArrayList(result)))
+    fun shareImages() = intent {
+        val result = state
+            .imageSummaries
+            .filterNotNull()
+            .filter { summary ->
+                summary.imageModified && summary.imageSaved
             }
+            .map { summary ->
+                summary.imageUri
+            }
+        if (!result.isNullOrEmpty()) {
+            postSideEffect(SelectionSideEffect.ShareImages(ArrayList(result)))
         }
     }
 
-    fun shareImagesByDefault() = orbit {
-        transformSuspend {
-            settingsRepository.shouldShareImagesByDefault()
-        }.sideEffect {
-            if (event) {
-                shareImages()
-            }
+    fun shareImagesByDefault() = intent {
+        if (settingsRepository.shouldShareImagesByDefaultSuspending()) {
+            shareImages()
         }
     }
 
@@ -117,30 +102,28 @@ class SelectionViewModel @Inject constructor(
     fun handleSelection(
         selection: AnyMessage?,
         treeUri: Uri
-    ) = orbit {
-        transformSuspend {
-            if (selection == null) {
-                handleUnsupportedSelection()
-                return@transformSuspend
+    ) = intent {
+        if (selection == null) {
+            handleUnsupportedSelection()
+            return@intent
+        }
+        when (selection.typeUrl) {
+            UserImageSelectionProto.ADAPTER.typeUrl -> {
+                handleUserImageSelection(
+                    selection = selection.unpack(UserImageSelectionProto.ADAPTER),
+                    treeUri = treeUri
+                )
             }
-            when (selection.typeUrl) {
-                UserImageSelectionProto.ADAPTER.typeUrl -> {
-                    handleUserImageSelection(
-                        selection = selection.unpack(UserImageSelectionProto.ADAPTER),
-                        treeUri = treeUri
-                    )
-                }
-                UserImagesSelectionProto.ADAPTER.typeUrl -> {
-                    handleUserImagesSelection(
-                        selection = selection
-                            .unpack(UserImagesSelectionProto.ADAPTER)
-                            .user_images_selection,
-                        treeUri = treeUri
-                    )
-                }
-                else -> {
-                    handleUnsupportedSelection()
-                }
+            UserImagesSelectionProto.ADAPTER.typeUrl -> {
+                handleUserImagesSelection(
+                    selection = selection
+                        .unpack(UserImagesSelectionProto.ADAPTER)
+                        .user_images_selection,
+                    treeUri = treeUri
+                )
+            }
+            else -> {
+                handleUnsupportedSelection()
             }
         }
     }
@@ -148,51 +131,51 @@ class SelectionViewModel @Inject constructor(
     private fun handleUserImageSelection(
         selection: UserImageSelectionProto,
         treeUri: Uri
-    ) = orbit {
-        transformFlow {
-            imageRepository.removeMetadataSingle(
-                selection = selection,
-                treeUri = treeUri,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientation()
-            )
-        }.reduce {
-            @Exhaustive
-            when (val result = event) {
-                is Result.Empty -> {
-                    state.copy(imageResult = result)
-                }
-                is Result.Report -> {
-                    val imageSummaries = state.imageSummaries.apply {
-                        setOrSkip(state.imagesTotal, result.summary)
+    ) = intent {
+        imageRepository.removeMetadataSingle(
+            selection = selection,
+            treeUri = treeUri,
+            displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
+            preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+        ).collect { result ->
+            reduce {
+                @Exhaustive
+                when (result) {
+                    is Result.Empty -> {
+                        state.copy(imageResult = result)
                     }
-                    val imageUris = state.imageUris.apply {
-                        setOrSkip(state.imagesTotal, result.summary.imageUri)
+                    is Result.Report -> {
+                        val imageSummaries = state.imageSummaries.apply {
+                            setOrSkip(state.imagesTotal, result.summary)
+                        }
+                        val imageUris = state.imageUris.apply {
+                            setOrSkip(state.imagesTotal, result.summary.imageUri)
+                        }
+                        val modified =
+                            state.imagesModified + result.summary.imageModified.toInt()
+                        val saved = state.imagesSaved + result.summary.imageSaved.toInt()
+                        state.copy(
+                            imageResult = result,
+                            imageSummaries = imageSummaries,
+                            imageUris = imageUris,
+                            imagesModified = modified,
+                            imagesSaved = saved
+                        )
                     }
-                    val modified = state.imagesModified + result.summary.imageModified.toInt()
-                    val saved = state.imagesSaved + result.summary.imageSaved.toInt()
-                    state.copy(
-                        imageResult = result,
-                        imageSummaries = imageSummaries,
-                        imageUris = imageUris,
-                        imagesModified = modified,
-                        imagesSaved = saved
-                    )
-                }
-                is Result.Handled -> {
-                    state.copy(
-                        imageResult = result,
-                        imagesTotal = state.imagesTotal + 1,
-                        progress = result.progress
-                    )
-                }
-                is Result.HandledAll -> {
-                    state.copy(handledAll = true)
+                    is Result.Handled -> {
+                        state.copy(
+                            imageResult = result,
+                            imagesTotal = state.imagesTotal + 1,
+                            progress = result.progress
+                        )
+                    }
+                    is Result.HandledAll -> {
+                        state.copy(handledAll = true)
+                    }
                 }
             }
-        }.sideEffect {
-            if (event is Result.HandledAll) {
-                post(SelectionSideEffect.SelectionHandled)
+            if (result is Result.HandledAll) {
+                postSideEffect(SelectionSideEffect.SelectionHandled)
             }
         }
     }
@@ -200,58 +183,56 @@ class SelectionViewModel @Inject constructor(
     private fun handleUserImagesSelection(
         selection: List<UserImageSelectionProto>,
         treeUri: Uri
-    ) = orbit {
-        transformFlow {
-            imageRepository.removeMetadataBulk(
-                selection = selection,
-                treeUri = treeUri,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientation(),
-            )
-        }.reduce {
-            @Exhaustive
-            when (val result = event) {
-                is Result.Empty -> {
-                    state.copy(imageResult = result)
-                }
-                is Result.Report -> {
-                    val imageSummaries = state.imageSummaries.apply {
-                        setOrSkip(state.imagesTotal, result.summary)
+    ) = intent {
+        imageRepository.removeMetadataBulk(
+            selection = selection,
+            treeUri = treeUri,
+            displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
+            preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending(),
+        ).collect { result ->
+            reduce {
+                @Exhaustive
+                when (result) {
+                    is Result.Empty -> {
+                        state.copy(imageResult = result)
                     }
-                    val imageUris = state.imageUris.apply {
-                        setOrSkip(state.imagesTotal, result.summary.imageUri)
+                    is Result.Report -> {
+                        val imageSummaries = state.imageSummaries.apply {
+                            setOrSkip(state.imagesTotal, result.summary)
+                        }
+                        val imageUris = state.imageUris.apply {
+                            setOrSkip(state.imagesTotal, result.summary.imageUri)
+                        }
+                        val modified =
+                            state.imagesModified + result.summary.imageModified.toInt()
+                        val saved = state.imagesSaved + result.summary.imageSaved.toInt()
+                        state.copy(
+                            imageResult = result,
+                            imageSummaries = imageSummaries,
+                            imageUris = imageUris,
+                            imagesModified = modified,
+                            imagesSaved = saved
+                        )
                     }
-                    val modified = state.imagesModified + result.summary.imageModified.toInt()
-                    val saved = state.imagesSaved + result.summary.imageSaved.toInt()
-                    state.copy(
-                        imageResult = result,
-                        imageSummaries = imageSummaries,
-                        imageUris = imageUris,
-                        imagesModified = modified,
-                        imagesSaved = saved
-                    )
-                }
-                is Result.Handled -> {
-                    state.copy(
-                        imageResult = result,
-                        imagesTotal = state.imagesTotal + 1,
-                        progress = result.progress
-                    )
-                }
-                is Result.HandledAll -> {
-                    state.copy(handledAll = true)
+                    is Result.Handled -> {
+                        state.copy(
+                            imageResult = result,
+                            imagesTotal = state.imagesTotal + 1,
+                            progress = result.progress
+                        )
+                    }
+                    is Result.HandledAll -> {
+                        state.copy(handledAll = true)
+                    }
                 }
             }
-        }.sideEffect {
-            if (event is Result.HandledAll) {
-                if (event is Result.HandledAll) {
-                    post(SelectionSideEffect.SelectionHandled)
-                }
+            if (result is Result.HandledAll) {
+                postSideEffect(SelectionSideEffect.SelectionHandled)
             }
         }
     }
 
-    private fun handleUnsupportedSelection() = orbit {
+    private fun handleUnsupportedSelection() = intent {
         reduce {
             state.copy(handledAll = true)
         }

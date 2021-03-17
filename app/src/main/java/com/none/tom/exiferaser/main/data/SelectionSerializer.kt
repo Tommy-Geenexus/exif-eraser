@@ -30,7 +30,7 @@ class SelectionSerializer(
     override val defaultValue: SelectionProto = SelectionProto()
 ) : Serializer<SelectionProto> {
 
-    override fun readFrom(input: InputStream): SelectionProto {
+    override suspend fun readFrom(input: InputStream): SelectionProto {
         return runCatching {
             SelectionProto.ADAPTER.decode(input)
         }.getOrElse { throwable ->
@@ -38,7 +38,8 @@ class SelectionSerializer(
         }
     }
 
-    override fun writeTo(
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun writeTo(
         t: SelectionProto,
         output: OutputStream
     ) {

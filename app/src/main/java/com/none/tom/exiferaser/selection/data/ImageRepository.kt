@@ -75,22 +75,24 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
-        return flow {
-            selection.forEachIndexed { index, imageSelection ->
-                emit(
-                    removeMetaData(
-                        selection = imageSelection,
-                        treeUri = treeUri,
-                        displayNameSuffix = displayNameSuffix,
-                        preserveOrientation = preserveOrientation
+        return withContext(dispatcher) {
+            flow {
+                selection.forEachIndexed { index, imageSelection ->
+                    emit(
+                        removeMetaData(
+                            selection = imageSelection,
+                            treeUri = treeUri,
+                            displayNameSuffix = displayNameSuffix,
+                            preserveOrientation = preserveOrientation
+                        )
                     )
-                )
-                emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
+                    emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
+                }
+                emit(Result.HandledAll)
             }
-            emit(Result.HandledAll)
+                .buffer()
+                .flowOn(dispatcher)
         }
-            .buffer()
-            .flowOn(dispatcher)
     }
 
     suspend fun removeMetadataSingle(
@@ -99,20 +101,22 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
-        return flow {
-            emit(
-                removeMetaData(
-                    selection = selection,
-                    treeUri = treeUri,
-                    displayNameSuffix = displayNameSuffix,
-                    preserveOrientation = preserveOrientation
+        return withContext(dispatcher) {
+            flow {
+                emit(
+                    removeMetaData(
+                        selection = selection,
+                        treeUri = treeUri,
+                        displayNameSuffix = displayNameSuffix,
+                        preserveOrientation = preserveOrientation
+                    )
                 )
-            )
-            emit(Result.Handled(progress = PROGRESS_MAX))
-            emit(Result.HandledAll)
+                emit(Result.Handled(progress = PROGRESS_MAX))
+                emit(Result.HandledAll)
+            }
+                .buffer()
+                .flowOn(dispatcher)
         }
-            .buffer()
-            .flowOn(dispatcher)
     }
 
     suspend fun packDocumentTreeToAnyMessageOrNull(treeUri: Uri): AnyMessage? {
@@ -171,8 +175,7 @@ class ImageRepository @Inject constructor(
         }
     }
 
-    @WorkerThread
-    private fun removeMetaData(
+    private suspend fun removeMetaData(
         selection: UserImageSelectionProto,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
@@ -199,7 +202,8 @@ class ImageRepository @Inject constructor(
                 exifInterfaceExtended = ExifInterfaceExtended(source)
                 containsIccProfile = exifInterfaceExtended.hasIccProfile()
                 containsExif = exifInterfaceExtended.hasAttributes(true)
-                containsPhotoshopImageResources = exifInterfaceExtended.hasPhotoshopImageResources()
+                containsPhotoshopImageResources =
+                    exifInterfaceExtended.hasPhotoshopImageResources()
                 containsXmp = exifInterfaceExtended.hasXmp()
                 containsExtendedXmp = exifInterfaceExtended.hasExtendedXmp()
                 containsMetadata = containsIccProfile ||
@@ -255,8 +259,7 @@ class ImageRepository @Inject constructor(
         )
     }
 
-    @WorkerThread
-    private fun createDocument(
+    private suspend fun createDocument(
         uri: Uri,
         defaultTreeUri: Uri = Uri.EMPTY,
         displayName: String = String.Empty,
@@ -309,6 +312,28 @@ class ImageRepository @Inject constructor(
         }
     }
 
+    suspend fun getExternalPicturesFileProviderUriOrNull(
+        fileProviderPackage: String = context.getString(R.string.file_provider_package),
+        displayName: String,
+        extension: String = EXTENSION_JPEG
+    ): Uri? {
+        return withContext(dispatcher) {
+            runCatching {
+                FileProvider.getUriForFile(
+                    context,
+                    fileProviderPackage,
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                        displayName + extension
+                    )
+                )
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                null
+            }
+        }
+    }
+
     @WorkerThread
     private fun getDisplayNameOrNull(uri: Uri): String? {
         return runCatching {
@@ -330,27 +355,6 @@ class ImageRepository @Inject constructor(
     private fun getMimeTypeOrNull(uri: Uri): String? {
         return runCatching {
             context.contentResolver.getType(uri)
-        }.getOrElse { exception ->
-            Timber.e(exception)
-            null
-        }
-    }
-
-    @WorkerThread
-    fun getExternalPicturesFileProviderUriOrNull(
-        fileProviderPackage: String = context.getString(R.string.file_provider_package),
-        displayName: String,
-        extension: String = EXTENSION_JPEG
-    ): Uri? {
-        return runCatching {
-            FileProvider.getUriForFile(
-                context,
-                fileProviderPackage,
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                    displayName + extension
-                )
-            )
         }.getOrElse { exception ->
             Timber.e(exception)
             null

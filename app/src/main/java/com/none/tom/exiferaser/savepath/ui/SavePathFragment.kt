@@ -20,6 +20,7 @@
 
 package com.none.tom.exiferaser.savepath.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -68,7 +69,7 @@ class SavePathFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.pathSaveDefault.setOnClickListener {
-            viewModel.navigateToSelection()
+            viewModel.navigateToSelection(savePath = Uri.EMPTY)
         }
         binding.pathSaveCustom.setOnClickListener {
             viewModel.chooseSelectionSavePath()

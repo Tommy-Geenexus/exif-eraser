@@ -30,7 +30,7 @@ class ImageSourcesSerializer(
     override val defaultValue: ImageSourcesProto = ImageSourcesProto()
 ) : Serializer<ImageSourcesProto> {
 
-    override fun readFrom(input: InputStream): ImageSourcesProto {
+    override suspend fun readFrom(input: InputStream): ImageSourcesProto {
         return runCatching {
             ImageSourcesProto.ADAPTER.decode(input)
         }.getOrElse { exception ->
@@ -38,7 +38,8 @@ class ImageSourcesSerializer(
         }
     }
 
-    override fun writeTo(
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun writeTo(
         t: ImageSourcesProto,
         output: OutputStream
     ) {

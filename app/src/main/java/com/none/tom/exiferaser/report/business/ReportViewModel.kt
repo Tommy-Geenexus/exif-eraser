@@ -28,9 +28,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.strict.orbit
-import org.orbitmvi.orbit.syntax.strict.reduce
-import org.orbitmvi.orbit.syntax.strict.sideEffect
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
@@ -44,39 +44,35 @@ class ReportViewModel @Inject constructor(
         initialState = ReportState()
     )
 
-    fun handleImageSummaries(imageSummaries: List<Summary>) = orbit {
+    fun handleImageSummaries(imageSummaries: List<Summary>) = intent {
         reduce {
             state.copy(imageSummaries = imageSummaries)
         }
     }
 
     @ExperimentalContracts
-    fun handleViewImage(position: Int) = orbit {
-        sideEffect {
-            val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
-            if (imageUri.isNotNullOrEmpty()) {
-                post(ReportSideEffect.ViewImage(imageUri))
-            }
+    fun handleViewImage(position: Int) = intent {
+        val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
+        if (imageUri.isNotNullOrEmpty()) {
+            postSideEffect(ReportSideEffect.ViewImage(imageUri))
         }
     }
 
-    fun handleImageDetails(position: Int) = orbit {
-        sideEffect {
-            val summary = state.imageSummaries.getOrNull(position)
-            if (summary != null) {
-                post(
-                    ReportSideEffect.NavigateToDetails(
-                        displayName = summary.displayName,
-                        extension = summary.extension,
-                        mimeType = summary.mimeType,
-                        containsIccProfile = summary.containsIccProfile,
-                        containsExif = summary.containsExif,
-                        containsPhotoshopImageResources = summary.containsPhotoshopImageResources,
-                        containsXmp = summary.containsXmp,
-                        containsExtendedXmp = summary.containsExtendedXmp,
-                    )
+    fun handleImageDetails(position: Int) = intent {
+        val summary = state.imageSummaries.getOrNull(position)
+        if (summary != null) {
+            postSideEffect(
+                ReportSideEffect.NavigateToDetails(
+                    displayName = summary.displayName,
+                    extension = summary.extension,
+                    mimeType = summary.mimeType,
+                    containsIccProfile = summary.containsIccProfile,
+                    containsExif = summary.containsExif,
+                    containsPhotoshopImageResources = summary.containsPhotoshopImageResources,
+                    containsXmp = summary.containsXmp,
+                    containsExtendedXmp = summary.containsExtendedXmp,
                 )
-            }
+            )
         }
     }
 }

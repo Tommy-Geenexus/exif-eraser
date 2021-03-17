@@ -31,15 +31,19 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @Singleton
 class SettingsRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) : SettingsDelegate {
 
     private val defaultSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -150,24 +154,58 @@ class SettingsRepository @Inject constructor(
         )
     }
 
-    fun hasPrivilegedDefaultSavePath(): Boolean {
-        val path = getDefaultSavePath()
-        return path.isNotEmpty() &&
-            hasPersistablePermissions(
-                resolver = context.contentResolver,
-                uri = path,
-                read = true,
-                write = true
+    suspend fun shouldPreserveImageOrientationSuspending(): Boolean {
+        return withContext(dispatcher) {
+            defaultSharedPrefs.getBoolean(
+                context.getString(R.string.key_image_orientation),
+                false
             )
+        }
     }
 
-    fun getDefaultDisplayNameSuffix(): String {
-        return defaultSharedPrefs
-            .getString(
-                context.getString(R.string.key_default_display_name_suffix),
-                String.Empty
+    suspend fun getDefaultSavePathSuspending(): Uri {
+        return withContext(dispatcher) {
+            getUri(R.string.key_default_path_save)
+        }
+    }
+
+    suspend fun getDefaultOpenPathSuspending(): Uri {
+        return withContext(dispatcher) {
+            getUri(R.string.key_default_path_open)
+        }
+    }
+
+    suspend fun shouldShareImagesByDefaultSuspending(): Boolean {
+        return withContext(dispatcher) {
+            defaultSharedPrefs.getBoolean(
+                context.getString(R.string.key_image_share_by_default),
+                false
             )
-            .orEmpty()
+        }
+    }
+
+    suspend fun hasPrivilegedDefaultSavePath(): Boolean {
+        return withContext(dispatcher) {
+            val path = getDefaultSavePath()
+            path.isNotEmpty() &&
+                hasPersistablePermissions(
+                    resolver = context.contentResolver,
+                    uri = path,
+                    read = true,
+                    write = true
+                )
+        }
+    }
+
+    suspend fun getDefaultDisplayNameSuffix(): String {
+        return withContext(dispatcher) {
+            defaultSharedPrefs
+                .getString(
+                    context.getString(R.string.key_default_display_name_suffix),
+                    String.Empty
+                )
+                .orEmpty()
+        }
     }
 
     private fun putUri(

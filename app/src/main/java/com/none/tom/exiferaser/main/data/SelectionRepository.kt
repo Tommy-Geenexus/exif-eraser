@@ -26,62 +26,68 @@ import androidx.datastore.core.DataStore
 import com.none.tom.exiferaser.SelectionProto
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
+import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNullOrEmpty
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @ExperimentalContracts
 @Singleton
 class SelectionRepository @Inject constructor(
-    private val dataStore: DataStore<SelectionProto>
+    private val dataStore: DataStore<SelectionProto>,
+    @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
     suspend fun getSelection(@IntRange(from = 0) dropFirstN: Int): Flow<AnyMessage?> {
-        return dataStore
-            .data
-            .catch { exception ->
-                Timber.e(exception)
-                emit(SelectionProto())
-            }
-            .map { proto ->
-                when {
-                    proto.user_image_selection_proto != null -> {
-                        if (dropFirstN == 0) {
-                            AnyMessage.pack(proto.user_image_selection_proto)
-                        } else {
-                            null
-                        }
-                    }
-                    proto.user_images_selection_proto != null -> {
-                        val selection = proto.user_images_selection_proto.user_images_selection
-                        when {
-                            dropFirstN == 0 -> {
-                                AnyMessage.pack(proto.user_images_selection_proto)
-                            }
-                            dropFirstN < selection.size -> {
-                                AnyMessage.pack(
-                                    UserImagesSelectionProto(
-                                        user_images_selection = selection.drop(dropFirstN)
-                                    )
-                                )
-                            }
-                            else -> {
+        return withContext(dispatcher) {
+            dataStore
+                .data
+                .catch { exception ->
+                    Timber.e(exception)
+                    emit(SelectionProto())
+                }
+                .map { proto ->
+                    when {
+                        proto.user_image_selection_proto != null -> {
+                            if (dropFirstN == 0) {
+                                AnyMessage.pack(proto.user_image_selection_proto)
+                            } else {
                                 null
                             }
                         }
-                    }
-                    else -> {
-                        null
+                        proto.user_images_selection_proto != null -> {
+                            val selection = proto.user_images_selection_proto.user_images_selection
+                            when {
+                                dropFirstN == 0 -> {
+                                    AnyMessage.pack(proto.user_images_selection_proto)
+                                }
+                                dropFirstN < selection.size -> {
+                                    AnyMessage.pack(
+                                        UserImagesSelectionProto(
+                                            user_images_selection = selection.drop(dropFirstN)
+                                        )
+                                    )
+                                }
+                                else -> {
+                                    null
+                                }
+                            }
+                        }
+                        else -> {
+                            null
+                        }
                     }
                 }
-            }
+        }
     }
 
     suspend fun putSelection(
@@ -91,16 +97,18 @@ class SelectionRepository @Inject constructor(
         if (imageUri.isNullOrEmpty()) {
             return null
         }
-        dataStore.updateData { proto ->
-            proto.copy(
-                user_image_selection_proto = UserImageSelectionProto(
-                    image_path = imageUri.toString(),
-                    from_camera = fromCamera
-                ),
-                user_images_selection_proto = null
-            )
+        return withContext(dispatcher) {
+            dataStore.updateData { proto ->
+                proto.copy(
+                    user_image_selection_proto = UserImageSelectionProto(
+                        image_path = imageUri.toString(),
+                        from_camera = fromCamera
+                    ),
+                    user_images_selection_proto = null
+                )
+            }
+            imageUri
         }
-        return imageUri
     }
 
     suspend fun putSelection(
@@ -108,39 +116,43 @@ class SelectionRepository @Inject constructor(
         intentImageUris: Array<Uri>? = null
     ): List<Uri>? {
         val uris = imageUris ?: intentImageUris?.toList() ?: return null
-        dataStore.updateData { proto ->
-            proto.copy(
-                user_image_selection_proto = null,
-                user_images_selection_proto = UserImagesSelectionProto(
-                    user_images_selection = uris
-                        .filter { imageUri -> imageUri.isNotEmpty() }
-                        .map { imageUri ->
-                            UserImageSelectionProto(image_path = imageUri.toString())
-                        }
+        return withContext(dispatcher) {
+            dataStore.updateData { proto ->
+                proto.copy(
+                    user_image_selection_proto = null,
+                    user_images_selection_proto = UserImagesSelectionProto(
+                        user_images_selection = uris
+                            .filter { imageUri -> imageUri.isNotEmpty() }
+                            .map { imageUri ->
+                                UserImageSelectionProto(image_path = imageUri.toString())
+                            }
+                    )
                 )
-            )
+            }
+            uris
         }
-        return uris
     }
 
     suspend fun putSelection(message: AnyMessage?): AnyMessage? {
         if (message == null) {
             return null
         }
-        dataStore.updateData { proto ->
-            var imageProto: UserImageSelectionProto? = null
-            var imagesProto: UserImagesSelectionProto? = null
-            if (message.typeUrl == UserImageSelectionProto.ADAPTER.typeUrl) {
-                imageProto = message.unpackOrNull(UserImageSelectionProto.ADAPTER)
+        return withContext(dispatcher) {
+            dataStore.updateData { proto ->
+                var imageProto: UserImageSelectionProto? = null
+                var imagesProto: UserImagesSelectionProto? = null
+                if (message.typeUrl == UserImageSelectionProto.ADAPTER.typeUrl) {
+                    imageProto = message.unpackOrNull(UserImageSelectionProto.ADAPTER)
+                }
+                if (message.typeUrl == UserImagesSelectionProto.ADAPTER.typeUrl) {
+                    imagesProto = message.unpackOrNull(UserImagesSelectionProto.ADAPTER)
+                }
+                proto.copy(
+                    user_image_selection_proto = imageProto,
+                    user_images_selection_proto = imagesProto
+                )
             }
-            if (message.typeUrl == UserImagesSelectionProto.ADAPTER.typeUrl) {
-                imagesProto = message.unpackOrNull(UserImagesSelectionProto.ADAPTER)
-            }
-            proto.copy(
-                user_image_selection_proto = imageProto,
-                user_images_selection_proto = imagesProto
-            )
+            message
         }
-        return message
     }
 }
