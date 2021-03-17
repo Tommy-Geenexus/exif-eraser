@@ -168,7 +168,13 @@ class MainViewModel @Inject constructor(
             state.copy(selectionPersisting = false)
         }.sideEffect {
             if (event != null) {
-                post(MainSideEffect.NavigateToSelectionSavePath)
+                post(
+                    if (fromCamera) {
+                        MainSideEffect.NavigateToSelection
+                    } else {
+                        MainSideEffect.NavigateToSelectionSavePath
+                    }
+                )
             }
         }
     }

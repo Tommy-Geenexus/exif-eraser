@@ -37,9 +37,7 @@
 
         <action
             android:id="@+id/main_to_selection"
-            app:destination="@id/fragment_selection"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:destination="@id/fragment_selection" />
     </fragment>
 
     <dialog

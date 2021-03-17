@@ -321,6 +321,14 @@ class MainFragment :
             is MainSideEffect.LaunchCamera -> {
                 launchCamera.launch(sideEffect.fileProviderImagePath)
             }
+            is MainSideEffect.NavigateToSelection -> {
+                setTransitions(
+                    transitionExit = MaterialSharedAxis(MaterialSharedAxis.X, true),
+                    transitionReenter = MaterialSharedAxis(MaterialSharedAxis.X, false)
+                )
+                viewModel.sharedTransitionAxis = MaterialSharedAxis.X
+                navigate(MainFragmentDirections.mainToSelection(savePath = Uri.EMPTY))
+            }
             is MainSideEffect.NavigateToSelectionSavePath -> {
                 setTransitions(
                     transitionExit = MaterialSharedAxis(MaterialSharedAxis.X, true),

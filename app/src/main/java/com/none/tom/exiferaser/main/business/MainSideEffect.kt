@@ -47,6 +47,9 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
+    object NavigateToSelection : MainSideEffect()
+
+    @Parcelize
     object NavigateToSelectionSavePath : MainSideEffect()
 
     @Parcelize
