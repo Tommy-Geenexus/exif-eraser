@@ -41,6 +41,7 @@ import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.isNullOrEmpty
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.getExtensionFromMimeTypeOrEmpty
+import com.none.tom.exiferaser.selection.isFileProviderUri
 import com.none.tom.exiferaser.selection.openInputStreamOrThrow
 import com.none.tom.exiferaser.selection.openOutputStreamOrThrow
 import com.none.tom.exiferaser.selection.queryOrThrow
@@ -266,7 +267,7 @@ class ImageRepository @Inject constructor(
             if (uri.scheme != ContentResolver.SCHEME_CONTENT) {
                 throw IllegalArgumentException("Invalid uri")
             }
-            if (DocumentFile.isDocumentUri(context, uri)) {
+            if (DocumentFile.isDocumentUri(context, uri) || !uri.isFileProviderUri()) {
                 if (displayName.isEmpty() || mimeType.isEmpty()) {
                     throw IllegalArgumentException("Invalid displayName or mimeType")
                 }

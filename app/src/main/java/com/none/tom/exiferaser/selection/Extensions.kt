@@ -92,6 +92,8 @@ fun String.getExtensionFromMimeTypeOrEmpty(): String {
     }
 }
 
+fun Uri.isFileProviderUri() = pathSegments.any { path -> path == "my_images" }
+
 @WorkerThread
 fun ContentResolver.openInputStreamOrThrow(uri: Uri): InputStream {
     return openInputStream(uri) ?: throw IOException()
