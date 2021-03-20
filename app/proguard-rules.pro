@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.none.tom.exiferaser.report.ui.ReportFragment
+
+# Workaround for https://github.com/material-components/material-components-android/issues/1814
+-keep class com.google.android.material.snackbar.** { *; }
