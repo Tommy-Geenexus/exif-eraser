@@ -24,19 +24,31 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.none.tom.exiferaser.Empty
+import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsDelegate
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.viewmodel.container
 import timber.log.Timber
 
+@ExperimentalContracts
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     @ApplicationContext context: Context,
+    private val imageRepository: ImageRepository,
     private val settingsRepository: SettingsRepository
 ) : AndroidViewModel(context as Application),
+    ContainerHost<SettingsState, SettingsSideEffect>,
     SettingsDelegate by settingsRepository {
+
+    override val container =
+        container<SettingsState, SettingsSideEffect>(initialState = SettingsState)
 
     fun getPackageVersionName(): String {
         val context = getApplication<Application>()
@@ -49,5 +61,10 @@ class SettingsViewModel @Inject constructor(
                 Timber.e(exception)
                 String.Empty
             }
+    }
+
+    fun deleteCameraImages() = intent {
+        val result = imageRepository.deleteExternalPictures()
+        postSideEffect(SettingsSideEffect.ExternalPicturesDeleted(success = result))
     }
 }

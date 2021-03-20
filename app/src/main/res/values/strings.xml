@@ -27,6 +27,14 @@
     <string name="default_path_open">Default open path</string>
     <string name="default_path_save">Default save path</string>
 
+    <string name="delete">Delete</string>
+    <string name="delete_camera_images">Delete camera images</string>
+    <string name="delete_camera_images_all">Delete all camera images taken from within this app (original and modified)</string>
+    <string name="delete_camera_images_confirm">Delete camera images?</string>
+    <string name="delete_camera_images_confirm_undone">This action cannot be undone.</string>
+    <string name="delete_camera_images_failed">Failed to delete camera images</string>
+    <string name="delete_camera_images_success">Successfully deleted camera images</string>
+
     <string name="details">Details</string>
 
     <string name="exif" translatable="false">EXIF</string>
@@ -56,6 +64,7 @@
     <string name="key_default_display_name_suffix" translatable="false">default_display_name_suffix</string>
     <string name="key_default_path_open" translatable="false">default_path_open</string>
     <string name="key_default_path_save" translatable="false">default_path_save</string>
+    <string name="key_delete_images" translatable="false">clear_images</string>
     <string name="key_file_system" translatable="false">file_system</string>
     <string name="key_image_orientation" translatable="false">image_orientation</string>
     <string name="key_image_share_by_default" translatable="false">image_share_by_default</string>

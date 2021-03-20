@@ -24,6 +24,14 @@
     <string name="default_path_open">Standard-Öffnungspfad</string>
     <string name="default_path_save">Standard-Speicherpfad</string>
 
+    <string name="delete">Löschen</string>
+    <string name="delete_camera_images">Kamera-Bilder löschen</string>
+    <string name="delete_camera_images_all">Alle Kamera-Bilder (original und modifiziert), die durch diese App aufgenommen wurden, löschen</string>
+    <string name="delete_camera_images_confirm">Kamera-Bilder löschen?</string>
+    <string name="delete_camera_images_confirm_undone">Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="delete_camera_images_failed">Kamera-Bilder konnten nicht gelöscht werden</string>
+    <string name="delete_camera_images_success">Kamera-Bilder erfolgreich gelöscht</string>
+
     <string name="details">Details</string>
 
     <string name="file_system">Dateisystem</string>

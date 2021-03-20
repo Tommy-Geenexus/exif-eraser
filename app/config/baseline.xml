@@ -11,6 +11,7 @@
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewHolder.kt$MainViewHolder$private fun setupDragAndDrop()</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
+    <ID>LongMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongParameterList:DetailsFragment.kt$DetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:DetailsViewModel.kt$DetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
@@ -22,6 +23,7 @@
     <ID>ReturnCount:AnimationUtils.kt$ fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
     <ID>ReturnCount:MainContentReceiver.kt$MainContentReceiver$@ExperimentalContracts override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
     <ID>ThrowsCount:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
+    <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.Extensions.kt</ID>
     <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListenerListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>

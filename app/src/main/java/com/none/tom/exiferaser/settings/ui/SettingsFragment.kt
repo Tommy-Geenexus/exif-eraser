@@ -27,7 +27,10 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -44,11 +47,14 @@ import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.settings.ImageButtonPreference
 import com.none.tom.exiferaser.settings.ViewUrl
+import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import com.none.tom.exiferaser.setupToolbar
+import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportImageFormats
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalContracts
 @AndroidEntryPoint
@@ -113,6 +119,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
         )
+        setFragmentResultListener(
+            DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
+        ) { _, bundle: Bundle ->
+            if (bundle.getBoolean(DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE)) {
+                viewModel.deleteCameraImages()
+            }
+        }
         _preferences = mutableListOf<Preference>().apply {
             for (categoryIndex in 0 until preferenceScreen.preferenceCount) {
                 val category = preferenceScreen[categoryIndex]
@@ -140,6 +153,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         layoutIndex = index
                     )
                 }
+                getString(R.string.key_delete_images) -> {
+                    setupPreferenceDeleteCameraImages(preference)
+                }
                 getString(R.string.key_default_display_name_suffix) -> {
                     setupPreferenceDefaultDisplayNameSuffix(preference as? EditTextPreference)
                 }
@@ -162,6 +178,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
             }
         }
+        lifecycleScope.launchWhenCreated {
+            viewModel.container.sideEffectFlow.collect { sideEffect ->
+                handleSideEffect(sideEffect)
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -174,6 +195,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         _preferences = null
         _binding = null
+    }
+
+    private fun handleSideEffect(sideEffect: SettingsSideEffect) {
+        if (sideEffect is SettingsSideEffect.ExternalPicturesDeleted) {
+            requireView().showSnackbar(
+                msg = if (sideEffect.success) {
+                    R.string.delete_camera_images_success
+                } else {
+                    R.string.delete_camera_images_failed
+                }
+            )
+        }
     }
 
     private fun setupPreferenceCategoryFileSystem(preference: Preference) {
@@ -207,6 +240,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
             shouldShowClearButton = summary?.equals(getString(R.string.none))?.not() ?: false
             doOnClear = { setDefaultSavePath(preference, layoutIndex, Uri.EMPTY) }
+        }
+    }
+
+    private fun setupPreferenceDeleteCameraImages(preference: Preference) {
+        preference.setOnPreferenceClickListener {
+            findNavController().navigate(SettingsFragmentDirections.settingsToDeleteCameraImages())
+            true
         }
     }
 

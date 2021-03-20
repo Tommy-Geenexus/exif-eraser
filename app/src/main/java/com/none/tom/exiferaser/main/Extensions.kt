@@ -38,7 +38,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
@@ -128,42 +127,6 @@ fun RecyclerView.addItemTouchHelper(itemTouchHelper: ItemTouchHelper) {
             }
         }
     )
-}
-
-fun View.showSnackbar(
-    anchor: View,
-    @StringRes msg: Int,
-    length: Int = Snackbar.LENGTH_SHORT
-) {
-    var backingSnackbar: Snackbar? = Snackbar
-        .make(this, msg, length)
-        .setAnchorView(anchor)
-    val snackbar = backingSnackbar
-    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
-    if (snackbar != null && lifecycle != null) {
-        lifecycle.addObserver(
-            object : LifecycleEventObserver {
-
-                override fun onStateChanged(
-                    source: LifecycleOwner,
-                    event: Lifecycle.Event
-                ) {
-                    when (event) {
-                        Lifecycle.Event.ON_STOP -> {
-                            lifecycle.removeObserver(this)
-                            snackbar.dismiss()
-                            backingSnackbar = null
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            }
-        )
-        snackbar.show()
-    } else {
-        backingSnackbar = null
-    }
 }
 
 fun View.canReceiveContent(): Boolean {

@@ -69,10 +69,10 @@ import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
 import com.none.tom.exiferaser.main.getClipImages
-import com.none.tom.exiferaser.main.showSnackbar
 import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
+import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint

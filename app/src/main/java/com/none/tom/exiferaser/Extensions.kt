@@ -25,14 +25,20 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -89,6 +95,42 @@ fun Fragment.setTransitions(
 
 fun Fragment.isActivityInMultiWindowMode(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && requireActivity().isInMultiWindowMode
+}
+
+fun View.showSnackbar(
+    anchor: View? = null,
+    @StringRes msg: Int,
+    length: Int = Snackbar.LENGTH_SHORT
+) {
+    var backingSnackbar: Snackbar? = Snackbar
+        .make(this, msg, length)
+        .setAnchorView(anchor)
+    val snackbar = backingSnackbar
+    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
+    if (snackbar != null && lifecycle != null) {
+        lifecycle.addObserver(
+            object : LifecycleEventObserver {
+
+                override fun onStateChanged(
+                    source: LifecycleOwner,
+                    event: Lifecycle.Event
+                ) {
+                    when (event) {
+                        Lifecycle.Event.ON_STOP -> {
+                            lifecycle.removeObserver(this)
+                            snackbar.dismiss()
+                            backingSnackbar = null
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            }
+        )
+        snackbar.show()
+    } else {
+        backingSnackbar = null
+    }
 }
 
 @ExperimentalContracts

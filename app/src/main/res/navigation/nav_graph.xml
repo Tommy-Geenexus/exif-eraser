@@ -51,7 +51,16 @@
 
     <fragment
         android:id="@+id/fragment_settings"
-        android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment" />
+        android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment">
+
+        <action
+            android:id="@+id/settings_to_delete_camera_images"
+            app:destination="@id/fragment_delete_camera_images" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/fragment_delete_camera_images"
+        android:name="com.none.tom.exiferaser.settings.ui.DeleteCameraImagesFragment" />
 
     <fragment
         android:id="@+id/fragment_selection"

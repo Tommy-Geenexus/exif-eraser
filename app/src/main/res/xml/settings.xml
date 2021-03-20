@@ -12,6 +12,12 @@
             app:icon="@drawable/ic_save_alt"
             app:key="@string/key_default_path_save"
             app:title="@string/default_path_save" />
+
+        <Preference
+            app:icon="@drawable/ic_rule_folder"
+            app:key="@string/key_delete_images"
+            app:summary="@string/delete_camera_images_all"
+            app:title="@string/delete_camera_images" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/image">
