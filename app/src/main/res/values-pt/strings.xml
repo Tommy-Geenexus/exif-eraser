@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">Concluído!</string>
+
+    <string name="always">Sempre</string>
+
+    <string name="automatically">Automaticamente</string>
+
+    <string name="become_translator">Ajudar traduzir</string>
+
+    <string name="camera">Câmera</string>
+
+    <string name="choose_image">Escolha imagem</string>
+    <string name="choose_image_directory">Escola pasta de imagens</string>
+    <string name="choose_images">Escolha imagens</string>
+    <string name="choose_your">Escolha seu</string>
+
+    <string name="clipboard_content_paste">Importar imagem do Clipboard</string>
+    <string name="clipboard_content_unsupported">Conteúdo do Clipboard incompatível</string>
+
+    <string name="confirm">Confirmar</string>
+
+    <string name="default_display_name_suffix">Sufixo padrão da imagem</string>
+    <string name="default_path_open">Pasta padrão</string>
+    <string name="default_path_save">Pasta padrão para salvar</string>
+
+    <string name="details">Detalhes</string>
+
+    <string name="file_system">Pastas de arquivos</string>
+
+    <string name="image">Imagem</string>
+    <string name="image_directory">Pasta da imagem</string>
+    <string name="image_file">Arquivo de imagem</string>
+    <string name="image_files">Arquivos de imagens</string>
+    <string name="image_orientation">Preservar orientação</string>
+    <string name="image_share_by_default">Auto compartilhar</string>
+    <string name="image_supported_formats">Formatos de imagens suportados</string>
+
+    <string name="images_modified">imagens modificadas</string>
+
+    <string name="low_batt_only">Quando bateria fraca detectada</string>
+
+    <string name="miscellaneous">Diversos</string>
+
+    <string name="modified">Modificado</string>
+
+    <string name="never">Nunca</string>
+
+    <string name="night_mode">Modo noturno</string>
+
+    <string name="none">Nenhum</string>
+
+    <string name="of">de</string>
+
+    <string name="path_error">Falha em obter o nome da pasta</string>
+    <string name="path_save_choose">Escolha pasta para salvar</string>
+    <string name="path_save_custom">Pasta personalizada para salvar</string>
+    <string name="path_save_default">Pasta padrão de arquivos</string>
+
+    <string name="preferred_image_source">fonte de imagem escolhida</string>
+
+    <string name="preserve_image_orientation_off">Não preservar a orientação original da imagem</string>
+    <string name="preserve_image_orientation_on">Preservar a orientação original da imagem</string>
+
+    <string name="reorder">Reorganizar</string>
+
+    <string name="report_bug">Relatar os bugs</string>
+
+    <string name="saved">Salvo</string>
+
+    <string name="settings">Configurações</string>
+
+    <string name="share">Compartilhar</string>
+    <string name="share_images_by_default_off">Não compartilhtar as imagens automaticamente após modificação</string>
+    <string name="share_images_by_default_on">Compartilhar as imagens automaticamente após modificação</string>
+    <string name="share_via">Compartilhar via</string>
+
+    <string name="suffix">Sufixo</string>
+
+    <string name="summary">Resumo</string>
+
+    <string name="take_picture">Tirar uma foto</string>
+
+    <string name="ui">IU</string>
+
+    <string name="unmodified">Não modificada</string>
+
+    <string name="unsaved">Não salva</string>
+
+    <string name="version">Versão</string>
+</resources>
