@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">Zrobione!</string>
+
+    <string name="always">Zawsze</string>
+
+    <string name="automatically">Automatycznie</string>
+
+    <string name="become_translator">Pomóż w tłumaczeniu</string>
+
+    <string name="camera">Aparat</string>
+
+    <string name="choose_image">Wybierz obraz</string>
+    <string name="choose_image_directory">Wybierz katalog obrazów</string>
+    <string name="choose_images">Wybierz obrazy</string>
+    <string name="choose_your">Wybierz twoje</string>
+
+    <string name="clipboard_content_paste">Wklej obraz ze schowka</string>
+    <string name="clipboard_content_unsupported">Niewspierana zawartość schowka</string>
+
+    <string name="confirm">Potwierdź</string>
+
+    <string name="default_display_name_suffix">"Domyślny sufiks nazwy "</string>
+    <string name="default_path_open">Domyślna ścieżka</string>
+    <string name="default_path_save">Domyślna ścieżka zapisu</string>
+
+    <string name="details">Szczegóły</string>
+
+    <string name="file_system">System plików</string>
+
+    <string name="image">Obraz</string>
+    <string name="image_directory">Ścieżka obrazu</string>
+    <string name="image_file">Plik obrazu</string>
+    <string name="image_files">Pliki obrazu</string>
+    <string name="image_orientation">Zachowaj orientację</string>
+    <string name="image_share_by_default">Domyślnie udostępnij</string>
+    <string name="image_supported_formats">Wspierane rozszerzenia obrazów</string>
+
+    <string name="images_modified">Zmodyfikowane obrazy</string>
+
+    <string name="low_batt_only">Tylko niski poziom baterii</string>
+
+    <string name="miscellaneous">Inne</string>
+
+    <string name="modified">Zmodyfikowano</string>
+
+    <string name="never">Nigdy</string>
+
+    <string name="night_mode">Tryb nocny</string>
+
+    <string name="none">Brak</string>
+
+    <string name="of">z</string>
+
+    <string name="path_error">Nie udało się uzyskać nazwy ścieżki</string>
+    <string name="path_save_choose">Wybierz ścieżkę zapisu</string>
+    <string name="path_save_custom">Własna ścieżka zapisu</string>
+    <string name="path_save_default">Domyślna ścieżka zapisu</string>
+
+    <string name="preferred_image_source">preferowane źródło obrazu</string>
+
+    <string name="preserve_image_orientation_off">Nie zachowuj oryginalnej orientacji obrazu</string>
+</resources>
