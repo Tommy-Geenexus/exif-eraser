@@ -209,8 +209,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun setupPreferenceCategoryFileSystem(preference: Preference) {
-        preference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+    private fun setupPreferenceCategoryFileSystem(preferenceCategory: PreferenceCategory) {
+        for (child in 0 until preferenceCategory.preferenceCount) {
+            val preference = preferenceCategory.getPreference(child)
+            if (preference != null) {
+                 if (preference.key != getString(R.string.key_delete_images)) {
+                     preference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                 }
+            }
+        }
     }
 
     private fun setupPreferenceDefaultPathOpen(
