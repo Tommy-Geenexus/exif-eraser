@@ -28,7 +28,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.Empty
@@ -86,7 +87,7 @@ class DetailsFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentDetailsBinding.inflate(LayoutInflater.from(requireContext()))
-        lifecycleScope.launchWhenCreated {
+        addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.stateFlow.collect { state ->
                 renderState(state)
             }

@@ -42,7 +42,8 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -184,12 +185,12 @@ class MainFragment :
                 }
             }
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.stateFlow.collect { state ->
                 renderState(state)
             }
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.sideEffectFlow.collect { sideEffect ->
                 handleSideEffect(sideEffect)
             }

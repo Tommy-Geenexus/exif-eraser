@@ -29,7 +29,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.net.toUri
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
@@ -178,7 +179,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
             }
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.sideEffectFlow.collect { sideEffect ->
                 handleSideEffect(sideEffect)
             }

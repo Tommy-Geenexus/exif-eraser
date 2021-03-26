@@ -34,7 +34,8 @@ import androidx.core.view.marginStart
 import androidx.core.view.marginTop
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -166,12 +167,12 @@ class ReportFragment :
         binding.toolbar.setNavigationOnClickListener {
             backCallback.handleOnBackPressed()
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.stateFlow.collect { state ->
                 renderState(state)
             }
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.sideEffectFlow.collect { sideEffect ->
                 handleSideEffect(sideEffect)
             }

@@ -29,7 +29,8 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.navArgs
 import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
@@ -95,12 +96,12 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                 slideOffset = bundle.getFloat(ReportFragment.KEY_OFFSET_SLIDE)
             )
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.stateFlow.collect { state ->
                 renderState(state)
             }
         }
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.container.sideEffectFlow.collect { sideEffect ->
                 handleSideEffect(sideEffect)
             }
