@@ -24,6 +24,14 @@
     <string name="default_path_open">Pasta padrão</string>
     <string name="default_path_save">Pasta padrão para salvar</string>
 
+    <string name="delete">Excluir</string>
+    <string name="delete_camera_images">Excluir imagens da câmera</string>
+    <string name="delete_camera_images_all">Excluir todas as imagens da câmera feitas com o App (original e modificado)</string>
+    <string name="delete_camera_images_confirm">Excluir imagens da câmera?</string>
+    <string name="delete_camera_images_confirm_undone">Esta ação não pode ser desfeita.</string>
+    <string name="delete_camera_images_failed">Falha ao excluir as imagens da câmera</string>
+    <string name="delete_camera_images_success">Imagens da câmera excluídas com sucesso</string>
+
     <string name="details">Detalhes</string>
 
     <string name="file_system">Pastas de arquivos</string>
