@@ -36,6 +36,7 @@ import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -48,46 +49,45 @@ class SelectionRepository @Inject constructor(
 ) {
 
     suspend fun getSelection(@IntRange(from = 0) dropFirstN: Int): Flow<AnyMessage?> {
-        return withContext(dispatcher) {
-            dataStore
-                .data
-                .catch { exception ->
-                    Timber.e(exception)
-                    emit(SelectionProto())
-                }
-                .map { proto ->
-                    when {
-                        proto.user_image_selection_proto != null -> {
-                            if (dropFirstN == 0) {
-                                AnyMessage.pack(proto.user_image_selection_proto)
-                            } else {
-                                null
-                            }
-                        }
-                        proto.user_images_selection_proto != null -> {
-                            val selection = proto.user_images_selection_proto.user_images_selection
-                            when {
-                                dropFirstN == 0 -> {
-                                    AnyMessage.pack(proto.user_images_selection_proto)
-                                }
-                                dropFirstN < selection.size -> {
-                                    AnyMessage.pack(
-                                        UserImagesSelectionProto(
-                                            user_images_selection = selection.drop(dropFirstN)
-                                        )
-                                    )
-                                }
-                                else -> {
-                                    null
-                                }
-                            }
-                        }
-                        else -> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+                emit(SelectionProto())
+            }
+            .map { proto ->
+                when {
+                    proto.user_image_selection_proto != null -> {
+                        if (dropFirstN == 0) {
+                            AnyMessage.pack(proto.user_image_selection_proto)
+                        } else {
                             null
                         }
                     }
+                    proto.user_images_selection_proto != null -> {
+                        val selection = proto.user_images_selection_proto.user_images_selection
+                        when {
+                            dropFirstN == 0 -> {
+                                AnyMessage.pack(proto.user_images_selection_proto)
+                            }
+                            dropFirstN < selection.size -> {
+                                AnyMessage.pack(
+                                    UserImagesSelectionProto(
+                                        user_images_selection = selection.drop(dropFirstN)
+                                    )
+                                )
+                            }
+                            else -> {
+                                null
+                            }
+                        }
+                    }
+                    else -> {
+                        null
+                    }
                 }
-        }
+            }
+            .flowOn(dispatcher)
     }
 
     suspend fun putSelection(
@@ -98,16 +98,21 @@ class SelectionRepository @Inject constructor(
             return null
         }
         return withContext(dispatcher) {
-            dataStore.updateData { proto ->
-                proto.copy(
-                    user_image_selection_proto = UserImageSelectionProto(
-                        image_path = imageUri.toString(),
-                        from_camera = fromCamera
-                    ),
-                    user_images_selection_proto = null
-                )
+            runCatching {
+                dataStore.updateData { proto ->
+                    proto.copy(
+                        user_image_selection_proto = UserImageSelectionProto(
+                            image_path = imageUri.toString(),
+                            from_camera = fromCamera
+                        ),
+                        user_images_selection_proto = null
+                    )
+                }
+                imageUri
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                null
             }
-            imageUri
         }
     }
 
@@ -117,19 +122,24 @@ class SelectionRepository @Inject constructor(
     ): List<Uri>? {
         val uris = imageUris ?: intentImageUris?.toList() ?: return null
         return withContext(dispatcher) {
-            dataStore.updateData { proto ->
-                proto.copy(
-                    user_image_selection_proto = null,
-                    user_images_selection_proto = UserImagesSelectionProto(
-                        user_images_selection = uris
-                            .filter { imageUri -> imageUri.isNotEmpty() }
-                            .map { imageUri ->
-                                UserImageSelectionProto(image_path = imageUri.toString())
-                            }
+            runCatching {
+                dataStore.updateData { proto ->
+                    proto.copy(
+                        user_image_selection_proto = null,
+                        user_images_selection_proto = UserImagesSelectionProto(
+                            user_images_selection = uris
+                                .filter { imageUri -> imageUri.isNotEmpty() }
+                                .map { imageUri ->
+                                    UserImageSelectionProto(image_path = imageUri.toString())
+                                }
+                        )
                     )
-                )
+                }
+                uris
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                null
             }
-            uris
         }
     }
 
@@ -138,21 +148,26 @@ class SelectionRepository @Inject constructor(
             return null
         }
         return withContext(dispatcher) {
-            dataStore.updateData { proto ->
-                var imageProto: UserImageSelectionProto? = null
-                var imagesProto: UserImagesSelectionProto? = null
-                if (message.typeUrl == UserImageSelectionProto.ADAPTER.typeUrl) {
-                    imageProto = message.unpackOrNull(UserImageSelectionProto.ADAPTER)
+            runCatching {
+                dataStore.updateData { proto ->
+                    var imageProto: UserImageSelectionProto? = null
+                    var imagesProto: UserImagesSelectionProto? = null
+                    if (message.typeUrl == UserImageSelectionProto.ADAPTER.typeUrl) {
+                        imageProto = message.unpackOrNull(UserImageSelectionProto.ADAPTER)
+                    }
+                    if (message.typeUrl == UserImagesSelectionProto.ADAPTER.typeUrl) {
+                        imagesProto = message.unpackOrNull(UserImagesSelectionProto.ADAPTER)
+                    }
+                    proto.copy(
+                        user_image_selection_proto = imageProto,
+                        user_images_selection_proto = imagesProto
+                    )
                 }
-                if (message.typeUrl == UserImagesSelectionProto.ADAPTER.typeUrl) {
-                    imagesProto = message.unpackOrNull(UserImagesSelectionProto.ADAPTER)
-                }
-                proto.copy(
-                    user_image_selection_proto = imageProto,
-                    user_images_selection_proto = imagesProto
-                )
+                message
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                null
             }
-            message
         }
     }
 }

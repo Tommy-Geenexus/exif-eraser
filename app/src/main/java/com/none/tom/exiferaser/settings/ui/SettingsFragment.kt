@@ -214,9 +214,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
         for (child in 0 until preferenceCategory.preferenceCount) {
             val preference = preferenceCategory.getPreference(child)
             if (preference != null) {
-                 if (preference.key != getString(R.string.key_delete_images)) {
-                     preference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                 }
+                if (preference.key != getString(R.string.key_delete_images)) {
+                    preference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                }
             }
         }
     }

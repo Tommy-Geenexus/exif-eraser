@@ -74,24 +74,22 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
-        return withContext(dispatcher) {
-            flow {
-                selection.forEachIndexed { index, imageSelection ->
-                    emit(
-                        removeMetaData(
-                            selection = imageSelection,
-                            treeUri = treeUri,
-                            displayNameSuffix = displayNameSuffix,
-                            preserveOrientation = preserveOrientation
-                        )
+        return flow {
+            selection.forEachIndexed { index, imageSelection ->
+                emit(
+                    removeMetaData(
+                        selection = imageSelection,
+                        treeUri = treeUri,
+                        displayNameSuffix = displayNameSuffix,
+                        preserveOrientation = preserveOrientation
                     )
-                    emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
-                }
-                emit(Result.HandledAll)
+                )
+                emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
             }
-                .buffer()
-                .flowOn(dispatcher)
+            emit(Result.HandledAll)
         }
+            .buffer()
+            .flowOn(dispatcher)
     }
 
     suspend fun removeMetadataSingle(
@@ -100,22 +98,20 @@ class ImageRepository @Inject constructor(
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
-        return withContext(dispatcher) {
-            flow {
-                emit(
-                    removeMetaData(
-                        selection = selection,
-                        treeUri = treeUri,
-                        displayNameSuffix = displayNameSuffix,
-                        preserveOrientation = preserveOrientation
-                    )
+        return flow {
+            emit(
+                removeMetaData(
+                    selection = selection,
+                    treeUri = treeUri,
+                    displayNameSuffix = displayNameSuffix,
+                    preserveOrientation = preserveOrientation
                 )
-                emit(Result.Handled(progress = PROGRESS_MAX))
-                emit(Result.HandledAll)
-            }
-                .buffer()
-                .flowOn(dispatcher)
+            )
+            emit(Result.Handled(progress = PROGRESS_MAX))
+            emit(Result.HandledAll)
         }
+            .buffer()
+            .flowOn(dispatcher)
     }
 
     suspend fun packDocumentTreeToAnyMessageOrNull(treeUri: Uri): AnyMessage? {

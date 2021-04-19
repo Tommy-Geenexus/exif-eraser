@@ -134,11 +134,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun putImageSources(imageSources: MutableList<AnyMessage>) = intent {
-        imageSourceRepository.putImageSources(imageSources)
+        val success = imageSourceRepository.putImageSources(imageSources)
         reduce {
             state.copy(
                 imageSourcesPersisting = false,
-                imageSourcesPersisted = true,
+                imageSourcesPersisted = success,
                 imageSourcesReordering = false,
                 imageSourcesReorder = false
             )
