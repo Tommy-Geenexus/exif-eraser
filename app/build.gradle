@@ -82,7 +82,9 @@ tasks.named("dependencyUpdates").configure {
     }
 }
 
-tasks.detekt.jvmTarget = "1.8"
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+    jvmTarget = "1.8"
+}
 
 detekt {
     baseline = file("$projectDir/config/baseline.xml")
