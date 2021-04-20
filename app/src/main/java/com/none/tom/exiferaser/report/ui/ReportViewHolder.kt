@@ -48,6 +48,7 @@ class ReportViewHolder(
     ) {
         binding.imageCropped.run {
             load(imageUri) {
+                allowHardware(binding.imageCropped.isHardwareAccelerated)
                 listener(
                     onError = { _, _ ->
                         scaleType = ImageView.ScaleType.CENTER
