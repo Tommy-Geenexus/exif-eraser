@@ -19,13 +19,4 @@
         <item name="android:navigationBarDividerColor">@color/csl_divider</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-
-    <style name="Theme.ExifEraser.Launcher">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/color_teal_500</item>
-        <item name="android:navigationBarDividerColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
 </resources>

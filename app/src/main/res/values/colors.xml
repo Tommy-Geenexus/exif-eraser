@@ -2,6 +2,8 @@
 <resources>
     <color name="color_teal_200">#80cbc4</color>or>
     <color name="color_teal_500">#009688</color>
+    <color name="color_teal_500_light">#52c7b8</color>
+    <color name="color_teal_500_dark">#00675b</color>
     <color name="color_green">#00b06f</color>
     <color name="color_green_light">#66cfa9</color>
     <color name="color_blue">#0041b0</color>

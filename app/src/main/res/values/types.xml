@@ -2,7 +2,7 @@
 <resources>
 
     <style name="TextAppearance.ExifEraser.Title.Toolbar" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
-        <item name="android:gravity">center</item>
+       <item name="android:gravity">center</item>
     </style>
 
     <style name="TextAppearance.ExifEraser.Title.Small" parent="@style/TextAppearance.MaterialComponents.Headline5">

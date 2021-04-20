@@ -13,6 +13,7 @@
         android:layout_height="?android:actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:logo="@drawable/ic_logo"
+        app:titleMarginStart="@dimen/spacing_large"
         app:titleTextAppearance="@style/TextAppearance.ExifEraser.Title.Toolbar" />
 
     <com.google.android.material.textview.MaterialTextView
