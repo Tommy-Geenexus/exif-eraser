@@ -77,13 +77,13 @@ class MainViewModel @Inject constructor(
         }
         set(value) = savedStateHandle.set(KEY_TRANSITION, value)
 
-    private fun prepareReadImageSources() = intent {
+    fun prepareReadImageSources() = intent {
         reduce {
             state.copy(imageSourcesFetching = true)
         }
     }
 
-    private fun readImageSources() = intent {
+    fun readImageSources() = intent {
         imageSourceRepository.getImageSources().collect { imageSources ->
             reduce {
                 state.copy(
@@ -155,14 +155,14 @@ class MainViewModel @Inject constructor(
         imageUri: Uri?,
         fromCamera: Boolean = false
     ) = intent {
-        val uri = selectionRepository.putSelection(
+        val success = selectionRepository.putSelection(
             imageUri = imageUri,
             fromCamera = fromCamera
         )
         reduce {
             state.copy(selectionPersisting = false)
         }
-        if (uri.isNotNullOrEmpty()) {
+        if (success) {
             postSideEffect(
                 if (fromCamera) {
                     MainSideEffect.NavigateToSelection
@@ -177,29 +177,29 @@ class MainViewModel @Inject constructor(
         imageUris: List<Uri>? = null,
         intentImageUris: Array<Uri>? = null
     ) = intent {
-        val uris = selectionRepository.putSelection(
+        val success = selectionRepository.putSelection(
             imageUris = imageUris,
             intentImageUris = intentImageUris
         )
         reduce {
             state.copy(selectionPersisting = false)
         }
-        if (!uris.isNullOrEmpty()) {
+        if (success) {
             postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
     fun putImageDirectorySelection(treeUri: Uri?) = intent {
-        val selection = if (treeUri.isNotNullOrEmpty()) {
+        val success = if (treeUri.isNotNullOrEmpty()) {
             val message = imageRepository.packDocumentTreeToAnyMessageOrNull(treeUri)
             selectionRepository.putSelection(message)
         } else {
-            null
+            false
         }
         reduce {
             state.copy(selectionPersisting = false)
         }
-        if (selection != null) {
+        if (success) {
             postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
@@ -238,9 +238,15 @@ class MainViewModel @Inject constructor(
         postSideEffect(MainSideEffect.ChooseImageDirectory(path))
     }
 
-    fun launchCamera(displayName: String) = intent {
+    fun launchCamera(
+        fileProviderPackage: String,
+        displayName: String
+    ) = intent {
         val uri =
-            imageRepository.getExternalPicturesFileProviderUriOrNull(displayName = displayName)
+            imageRepository.getExternalPicturesFileProviderUriOrNull(
+                fileProviderPackage = fileProviderPackage,
+                displayName = displayName
+            )
         reduce {
             state.copy(accessingPreferences = false)
         }

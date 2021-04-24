@@ -255,7 +255,10 @@ class MainFragment :
 
     override fun onCameraItemSelected() {
         viewModel.prepareChooseImagesOrLaunchCamera()
-        viewModel.launchCamera(displayName = System.currentTimeMillis().toString())
+        viewModel.launchCamera(
+            fileProviderPackage = requireContext().getString(R.string.file_provider_package),
+            displayName = System.currentTimeMillis().toString()
+        )
     }
 
     override fun onImageSourceMoved(

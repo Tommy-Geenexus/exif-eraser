@@ -47,7 +47,7 @@ class SavePathViewModel @Inject constructor(
         onCreate = { verifyHasPrivilegedDefaultSavePath() }
     )
 
-    private fun verifyHasPrivilegedDefaultSavePath() = intent {
+    fun verifyHasPrivilegedDefaultSavePath() = intent {
         val result = settingsRepository.hasPrivilegedDefaultSavePath()
         reduce {
             state.copy(hasPrivilegedDefaultSavePath = result)

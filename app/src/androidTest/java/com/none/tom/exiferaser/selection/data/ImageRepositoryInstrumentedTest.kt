@@ -18,7 +18,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser
+package com.none.tom.exiferaser.selection.data
 
 import android.Manifest
 import android.content.Context
@@ -31,12 +31,19 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import app.cash.turbine.FlowTurbine
 import app.cash.turbine.test
+import com.none.tom.exiferaser.EXTENSION_JPEG
+import com.none.tom.exiferaser.EXTENSION_PNG
+import com.none.tom.exiferaser.EXTENSION_WEBP
+import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import com.none.tom.exiferaser.MIME_TYPE_PNG
+import com.none.tom.exiferaser.MIME_TYPE_WEBP
+import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.UserImageSelectionProto
+import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.PROGRESS_MIN
-import com.none.tom.exiferaser.selection.data.ImageRepository
-import com.none.tom.exiferaser.selection.data.Result
-import com.none.tom.exiferaser.selection.data.Summary
 import com.none.tom.exiferaser.selection.toProgress
+import com.squareup.wire.AnyMessage
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.contracts.ExperimentalContracts
@@ -226,9 +233,11 @@ class ImageRepositoryInstrumentedTest {
                 val uri = getExternalPicturesFileProviderUri(displayName, extension)
                 expectThat(uri).isNotNull()
                 testRepository.removeMetadataSingle(
-                    selection = UserImageSelectionProto(
-                        image_path = uri.toString(),
-                        from_camera = false
+                    selection = AnyMessage.pack(
+                        UserImageSelectionProto(
+                            image_path = uri.toString(),
+                            from_camera = false
+                        )
                     ),
                     preserveOrientation = false
                 ).test {
@@ -257,7 +266,7 @@ class ImageRepositoryInstrumentedTest {
             )
         }
         testRepository.removeMetadataBulk(
-            selection = selection,
+            selection = AnyMessage.pack(UserImagesSelectionProto(selection)),
             preserveOrientation = false
         ).test {
             for (index in 0 until selection.size) {

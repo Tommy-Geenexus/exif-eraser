@@ -69,13 +69,16 @@ class ImageRepository @Inject constructor(
 ) {
 
     suspend fun removeMetadataBulk(
-        selection: List<UserImageSelectionProto>,
+        selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
         return flow {
-            selection.forEachIndexed { index, imageSelection ->
+            val imagesSelection = selection
+                .unpack(UserImagesSelectionProto.ADAPTER)
+                .user_images_selection
+            imagesSelection.forEachIndexed { index, imageSelection ->
                 emit(
                     removeMetaData(
                         selection = imageSelection,
@@ -84,7 +87,7 @@ class ImageRepository @Inject constructor(
                         preserveOrientation = preserveOrientation
                     )
                 )
-                emit(Result.Handled(progress = (index + 1).toProgress(selection.size)))
+                emit(Result.Handled(progress = (index + 1).toProgress(imagesSelection.size)))
             }
             emit(Result.HandledAll)
         }
@@ -93,7 +96,7 @@ class ImageRepository @Inject constructor(
     }
 
     suspend fun removeMetadataSingle(
-        selection: UserImageSelectionProto,
+        selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         preserveOrientation: Boolean = false
@@ -101,7 +104,7 @@ class ImageRepository @Inject constructor(
         return flow {
             emit(
                 removeMetaData(
-                    selection = selection,
+                    selection = selection.unpack(UserImageSelectionProto.ADAPTER),
                     treeUri = treeUri,
                     displayNameSuffix = displayNameSuffix,
                     preserveOrientation = preserveOrientation

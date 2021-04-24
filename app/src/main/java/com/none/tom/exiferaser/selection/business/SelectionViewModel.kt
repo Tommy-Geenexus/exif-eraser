@@ -109,18 +109,10 @@ class SelectionViewModel @Inject constructor(
         }
         when (selection.typeUrl) {
             UserImageSelectionProto.ADAPTER.typeUrl -> {
-                handleUserImageSelection(
-                    selection = selection.unpack(UserImageSelectionProto.ADAPTER),
-                    treeUri = treeUri
-                )
+                handleUserImageSelection(selection, treeUri)
             }
             UserImagesSelectionProto.ADAPTER.typeUrl -> {
-                handleUserImagesSelection(
-                    selection = selection
-                        .unpack(UserImagesSelectionProto.ADAPTER)
-                        .user_images_selection,
-                    treeUri = treeUri
-                )
+                handleUserImagesSelection(selection, treeUri)
             }
             else -> {
                 handleUnsupportedSelection()
@@ -128,8 +120,8 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    private fun handleUserImageSelection(
-        selection: UserImageSelectionProto,
+    fun handleUserImageSelection(
+        selection: AnyMessage,
         treeUri: Uri
     ) = intent {
         imageRepository.removeMetadataSingle(
@@ -180,8 +172,8 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    private fun handleUserImagesSelection(
-        selection: List<UserImageSelectionProto>,
+    fun handleUserImagesSelection(
+        selection: AnyMessage,
         treeUri: Uri
     ) = intent {
         imageRepository.removeMetadataBulk(
@@ -232,7 +224,7 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    private fun handleUnsupportedSelection() = intent {
+    fun handleUnsupportedSelection() = intent {
         reduce {
             state.copy(handledAll = true)
         }

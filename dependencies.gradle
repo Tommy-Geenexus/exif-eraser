@@ -21,6 +21,7 @@ ext {
     def fragment_version = "1.3.3"
     def lifecycle_version = "2.4.0-alpha01"
     def material_version = "1.4.0-alpha02"
+    def mockK_version = "1.11.0"
     def orbit_version = "3.0.1"
     def preference_version = "1.1.1"
     def recycler_view_version = "1.2.0"
@@ -84,6 +85,9 @@ ext {
 
     test_dependencies = [
             "junit"       : "junit:junit:$junit_version",
-            "roboelectric": "org.robolectric:robolectric:$roboelectric_version"
+            "mockK"       : "io.mockk:mockk:$mockK_version",
+            "orbit"       : "org.orbit-mvi:orbit-test:$orbit_version",
+            "roboelectric": "org.robolectric:robolectric:$roboelectric_version",
+            "strikt"    : "io.strikt:strikt-core:$strikt_version"
     ]
 }

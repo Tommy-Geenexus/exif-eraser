@@ -93,9 +93,9 @@ class SelectionRepository @Inject constructor(
     suspend fun putSelection(
         imageUri: Uri?,
         fromCamera: Boolean = false
-    ): Uri? {
+    ): Boolean {
         if (imageUri.isNullOrEmpty()) {
-            return null
+            return false
         }
         return withContext(dispatcher) {
             runCatching {
@@ -108,10 +108,10 @@ class SelectionRepository @Inject constructor(
                         user_images_selection_proto = null
                     )
                 }
-                imageUri
+                true
             }.getOrElse { exception ->
                 Timber.e(exception)
-                null
+                false
             }
         }
     }
@@ -119,8 +119,8 @@ class SelectionRepository @Inject constructor(
     suspend fun putSelection(
         imageUris: List<Uri>? = null,
         intentImageUris: Array<Uri>? = null
-    ): List<Uri>? {
-        val uris = imageUris ?: intentImageUris?.toList() ?: return null
+    ): Boolean {
+        val uris = imageUris ?: intentImageUris?.toList() ?: return false
         return withContext(dispatcher) {
             runCatching {
                 dataStore.updateData { proto ->
@@ -135,17 +135,17 @@ class SelectionRepository @Inject constructor(
                         )
                     )
                 }
-                uris
+                true
             }.getOrElse { exception ->
                 Timber.e(exception)
-                null
+                false
             }
         }
     }
 
-    suspend fun putSelection(message: AnyMessage?): AnyMessage? {
+    suspend fun putSelection(message: AnyMessage?): Boolean {
         if (message == null) {
-            return null
+            return false
         }
         return withContext(dispatcher) {
             runCatching {
@@ -163,10 +163,10 @@ class SelectionRepository @Inject constructor(
                         user_images_selection_proto = imagesProto
                     )
                 }
-                message
+                true
             }.getOrElse { exception ->
                 Timber.e(exception)
-                null
+                false
             }
         }
     }
