@@ -97,7 +97,7 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    fun hasSavedImages() = container.currentState.imagesSaved > 0
+    fun hasSavedImages() = container.stateFlow.value.imagesSaved > 0
 
     fun handleSelection(
         selection: AnyMessage?,
