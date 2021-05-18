@@ -1,7 +1,7 @@
 ext {
     kotlin_version = "1.5.0"
     dagger_version = "2.35.1"
-    detekt_version = "1.16.0"
+    detekt_version = "1.17.0"
     exhaustive_version = "0.1.1"
     ktlint_version = "10.0.0"
     nav_version = "2.3.5"
@@ -13,7 +13,7 @@ ext {
     def coil_version = "1.2.1"
     def constraint_layout_version = "2.0.4"
     def core_version = "1.6.0-alpha03"
-    def coroutines_test_version = "1.4.3"
+    def coroutines_version = "1.5.0"
     def dagger_vm_compiler_version = "1.0.0"
     def data_store_version = "1.0.0-beta01"
     def desugar_version = "1.1.1"
@@ -29,7 +29,7 @@ ext {
     def strikt_version = "0.31.0"
     def test_version = "1.3.0"
     def timber_version = "4.7.1"
-    def turbine_version = "0.4.1"
+    def turbine_version = "0.5.0"
 
     def leak_canary_version = "2.7"
 
@@ -39,7 +39,7 @@ ext {
     def espresso_version = "3.3.0"
 
     android_test_dependencies = [
-            "coroutines": "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version",
+            "coroutines": "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version",
             "junit_ext" : "androidx.test.ext:junit:$junit_ext_version",
             "espresso"  : "androidx.test.espresso:espresso-core:$espresso_version",
             "rules"     : "androidx.test:rules:$test_version",
@@ -53,6 +53,7 @@ ext {
             "coil"               : "io.coil-kt:coil:$coil_version",
             "constraint_layout"  : "androidx.constraintlayout:constraintlayout:$constraint_layout_version",
             "core"               : "androidx.core:core-ktx:$core_version",
+            "coroutines"         : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
             "dagger_hilt"        : "com.google.dagger:hilt-android:$dagger_version",
             "data_store_prefs"   : "androidx.datastore:datastore-preferences:$data_store_version",
             "data_store_proto"   : "androidx.datastore:datastore-core:$data_store_version",
@@ -88,6 +89,6 @@ ext {
             "mockK"       : "io.mockk:mockk:$mockK_version",
             "orbit"       : "org.orbit-mvi:orbit-test:$orbit_version",
             "roboelectric": "org.robolectric:robolectric:$roboelectric_version",
-            "strikt"    : "io.strikt:strikt-core:$strikt_version"
+            "strikt"      : "io.strikt:strikt-core:$strikt_version"
     ]
 }

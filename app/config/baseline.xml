@@ -10,7 +10,10 @@
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewHolder.kt$MainViewHolder$private fun setupDragAndDrop()</ID>
+    <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
+    <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImageSelection()</ID>
+    <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
     <ID>LongMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongParameterList:DetailsFragment.kt$DetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:DetailsViewModel.kt$DetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>

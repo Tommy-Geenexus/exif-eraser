@@ -55,9 +55,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    lintOptions {
-        disable 'InvalidFragmentVersionForActivityResult'
-    }
     sourceSets {
         main.java.srcDirs += "$buildDir/generated/source/wire"
     }
@@ -92,7 +89,6 @@ detekt {
 
 ktlint {
     android.set(true)
-    ignoreFailures.set(true)
     filter {
         exclude { element -> element.file.path.contains("generated/") }
         include("**/kotlin/**")
