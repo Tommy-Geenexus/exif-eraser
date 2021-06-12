@@ -39,19 +39,19 @@ class MainAdapter(
     private val listener: Listener,
     private val receiver: MainContentReceiver
 ) : ListAdapter<AnyMessage, MainViewHolder>(
-        object : DiffUtil.ItemCallback<AnyMessage>() {
+    object : DiffUtil.ItemCallback<AnyMessage>() {
 
-            override fun areItemsTheSame(
-                oldItem: AnyMessage,
-                newItem: AnyMessage
-            ) = oldItem == newItem
+        override fun areItemsTheSame(
+            oldItem: AnyMessage,
+            newItem: AnyMessage
+        ) = oldItem == newItem
 
-            override fun areContentsTheSame(
-                oldItem: AnyMessage,
-                newItem: AnyMessage
-            ) = oldItem == newItem
-        }
-    ),
+        override fun areContentsTheSame(
+            oldItem: AnyMessage,
+            newItem: AnyMessage
+        ) = oldItem == newItem
+    }
+),
     SimpleItemTouchHelperCallback.OnRecyclerViewItemMoveListener {
 
     interface Listener {
