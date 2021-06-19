@@ -35,7 +35,8 @@ import androidx.core.view.marginTop
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.addRepeatingJob
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,6 +62,7 @@ import com.none.tom.exiferaser.selection.ui.SelectionFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @Suppress("unused")
@@ -167,14 +169,18 @@ class ReportFragment :
         binding.toolbar.setNavigationOnClickListener {
             backCallback.handleOnBackPressed()
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.stateFlow.collect { state ->
-                renderState(state)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.stateFlow.collect { state ->
+                    renderState(state)
+                }
             }
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.sideEffectFlow.collect { sideEffect ->
-                handleSideEffect(sideEffect)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.sideEffectFlow.collect { sideEffect ->
+                    handleSideEffect(sideEffect)
+                }
             }
         }
     }

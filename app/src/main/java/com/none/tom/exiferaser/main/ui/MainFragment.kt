@@ -43,7 +43,8 @@ import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.addRepeatingJob
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -79,6 +80,7 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint
@@ -185,14 +187,18 @@ class MainFragment :
                 }
             }
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.stateFlow.collect { state ->
-                renderState(state)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.stateFlow.collect { state ->
+                    renderState(state)
+                }
             }
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.sideEffectFlow.collect { sideEffect ->
-                handleSideEffect(sideEffect)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.sideEffectFlow.collect { sideEffect ->
+                    handleSideEffect(sideEffect)
+                }
             }
         }
         consumeDeepLinkIfPresent()
