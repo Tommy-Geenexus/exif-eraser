@@ -30,7 +30,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.addRepeatingJob
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
@@ -52,6 +53,7 @@ import com.none.tom.exiferaser.setupToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint
@@ -96,14 +98,18 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                 slideOffset = bundle.getFloat(ReportFragment.KEY_OFFSET_SLIDE)
             )
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.stateFlow.collect { state ->
-                renderState(state)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.stateFlow.collect { state ->
+                    renderState(state)
+                }
             }
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.sideEffectFlow.collect { sideEffect ->
-                handleSideEffect(sideEffect)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.sideEffectFlow.collect { sideEffect ->
+                    handleSideEffect(sideEffect)
+                }
             }
         }
     }

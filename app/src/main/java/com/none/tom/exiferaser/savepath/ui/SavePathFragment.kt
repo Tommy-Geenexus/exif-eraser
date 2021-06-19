@@ -29,7 +29,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.addRepeatingJob
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import app.cash.exhaustive.Exhaustive
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.none.tom.exiferaser.R
@@ -41,6 +42,7 @@ import com.none.tom.exiferaser.savepath.business.SavePathViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint
@@ -75,14 +77,18 @@ class SavePathFragment : BottomSheetDialogFragment() {
         binding.pathSaveCustom.setOnClickListener {
             viewModel.chooseSelectionSavePath()
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.stateFlow.collect { state ->
-                renderState(state)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.stateFlow.collect { state ->
+                    renderState(state)
+                }
             }
         }
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
-            viewModel.container.sideEffectFlow.collect { sideEffect ->
-                handleSideEffect(sideEffect)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.sideEffectFlow.collect { sideEffect ->
+                    handleSideEffect(sideEffect)
+                }
             }
         }
     }
