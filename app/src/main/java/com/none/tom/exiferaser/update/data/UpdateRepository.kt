@@ -170,10 +170,16 @@ class UpdateRepository @Inject constructor(
                 }
             }
             else -> {
-                if (info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                    UpdatePriority.High
-                } else {
-                    UpdatePriority.Medium
+                when {
+                    info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) -> {
+                        UpdatePriority.High
+                    }
+                    info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) -> {
+                        UpdatePriority.Medium
+                    }
+                    else -> {
+                        UpdatePriority.Low
+                    }
                 }
             }
         }
