@@ -201,11 +201,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun handleSideEffect(sideEffect: SettingsSideEffect) {
         if (sideEffect is SettingsSideEffect.ExternalPicturesDeleted) {
             requireView().showSnackbar(
-                msg = if (sideEffect.success) {
-                    R.string.delete_camera_images_success
-                } else {
-                    R.string.delete_camera_images_failed
-                }
+                msg = getString(
+                    if (sideEffect.success) {
+                        R.string.delete_camera_images_success
+                    } else {
+                        R.string.delete_camera_images_failed
+                    }
+                )
             )
         }
     }

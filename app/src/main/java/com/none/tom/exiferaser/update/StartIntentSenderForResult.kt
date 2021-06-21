@@ -18,35 +18,35 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.di
+package com.none.tom.exiferaser.update
 
-import android.content.ContentResolver
 import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import android.content.Intent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ContextModule {
+class StartIntentSenderForResult : ActivityResultContract<IntentSenderRequest, ActivityResult>() {
 
-    @Provides
-    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
-        return context.contentResolver
+    var immediateUpdate = false
+
+    override fun createIntent(
+        context: Context,
+        input: IntentSenderRequest
+    ): Intent {
+        return Intent(
+            ActivityResultContracts.StartIntentSenderForResult.ACTION_INTENT_SENDER_REQUEST
+        ).apply {
+            putExtra(
+                ActivityResultContracts.StartIntentSenderForResult.EXTRA_INTENT_SENDER_REQUEST,
+                input
+            )
+        }
     }
 
-    @Provides
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
-    }
-
-    @Provides
-    fun provideNotificationManager(
-        @ApplicationContext context: Context
-    ) = NotificationManagerCompat.from(context)
+    override fun parseResult(
+        resultCode: Int,
+        intent: Intent?
+    ) = ActivityResult(resultCode, intent)
 }

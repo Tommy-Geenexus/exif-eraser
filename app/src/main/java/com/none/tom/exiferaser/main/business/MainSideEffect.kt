@@ -22,9 +22,23 @@ package com.none.tom.exiferaser.main.business
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.annotation.IntRange
+import com.none.tom.exiferaser.selection.PROGRESS_MAX
+import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import kotlinx.parcelize.Parcelize
 
 sealed class MainSideEffect : Parcelable {
+
+    @Parcelize
+    data class FlexibleUpdateInProgress(
+        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) val progress: Int
+    ) : MainSideEffect()
+
+    @Parcelize
+    object FlexibleUpdateReadyToInstall : MainSideEffect()
+
+    @Parcelize
+    object FlexibleUpdateFailed : MainSideEffect()
 
     @Parcelize
     data class ChooseImage(

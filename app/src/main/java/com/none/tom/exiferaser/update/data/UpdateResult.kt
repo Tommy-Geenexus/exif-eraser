@@ -18,35 +18,30 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.di
+package com.none.tom.exiferaser.update.data
 
-import android.content.ContentResolver
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import android.os.Parcelable
+import androidx.annotation.IntRange
+import com.none.tom.exiferaser.selection.PROGRESS_MAX
+import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import kotlinx.parcelize.Parcelize
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ContextModule {
+sealed class UpdateResult : Parcelable {
 
-    @Provides
-    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
-        return context.contentResolver
-    }
+    @Parcelize
+    object NotAvailable : UpdateResult()
 
-    @Provides
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
-    }
+    @Parcelize
+    object Available : UpdateResult()
 
-    @Provides
-    fun provideNotificationManager(
-        @ApplicationContext context: Context
-    ) = NotificationManagerCompat.from(context)
+    @Parcelize
+    data class InProgress(
+        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) val progress: Int
+    ) : UpdateResult()
+
+    @Parcelize
+    object ReadyToInstall : UpdateResult()
+
+    @Parcelize
+    object FailedToInstall : UpdateResult()
 }

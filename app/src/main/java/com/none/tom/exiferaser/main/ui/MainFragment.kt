@@ -41,6 +41,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StyleRes
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
@@ -49,8 +50,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import app.cash.exhaustive.Exhaustive
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
+import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
@@ -71,6 +74,7 @@ import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
 import com.none.tom.exiferaser.main.getClipImages
 import com.none.tom.exiferaser.navigate
+import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import com.none.tom.exiferaser.setTransitions
 import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.showSnackbar
@@ -135,6 +139,20 @@ class MainFragment :
             toolbar = binding.toolbar,
             titleRes = R.string.app_name
         )
+        setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_FAILED) { _, _ ->
+            viewModel.handleFlexibleUpdateFailure()
+        }
+        setFragmentResultListener(
+            ExifEraserActivity.KEY_UPDATE_IN_PROGRESS
+        ) { key: String, args: Bundle ->
+            viewModel.handleFlexibleUpdateInProgress(
+                progress = args.getInt(key, PROGRESS_MIN),
+                notify = binding.imageSourcesReorderLayout.childCount < 2
+            )
+        }
+        setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_READY_TO_INSTALL) { _, _ ->
+            viewModel.handleFlexibleUpdateReadyToInstall()
+        }
         binding.title.text = if (isOrientationPortrait()) {
             getString(
                 R.string.choose_your_preferred_image_source_placeholder,
@@ -313,6 +331,27 @@ class MainFragment :
     private fun handleSideEffect(sideEffect: MainSideEffect) {
         @Exhaustive
         when (sideEffect) {
+            MainSideEffect.FlexibleUpdateReadyToInstall -> {
+                binding.imageSourcesReorderLayout.showSnackbar(
+                    msg = getString(R.string.app_update_ready),
+                    actionMsg = R.string.install,
+                    onActionClick = {
+                        viewModel.completeFlexibleUpdate()
+                    },
+                    length = Snackbar.LENGTH_INDEFINITE
+                )
+            }
+            MainSideEffect.FlexibleUpdateFailed -> {
+                binding.imageSourcesReorderLayout.showSnackbar(
+                    msg = getString(R.string.app_update_failed)
+                )
+            }
+            is MainSideEffect.FlexibleUpdateInProgress -> {
+                binding.imageSourcesReorderLayout.showSnackbar(
+                    msg = getString(R.string.app_update_download),
+                    length = Snackbar.LENGTH_INDEFINITE
+                )
+            }
             is MainSideEffect.ChooseImage -> {
                 chooseImage.launch(supportedMimeTypes)
             }
@@ -353,9 +392,8 @@ class MainFragment :
                 viewModel.handleReceivedImages(sideEffect.uris)
             }
             is MainSideEffect.PasteImagesNone -> {
-                requireView().showSnackbar(
-                    anchor = binding.imageSourcesReorder,
-                    msg = R.string.clipboard_content_unsupported
+                binding.imageSourcesReorderLayout.showSnackbar(
+                    msg = getString(R.string.clipboard_content_unsupported)
                 )
             }
             is MainSideEffect.ReceivedImage -> {

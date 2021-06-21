@@ -20,6 +20,7 @@
 
 package com.none.tom.exiferaser
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
@@ -97,14 +98,18 @@ fun Fragment.isActivityInMultiWindowMode(): Boolean {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && requireActivity().isInMultiWindowMode
 }
 
+@SuppressLint("ShowToast")
 fun View.showSnackbar(
     anchor: View? = null,
-    @StringRes msg: Int,
+    msg: String,
+    @StringRes actionMsg: Int = 0,
+    onActionClick: View.OnClickListener? = null,
     length: Int = Snackbar.LENGTH_SHORT
 ) {
     var backingSnackbar: Snackbar? = Snackbar
         .make(this, msg, length)
         .setAnchorView(anchor)
+        .setAction(if (actionMsg != 0) context.getString(actionMsg) else null, onActionClick)
     val snackbar = backingSnackbar
     val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
     if (snackbar != null && lifecycle != null) {

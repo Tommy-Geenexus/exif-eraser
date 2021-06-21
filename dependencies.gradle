@@ -23,6 +23,8 @@ ext {
     def material_version = "1.4.0-rc01"
     def mockK_version = "1.11.0"
     def orbit_version = "3.1.1"
+    def play_core_version = "1.10.0"
+    def play_core_ktx_version = "1.8.1"
     def preference_version = "1.1.1"
     def recycler_view_version = "1.2.1"
     def roboelectric_version = "4.5.1"
@@ -65,6 +67,8 @@ ext {
             "navigation_fragment": "androidx.navigation:navigation-fragment-ktx:$nav_version",
             "navigation_ui"      : "androidx.navigation:navigation-ui-ktx:$nav_version",
             "orbit_vm"           : "org.orbit-mvi:orbit-viewmodel:$orbit_version",
+            "play_core"          : "com.google.android.play:core:$play_core_version",
+            "play_core_ktx"      : "com.google.android.play:core-ktx:$play_core_ktx_version",
             "preference"         : "androidx.preference:preference-ktx:$preference_version",
             "recycler_view"      : "androidx.recyclerview:recyclerview:$recycler_view_version",
             "timber"             : "com.jakewharton.timber:timber:$timber_version",

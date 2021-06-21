@@ -22,27 +22,56 @@ package com.none.tom.exiferaser
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDeepLinkBuilder
+import app.cash.exhaustive.Exhaustive
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
+import com.none.tom.exiferaser.update.StartIntentSenderForResult
+import com.none.tom.exiferaser.update.business.UpdateSideEffect
+import com.none.tom.exiferaser.update.business.UpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
 
-    private companion object {
+    companion object {
         // See MainFragmentArgs
-        const val KEY_IMAGE_SELECTION = "image_selection"
+        private const val KEY_IMAGE_SELECTION = "image_selection"
 
         // See MainFragmentArgs
-        const val KEY_IMAGES_SELECTION = "images_selection"
+        private const val KEY_IMAGES_SELECTION = "images_selection"
 
         // See MainFragmentArgs
-        const val KEY_SHORTCUT = "shortcut"
+        private const val KEY_SHORTCUT = "shortcut"
+
+        const val KEY_UPDATE_FAILED = TOP_LEVEL_PACKAGE_NAME + "UPDATE_FAILED"
+
+        const val KEY_UPDATE_IN_PROGRESS = TOP_LEVEL_PACKAGE_NAME + "UPDATE_IN_PROGRESS"
+
+        const val KEY_UPDATE_READY_TO_INSTALL = TOP_LEVEL_PACKAGE_NAME + "UPDATE_READY_TO_INSTALL"
+    }
+
+    private val viewModel: UpdateViewModel by viewModels()
+    private val contract = StartIntentSenderForResult()
+    private val updateResult = registerForActivityResult(contract) { result ->
+        if (result != null) {
+            viewModel.handleAppUpdateResult(
+                result = result.resultCode,
+                immediateUpdate = contract.immediateUpdate
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +81,14 @@ class ExifEraserActivity : AppCompatActivity() {
         setContentView(binding.root)
         handleSendIntent()
         handleShortcutIntent()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.sideEffectFlow.collect { sideEffect ->
+                    handleSideEffect(sideEffect)
+                }
+            }
+        }
+        viewModel.checkAppUpdateAvailability()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -59,6 +96,49 @@ class ExifEraserActivity : AppCompatActivity() {
         setIntent(intent)
         handleSendIntent()
         handleShortcutIntent()
+    }
+
+    private fun handleSideEffect(sideEffect: UpdateSideEffect) {
+        @Exhaustive
+        when (sideEffect) {
+            is UpdateSideEffect.UpdateAvailable -> {
+                viewModel.beginOrResumeAppUpdate(sideEffect.info) { um, info, type, requestCode ->
+                    um.startUpdateFlowForResult(
+                        info,
+                        type,
+                        { intentSender: IntentSender, _, _, _, _, _, _ ->
+                            contract.immediateUpdate = sideEffect.immediateUpdate
+                            updateResult.launch(IntentSenderRequest.Builder(intentSender).build())
+                        },
+                        requestCode
+                    )
+                }
+            }
+            UpdateSideEffect.UpdateCancelled -> {
+                finish()
+            }
+            UpdateSideEffect.UpdateFailed -> {
+                supportFragmentManager
+                    .primaryNavigationFragment
+                    ?.childFragmentManager
+                    ?.setFragmentResult(KEY_UPDATE_FAILED, bundleOf())
+            }
+            is UpdateSideEffect.UpdateInProgress -> {
+                supportFragmentManager
+                    .primaryNavigationFragment
+                    ?.childFragmentManager
+                    ?.setFragmentResult(
+                        KEY_UPDATE_IN_PROGRESS,
+                        bundleOf(KEY_UPDATE_IN_PROGRESS to sideEffect.progress)
+                    )
+            }
+            UpdateSideEffect.UpdateReadyToInstall -> {
+                supportFragmentManager
+                    .primaryNavigationFragment
+                    ?.childFragmentManager
+                    ?.setFragmentResult(KEY_UPDATE_READY_TO_INSTALL, bundleOf())
+            }
+        }
     }
 
     private fun handleSendIntent() {

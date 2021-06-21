@@ -18,35 +18,33 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.di
+package com.none.tom.exiferaser.update.business
 
-import android.content.ContentResolver
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import android.os.Parcelable
+import androidx.annotation.IntRange
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.none.tom.exiferaser.selection.PROGRESS_MAX
+import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import kotlinx.parcelize.Parcelize
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ContextModule {
+sealed class UpdateSideEffect {
 
-    @Provides
-    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
-        return context.contentResolver
-    }
+    data class UpdateAvailable(
+        val info: AppUpdateInfo,
+        val immediateUpdate: Boolean
+    ) : UpdateSideEffect()
 
-    @Provides
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
-    }
+    @Parcelize
+    data class UpdateInProgress(
+        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) val progress: Int
+    ) : UpdateSideEffect(), Parcelable
 
-    @Provides
-    fun provideNotificationManager(
-        @ApplicationContext context: Context
-    ) = NotificationManagerCompat.from(context)
+    @Parcelize
+    object UpdateReadyToInstall : UpdateSideEffect(), Parcelable
+
+    @Parcelize
+    object UpdateFailed : UpdateSideEffect(), Parcelable
+
+    @Parcelize
+    object UpdateCancelled : UpdateSideEffect(), Parcelable
 }

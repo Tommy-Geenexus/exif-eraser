@@ -34,6 +34,7 @@ import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
+import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.squareup.wire.AnyMessage
 import io.mockk.Ordering
 import io.mockk.coEvery
@@ -58,6 +59,7 @@ class MainViewModelTest {
     private val imageSourceRepository = mockk<ImageSourceRepository>()
     private val selectionRepository = mockk<SelectionRepository>()
     private val settingsRepository = mockk<SettingsRepository>()
+    private val updateRepository = mockk<UpdateRepository>()
 
     private val testUri = ContentResolver.SCHEME_CONTENT.toUri()
     private val testUris = listOf(testUri)
@@ -80,7 +82,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false,
@@ -112,7 +115,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false
@@ -149,7 +153,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false
@@ -192,7 +197,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false
@@ -219,7 +225,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false
@@ -284,7 +291,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         coEvery {
             selectionRepository.putSelection(
@@ -322,7 +330,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
         coEvery {
@@ -356,7 +365,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         viewModel.handleSettings()
         viewModel.assert(initialState) {
@@ -372,7 +382,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         viewModel.prepareChooseImagesOrLaunchCamera()
         viewModel.assert(initialState) {
@@ -392,7 +403,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
@@ -419,7 +431,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
@@ -446,7 +459,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
@@ -473,7 +487,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         coEvery {
             imageRepository.getExternalPicturesFileProviderUriOrNull(
@@ -509,7 +524,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         viewModel.handleShortcut(String.Empty)
         viewModel.assert(initialState) {
@@ -525,7 +541,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         viewModel.reportShortcutUsed(String.Empty)
         viewModel.assert(initialState) {
@@ -541,7 +558,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(initialState)
         viewModel.handleMultiWindowMode(isInMultiWindowMode = true)
         viewModel.assert(initialState) {
@@ -561,7 +579,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false
@@ -585,7 +604,8 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
         ).test(
             initialState = initialState,
             isolateFlow = false

@@ -18,35 +18,10 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.di
+package com.none.tom.exiferaser.update.business
 
-import android.content.ContentResolver
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ContextModule {
-
-    @Provides
-    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
-        return context.contentResolver
-    }
-
-    @Provides
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
-    }
-
-    @Provides
-    fun provideNotificationManager(
-        @ApplicationContext context: Context
-    ) = NotificationManagerCompat.from(context)
-}
+@Parcelize
+object UpdateState : Parcelable

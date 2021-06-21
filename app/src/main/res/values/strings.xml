@@ -5,6 +5,11 @@
     <string name="always">Always</string>
 
     <string name="app_name" translatable="false">ExifEraser</string>
+    <string name="app_update_download">Update downloading </string>
+    <string name="app_update_downloaded">Update successfully downloaded</string>
+    <string name="app_update_failed">Update failed</string>
+    <string name="app_update_install">Tap here to install</string>
+    <string name="app_update_ready">Update ready to install</string>
 
     <string name="automatically">Automatically</string>
 
@@ -58,6 +63,8 @@
 
     <string name="images_modified">images modified</string>
     <string name="images_modified_placeholder" translatable="false">%d %s %d %s</string>
+
+    <string name="install">Install</string>
 
     <string name="key_batch_image_processing" translatable="false">batch_image_processing</string>
     <string name="key_bug_report" translatable="false">bug_report</string>

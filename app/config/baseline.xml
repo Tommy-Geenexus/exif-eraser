@@ -20,6 +20,7 @@
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:MainViewHolder.kt$MainViewHolder$255</ID>
+    <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
     <ID>NestedBlockDepth:MainContentReceiver.kt$MainContentReceiver$@ExperimentalContracts override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
     <ID>NestedBlockDepth:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>ReturnCount:AnimationUtils.kt$ @ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
