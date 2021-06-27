@@ -5,10 +5,10 @@
     android:viewportHeight="24">
     <path
         android:fillColor="?attr/colorDrawable"
-        android:pathData="M7.47,21.49C4.2,19.93 1.86,16.76 1.5,13L0,13C0.51,19.16 5.66,24 11.95,24C12.18,24 12.39,23.98 12.61,23.97L8.8,20.15ZM12.05,0C11.82,0 11.61,0.02 11.39,0.04L15.2,3.85L16.53,2.52C19.8,4.07 22.14,7.24 22.5,11L24,11C23.49,4.84 18.34,0 12.05,0Z"
+        android:pathData="M20,6L12,6L10,4L4,4C2.9,4 2.01,4.9 2.01,6L2,18C2,19.1 2.9,20 4,20L20,20C21.1,20 22,19.1 22,18L22,8C22,6.9 21.1,6 20,6ZM20,18L4,18L4,8L20,8L20,18Z"
         android:strokeWidth="1" />
     <path
         android:fillColor="?attr/colorDrawable"
-        android:pathData="M13,14.67L15.59,12.09L17,13.5L12,18.5L7,13.5L8.41,12.09L11,14.67L11,5L13,5Z"
+        android:pathData="M5,17L19,17L15.517,12.5L13.029,15.51L9.546,11Z"
         android:strokeWidth="1" />
 </vector>

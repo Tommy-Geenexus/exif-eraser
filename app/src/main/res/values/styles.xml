@@ -14,7 +14,7 @@
         <item name="android:gravity">start|center_vertical</item>
         <item name="iconPadding">@dimen/spacing_large</item>
         <item name="iconTint">?attr/colorDrawable</item>
-        <item name="iconTintMode">src_in</item>
+        <item name="iconTintMode">src_atop</item>
     </style>
 
     <style name="Widget.ExifEraser.Chip.Action.Outlined" parent="Widget.MaterialComponents.Chip.Action">
