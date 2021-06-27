@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/content_paste"
-        android:icon="@drawable/ic_add_photo_alternate"
+        android:icon="@drawable/ic_image_paste"
         android:title="@string/clipboard_content_paste"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />

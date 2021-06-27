@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginEnd="@dimen/spacing_small"
         android:text="@string/path_save_default"
-        app:icon="@drawable/ic_save_alt_default" />
+        app:icon="@drawable/ic_image_folder_save_default" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/path_save_custom"
@@ -33,5 +33,5 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginBottom="@dimen/spacing_normal"
         android:text="@string/path_save_custom"
-        app:icon="@drawable/ic_launch" />
+        app:icon="@drawable/ic_image_folder_save" />
 </LinearLayout>
