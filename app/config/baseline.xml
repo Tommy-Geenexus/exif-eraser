@@ -5,6 +5,7 @@
     <ID>ComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>ComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>ComplexMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
+    <ID>LargeClass:MainViewModelTest.kt$MainViewModelTest</ID>
     <ID>LongMethod:DetailsFragment.kt$DetailsFragment$private fun renderState(state: DetailsState)</ID>
     <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
