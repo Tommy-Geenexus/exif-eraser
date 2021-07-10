@@ -109,7 +109,7 @@ class ImageRepositoryInstrumentedTest {
     )
     private val expectedSummaries = listOf(
         Summary(
-            displayName = JPEG_WITH_EXIF_WITH_XMP,
+            displayName = JPEG_WITH_EXIF_WITH_XMP + CONTENT_URI_SUFFIX,
             extension = EXTENSION_JPEG,
             mimeType = MIME_TYPE_JPEG,
             imageUri = expectedImagePathsModified[0],
@@ -135,7 +135,7 @@ class ImageRepositoryInstrumentedTest {
             containsExtendedXmp = false
         ),
         Summary(
-            displayName = PNG_WITH_EXIF,
+            displayName = PNG_WITH_EXIF + CONTENT_URI_SUFFIX,
             extension = EXTENSION_PNG,
             mimeType = MIME_TYPE_PNG,
             imageUri = expectedImagePathsModified[2],
@@ -161,7 +161,7 @@ class ImageRepositoryInstrumentedTest {
             containsExtendedXmp = false
         ),
         Summary(
-            displayName = WEBP_WITH_EXIF,
+            displayName = WEBP_WITH_EXIF + CONTENT_URI_SUFFIX,
             extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
             imageUri = expectedImagePathsModified[4],
@@ -174,7 +174,7 @@ class ImageRepositoryInstrumentedTest {
             containsExtendedXmp = false
         ),
         Summary(
-            displayName = WEBP_WITHOUT_EXIF_WITH_MAKE,
+            displayName = WEBP_WITHOUT_EXIF_WITH_MAKE + CONTENT_URI_SUFFIX,
             extension = EXTENSION_WEBP,
             mimeType = MIME_TYPE_WEBP,
             imageUri = expectedImagePathsModified[5],
