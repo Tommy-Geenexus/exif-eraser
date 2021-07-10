@@ -214,7 +214,8 @@ class ImageRepository @Inject constructor(
                         containsXmp ||
                         containsExtendedXmp
                 }
-                displayName = getDisplayNameOrNull(uri).orEmpty()
+                displayName = getDisplayNameOrNull(uri)
+                    .orEmpty()
                     .replaceAfter(delimiter = '.', replacement = "")
                     .trimEnd { c -> c == '.' }
                 if (displayNameSuffix.isNotEmpty()) {
@@ -240,6 +241,12 @@ class ImageRepository @Inject constructor(
                             imageSaved = true
                         }
                     }
+                    displayName = DocumentFile
+                        .fromSingleUri(context, modifiedUri)
+                        ?.name
+                        ?.replaceAfter(delimiter = '.', replacement = "")
+                        ?.trimEnd { c -> c == '.' }
+                        ?: displayName
                 }
             }.getOrElse { exception ->
                 Timber.e(exception)
