@@ -28,13 +28,15 @@ import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import com.none.tom.exiferaser.selection.data.Summary
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class ReportViewModelTest {
@@ -57,11 +59,13 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageSummaries() {
+    fun test_handleImageSummaries() = runBlockingTest {
         val initialState = ReportState()
         val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
         val summaries = listOf(summary)
-        viewModel.handleImageSummaries(summaries)
+        viewModel.testIntent {
+            handleImageSummaries(summaries)
+        }
         viewModel.assert(initialState) {
             states(
                 {
@@ -73,10 +77,12 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleViewImage() {
+    fun test_handleViewImage() = runBlockingTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
         val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
-        viewModel.handleViewImage(position = 0)
+        viewModel.testIntent {
+            handleViewImage(position = 0)
+        }
         viewModel.assert(initialState) {
             postedSideEffects(ReportSideEffect.ViewImage(imageUri = testUri))
         }
@@ -84,10 +90,12 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageDetails() {
+    fun test_handleImageDetails() = runBlockingTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
         val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
-        viewModel.handleImageDetails(position = 0)
+        viewModel.testIntent {
+            handleImageDetails(position = 0)
+        }
         viewModel.assert(initialState) {
             postedSideEffects(
                 ReportSideEffect.NavigateToDetails(

@@ -41,14 +41,16 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import java.util.Collections
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@ExperimentalCoroutinesApi
 @ExperimentalContracts
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
@@ -70,7 +72,7 @@ class MainViewModelTest {
     )
 
     @Test
-    fun test_prepareReadImageSources_readImageSources() {
+    fun test_prepareReadImageSources_readImageSources() = runBlockingTest {
         coEvery {
             imageSourceRepository.getImageSources()
         } returns flowOf(testImageSources)
@@ -83,9 +85,9 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(
             initialState = initialState,
-            isolateFlow = false,
-            runOnCreate = true
+            isolateFlow = false
         )
+        viewModel.runOnCreate()
         coVerify(exactly = 1) {
             imageSourceRepository.getImageSources()
         }
@@ -105,7 +107,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_prepareReorderImageSources_reorderImageSources() {
+    fun test_prepareReorderImageSources_reorderImageSources() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -119,12 +121,16 @@ class MainViewModelTest {
         )
         val reorderedImageSources = testImageSources.toMutableList()
         Collections.swap(reorderedImageSources, 1, 0)
-        viewModel.prepareReorderImageSources()
-        viewModel.reorderImageSources(
-            imageSources = testImageSources,
-            oldIndex = 0,
-            newIndex = 1
-        )
+        viewModel.testIntent {
+            prepareReorderImageSources()
+        }
+        viewModel.testIntent {
+            reorderImageSources(
+                imageSources = testImageSources,
+                oldIndex = 0,
+                newIndex = 1
+            )
+        }
         viewModel.assert(initialState) {
             states(
                 {
@@ -142,7 +148,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_preparePutImageSources_putImageSources() {
+    fun test_preparePutImageSources_putImageSources() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -157,8 +163,12 @@ class MainViewModelTest {
         coEvery {
             imageSourceRepository.putImageSources(testImageSources)
         } returns true
-        viewModel.preparePutImageSources()
-        viewModel.putImageSources(testImageSources)
+        viewModel.testIntent {
+            preparePutImageSources()
+        }
+        viewModel.testIntent {
+            putImageSources(testImageSources)
+        }
         coVerify(exactly = 1) {
             imageSourceRepository.putImageSources(testImageSources)
         }
@@ -185,7 +195,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_preparePutSelection() {
+    fun test_preparePutSelection() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -197,8 +207,12 @@ class MainViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.preparePutSelection(null)
-        viewModel.preparePutSelection(Unit)
+        viewModel.testIntent {
+            preparePutSelection(null)
+        }
+        viewModel.testIntent {
+            preparePutSelection(Unit)
+        }
         viewModel.assert(initialState) {
             states(
                 {
@@ -212,7 +226,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImageSelection() {
+    fun test_putImageSelection() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -230,10 +244,12 @@ class MainViewModelTest {
                 fromCamera = false
             )
         } returns true
-        viewModel.putImageSelection(
-            imageUri = testUri,
-            fromCamera = false
-        )
+        viewModel.testIntent {
+            putImageSelection(
+                imageUri = testUri,
+                fromCamera = false
+            )
+        }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
                 imageUri = testUri,
@@ -246,10 +262,12 @@ class MainViewModelTest {
                 fromCamera = true
             )
         } returns true
-        viewModel.putImageSelection(
-            imageUri = testUri,
-            fromCamera = true
-        )
+        viewModel.testIntent {
+            putImageSelection(
+                imageUri = testUri,
+                fromCamera = true
+            )
+        }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
                 imageUri = testUri,
@@ -277,7 +295,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImagesSelection() {
+    fun test_putImagesSelection() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -292,10 +310,12 @@ class MainViewModelTest {
                 intentImageUris = testUris.toTypedArray()
             )
         } returns true
-        viewModel.putImagesSelection(
-            imageUris = testUris,
-            intentImageUris = testUris.toTypedArray()
-        )
+        viewModel.testIntent {
+            putImagesSelection(
+                imageUris = testUris,
+                intentImageUris = testUris.toTypedArray()
+            )
+        }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
                 imageUris = testUris,
@@ -315,7 +335,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImageDirectorySelection() {
+    fun test_putImageDirectorySelection() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -331,7 +351,9 @@ class MainViewModelTest {
         coEvery {
             selectionRepository.putSelection(result)
         } returns true
-        viewModel.putImageDirectorySelection(treeUri = testUri)
+        viewModel.testIntent {
+            putImageDirectorySelection(treeUri = testUri)
+        }
         coVerify(ordering = Ordering.SEQUENCE) {
             imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
             selectionRepository.putSelection(result)
@@ -349,7 +371,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleSettings() {
+    fun test_handleSettings() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -358,14 +380,16 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.handleSettings()
+        viewModel.testIntent {
+            handleSettings()
+        }
         viewModel.assert(initialState) {
             postedSideEffects(MainSideEffect.NavigateToSettings)
         }
     }
 
     @Test
-    fun test_prepareChooseImagesOrLaunchCamera() {
+    fun test_prepareChooseImagesOrLaunchCamera() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -374,7 +398,9 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.prepareChooseImagesOrLaunchCamera()
+        viewModel.testIntent {
+            prepareChooseImagesOrLaunchCamera()
+        }
         viewModel.assert(initialState) {
             states(
                 {
@@ -385,7 +411,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImage() {
+    fun test_chooseImage() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -397,7 +423,9 @@ class MainViewModelTest {
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
         } returns testUri
-        viewModel.chooseImage()
+        viewModel.testIntent {
+            chooseImage()
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultOpenPathSuspending()
         }
@@ -412,7 +440,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImages() {
+    fun test_chooseImages() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -424,7 +452,9 @@ class MainViewModelTest {
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
         } returns testUri
-        viewModel.chooseImages()
+        viewModel.testIntent {
+            chooseImages()
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultOpenPathSuspending()
         }
@@ -439,7 +469,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImageDirectory() {
+    fun test_chooseImageDirectory() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -451,7 +481,9 @@ class MainViewModelTest {
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
         } returns testUri
-        viewModel.chooseImageDirectory()
+        viewModel.testIntent {
+            chooseImageDirectory()
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultOpenPathSuspending()
         }
@@ -466,7 +498,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_launchCamera() {
+    fun test_launchCamera() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -481,10 +513,12 @@ class MainViewModelTest {
                 displayName = String.Empty
             )
         } returns testUri
-        viewModel.launchCamera(
-            fileProviderPackage = String.Empty,
-            displayName = String.Empty
-        )
+        viewModel.testIntent {
+            launchCamera(
+                fileProviderPackage = String.Empty,
+                displayName = String.Empty
+            )
+        }
         coVerify(exactly = 1) {
             imageRepository.getExternalPicturesFileProviderUriOrNull(
                 fileProviderPackage = String.Empty,
@@ -502,7 +536,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleShortcut() {
+    fun test_handleShortcut() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -511,14 +545,16 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.handleShortcut(String.Empty)
+        viewModel.testIntent {
+            handleShortcut(String.Empty)
+        }
         viewModel.assert(initialState) {
             postedSideEffects(MainSideEffect.ShortcutHandle(String.Empty))
         }
     }
 
     @Test
-    fun test_reportShortcutUsed() {
+    fun test_reportShortcutUsed() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -527,14 +563,16 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.reportShortcutUsed(String.Empty)
+        viewModel.testIntent {
+            reportShortcutUsed(String.Empty)
+        }
         viewModel.assert(initialState) {
             postedSideEffects(MainSideEffect.ShortcutReportUsed(String.Empty))
         }
     }
 
     @Test
-    fun test_handleMultiWindowMode() {
+    fun test_handleMultiWindowMode() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -543,7 +581,9 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.handleMultiWindowMode(isInMultiWindowMode = true)
+        viewModel.testIntent {
+            handleMultiWindowMode(isInMultiWindowMode = true)
+        }
         viewModel.assert(initialState) {
             states(
                 {
@@ -554,7 +594,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleReceivedImages() {
+    fun test_handleReceivedImages() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -566,9 +606,15 @@ class MainViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.handleReceivedImages(emptyList())
-        viewModel.handleReceivedImages(listOf(testUri))
-        viewModel.handleReceivedImages(listOf(testUri, testUri))
+        viewModel.testIntent {
+            handleReceivedImages(emptyList())
+        }
+        viewModel.testIntent {
+            handleReceivedImages(listOf(testUri))
+        }
+        viewModel.testIntent {
+            handleReceivedImages(listOf(testUri, testUri))
+        }
         viewModel.assert(initialState) {
             postedSideEffects(
                 MainSideEffect.ReceivedImage(uri = testUri),
@@ -578,7 +624,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handlePasteImages() {
+    fun test_handlePasteImages() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -590,9 +636,15 @@ class MainViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.handlePasteImages(emptyList())
-        viewModel.handlePasteImages(listOf(testUri))
-        viewModel.handlePasteImages(listOf(testUri, testUri))
+        viewModel.testIntent {
+            handlePasteImages(emptyList())
+        }
+        viewModel.testIntent {
+            handlePasteImages(listOf(testUri))
+        }
+        viewModel.testIntent {
+            handlePasteImages(listOf(testUri, testUri))
+        }
         viewModel.assert(initialState) {
             postedSideEffects(
                 MainSideEffect.PasteImagesNone,
