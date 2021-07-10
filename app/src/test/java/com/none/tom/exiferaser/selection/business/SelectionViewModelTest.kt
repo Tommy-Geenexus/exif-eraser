@@ -43,17 +43,19 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import strikt.api.expectThat
 import strikt.assertions.isTrue
 
+@ExperimentalCoroutinesApi
 @ExperimentalContracts
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
@@ -93,7 +95,7 @@ class SelectionViewModelTest {
     )
 
     @Test
-    fun test_readSelection() {
+    fun test_readSelection() = runBlockingTest {
         coEvery {
             selectionRepository.getSelection(dropFirstN = 0)
         } returns flowOf(testImageSelection)
@@ -105,9 +107,9 @@ class SelectionViewModelTest {
             settingsRepository = settingsRepository
         ).test(
             initialState = initialState,
-            isolateFlow = false,
-            runOnCreate = true
+            isolateFlow = false
         )
+        viewModel.runOnCreate()
         coVerify(exactly = 1) {
             selectionRepository.getSelection(dropFirstN = 0)
         }
@@ -117,7 +119,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_prepareReport() {
+    fun test_prepareReport() = runBlockingTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -127,14 +129,16 @@ class SelectionViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.prepareReport()
+        viewModel.testIntent {
+            prepareReport()
+        }
         viewModel.assert(initialState) {
             postedSideEffects(SelectionSideEffect.PrepareReport(listOf(testSummary)))
         }
     }
 
     @Test
-    fun test_shareImages() {
+    fun test_shareImages() = runBlockingTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -144,14 +148,16 @@ class SelectionViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.shareImages()
+        viewModel.testIntent {
+            shareImages()
+        }
         viewModel.assert(initialState) {
             postedSideEffects(SelectionSideEffect.ShareImages(ArrayList(testUris)))
         }
     }
 
     @Test
-    fun test_shareImagesByDefault() {
+    fun test_shareImagesByDefault() = runBlockingTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -164,14 +170,16 @@ class SelectionViewModelTest {
         coEvery {
             settingsRepository.shouldShareImagesByDefaultSuspending()
         } returns true
-        viewModel.shareImagesByDefault()
+        viewModel.testIntent {
+            shareImagesByDefault()
+        }
         coVerify(exactly = 1) {
             settingsRepository.shouldShareImagesByDefaultSuspending()
         }
     }
 
     @Test
-    fun test_hasSavedImages() {
+    fun test_hasSavedImages() = runBlockingTest {
         val initialState = SelectionState(
             imagesSaved = 1
         )
@@ -181,11 +189,13 @@ class SelectionViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        expectThat(viewModel.hasSavedImages()).isTrue()
+        viewModel.testIntent {
+            expectThat(hasSavedImages()).isTrue()
+        }
     }
 
     @Test
-    fun test_handleUserImageSelection() {
+    fun test_handleUserImageSelection() = runBlockingTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -211,10 +221,12 @@ class SelectionViewModelTest {
             emit(Result.Handled(progress = PROGRESS_MAX))
             emit(Result.HandledAll)
         }
-        viewModel.handleUserImageSelection(
-            selection = testImageSelection,
-            treeUri = Uri.EMPTY
-        )
+        viewModel.testIntent {
+            handleUserImageSelection(
+                selection = testImageSelection,
+                treeUri = Uri.EMPTY
+            )
+        }
         coVerify(ordering = Ordering.ALL) {
             settingsRepository.shouldPreserveImageOrientationSuspending()
             settingsRepository.getDefaultDisplayNameSuffix()
@@ -256,7 +268,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_handleUserImagesSelection() {
+    fun test_handleUserImagesSelection() = runBlockingTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -284,10 +296,12 @@ class SelectionViewModelTest {
             emit(Result.Handled(progress = PROGRESS_MAX))
             emit(Result.HandledAll)
         }
-        viewModel.handleUserImagesSelection(
-            selection = testImagesSelection,
-            treeUri = Uri.EMPTY
-        )
+        viewModel.testIntent {
+            handleUserImagesSelection(
+                selection = testImagesSelection,
+                treeUri = Uri.EMPTY
+            )
+        }
         coVerify(ordering = Ordering.ALL) {
             settingsRepository.shouldPreserveImageOrientationSuspending()
             settingsRepository.getDefaultDisplayNameSuffix()
@@ -353,7 +367,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_handleUnsupportedSelection() {
+    fun test_handleUnsupportedSelection() = runBlockingTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -361,7 +375,9 @@ class SelectionViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
         ).test(initialState)
-        viewModel.handleUnsupportedSelection()
+        viewModel.testIntent {
+            handleUnsupportedSelection()
+        }
         viewModel.assert(initialState) {
             states(
                 {

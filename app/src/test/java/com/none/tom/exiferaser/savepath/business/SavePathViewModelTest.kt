@@ -30,13 +30,15 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class SavePathViewModelTest {
@@ -46,7 +48,7 @@ class SavePathViewModelTest {
     private val testUri = ContentResolver.SCHEME_CONTENT.toUri()
 
     @Test
-    fun test_verifyHasPrivilegedDefaultSavePath() {
+    fun test_verifyHasPrivilegedDefaultSavePath() = runBlockingTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -58,14 +60,18 @@ class SavePathViewModelTest {
         coEvery {
             settingsRepository.hasPrivilegedDefaultSavePath()
         } returns true
-        viewModel.verifyHasPrivilegedDefaultSavePath()
+        viewModel.testIntent {
+            verifyHasPrivilegedDefaultSavePath()
+        }
         coVerify(exactly = 1) {
             settingsRepository.hasPrivilegedDefaultSavePath()
         }
         coEvery {
             settingsRepository.hasPrivilegedDefaultSavePath()
         } returns false
-        viewModel.verifyHasPrivilegedDefaultSavePath()
+        viewModel.testIntent {
+            verifyHasPrivilegedDefaultSavePath()
+        }
         coVerify(exactly = 2) {
             settingsRepository.hasPrivilegedDefaultSavePath()
         }
@@ -82,7 +88,7 @@ class SavePathViewModelTest {
     }
 
     @Test
-    fun test_chooseSelectionSavePath() {
+    fun test_chooseSelectionSavePath() = runBlockingTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -91,11 +97,15 @@ class SavePathViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.chooseSelectionSavePath(testUri)
+        viewModel.testIntent {
+            chooseSelectionSavePath(testUri)
+        }
         coEvery {
             settingsRepository.getDefaultOpenPathSuspending()
         } returns testUri
-        viewModel.chooseSelectionSavePath(Uri.EMPTY)
+        viewModel.testIntent {
+            chooseSelectionSavePath(Uri.EMPTY)
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultOpenPathSuspending()
         }
@@ -109,7 +119,7 @@ class SavePathViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_navigateToSelection() {
+    fun test_navigateToSelection() = runBlockingTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -118,12 +128,18 @@ class SavePathViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.navigateToSelection(null)
-        viewModel.navigateToSelection(testUri)
+        viewModel.testIntent {
+            navigateToSelection(null)
+        }
+        viewModel.testIntent {
+            navigateToSelection(testUri)
+        }
         coEvery {
             settingsRepository.getDefaultSavePathSuspending()
         } returns testUri
-        viewModel.navigateToSelection(Uri.EMPTY)
+        viewModel.testIntent {
+            navigateToSelection(Uri.EMPTY)
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultSavePathSuspending()
         }

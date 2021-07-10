@@ -29,17 +29,19 @@ import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.none.tom.exiferaser.update.data.UpdateResult
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 
+@ExperimentalCoroutinesApi
 class UpdateViewModelTest {
 
     private val updateRepository = mockk<UpdateRepository>()
 
     @Test
-    fun test_beginOrResumeAppUpdate() {
+    fun test_beginOrResumeAppUpdate() = runBlockingTest {
         val initialState = UpdateState
         val viewModel = UpdateViewModel(updateRepository).test(initialState = initialState)
         val info = mockk<AppUpdateInfo>()
@@ -54,10 +56,12 @@ class UpdateViewModelTest {
             emit(UpdateResult.InProgress(progress = PROGRESS_MAX))
             emit(UpdateResult.ReadyToInstall)
         }
-        viewModel.beginOrResumeAppUpdate(
-            info = info,
-            onBeginUpdate = onBeginUpdate
-        )
+        viewModel.testIntent {
+            beginOrResumeAppUpdate(
+                info = info,
+                onBeginUpdate = onBeginUpdate
+            )
+        }
         viewModel.assert(initialState) {
             postedSideEffects(
                 UpdateSideEffect.UpdateFailed,
@@ -69,7 +73,7 @@ class UpdateViewModelTest {
     }
 
     @Test
-    fun test_checkAppUpdateAvailability() {
+    fun test_checkAppUpdateAvailability() = runBlockingTest {
         val initialState = UpdateState
         val viewModel = UpdateViewModel(updateRepository).test(
             initialState = initialState,
@@ -85,19 +89,27 @@ class UpdateViewModelTest {
         coEvery {
             updateRepository.getAppUpdatePriority(info)
         } returns UpdatePriority.Low
-        viewModel.checkAppUpdateAvailability()
+        viewModel.testIntent {
+            checkAppUpdateAvailability()
+        }
         coEvery {
             updateRepository.getAppUpdatePriority(info)
         } returns UpdatePriority.Medium
-        viewModel.checkAppUpdateAvailability()
+        viewModel.testIntent {
+            checkAppUpdateAvailability()
+        }
         coEvery {
             updateRepository.getAppUpdatePriority(info)
         } returns UpdatePriority.High
-        viewModel.checkAppUpdateAvailability()
+        viewModel.testIntent {
+            checkAppUpdateAvailability()
+        }
         coEvery {
             updateRepository.isAppUpdateAvailableOrInProgress(info)
         } returns false
-        viewModel.checkAppUpdateAvailability()
+        viewModel.testIntent {
+            checkAppUpdateAvailability()
+        }
         viewModel.assert(initialState) {
             postedSideEffects(
                 UpdateSideEffect.UpdateAvailable(
@@ -117,28 +129,36 @@ class UpdateViewModelTest {
     }
 
     @Test
-    fun test_handleAppUpdateResult() {
+    fun test_handleAppUpdateResult() = runBlockingTest {
         val initialState = UpdateState
         val viewModel = UpdateViewModel(updateRepository).test(
             initialState = initialState,
             isolateFlow = false
         )
-        viewModel.handleAppUpdateResult(
-            result = -1, // Activity.RESULT_OK
-            immediateUpdate = false
-        )
-        viewModel.handleAppUpdateResult(
-            result = -1, // Activity.RESULT_OK
-            immediateUpdate = true
-        )
-        viewModel.handleAppUpdateResult(
-            result = 0, // Activity.RESULT_CANCELLED
-            immediateUpdate = false
-        )
-        viewModel.handleAppUpdateResult(
-            result = 0, // Activity.RESULT_CANCELLED
-            immediateUpdate = true
-        )
+        viewModel.testIntent {
+            handleAppUpdateResult(
+                result = -1, // Activity.RESULT_OK
+                immediateUpdate = false
+            )
+        }
+        viewModel.testIntent {
+            handleAppUpdateResult(
+                result = -1, // Activity.RESULT_OK
+                immediateUpdate = true
+            )
+        }
+        viewModel.testIntent {
+            handleAppUpdateResult(
+                result = 0, // Activity.RESULT_CANCELLED
+                immediateUpdate = false
+            )
+        }
+        viewModel.testIntent {
+            handleAppUpdateResult(
+                result = 0, // Activity.RESULT_CANCELLED
+                immediateUpdate = true
+            )
+        }
         viewModel.assert(initialState) {
             postedSideEffects(UpdateSideEffect.UpdateCancelled)
         }

@@ -23,25 +23,29 @@ package com.none.tom.exiferaser.details.business
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import org.orbitmvi.orbit.assert
 import org.orbitmvi.orbit.test
 
+@ExperimentalCoroutinesApi
 class DetailsViewModelTest {
 
     @Test
-    fun test_handleImageDetails() {
+    fun test_handleImageDetails() = runBlockingTest {
         val initialState = DetailsState()
         val viewModel = DetailsViewModel(SavedStateHandle()).test(initialState)
-        viewModel.handleImageDetails(
-            extension = EXTENSION_JPEG,
-            mimeType = MIME_TYPE_JPEG,
-            containsIccProfile = true,
-            containsExif = true,
-            containsPhotoshopImageResources = true,
-            containsXmp = true,
-            containsExtendedXmp = true
-        )
+        viewModel.testIntent {
+            handleImageDetails(
+                extension = EXTENSION_JPEG,
+                mimeType = MIME_TYPE_JPEG,
+                containsIccProfile = true,
+                containsExif = true,
+                containsPhotoshopImageResources = true,
+                containsXmp = true,
+                containsExtendedXmp = true
+            )
+        }
         viewModel.assert(initialState) {
             states(
                 {
