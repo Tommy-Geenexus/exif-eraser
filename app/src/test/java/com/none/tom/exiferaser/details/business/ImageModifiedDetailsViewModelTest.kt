@@ -29,12 +29,12 @@ import org.junit.Test
 import org.orbitmvi.orbit.test
 
 @ExperimentalCoroutinesApi
-class DetailsViewModelTest {
+class ImageModifiedDetailsViewModelTest {
 
     @Test
     fun test_handleImageDetails() = runBlockingTest {
-        val initialState = DetailsState()
-        val viewModel = DetailsViewModel(SavedStateHandle()).test(initialState)
+        val initialState = ImageModifiedDetailsState()
+        val viewModel = ImageModifiedDetailsViewModel(SavedStateHandle()).test(initialState)
         viewModel.testIntent {
             handleImageDetails(
                 extension = EXTENSION_JPEG,

@@ -26,7 +26,11 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Summary
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -36,12 +40,14 @@ import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@ExperimentalContracts
 @ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
 class ReportViewModelTest {
 
     private val testUri = ContentResolver.SCHEME_CONTENT.toUri()
+    private val imageRepository = mockk<ImageRepository>()
 
     private val summary = Summary(
         displayName = "test.jpg",
@@ -61,7 +67,10 @@ class ReportViewModelTest {
     @Test
     fun test_handleImageSummaries() = runBlockingTest {
         val initialState = ReportState()
-        val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
+        val viewModel = ReportViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageRepository = imageRepository
+        ).test(initialState)
         val summaries = listOf(summary)
         viewModel.testIntent {
             handleImageSummaries(summaries)
@@ -79,7 +88,10 @@ class ReportViewModelTest {
     @Test
     fun test_handleViewImage() = runBlockingTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
-        val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
+        val viewModel = ReportViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageRepository = imageRepository
+        ).test(initialState)
         viewModel.testIntent {
             handleViewImage(position = 0)
         }
@@ -90,15 +102,18 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageDetails() = runBlockingTest {
+    fun test_handleImageModifiedDetails() = runBlockingTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
-        val viewModel = ReportViewModel(savedStateHandle = SavedStateHandle()).test(initialState)
+        val viewModel = ReportViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageRepository = imageRepository
+        ).test(initialState)
         viewModel.testIntent {
-            handleImageDetails(position = 0)
+            handleImageModifiedDetails(position = 0)
         }
         viewModel.assert(initialState) {
             postedSideEffects(
-                ReportSideEffect.NavigateToDetails(
+                ReportSideEffect.NavigateToImageModifiedDetails(
                     displayName = summary.displayName,
                     extension = summary.extension,
                     mimeType = summary.mimeType,
@@ -108,6 +123,31 @@ class ReportViewModelTest {
                     containsXmp = summary.containsXmp,
                     containsExtendedXmp = summary.containsExtendedXmp
                 )
+            )
+        }
+    }
+
+    @ExperimentalContracts
+    @Test
+    fun test_handleImageSavedDetails() = runBlockingTest {
+        val initialState = ReportState(imageSummaries = listOf(summary))
+        val viewModel = ReportViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageRepository = imageRepository
+        ).test(initialState)
+        val imagePath = ContentResolver.SCHEME_CONTENT
+        coEvery {
+            imageRepository.getDocumentPathOrNull(summary.imageUri)
+        } returns imagePath
+        viewModel.testIntent {
+            handleImageSavedDetails(position = 0)
+        }
+        coVerify(exactly = 1) {
+            imageRepository.getDocumentPathOrNull(summary.imageUri)
+        }
+        viewModel.assert(initialState) {
+            postedSideEffects(
+                ReportSideEffect.NavigateToImageSavedDetails(imagePath)
             )
         }
     }

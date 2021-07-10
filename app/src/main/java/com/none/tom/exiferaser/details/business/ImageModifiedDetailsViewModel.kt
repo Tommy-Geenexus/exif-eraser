@@ -30,14 +30,14 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(
+class ImageModifiedDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-) : ContainerHost<DetailsState, Nothing>,
+) : ContainerHost<ImageModifiedDetailsState, Nothing>,
     ViewModel() {
 
-    override val container = container<DetailsState, Nothing>(
+    override val container = container<ImageModifiedDetailsState, Nothing>(
         savedStateHandle = savedStateHandle,
-        initialState = DetailsState()
+        initialState = ImageModifiedDetailsState()
     )
 
     fun handleImageDetails(

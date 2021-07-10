@@ -58,6 +58,7 @@
     <string name="image_file">Image file</string>
     <string name="image_files">Image files</string>
     <string name="image_orientation">Preserve orientation</string>
+    <string name="image_path">Image path</string>
     <string name="image_share_by_default">Share by default</string>
     <string name="image_supported_formats">Supported image formats</string>
 

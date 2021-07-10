@@ -48,7 +48,8 @@ import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentReportBinding
-import com.none.tom.exiferaser.details.ui.DetailsFragment
+import com.none.tom.exiferaser.details.ui.ImageModifiedDetailsFragment
+import com.none.tom.exiferaser.details.ui.ImageSavedDetailsFragment
 import com.none.tom.exiferaser.report.ReportConstraintLayout
 import com.none.tom.exiferaser.report.business.ReportSideEffect
 import com.none.tom.exiferaser.report.business.ReportState
@@ -209,8 +210,12 @@ class ReportFragment :
         viewModel.handleViewImage(position)
     }
 
-    override fun onModifiedSelected(position: Int) {
-        viewModel.handleImageDetails(position)
+    override fun onImageModifiedSelected(position: Int) {
+        viewModel.handleImageModifiedDetails(position)
+    }
+
+    override fun onImageSavedSelected(position: Int) {
+        viewModel.handleImageSavedDetails(position)
     }
 
     private fun renderState(state: ReportState) {
@@ -228,8 +233,8 @@ class ReportFragment :
                     }
                 )
             }
-            is ReportSideEffect.NavigateToDetails -> {
-                DetailsFragment.newInstance(
+            is ReportSideEffect.NavigateToImageModifiedDetails -> {
+                ImageModifiedDetailsFragment.newInstance(
                     displayName = sideEffect.displayName,
                     extension = sideEffect.extension,
                     mimeType = sideEffect.mimeType,
@@ -238,7 +243,12 @@ class ReportFragment :
                     containsPhotoshopImageResources = sideEffect.containsPhotoshopImageResources,
                     containsXmp = sideEffect.containsXmp,
                     containsExtendedXmp = sideEffect.containsExtendedXmp
-                ).show(childFragmentManager, DetailsFragment.TAG)
+                ).show(childFragmentManager, ImageModifiedDetailsFragment.TAG)
+            }
+            is ReportSideEffect.NavigateToImageSavedDetails -> {
+                ImageSavedDetailsFragment
+                    .newInstance(sideEffect.imagePath)
+                    .show(childFragmentManager, ImageSavedDetailsFragment.TAG)
             }
         }
     }

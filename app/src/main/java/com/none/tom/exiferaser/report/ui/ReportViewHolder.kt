@@ -66,36 +66,39 @@ class ReportViewHolder(
                 if (imageModified) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_flaky)
+                    setChipIconResource(R.drawable.ic_edit)
                     setTextColor(colorOk)
                     setText(R.string.modified)
                     setOnClickListener {
-                        listener.onModifiedSelected(absoluteAdapterPosition)
+                        listener.onImageModifiedSelected(absoluteAdapterPosition)
                     }
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_edit_failed)
                     setTextColor(colorError)
                     setText(R.string.unmodified)
                 }
-                isFocusable = imageModified
-                isClickable = imageModified
+                isEnabled = imageModified
             }
             binding.saved.apply {
                 if (imageSaved) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_save)
                     setTextColor(colorOk)
                     setText(R.string.saved)
+                    setOnClickListener {
+                        listener.onImageSavedSelected(absoluteAdapterPosition)
+                    }
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_save_failed)
                     setTextColor(colorError)
                     setText(R.string.unsaved)
                 }
+                isEnabled = imageSaved
             }
         }
     }
