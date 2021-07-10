@@ -18,19 +18,36 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.details.business
+package com.none.tom.exiferaser.details.ui
 
-import android.os.Parcelable
-import com.none.tom.exiferaser.Empty
-import kotlinx.parcelize.Parcelize
+import android.app.Dialog
+import android.os.Bundle
+import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import dagger.hilt.android.AndroidEntryPoint
 
-@Parcelize
-data class DetailsState(
-    val extension: String = String.Empty,
-    val mimeType: String = String.Empty,
-    val containsIccProfile: Boolean = false,
-    val containsExif: Boolean = false,
-    val containsPhotoshopImageResources: Boolean = false,
-    val containsXmp: Boolean = false,
-    val containsExtendedXmp: Boolean = false
-) : Parcelable
+@AndroidEntryPoint
+class ImageSavedDetailsFragment : DialogFragment() {
+
+    companion object {
+
+        const val TAG = "SaveDetailsFragment"
+
+        private const val KEY_IMAGE_PATH = TOP_LEVEL_PACKAGE_NAME + "IMAGE_PATH"
+
+        fun newInstance(imagePath: String) = ImageSavedDetailsFragment().apply {
+            arguments = bundleOf(KEY_IMAGE_PATH to imagePath)
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(R.string.image_path)
+            .setMessage(requireArguments().getString(KEY_IMAGE_PATH))
+            .setPositiveButton(android.R.string.ok, null)
+            .create()
+    }
+}

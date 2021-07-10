@@ -46,7 +46,8 @@ class ReportAdapter(
 
     interface Listener {
         fun onImageThumbnailSelected(position: Int)
-        fun onModifiedSelected(position: Int)
+        fun onImageModifiedSelected(position: Int)
+        fun onImageSavedSelected(position: Int)
     }
 
     override fun onCreateViewHolder(

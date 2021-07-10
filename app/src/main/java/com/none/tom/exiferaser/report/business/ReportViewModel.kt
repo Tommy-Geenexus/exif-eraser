@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.report.business
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.isNotNullOrEmpty
+import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Summary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,9 +34,11 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
+@ExperimentalContracts
 @HiltViewModel
 class ReportViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val imageRepository: ImageRepository
 ) : ContainerHost<ReportState, ReportSideEffect>,
     ViewModel() {
 
@@ -50,7 +53,6 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    @ExperimentalContracts
     fun handleViewImage(position: Int) = intent {
         val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
         if (imageUri.isNotNullOrEmpty()) {
@@ -58,11 +60,11 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun handleImageDetails(position: Int) = intent {
+    fun handleImageModifiedDetails(position: Int) = intent {
         val summary = state.imageSummaries.getOrNull(position)
         if (summary != null) {
             postSideEffect(
-                ReportSideEffect.NavigateToDetails(
+                ReportSideEffect.NavigateToImageModifiedDetails(
                     displayName = summary.displayName,
                     extension = summary.extension,
                     mimeType = summary.mimeType,
@@ -73,6 +75,16 @@ class ReportViewModel @Inject constructor(
                     containsExtendedXmp = summary.containsExtendedXmp,
                 )
             )
+        }
+    }
+
+    fun handleImageSavedDetails(position: Int) = intent {
+        val summary = state.imageSummaries.getOrNull(position)
+        if (summary != null) {
+            val imagePath = imageRepository.getDocumentPathOrNull(summary.imageUri)
+            if (!imagePath.isNullOrEmpty()) {
+                postSideEffect(ReportSideEffect.NavigateToImageSavedDetails(imagePath))
+            }
         }
     }
 }

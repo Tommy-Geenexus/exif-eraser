@@ -37,15 +37,15 @@ import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
-import com.none.tom.exiferaser.databinding.FragmentDetailsBinding
-import com.none.tom.exiferaser.details.business.DetailsState
-import com.none.tom.exiferaser.details.business.DetailsViewModel
+import com.none.tom.exiferaser.databinding.FragmentImageModifiedDetailsBinding
+import com.none.tom.exiferaser.details.business.ImageModifiedDetailsState
+import com.none.tom.exiferaser.details.business.ImageModifiedDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class DetailsFragment : DialogFragment() {
+class ImageModifiedDetailsFragment : DialogFragment() {
 
     companion object {
 
@@ -69,7 +69,7 @@ class DetailsFragment : DialogFragment() {
             containsPhotoshopImageResources: Boolean,
             containsXmp: Boolean,
             containsExtendedXmp: Boolean
-        ) = DetailsFragment().apply {
+        ) = ImageModifiedDetailsFragment().apply {
             arguments = bundleOf(
                 KEY_DISPLAY_NAME to displayName,
                 KEY_EXTENSION to extension,
@@ -83,15 +83,17 @@ class DetailsFragment : DialogFragment() {
         }
     }
 
-    private val viewModel: DetailsViewModel by viewModels()
-    private var _binding: FragmentDetailsBinding? = null
-    private val binding: FragmentDetailsBinding get() = _binding!!
+    private val viewModelImageModified: ImageModifiedDetailsViewModel by viewModels()
+    private var _binding: FragmentImageModifiedDetailsBinding? = null
+    private val binding: FragmentImageModifiedDetailsBinding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = FragmentDetailsBinding.inflate(LayoutInflater.from(requireContext()))
+        _binding = FragmentImageModifiedDetailsBinding.inflate(
+            LayoutInflater.from(requireContext())
+        )
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.container.stateFlow.collect { state ->
+                viewModelImageModified.container.stateFlow.collect { state ->
                     renderState(state)
                 }
             }
@@ -104,7 +106,7 @@ class DetailsFragment : DialogFragment() {
             .apply {
                 setOnShowListener {
                     arguments?.let { args ->
-                        viewModel.handleImageDetails(
+                        viewModelImageModified.handleImageDetails(
                             extension = args.getString(KEY_EXTENSION, String.Empty),
                             mimeType = args.getString(KEY_MIME_TYPE, String.Empty),
                             containsIccProfile = args.getBoolean(KEY_ICCP),
@@ -123,7 +125,7 @@ class DetailsFragment : DialogFragment() {
         _binding = null
     }
 
-    private fun renderState(state: DetailsState) {
+    private fun renderState(state: ImageModifiedDetailsState) {
         binding.apply {
             extension.apply {
                 if (state.extension.isNotEmpty()) {
@@ -141,12 +143,12 @@ class DetailsFragment : DialogFragment() {
                 if (state.containsIccProfile) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_block)
                     setTextColor(colorError)
                 }
             }
@@ -154,12 +156,12 @@ class DetailsFragment : DialogFragment() {
                 if (state.containsExif) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_block)
                     setTextColor(colorError)
                 }
             }
@@ -167,12 +169,12 @@ class DetailsFragment : DialogFragment() {
                 if (state.containsXmp) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_block)
                     setTextColor(colorError)
                 }
             }
@@ -180,12 +182,12 @@ class DetailsFragment : DialogFragment() {
                 if (state.containsPhotoshopImageResources) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_block)
                     setTextColor(colorError)
                 }
                 isVisible = state.mimeType == MIME_TYPE_JPEG
@@ -194,12 +196,12 @@ class DetailsFragment : DialogFragment() {
                 if (state.containsExtendedXmp) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_check)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_clear)
+                    setChipIconResource(R.drawable.ic_block)
                     setTextColor(colorError)
                 }
                 isVisible = state.mimeType == MIME_TYPE_JPEG
