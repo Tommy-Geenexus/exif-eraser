@@ -41,6 +41,8 @@
     <string name="image_file">Bilddatei</string>
     <string name="image_files">Bilddateien</string>
     <string name="image_orientation">Ausrichtung beibehalten</string>
+    <string name="image_path">Bildpfad</string>
+    <string name="image_path_not_found">Bildpfad nicht gefunden</string>
     <string name="image_share_by_default">Standardmäßig teilen</string>
     <string name="image_supported_formats">Unterstützte Bildformate</string>
 
