@@ -87,14 +87,6 @@ detekt {
     baseline = file("$projectDir/config/baseline.xml")
 }
 
-// Workaround for https://github.com/google/dagger/issues/2684
-kapt {
-    javacOptions {
-        option("-Adagger.fastInit=ENABLED")
-        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-    }
-}
-
 ktlint {
     android.set(true)
     filter {
