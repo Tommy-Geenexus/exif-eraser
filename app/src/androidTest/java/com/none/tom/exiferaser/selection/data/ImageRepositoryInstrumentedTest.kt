@@ -245,8 +245,8 @@ class ImageRepositoryInstrumentedTest {
                         summary = expectedSummaries[index],
                         progress = PROGRESS_MAX
                     )
-                    expectThat(expectItem()).isA<Result.HandledAll>()
-                    expectComplete()
+                    expectThat(awaitItem()).isA<Result.HandledAll>()
+                    awaitComplete()
                 }
             }
         }
@@ -275,8 +275,8 @@ class ImageRepositoryInstrumentedTest {
                     progress = (index + 1).toProgress(selection.size)
                 )
             }
-            expectThat(expectItem()).isA<Result.HandledAll>()
-            expectComplete()
+            expectThat(awaitItem()).isA<Result.HandledAll>()
+            awaitComplete()
         }
     }
 
@@ -284,13 +284,13 @@ class ImageRepositoryInstrumentedTest {
         summary: Summary,
         @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) progress: Int
     ) {
-        with(expectItem()) {
+        with(awaitItem()) {
             expectThat(this).isA<Result.Report>()
             expectThat((this as Result.Report).summary) {
                 isEqualTo(summary)
             }
         }
-        with(expectItem()) {
+        with(awaitItem()) {
             expectThat(this).isA<Result.Handled>()
             expectThat((this as Result.Handled).progress).isEqualTo(progress)
         }

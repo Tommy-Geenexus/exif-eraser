@@ -4,6 +4,7 @@ buildscript {
 
     repositories {
         google()
+        //noinspection JcenterRepositoryObsolete
         jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -11,7 +12,7 @@ buildscript {
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-parcelize-compiler:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_version"
@@ -29,6 +30,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        //noinspection JcenterRepositoryObsolete
         jcenter()
     }
 }

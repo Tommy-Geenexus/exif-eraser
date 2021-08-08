@@ -1,3 +1,5 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-parcelize"
@@ -13,13 +15,13 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 apply from: "../dependencies.gradle"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.none.tom.exiferaser"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 19
         versionName "4.3.0"
 
@@ -35,7 +37,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 
     compileOptions {
@@ -79,7 +81,7 @@ tasks.named("dependencyUpdates").configure {
     }
 }
 
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+tasks.withType(Detekt).configureEach {
     jvmTarget = "1.8"
 }
 
