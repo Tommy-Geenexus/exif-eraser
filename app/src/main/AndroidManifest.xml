@@ -16,7 +16,8 @@
 
         <activity
             android:name="com.none.tom.exiferaser.ExifEraserActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
