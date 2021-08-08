@@ -25,6 +25,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavDeepLinkBuilder
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,8 +47,8 @@ class ExifEraserActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_ExifEraser)
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         handleSendIntent()
