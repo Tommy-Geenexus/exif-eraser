@@ -22,8 +22,10 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.ExifEraser.Launcher" parent="Theme.ExifEraser">
-        <item name="android:windowBackground">@drawable/splash</item>
+    <style name="Theme.ExifEraser.Launcher" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/color_teal_500_light</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.ExifEraser</item>
     </style>
 
     <style name="ThemeOverlay.ExifEraser.Sheet.Bottom" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
