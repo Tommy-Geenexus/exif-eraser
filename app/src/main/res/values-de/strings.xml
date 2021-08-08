@@ -4,6 +4,12 @@
 
     <string name="always">Immer</string>
 
+    <string name="app_update_download">Update wird heruntergeladen</string>
+    <string name="app_update_downloaded">Update erfolgreich heruntergeladen</string>
+    <string name="app_update_failed">Update fehlgeschlagen</string>
+    <string name="app_update_install">Hier klicken zum Installieren</string>
+    <string name="app_update_ready">Update bereit zur Installation</string>
+
     <string name="automatically">Automatisch</string>
 
     <string name="become_translator">Übersetzen helfen</string>
@@ -46,6 +52,8 @@
     <string name="image_supported_formats">Unterstützte Bildformate</string>
 
     <string name="images_modified">Bilder modifiziert</string>
+
+    <string name="install">Installieren</string>
 
     <string name="low_batt_only">Bei niedrigem Akkustand</string>
 
