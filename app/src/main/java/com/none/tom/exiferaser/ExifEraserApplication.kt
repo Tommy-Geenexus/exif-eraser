@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2020, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,8 +24,8 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class ExifEraserApplication : Application() {

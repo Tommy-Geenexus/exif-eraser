@@ -28,8 +28,6 @@ import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.squareup.wire.AnyMessage
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -37,6 +35,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class ImageSourceRepository @Inject constructor(

@@ -42,7 +42,6 @@ import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -54,6 +53,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import strikt.api.expectThat
 import strikt.assertions.isTrue
+import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalCoroutinesApi
 @ExperimentalContracts

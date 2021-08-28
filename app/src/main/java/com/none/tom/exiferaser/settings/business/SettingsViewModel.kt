@@ -29,13 +29,13 @@ import com.none.tom.exiferaser.settings.data.SettingsDelegate
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import kotlin.contracts.ExperimentalContracts
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @HiltViewModel

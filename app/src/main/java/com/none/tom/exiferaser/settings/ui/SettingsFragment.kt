@@ -55,9 +55,9 @@ import com.none.tom.exiferaser.setupToolbar
 import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportImageFormats
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @AndroidEntryPoint

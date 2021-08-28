@@ -39,8 +39,6 @@ import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.util.Collections
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
@@ -49,6 +47,8 @@ import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.util.Collections
+import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalCoroutinesApi
 @ExperimentalContracts
