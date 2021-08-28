@@ -82,9 +82,9 @@ import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @AndroidEntryPoint

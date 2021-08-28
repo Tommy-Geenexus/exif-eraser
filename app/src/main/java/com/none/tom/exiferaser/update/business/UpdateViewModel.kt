@@ -27,12 +27,12 @@ import com.none.tom.exiferaser.update.data.UpdatePriority
 import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.none.tom.exiferaser.update.data.UpdateResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
 @HiltViewModel
 class UpdateViewModel @Inject constructor(

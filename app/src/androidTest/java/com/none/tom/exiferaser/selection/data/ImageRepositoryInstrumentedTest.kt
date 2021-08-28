@@ -44,10 +44,6 @@ import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import com.none.tom.exiferaser.selection.toProgress
 import com.squareup.wire.AnyMessage
-import java.io.File
-import java.io.FileOutputStream
-import kotlin.contracts.ExperimentalContracts
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -61,6 +57,10 @@ import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
+import java.io.File
+import java.io.FileOutputStream
+import kotlin.contracts.ExperimentalContracts
+import kotlin.time.ExperimentalTime
 
 @ExperimentalCoroutinesApi
 @ExperimentalTime

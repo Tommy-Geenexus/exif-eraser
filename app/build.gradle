@@ -3,14 +3,15 @@ import io.gitlab.arturbosch.detekt.Detekt
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-parcelize"
-apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "org.jetbrains.kotlin.kapt"
-apply plugin: "dagger.hilt.android.plugin"
-apply plugin: "com.squareup.wire"
+apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "app.cash.exhaustive"
+apply plugin: "com.diffplug.spotless"
 apply plugin: "com.github.ben-manes.versions"
-apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "com.squareup.wire"
+apply plugin: "dagger.hilt.android.plugin"
 apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 apply from: "../dependencies.gradle"
 
@@ -32,7 +33,8 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
         }
     }
 
@@ -45,18 +47,22 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     packagingOptions {
-        exclude 'META-INF/AL2.0'
-        exclude 'META-INF/LGPL2.1'
+        exclude "META-INF/AL2.0"
+        exclude "META-INF/LGPL2.1"
     }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
+
     sourceSets {
         main.java.srcDirs += "$buildDir/generated/source/wire"
     }
@@ -70,7 +76,7 @@ wire {
 
 tasks.named("dependencyUpdates").configure {
     def isNonStable = { String version ->
-        def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { keyword ->
+        def stableKeyword = ["RELEASE", "FINAL", "GA"].any { keyword ->
             version.toUpperCase().contains(keyword)
         }
         def regex = /^[0-9,.v-]+(-r)?$/
@@ -91,9 +97,21 @@ detekt {
 
 ktlint {
     android.set(true)
+    disabledRules.set(["import-ordering"])
+
     filter {
         exclude { element -> element.file.path.contains("generated/") }
         include("**/kotlin/**")
+    }
+}
+
+spotless {
+    kotlin {
+        target("src/*/java/**/*.kt")
+        targetExclude("src/*/java/**/AnimationUtils.kt")
+        ktlint()
+        endWithNewline()
+        licenseHeaderFile rootProject.file("spotless/copyright.txt")
     }
 }
 

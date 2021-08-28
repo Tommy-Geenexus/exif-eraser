@@ -1,10 +1,11 @@
 ext {
     kotlin_version = "1.5.21"
     dagger_version = "2.38.1"
-    detekt_version = "1.17.1"
+    detekt_version = "1.18.0"
     exhaustive_version = "0.2.0"
     ktlint_version = "10.1.0"
     nav_version = "2.3.5"
+    spotless_version = "5.14.3"
     versions_version = "0.39.0"
     wire_version = "3.7.0"
 
@@ -31,7 +32,7 @@ ext {
     def roboelectric_version = "4.6.1"
     def strikt_version = "0.31.0"
     def test_version = "1.4.0"
-    def timber_version = "4.7.1"
+    def timber_version = "5.0.1"
     def turbine_version = "0.6.0"
 
     def leak_canary_version = "2.7"

@@ -32,6 +32,7 @@ import com.none.tom.exiferaser.areMimeTypesSupported
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 class MainContentReceiver(
     private val listener: Listener
 ) : OnReceiveContentListener {
@@ -45,7 +46,6 @@ class MainContentReceiver(
         )
     }
 
-    @ExperimentalContracts
     override fun onReceiveContent(
         view: View,
         payload: ContentInfoCompat

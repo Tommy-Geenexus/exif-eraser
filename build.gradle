@@ -12,15 +12,16 @@ buildscript {
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        classpath 'com.android.tools.build:gradle:7.0.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-parcelize-compiler:$kotlin_version"
+        classpath "app.cash.exhaustive:exhaustive-gradle:$exhaustive_version"
+        classpath "com.android.tools.build:gradle:7.0.1"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotless_version"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$versions_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_version"
         classpath "com.squareup.wire:wire-gradle-plugin:$wire_version"
-        classpath "app.cash.exhaustive:exhaustive-gradle:$exhaustive_version"
-        classpath "com.github.ben-manes:gradle-versions-plugin:$versions_version"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlint_version"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-parcelize-compiler:$kotlin_version"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlint_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
