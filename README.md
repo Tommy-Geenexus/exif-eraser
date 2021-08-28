@@ -1,9 +1,10 @@
 [![License](https://img.shields.io/github/license/Tommy-Geenexus/exif-eraser)](https://mit-license.org/)
-[![Assemble](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Assemble/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AAssemble)
-[![Unit Tests](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Unit%20Tests/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3A%22Unit+Tests%22)
-[![Instrumentation Tests](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Instrumentation%20Tests/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3A%22Instrumentation+Tests%22)
-[![Detekt](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Detekt/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3ADetekt)
-[![Ktlint](https://github.com/Tommy-Geenexus/exif-eraser/workflows/Ktlint/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions?query=workflow%3AKtlint)
+[![Assemble](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml)
+[![Unit Tests](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml)
+[![Instrumentation Tests](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_instrumented.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_instrumented.yml)
+[![Detekt](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/detekt.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/detekt.yml)
+[![Ktlint](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/ktlint.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/ktlint.yml)
+[![Spotless](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/spotless.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/spotless.yml)
 
 # ExifEraser
 ExifEraser is a modern, permissionless image metadata erasing application for Android 6.0+.
