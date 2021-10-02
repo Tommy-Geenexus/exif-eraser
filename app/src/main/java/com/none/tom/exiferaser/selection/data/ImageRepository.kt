@@ -24,7 +24,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -402,14 +401,10 @@ class ImageRepository @Inject constructor(
     suspend fun getDocumentPathOrNull(uri: Uri): String? {
         return withContext(dispatcher) {
             runCatching {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    DocumentsContract
-                        .findDocumentPath(context.contentResolver, uri)
-                        ?.path
-                        ?.lastOrNull()
-                } else {
-                    null
-                }
+                DocumentsContract
+                    .findDocumentPath(context.contentResolver, uri)
+                    ?.path
+                    ?.lastOrNull()
             }.getOrElse { exception ->
                 Timber.e(exception)
                 null

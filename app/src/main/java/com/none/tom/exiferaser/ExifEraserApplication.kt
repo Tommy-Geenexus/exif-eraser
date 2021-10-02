@@ -21,23 +21,16 @@
 package com.none.tom.exiferaser
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import com.none.tom.exiferaser.settings.data.SettingsRepository
+import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltAndroidApp
 class ExifEraserApplication : Application() {
 
-    @Inject
-    internal lateinit var settingsRepository: SettingsRepository
-
     override fun onCreate() {
         super.onCreate()
-        if (::settingsRepository.isInitialized) {
-            AppCompatDelegate.setDefaultNightMode(settingsRepository.getDefaultNightMode())
-        }
+        DynamicColors.applyToActivitiesIfAvailable(this)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

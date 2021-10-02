@@ -8,7 +8,7 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="?colorAccent"
+        android:backgroundTint="?attr/colorPrimaryContainer"
         app:layout_behavior=".report.ui.ReportFragmentBehaviour"
         app:shapeAppearance="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round">
 
@@ -18,25 +18,26 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_normal"
             android:drawablePadding="@dimen/spacing_small"
+            android:drawableTint="?attr/colorOnPrimaryContainer"
             android:gravity="center_vertical"
             android:text="@string/details"
-            android:textAppearance="@style/TextAppearance.ExifEraser.Button"
+            android:textColor="?attr/colorOnPrimaryContainer"
             app:drawableStartCompat="@drawable/ic_expand_less"
-            app:drawableTint="?attr/colorDrawableInverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            style="?attr/toolbarSurfaceStyle"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
             android:alpha="0"
+            android:elevation="@dimen/elevation_micro"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_expand_more"
-            app:title="@string/details"
-            app:titleTextColor="?attr/colorOnPrimary" />
+            app:navigationIconTint="?attr/colorControlNormal"
+            app:title="@string/details" />
 
         <View
             android:id="@+id/expand"

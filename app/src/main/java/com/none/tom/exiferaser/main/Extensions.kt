@@ -25,10 +25,7 @@ import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
-import android.view.View
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -37,40 +34,29 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.none.tom.exiferaser.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
 import kotlin.contracts.ExperimentalContracts
 
-fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
+fun FloatingActionButton.addIconAnimation(
     @DrawableRes iconResStart: Int,
-    @DrawableRes iconResEnd: Int,
-    @StringRes textResStart: Int,
-    @StringRes textResEnd: Int
+    @DrawableRes iconResEnd: Int
 ) {
-    setIconResource(iconResStart)
-    setText(textResStart)
+    setImageResource(iconResStart)
     tag = iconResStart
     val callback = object : Animatable2Compat.AnimationCallback() {
-
-        override fun onAnimationStart(drawable: Drawable?) {
-            shrink()
-        }
 
         override fun onAnimationEnd(drawableEnd: Drawable?) {
             AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
             tag = if (tag == iconResEnd) {
-                setIconResource(iconResStart)
-                setText(textResStart)
+                setImageResource(iconResStart)
                 iconResStart
             } else {
-                setIconResource(iconResEnd)
-                setText(textResEnd)
+                setImageResource(iconResEnd)
                 iconResEnd
             }
-            AnimatedVectorDrawableCompat.registerAnimationCallback(icon, this)
-            extend()
+            AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this)
         }
     }
     val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
@@ -83,13 +69,13 @@ fun ExtendedFloatingActionButton.addScaleAndIconAnimation(
             ) {
                 when (event) {
                     Lifecycle.Event.ON_START -> {
-                        AnimatedVectorDrawableCompat.registerAnimationCallback(icon, callback)
+                        AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, callback)
                     }
                     Lifecycle.Event.ON_STOP -> {
-                        if (icon is Animatable) {
-                            (icon as Animatable).stop()
+                        if (drawable is Animatable) {
+                            (drawable as Animatable).stop()
                         }
-                        AnimatedVectorDrawableCompat.unregisterAnimationCallback(icon, callback)
+                        AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawable, callback)
                     }
                     Lifecycle.Event.ON_DESTROY -> {
                         lifecycle.removeObserver(this)
@@ -129,23 +115,11 @@ fun RecyclerView.addItemTouchHelper(itemTouchHelper: ItemTouchHelper) {
     )
 }
 
-fun View.canReceiveContent(): Boolean {
-    val tag = tag as? String
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-        !tag.isNullOrEmpty() &&
-        tag == context.getString(R.string.image_files)
-}
-
-fun Context.hasImageClip(): Boolean {
-    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    return cm.hasPrimaryClip() && cm.primaryClipDescription?.areMimeTypesSupported() == true
-}
-
 @ExperimentalContracts
 fun Context.getClipImages(): List<Uri> {
     val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val resultSet = linkedSetOf<Uri>()
-    if (hasImageClip()) {
+    if (cm.hasPrimaryClip() && cm.primaryClipDescription?.areMimeTypesSupported() == true) {
         cm.primaryClip?.addUrisToSet(resultSet)
     }
     return resultSet.toList()

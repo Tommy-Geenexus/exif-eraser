@@ -42,6 +42,22 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
+    data class DefaultNightMode(
+        val value: Int
+    ) : MainSideEffect()
+
+    @Parcelize
+    object DeleteCameraImages : MainSideEffect()
+
+    @Parcelize
+    data class ExternalPicturesDeleted(
+        val success: Boolean
+    ) : MainSideEffect()
+
+    @Parcelize
+    object ImageSourcesReadComplete : MainSideEffect()
+
+    @Parcelize
     data class LaunchCamera(
         val fileProviderImagePath: Uri
     ) : MainSideEffect()
@@ -54,6 +70,9 @@ sealed class MainSideEffect : Parcelable {
 
     @Parcelize
     object NavigateToSettings : MainSideEffect()
+
+    @Parcelize
+    object NavigateToHelp : MainSideEffect()
 
     @Parcelize
     data class PasteImages(
@@ -73,13 +92,16 @@ sealed class MainSideEffect : Parcelable {
         val uris: List<Uri>
     ) : MainSideEffect()
 
-    @Parcelize
-    data class ShortcutHandle(
-        val shortcutAction: String
-    ) : MainSideEffect()
+    sealed class Shortcut : MainSideEffect() {
 
-    @Parcelize
-    data class ShortcutReportUsed(
-        val shortcutAction: String
-    ) : MainSideEffect()
+        @Parcelize
+        data class Handle(
+            val shortcutAction: String
+        ) : MainSideEffect()
+
+        @Parcelize
+        data class ReportUsage(
+            val shortcutAction: String
+        ) : MainSideEffect()
+    }
 }

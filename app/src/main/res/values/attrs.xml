@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorOk" format="color" />
-    <attr name="colorAccept" format="color" />
-    <attr name="colorDrawable" format="reference" />
-    <attr name="colorDrawableInverse" format="reference" />
 </resources>

@@ -2,7 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/fragment_main">
+
+    <action
+        android:id="@+id/global_to_main"
+        app:destination="@id/fragment_main"
+        app:popUpTo="@id/fragment_main"
+        app:popUpToInclusive="true" />
 
     <fragment
         android:id="@+id/fragment_main"
@@ -17,23 +24,31 @@
 
         <argument
             android:name="image_selection"
+            android:defaultValue="@null"
             app:argType="android.net.Uri"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
 
         <argument
             android:name="images_selection"
+            android:defaultValue="@null"
             app:argType="android.net.Uri[]"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/main_to_delete_camera_images"
+            app:destination="@id/fragment_delete_camera_images" />
 
         <action
             android:id="@+id/main_to_settings"
             app:destination="@id/fragment_settings" />
 
         <action
+            android:id="@+id/main_to_help"
+            app:destination="@id/fragment_help" />
+
+        <action
             android:id="@+id/main_to_selection_save_path"
-            app:destination="@id/fragment_selection_save_path" />
+            app:destination="@id/fragment_save_path" />
 
         <action
             android:id="@+id/main_to_selection"
@@ -41,8 +56,14 @@
     </fragment>
 
     <dialog
-        android:id="@+id/fragment_selection_save_path"
-        android:name="com.none.tom.exiferaser.savepath.ui.SavePathFragment">
+        android:id="@+id/fragment_delete_camera_images"
+        android:name="com.none.tom.exiferaser.main.ui.DeleteCameraImagesFragment"
+        tools:layout="@layout/fragment_delete_camera_images" />
+
+    <dialog
+        android:id="@+id/fragment_save_path"
+        android:name="com.none.tom.exiferaser.savepath.ui.SavePathFragment"
+        tools:layout="@layout/fragment_save_path">
 
         <action
             android:id="@+id/selection_save_path_to_selection"
@@ -51,16 +72,41 @@
 
     <fragment
         android:id="@+id/fragment_settings"
-        android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment">
+        android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment"
+        tools:layout="@layout/fragment_settings">
 
         <action
-            android:id="@+id/settings_to_delete_camera_images"
-            app:destination="@id/fragment_delete_camera_images" />
+            android:id="@+id/settings_to_default_display_name_suffix"
+            app:destination="@id/fragment_default_display_name_suffix" />
+
+        <action
+            android:id="@+id/settings_to_default_night_mode"
+            app:destination="@id/fragment_default_night_mode" />
     </fragment>
 
     <dialog
-        android:id="@+id/fragment_delete_camera_images"
-        android:name="com.none.tom.exiferaser.settings.ui.DeleteCameraImagesFragment" />
+        android:id="@+id/fragment_default_display_name_suffix"
+        android:name="com.none.tom.exiferaser.settings.ui.DefaultDisplayNameSuffixFragment"
+        tools:layout="@layout/fragment_default_display_name_suffix">
+
+        <argument
+            android:name="default_display_name_suffix"
+            app:argType="string" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/fragment_default_night_mode"
+        android:name="com.none.tom.exiferaser.settings.ui.DefaultNightModeFragment">
+
+        <argument
+            android:name="default_night_mode"
+            app:argType="integer" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/fragment_help"
+        android:name="com.none.tom.exiferaser.main.ui.HelpFragment"
+        tools:layout="@layout/fragment_help" />
 
     <fragment
         android:id="@+id/fragment_selection"
@@ -72,5 +118,4 @@
             app:argType="android.net.Uri"
             app:nullable="false" />
     </fragment>
-
 </navigation>

@@ -91,10 +91,10 @@ class SelectionRepository @Inject constructor(
     }
 
     suspend fun putSelection(
-        imageUri: Uri?,
+        uri: Uri?,
         fromCamera: Boolean = false
     ): Boolean {
-        if (imageUri.isNullOrEmpty()) {
+        if (uri.isNullOrEmpty()) {
             return false
         }
         return withContext(dispatcher) {
@@ -102,7 +102,7 @@ class SelectionRepository @Inject constructor(
                 dataStore.updateData { proto ->
                     proto.copy(
                         user_image_selection_proto = UserImageSelectionProto(
-                            image_path = imageUri.toString(),
+                            image_path = uri.toString(),
                             from_camera = fromCamera
                         ),
                         user_images_selection_proto = null
@@ -117,20 +117,20 @@ class SelectionRepository @Inject constructor(
     }
 
     suspend fun putSelection(
-        imageUris: List<Uri>? = null,
-        intentImageUris: Array<Uri>? = null
+        uris: List<Uri>? = null,
+        urisFromIntent: Array<Uri>? = null
     ): Boolean {
-        val uris = imageUris ?: intentImageUris?.toList() ?: return false
+        val selection = uris ?: urisFromIntent?.toList() ?: return false
         return withContext(dispatcher) {
             runCatching {
                 dataStore.updateData { proto ->
                     proto.copy(
                         user_image_selection_proto = null,
                         user_images_selection_proto = UserImagesSelectionProto(
-                            user_images_selection = uris
-                                .filter { imageUri -> imageUri.isNotEmpty() }
-                                .map { imageUri ->
-                                    UserImageSelectionProto(image_path = imageUri.toString())
+                            user_images_selection = selection
+                                .filter { uri -> uri.isNotEmpty() }
+                                .map { uri ->
+                                    UserImageSelectionProto(image_path = uri.toString())
                                 }
                         )
                     )

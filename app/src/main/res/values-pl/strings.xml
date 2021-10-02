@@ -18,8 +18,6 @@
     <string name="clipboard_content_paste">Wklej obraz ze schowka</string>
     <string name="clipboard_content_unsupported">Niewspierana zawartość schowka</string>
 
-    <string name="confirm">Potwierdź</string>
-
     <string name="default_display_name_suffix">"Domyślny sufiks nazwy "</string>
     <string name="default_path_open">Domyślna ścieżka</string>
     <string name="default_path_save">Domyślna ścieżka zapisu</string>
@@ -40,8 +38,6 @@
 
     <string name="low_batt_only">Tylko niski poziom baterii</string>
 
-    <string name="miscellaneous">Inne</string>
-
     <string name="modified">Zmodyfikowano</string>
 
     <string name="never">Nigdy</string>
@@ -52,7 +48,6 @@
 
     <string name="of">z</string>
 
-    <string name="path_error">Nie udało się uzyskać nazwy ścieżki</string>
     <string name="path_save_choose">Wybierz ścieżkę zapisu</string>
     <string name="path_save_custom">Własna ścieżka zapisu</string>
     <string name="path_save_default">Domyślna ścieżka zapisu</string>

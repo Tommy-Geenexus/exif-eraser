@@ -20,13 +20,14 @@
 
 package com.none.tom.exiferaser
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.view.WindowCompat
+import androidx.navigation.findNavController
+import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.contracts.ExperimentalContracts
@@ -36,6 +37,7 @@ import kotlin.contracts.ExperimentalContracts
 class ExifEraserActivity : AppCompatActivity() {
 
     private companion object {
+
         // See MainFragmentArgs
         const val KEY_IMAGE_SELECTION = "image_selection"
 
@@ -49,8 +51,13 @@ class ExifEraserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        window.statusBarColor = SurfaceColors.getColorForElevation(
+            this,
+            resources.getDimension(R.dimen.elevation_micro)
+        )
         handleSendIntent()
         handleShortcutIntent()
     }
@@ -63,52 +70,44 @@ class ExifEraserActivity : AppCompatActivity() {
     }
 
     private fun handleSendIntent() {
-        if (!isSendIntent() || intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
-            return
-        }
-        if (isSupportedSendImageIntent()) {
+        if (!intent.hasExtra(INTENT_EXTRA_CONSUMED) &&
+            isSendIntent() &&
+            isSupportedSendImageIntent()
+        ) {
             val imageUris = intent.getClipDataUris()
-            if (imageUris.isEmpty()) {
-                return
+            if (imageUris.isNotEmpty()) {
+                val args = if (imageUris.size > 1) {
+                    bundleOf(KEY_IMAGES_SELECTION to imageUris)
+                } else {
+                    bundleOf(KEY_IMAGE_SELECTION to imageUris.first())
+                }
+                findNavController(R.id.nav_controller).navigate(R.id.global_to_main, args)
             }
-            val args = if (imageUris.size > 1) {
-                KEY_IMAGES_SELECTION to imageUris
-            } else {
-                KEY_IMAGE_SELECTION to imageUris.first()
-            }
-            sendPendingIntent(bundleOf(args))
         }
     }
 
     private fun handleShortcutIntent() {
-        if (!isShortcutIntent() || intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
-            return
+        if (!intent.hasExtra(INTENT_EXTRA_CONSUMED) && isShortcutIntent()) {
+            val args = bundleOf(KEY_SHORTCUT to intent.action)
+            findNavController(R.id.nav_controller)
+                .createDeepLink()
+                .setGraph(R.navigation.nav_graph)
+                .setDestination(R.id.fragment_main)
+                .setArguments(args)
+                .createTaskStackBuilder()
+                .startActivities()
         }
-        sendPendingIntent(bundleOf(KEY_SHORTCUT to intent.action))
-    }
-
-    private fun sendPendingIntent(args: Bundle) {
-        NavDeepLinkBuilder(this)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.fragment_main)
-            .setArguments(args)
-            .createPendingIntent()
-            .send(
-                this,
-                Activity.RESULT_OK,
-                Intent().apply {
-                    fillIn(intent, 0)
-                }
-            )
     }
 
     private fun isSendIntent(): Boolean {
-        return intent.action == Intent.ACTION_SEND ||
-            intent.action == Intent.ACTION_SEND_MULTIPLE
+        return intent.action == Intent.ACTION_SEND || intent.action == Intent.ACTION_SEND_MULTIPLE
     }
 
     private fun isSupportedSendImageIntent(): Boolean {
-        return (intent.type == MIME_TYPE_IMAGE || supportedMimeTypes.contains(intent.type)) &&
+        return (
+            intent.type == MIME_TYPE_IMAGE ||
+                supportedMimeTypes.contains(intent.type)
+            ) &&
             (intent.data != null || intent.clipData != null)
     }
 

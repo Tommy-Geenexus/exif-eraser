@@ -72,7 +72,10 @@ class MainViewModelTest {
     )
 
     @Test
-    fun test_prepareReadImageSources_readImageSources() = runBlockingTest {
+    fun test_readImageSources() = runBlockingTest {
+        coEvery {
+            settingsRepository.getDefaultNightMode()
+        } returns flowOf(0)
         coEvery {
             imageSourceRepository.getImageSources()
         } returns flowOf(testImageSources)
@@ -89,25 +92,30 @@ class MainViewModelTest {
         )
         viewModel.runOnCreate()
         coVerify(exactly = 1) {
+            settingsRepository.getDefaultNightMode()
             imageSourceRepository.getImageSources()
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(imageSourcesFetching = true)
+                    copy(loading = true)
                 },
                 {
                     copy(
                         imageSources = testImageSources,
-                        imageSourcesFetching = false
+                        loading = false
                     )
-                }
+                },
+            )
+            postedSideEffects(
+                MainSideEffect.DefaultNightMode(0),
+                MainSideEffect.ImageSourcesReadComplete
             )
         }
     }
 
     @Test
-    fun test_prepareReorderImageSources_reorderImageSources() = runBlockingTest {
+    fun test_reorderImageSources() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -122,9 +130,6 @@ class MainViewModelTest {
         val reorderedImageSources = testImageSources.toMutableList()
         Collections.swap(reorderedImageSources, 1, 0)
         viewModel.testIntent {
-            prepareReorderImageSources()
-        }
-        viewModel.testIntent {
             reorderImageSources(
                 imageSources = testImageSources,
                 oldIndex = 0,
@@ -134,21 +139,14 @@ class MainViewModelTest {
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(imageSourcesReorder = true)
-                },
-                {
-                    copy(
-                        imageSources = reorderedImageSources,
-                        imageSourcesReordering = true,
-                        imageSourcesReorder = false
-                    )
+                    copy(imageSources = reorderedImageSources)
                 }
             )
         }
     }
 
     @Test
-    fun test_preparePutImageSources_putImageSources() = runBlockingTest {
+    fun test_putImageSources() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -164,9 +162,6 @@ class MainViewModelTest {
             imageSourceRepository.putImageSources(testImageSources)
         } returns true
         viewModel.testIntent {
-            preparePutImageSources()
-        }
-        viewModel.testIntent {
             putImageSources(testImageSources)
         }
         coVerify(exactly = 1) {
@@ -175,51 +170,10 @@ class MainViewModelTest {
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(
-                        imageSourcesPersisting = true,
-                        imageSourcesPersisted = false,
-                        imageSourcesReordering = false,
-                        imageSourcesReorder = false
-                    )
+                    copy(loading = true)
                 },
                 {
-                    copy(
-                        imageSourcesPersisting = false,
-                        imageSourcesPersisted = true,
-                        imageSourcesReordering = false,
-                        imageSourcesReorder = false
-                    )
-                }
-            )
-        }
-    }
-
-    @Test
-    fun test_preparePutSelection() = runBlockingTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
-            savedStateHandle = SavedStateHandle(),
-            imageRepository = imageRepository,
-            imageSourceRepository = imageSourceRepository,
-            selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
-            isolateFlow = false
-        )
-        viewModel.testIntent {
-            preparePutSelection(null)
-        }
-        viewModel.testIntent {
-            preparePutSelection(Unit)
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(selectionPersisting = false)
-                },
-                {
-                    copy(selectionPersisting = true)
+                    copy(loading = false)
                 }
             )
         }
@@ -240,51 +194,53 @@ class MainViewModelTest {
         )
         coEvery {
             selectionRepository.putSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = false
             )
         } returns true
         viewModel.testIntent {
             putImageSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = false
             )
         }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = false
             )
         }
         coEvery {
             selectionRepository.putSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = true
             )
         } returns true
         viewModel.testIntent {
             putImageSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = true
             )
         }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
-                imageUri = testUri,
+                uri = testUri,
                 fromCamera = true
             )
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(
-                        selectionPersisting = false
-                    )
+                    copy(loading = true)
                 },
                 {
-                    copy(
-                        selectionPersisting = false
-                    )
+                    copy(loading = false)
+                },
+                {
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(
@@ -306,28 +262,29 @@ class MainViewModelTest {
         ).test(initialState)
         coEvery {
             selectionRepository.putSelection(
-                imageUris = testUris,
-                intentImageUris = testUris.toTypedArray()
+                uris = testUris,
+                urisFromIntent = testUris.toTypedArray()
             )
         } returns true
         viewModel.testIntent {
             putImagesSelection(
-                imageUris = testUris,
-                intentImageUris = testUris.toTypedArray()
+                uris = testUris,
+                urisFromIntent = testUris.toTypedArray()
             )
         }
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
-                imageUris = testUris,
-                intentImageUris = testUris.toTypedArray()
+                uris = testUris,
+                urisFromIntent = testUris.toTypedArray()
             )
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(
-                        selectionPersisting = false
-                    )
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.NavigateToSelectionSavePath)
@@ -352,7 +309,7 @@ class MainViewModelTest {
             selectionRepository.putSelection(result)
         } returns true
         viewModel.testIntent {
-            putImageDirectorySelection(treeUri = testUri)
+            putImageDirectorySelection(uri = testUri)
         }
         coVerify(ordering = Ordering.SEQUENCE) {
             imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
@@ -361,9 +318,10 @@ class MainViewModelTest {
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(
-                        selectionPersisting = false
-                    )
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.NavigateToSelectionSavePath)
@@ -389,28 +347,6 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_prepareChooseImagesOrLaunchCamera() = runBlockingTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
-            savedStateHandle = SavedStateHandle(),
-            imageRepository = imageRepository,
-            imageSourceRepository = imageSourceRepository,
-            selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            prepareChooseImagesOrLaunchCamera()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(accessingPreferences = true)
-                }
-            )
-        }
-    }
-
-    @Test
     fun test_chooseImage() = runBlockingTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
@@ -421,18 +357,21 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultOpenPathSuspending()
-        } returns testUri
+            settingsRepository.getDefaultPathOpen()
+        } returns flowOf(testUri)
         viewModel.testIntent {
-            chooseImage()
+            chooseImage(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultOpenPathSuspending()
+            settingsRepository.getDefaultPathOpen()
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(accessingPreferences = false)
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.ChooseImage(openPath = testUri))
@@ -450,18 +389,21 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultOpenPathSuspending()
-        } returns testUri
+            settingsRepository.getDefaultPathOpen()
+        } returns flowOf(testUri)
         viewModel.testIntent {
-            chooseImages()
+            chooseImages(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultOpenPathSuspending()
+            settingsRepository.getDefaultPathOpen()
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(accessingPreferences = false)
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.ChooseImages(openPath = testUri))
@@ -479,18 +421,21 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultOpenPathSuspending()
-        } returns testUri
+            settingsRepository.getDefaultPathOpen()
+        } returns flowOf(testUri)
         viewModel.testIntent {
-            chooseImageDirectory()
+            chooseImageDirectory(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultOpenPathSuspending()
+            settingsRepository.getDefaultPathOpen()
         }
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(accessingPreferences = false)
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.ChooseImageDirectory(openPath = testUri))
@@ -516,7 +461,8 @@ class MainViewModelTest {
         viewModel.testIntent {
             launchCamera(
                 fileProviderPackage = String.Empty,
-                displayName = String.Empty
+                displayName = String.Empty,
+                canReorderImageSources = false
             )
         }
         coVerify(exactly = 1) {
@@ -528,7 +474,10 @@ class MainViewModelTest {
         viewModel.assert(initialState) {
             states(
                 {
-                    copy(accessingPreferences = false)
+                    copy(loading = true)
+                },
+                {
+                    copy(loading = false)
                 }
             )
             postedSideEffects(MainSideEffect.LaunchCamera(fileProviderImagePath = testUri))
@@ -549,7 +498,7 @@ class MainViewModelTest {
             handleShortcut(String.Empty)
         }
         viewModel.assert(initialState) {
-            postedSideEffects(MainSideEffect.ShortcutHandle(String.Empty))
+            postedSideEffects(MainSideEffect.Shortcut.Handle(String.Empty))
         }
     }
 
@@ -567,29 +516,7 @@ class MainViewModelTest {
             reportShortcutUsed(String.Empty)
         }
         viewModel.assert(initialState) {
-            postedSideEffects(MainSideEffect.ShortcutReportUsed(String.Empty))
-        }
-    }
-
-    @Test
-    fun test_handleMultiWindowMode() = runBlockingTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
-            savedStateHandle = SavedStateHandle(),
-            imageRepository = imageRepository,
-            imageSourceRepository = imageSourceRepository,
-            selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleMultiWindowMode(isInMultiWindowMode = true)
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(isInMultiWindowMode = true)
-                }
-            )
+            postedSideEffects(MainSideEffect.Shortcut.ReportUsage(String.Empty))
         }
     }
 

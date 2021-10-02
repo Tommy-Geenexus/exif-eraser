@@ -44,8 +44,8 @@ class ImageSavedDetailsFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val imagePath = requireArguments().getString(KEY_IMAGE_PATH)
-            ?: getString(R.string.image_path)
+        val imagePath =
+            requireArguments().getString(KEY_IMAGE_PATH) ?: getString(R.string.image_path)
         return MaterialAlertDialogBuilder(requireActivity())
             .setTitle(R.string.image_path)
             .setMessage(imagePath)

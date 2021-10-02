@@ -24,17 +24,28 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.edit
+import androidx.core.net.toUri
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.documentfile.provider.DocumentFile
-import androidx.preference.PreferenceManager
 import com.none.tom.exiferaser.Empty
-import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.settings.defaultNightMode
+import com.none.tom.exiferaser.settings.defaultNightModeValue
+import com.none.tom.exiferaser.settings.name
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,184 +54,273 @@ import javax.inject.Singleton
 @Singleton
 class SettingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val dataStore: DataStore<Preferences>,
     @DispatcherIo private val dispatcher: CoroutineDispatcher
-) : SettingsDelegate {
+) {
 
-    private val defaultSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-    fun getDefaultNightMode(): Int {
-        return defaultSharedPrefs
-            .getString(context.getString(R.string.key_night_mode), null)
-            ?.toIntOrNull()
-            ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    private companion object {
+        const val KEY_DEFAULT_OPEN_PATH = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_OPEN_PATH"
+        const val KEY_DEFAULT_SAVE_PATH = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_SAVE_PATH"
+        const val KEY_PRESERVE_ORIENTATION = TOP_LEVEL_PACKAGE_NAME + "PRESERVE_ORIENTATION"
+        const val KEY_SHARE_BY_DEFAULT = TOP_LEVEL_PACKAGE_NAME + "SHARE_BY_DEFAULT"
+        const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX =
+            TOP_LEVEL_PACKAGE_NAME + "DEFAULT_DISPLAY_NAME_SUFFIX"
+        const val KEY_DEFAULT_NIGHT_MODE = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_NIGHT_MODE"
     }
 
-    override fun putDefaultOpenPath(
-        path: Uri,
+    private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
+    private val keyDefaultSavePath = stringPreferencesKey(KEY_DEFAULT_SAVE_PATH)
+    private val keyPreserveOrientation = booleanPreferencesKey(KEY_PRESERVE_ORIENTATION)
+    private val keyShareByDefault = booleanPreferencesKey(KEY_SHARE_BY_DEFAULT)
+    private val keyDefaultDisplayNameSuffix = stringPreferencesKey(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+    private val keyDefaultNightMode = intPreferencesKey(KEY_DEFAULT_NIGHT_MODE)
+
+    suspend fun putDefaultPathOpen(
+        defaultPathOpenNew: Uri,
+        defaultPathOpenCurrent: Uri,
         releaseUriPermissions: Boolean
-    ) {
-        if (path.isNotEmpty()) {
+    ): Boolean {
+        if (defaultPathOpenNew.isNotEmpty()) {
             takePersistablePermissions(
                 resolver = context.contentResolver,
-                uri = path,
+                uri = defaultPathOpenNew,
                 read = true,
                 write = false
             )
         } else if (releaseUriPermissions) {
             releasePersistablePermissions(
                 resolver = context.contentResolver,
-                uri = getDefaultOpenPath(),
+                uri = defaultPathOpenCurrent,
                 read = true,
                 write = false
             )
         }
-        putUri(R.string.key_default_path_open, path)
-    }
-
-    override fun getDefaultOpenPath() = getUri(R.string.key_default_path_open)
-
-    override fun getDefaultOpenPathSummary(): String {
-        val path = getDefaultOpenPath()
-        return runCatching {
-            if (path.isNotEmpty()) {
-                DocumentFile.fromTreeUri(context, path)?.name
-                    ?: context.getString(R.string.path_error)
-            } else {
-                context.getString(R.string.none)
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyDefaultOpenPath] = defaultPathOpenNew.toString()
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
             }
-        }.getOrElse { exception ->
-            Timber.e(exception)
-            context.getString(R.string.path_error)
         }
     }
 
-    override fun putDefaultSavePath(
-        path: Uri,
+    fun getDefaultPathOpen(): Flow<Uri> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+                Uri.EMPTY
+            }
+            .map { preferences ->
+                preferences[keyDefaultOpenPath]?.toUri() ?: Uri.EMPTY
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun getDefaultPathOpenName(): String {
+        val defaultPathOpen = getDefaultPathOpen().first()
+        return runCatching {
+            if (defaultPathOpen.isNotEmpty()) {
+                DocumentFile.fromTreeUri(context, defaultPathOpen)?.name.orEmpty()
+            } else {
+                String.Empty
+            }
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            String.Empty
+        }
+    }
+
+    suspend fun putDefaultPathSave(
+        defaultPathSaveNew: Uri,
+        defaultPathSaveCurrent: Uri,
         releaseUriPermissions: Boolean
-    ) {
-        if (path.isNotEmpty()) {
+    ): Boolean {
+        if (defaultPathSaveNew.isNotEmpty()) {
             takePersistablePermissions(
                 resolver = context.contentResolver,
-                uri = path,
+                uri = defaultPathSaveNew,
                 read = true,
                 write = true
             )
         } else if (releaseUriPermissions) {
             releasePersistablePermissions(
                 resolver = context.contentResolver,
-                uri = getDefaultSavePath(),
+                uri = defaultPathSaveCurrent,
                 read = true,
                 write = true
             )
         }
-        putUri(R.string.key_default_path_save, path)
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyDefaultSavePath] = defaultPathSaveNew.toString()
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
+        }
     }
 
-    override fun getDefaultSavePath() = getUri(R.string.key_default_path_save)
+    fun getDefaultPathSave(): Flow<Uri> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+                Uri.EMPTY
+            }
+            .map { preferences ->
+                preferences[keyDefaultSavePath]?.toUri() ?: Uri.EMPTY
+            }
+            .flowOn(dispatcher)
+    }
 
-    override fun getDefaultSavePathSummary(): String {
-        val path = getDefaultSavePath()
+    suspend fun getDefaultPathSaveName(): String {
+        val defaultPathSave = getDefaultPathSave().first()
         return runCatching {
-            if (path.isNotEmpty()) {
-                DocumentFile.fromTreeUri(context, path)?.name
-                    ?: context.getString(R.string.path_error)
+            if (defaultPathSave.isNotEmpty()) {
+                DocumentFile.fromTreeUri(context, defaultPathSave)?.name.orEmpty()
             } else {
-                context.getString(R.string.none)
+                String.Empty
             }
         }.getOrElse { exception ->
             Timber.e(exception)
-            context.getString(R.string.path_error)
+            String.Empty
         }
     }
 
-    override fun shouldPreserveImageOrientation(): Boolean {
-        return defaultSharedPrefs.getBoolean(
-            context.getString(R.string.key_image_orientation),
-            false
-        )
-    }
-
-    override fun shouldShareImagesByDefault(): Boolean {
-        return defaultSharedPrefs.getBoolean(
-            context.getString(R.string.key_image_share_by_default),
-            false
-        )
-    }
-
-    override fun isBatchImageProcessingEnabled(): Boolean {
-        return defaultSharedPrefs.getBoolean(
-            context.getString(R.string.key_batch_image_processing),
-            true
-        )
-    }
-
-    suspend fun shouldPreserveImageOrientationSuspending(): Boolean {
+    suspend fun hasPrivilegedDefaultPathSave(defaultSavePath: Uri): Boolean {
         return withContext(dispatcher) {
-            defaultSharedPrefs.getBoolean(
-                context.getString(R.string.key_image_orientation),
-                false
-            )
-        }
-    }
-
-    suspend fun getDefaultSavePathSuspending(): Uri {
-        return withContext(dispatcher) {
-            getUri(R.string.key_default_path_save)
-        }
-    }
-
-    suspend fun getDefaultOpenPathSuspending(): Uri {
-        return withContext(dispatcher) {
-            getUri(R.string.key_default_path_open)
-        }
-    }
-
-    suspend fun shouldShareImagesByDefaultSuspending(): Boolean {
-        return withContext(dispatcher) {
-            defaultSharedPrefs.getBoolean(
-                context.getString(R.string.key_image_share_by_default),
-                false
-            )
-        }
-    }
-
-    suspend fun hasPrivilegedDefaultSavePath(): Boolean {
-        return withContext(dispatcher) {
-            val path = getDefaultSavePath()
-            path.isNotEmpty() &&
+            defaultSavePath.isNotEmpty() &&
                 hasPersistablePermissions(
                     resolver = context.contentResolver,
-                    uri = path,
+                    uri = defaultSavePath,
                     read = true,
                     write = true
                 )
         }
     }
 
-    suspend fun getDefaultDisplayNameSuffix(): String {
+    suspend fun putPreserveOrientation(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            defaultSharedPrefs
-                .getString(
-                    context.getString(R.string.key_default_display_name_suffix),
-                    String.Empty
-                )
-                .orEmpty()
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyPreserveOrientation] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
         }
     }
 
-    private fun putUri(
-        @StringRes id: Int,
-        uri: Uri
-    ) {
-        defaultSharedPrefs.edit {
-            putString(context.getString(id), uri.toString())
+    fun shouldPreserveOrientation(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keyPreserveOrientation] ?: false
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun putShareByDefault(value: Boolean): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyShareByDefault] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
         }
     }
 
-    private fun getUri(@StringRes id: Int): Uri {
-        return defaultSharedPrefs
-            .getString(context.getString(id), String.Empty)
-            .let { uri -> if (!uri.isNullOrEmpty()) Uri.parse(uri) else Uri.EMPTY }
+    fun shouldShareByDefault(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keyShareByDefault] ?: false
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun putDefaultDisplayNameSuffix(value: String): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyDefaultDisplayNameSuffix] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
+        }
+    }
+
+    fun getDefaultDisplayNameSuffix(): Flow<String> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+                String.Empty
+            }
+            .map { preferences ->
+                preferences[keyDefaultDisplayNameSuffix] ?: String.Empty
+            }
+            .flowOn(dispatcher)
+    }
+
+    fun getDefaultNightMode(): Flow<Int> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+                defaultNightModeValue
+            }
+            .map { preferences ->
+                preferences[keyDefaultNightMode] ?: defaultNightModeValue
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun getDefaultNightModeName(): String {
+        val defaultNightMode by context.defaultNightMode()
+        val defaultNightModeCurrent = getDefaultNightMode().first()
+        return defaultNightMode
+            .entries
+            .find { entry -> entry.value == defaultNightModeCurrent }
+            ?.key
+            ?: defaultNightMode.name()
+    }
+
+    suspend fun putDefaultNightMode(value: Int): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyDefaultNightMode] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
+        }
     }
 
     @Suppress("SameParameterValue")

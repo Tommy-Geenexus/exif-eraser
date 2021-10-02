@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
+        <item name="colorOnSurface">@android:color/system_neutral1_100</item>
+        <item name="colorOk">@color/color_green_200</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.ExifEraser.Launcher" parent="Theme.ExifEraser" />
+</resources>

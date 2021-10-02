@@ -22,7 +22,6 @@ package com.none.tom.exiferaser.selection
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
@@ -104,7 +103,6 @@ fun ContentResolver.openOutputStreamOrThrow(uri: Uri): OutputStream {
     return openOutputStream(uri) ?: throw IOException()
 }
 
-@SuppressLint("Recycle")
 @WorkerThread
 fun ContentResolver.queryOrThrow(uri: Uri): Cursor {
     return query(uri, null, null, null, null) ?: throw IOException()

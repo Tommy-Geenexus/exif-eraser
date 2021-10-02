@@ -43,6 +43,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
@@ -168,13 +169,13 @@ class SelectionViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.shouldShareImagesByDefaultSuspending()
-        } returns true
+            settingsRepository.shouldShareByDefault()
+        } returns flowOf(true)
         viewModel.testIntent {
             shareImagesByDefault()
         }
         coVerify(exactly = 1) {
-            settingsRepository.shouldShareImagesByDefaultSuspending()
+            settingsRepository.shouldShareByDefault()
         }
     }
 
@@ -205,16 +206,18 @@ class SelectionViewModelTest {
         ).test(initialState)
         coEvery {
             settingsRepository.getDefaultDisplayNameSuffix()
-        } returns String.Empty
+        } returns flowOf(String.Empty)
         coEvery {
-            settingsRepository.shouldPreserveImageOrientationSuspending()
-        } returns false
+            settingsRepository.shouldPreserveOrientation()
+        } returns flowOf(false)
+        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+        val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
         coEvery {
             imageRepository.removeMetadataSingle(
                 selection = testImageSelection,
                 treeUri = Uri.EMPTY,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+                displayNameSuffix = displayNameSuffix,
+                preserveOrientation = preserveOrientation
             )
         } returns flow {
             emit(Result.Report(summary = testSummary))
@@ -228,13 +231,13 @@ class SelectionViewModelTest {
             )
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldPreserveImageOrientationSuspending()
+            settingsRepository.shouldPreserveOrientation()
             settingsRepository.getDefaultDisplayNameSuffix()
             imageRepository.removeMetadataSingle(
                 selection = testImageSelection,
                 treeUri = Uri.EMPTY,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+                displayNameSuffix = displayNameSuffix,
+                preserveOrientation = preserveOrientation
             )
         }
         viewModel.assert(initialState) {
@@ -278,16 +281,18 @@ class SelectionViewModelTest {
         ).test(initialState)
         coEvery {
             settingsRepository.getDefaultDisplayNameSuffix()
-        } returns String.Empty
+        } returns flowOf(String.Empty)
         coEvery {
-            settingsRepository.shouldPreserveImageOrientationSuspending()
-        } returns false
+            settingsRepository.shouldPreserveOrientation()
+        } returns flowOf(false)
+        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+        val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
         coEvery {
             imageRepository.removeMetadataBulk(
                 selection = testImagesSelection,
                 treeUri = Uri.EMPTY,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+                displayNameSuffix = displayNameSuffix,
+                preserveOrientation = preserveOrientation
             )
         } returns flow {
             emit(Result.Report(summary = testSummary))
@@ -303,13 +308,13 @@ class SelectionViewModelTest {
             )
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldPreserveImageOrientationSuspending()
+            settingsRepository.shouldPreserveOrientation()
             settingsRepository.getDefaultDisplayNameSuffix()
             imageRepository.removeMetadataBulk(
                 selection = testImagesSelection,
                 treeUri = Uri.EMPTY,
-                displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-                preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+                displayNameSuffix = displayNameSuffix,
+                preserveOrientation = preserveOrientation
             )
         }
         viewModel.assert(initialState) {

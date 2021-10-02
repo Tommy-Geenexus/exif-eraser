@@ -23,8 +23,11 @@ package com.none.tom.exiferaser.report.ui
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.AttrRes
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
@@ -56,7 +59,6 @@ import com.none.tom.exiferaser.report.business.ReportState
 import com.none.tom.exiferaser.report.business.ReportViewModel
 import com.none.tom.exiferaser.report.lerp
 import com.none.tom.exiferaser.report.lerpArgb
-import com.none.tom.exiferaser.report.resolveThemeAttr
 import com.none.tom.exiferaser.selection.MaterialColor
 import com.none.tom.exiferaser.selection.data.Summary
 import com.none.tom.exiferaser.selection.ui.SelectionFragment
@@ -66,7 +68,6 @@ import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
-@Suppress("unused")
 @AndroidEntryPoint
 class ReportFragment :
     BaseFragment<FragmentReportBinding>(R.layout.fragment_report),
@@ -84,24 +85,27 @@ class ReportFragment :
     }
 
     private val viewModel: ReportViewModel by viewModels()
+    private val viewImage = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {}
     private val colorBackgroundStart by lazy(LazyThreadSafetyMode.NONE) {
-        MaterialColors.getColor(requireView(), R.attr.colorAccent)
+        MaterialColors.getColor(requireView(), R.attr.colorPrimaryContainer)
     }
     private val colorBackgroundEnd by lazy(LazyThreadSafetyMode.NONE) {
-        MaterialColors.getColor(requireView(), android.R.attr.colorBackground)
+        MaterialColors.getColor(requireView(), R.attr.colorSurface)
     }
-    private val endFraction by lazy {
-        1 - (
-            requireContext().resolveThemeAttr(android.R.attr.actionBarSize).toFloat() /
-                binding.layout.height.toFloat()
-            )
+    private val endFraction by lazy(LazyThreadSafetyMode.NONE) {
+        val actionBarSize = resolveThemeAttribute(android.R.attr.actionBarSize).toFloat()
+        val layoutHeight = binding.layout.height.toFloat()
+        1 - (actionBarSize / layoutHeight)
     }
     private val backCallback by lazy(LazyThreadSafetyMode.NONE) {
-        requireActivity()
-            .onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, enabled = false) {
-                behaviour.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            enabled = false
+        ) {
+            behaviour.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
     private var _reportCallback: BottomSheetBehavior.BottomSheetCallback? = null
     private val reportCallback get() = _reportCallback!!
@@ -226,7 +230,7 @@ class ReportFragment :
         @Exhaustive
         when (sideEffect) {
             is ReportSideEffect.ViewImage -> {
-                startActivity(
+                viewImage.launch(
                     Intent(Intent.ACTION_VIEW).apply {
                         setDataAndTypeAndNormalize(sideEffect.imageUri, MIME_TYPE_IMAGE)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -326,5 +330,14 @@ class ReportFragment :
 
     private fun handleReportStateChanged(newState: Int) {
         backCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun resolveThemeAttribute(
+        @AttrRes attr: Int,
+        typedValue: TypedValue = TypedValue(),
+        resolveRefs: Boolean = true
+    ): Int {
+        requireActivity().theme.resolveAttribute(attr, typedValue, resolveRefs)
+        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
     }
 }

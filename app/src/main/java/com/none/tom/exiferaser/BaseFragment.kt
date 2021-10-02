@@ -23,8 +23,14 @@ package com.none.tom.exiferaser
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.transition.MaterialSharedAxis
 
 abstract class BaseFragment<B : ViewBinding>(
     @LayoutRes layoutRes: Int
@@ -46,4 +52,62 @@ abstract class BaseFragment<B : ViewBinding>(
     }
 
     abstract fun bindLayout(view: View): B
+
+    internal fun setupToolbar(
+        toolbar: Toolbar,
+        @StringRes titleRes: Int = 0
+    ) {
+        if (titleRes != 0) {
+            toolbar.setTitle(titleRes)
+        }
+        (requireActivity() as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        requireParentFragment()
+            .childFragmentManager
+            .backStackEntryCount
+            .takeIf { count -> count > 0 }
+            ?.let {
+                toolbar.apply {
+                    setNavigationIcon(R.drawable.ic_arrow_back)
+                    setNavigationOnClickListener {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+    }
+
+    internal fun setTransitions(
+        transitionEnter: MaterialSharedAxis? = null,
+        transitionExit: MaterialSharedAxis? = null,
+        transitionReturn: MaterialSharedAxis? = null,
+        transitionReenter: MaterialSharedAxis? = null
+    ) {
+        enterTransition = transitionEnter?.apply {
+            duration = resources.getInteger(
+                com.google.android.material.R.integer.material_motion_duration_long_1
+            ).toLong()
+        }
+        exitTransition = transitionExit?.apply {
+            duration = resources.getInteger(
+                com.google.android.material.R.integer.material_motion_duration_long_1
+            ).toLong()
+        }
+        returnTransition = transitionReturn?.apply {
+            duration = resources.getInteger(
+                com.google.android.material.R.integer.material_motion_duration_long_1
+            ).toLong()
+        }
+        reenterTransition = transitionReenter?.apply {
+            duration = resources.getInteger(
+                com.google.android.material.R.integer.material_motion_duration_long_1
+            ).toLong()
+        }
+    }
+
+    internal fun navigate(navDirections: NavDirections) {
+        val navController = findNavController()
+        val action = navController.currentDestination?.getAction(navDirections.actionId)
+        if (action != null && action.destinationId != 0) {
+            navController.navigate(navDirections)
+        }
+    }
 }

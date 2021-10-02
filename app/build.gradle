@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "com.none.tom.exiferaser"
-        minSdkVersion 23
+        minSdkVersion 27
         targetSdkVersion 31
         versionCode 28
         versionName "4.3.2"

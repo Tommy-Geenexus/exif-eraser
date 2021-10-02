@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.none.tom.exiferaser.databinding.FragmentReportCardViewBinding
+import com.none.tom.exiferaser.databinding.ItemReportBinding
 import com.none.tom.exiferaser.selection.data.Summary
 
 class ReportAdapter(
@@ -55,7 +55,7 @@ class ReportAdapter(
         viewType: Int
     ): ReportViewHolder {
         return ReportViewHolder(
-            FragmentReportCardViewBinding.inflate(
+            ItemReportBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
