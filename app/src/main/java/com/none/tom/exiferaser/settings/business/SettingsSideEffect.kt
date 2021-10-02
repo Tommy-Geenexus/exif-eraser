@@ -20,13 +20,59 @@
 
 package com.none.tom.exiferaser.settings.business
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 sealed class SettingsSideEffect : Parcelable {
 
     @Parcelize
-    data class ExternalPicturesDeleted(
+    data class DefaultPathOpenClear(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class DefaultPathSaveClear(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class DefaultPathOpenSelect(
+        val uri: Uri
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class DefaultPathSaveSelect(
+        val uri: Uri
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class DefaultPathOpenStore(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class DefaultPathSaveStore(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class NavigateToDefaultDisplayNameSuffix(
+        val defaultDisplayNameSuffix: String
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class NavigateToDefaultNightMode(
+        val defaultNightMode: Int
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class PreserveOrientation(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
+    data class ShareByDefault(
         val success: Boolean
     ) : SettingsSideEffect()
 }

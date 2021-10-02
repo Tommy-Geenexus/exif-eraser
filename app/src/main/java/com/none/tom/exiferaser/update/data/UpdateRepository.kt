@@ -30,6 +30,7 @@ import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.android.material.color.MaterialColors
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
@@ -198,9 +199,7 @@ class UpdateRepository @Inject constructor(
         ) progress: Int = PROGRESS_MIN,
         failed: Boolean = false
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerNotificationChannel()
-        }
+        registerNotificationChannel()
         notificationManager.notify(
             NOTIFICATION_ID,
             when {
@@ -221,7 +220,7 @@ class UpdateRepository @Inject constructor(
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_logo_update_error)
-            .setColor(context.getColor(R.color.color_teal_500))
+            .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_failed))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(
@@ -242,7 +241,7 @@ class UpdateRepository @Inject constructor(
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_logo_update_downloading)
-            .setColor(context.getColor(R.color.color_teal_500))
+            .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_download))
             .setProgress(PROGRESS_MAX, progress, false)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -262,7 +261,7 @@ class UpdateRepository @Inject constructor(
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_logo_update_downloaded)
-            .setColor(context.getColor(R.color.color_teal_500))
+            .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_downloaded))
             .setContentText(context.getString(R.string.app_update_install))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

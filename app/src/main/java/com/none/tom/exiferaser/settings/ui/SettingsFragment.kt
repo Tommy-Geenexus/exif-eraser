@@ -20,40 +20,26 @@
 
 package com.none.tom.exiferaser.settings.ui
 
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.net.toUri
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
-import androidx.preference.EditTextPreference
-import androidx.preference.ListPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
+import com.none.tom.exiferaser.BaseFragment
+import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.URL_ISSUES
-import com.none.tom.exiferaser.URL_LOCALISATION
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
-import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
-import com.none.tom.exiferaser.setTransitions
-import com.none.tom.exiferaser.settings.ImageButtonPreference
-import com.none.tom.exiferaser.settings.ViewUrl
 import com.none.tom.exiferaser.settings.business.SettingsSideEffect
+import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
-import com.none.tom.exiferaser.setupToolbar
-import com.none.tom.exiferaser.showSnackbar
-import com.none.tom.exiferaser.supportImageFormats
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -61,40 +47,21 @@ import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @AndroidEntryPoint
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment :
+    BaseFragment<FragmentSettingsBinding>(R.layout.fragment_settings),
+    SettingsAdapter.Listener {
 
     private val viewModel: SettingsViewModel by viewModels()
-    private val defaultOpenPath = registerForActivityResult(OpenDocumentTree()) { path ->
-        if (path.isNotNullOrEmpty()) {
-            preferences.forEachIndexed { index, preference ->
-                if (preference.key == getString(R.string.key_default_path_open)) {
-                    setDefaultOpenPath(
-                        preference = preference as? ImageButtonPreference,
-                        layoutIndex = index,
-                        path = path
-                    )
-                }
-            }
+    private val defaultPathOpen = registerForActivityResult(OpenDocumentTree()) { uri ->
+        if (uri.isNotNullOrEmpty()) {
+            viewModel.storeDefaultPathOpen(uri)
         }
     }
-    private val defaultSavePath = registerForActivityResult(OpenDocumentTree()) { path ->
-        if (path.isNotNullOrEmpty()) {
-            preferences.forEachIndexed { index, preference ->
-                if (preference.key == getString(R.string.key_default_path_save)) {
-                    setDefaultSavePath(
-                        preference = preference as ImageButtonPreference,
-                        layoutIndex = index,
-                        path = path
-                    )
-                }
-            }
+    private val defaultPathSave = registerForActivityResult(OpenDocumentTree()) { uri ->
+        if (uri.isNotNullOrEmpty()) {
+            viewModel.storeDefaultPathSave(uri)
         }
     }
-    private val viewUrl = registerForActivityResult(ViewUrl()) {}
-    private var _binding: FragmentSettingsBinding? = null
-    internal val binding: FragmentSettingsBinding get() = _binding!!
-    private var _preferences: MutableList<Preference>? = null
-    private val preferences: List<Preference> get() = _preferences!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,80 +71,42 @@ class SettingsFragment : PreferenceFragmentCompat() {
         )
     }
 
-    override fun onCreatePreferences(
-        savedInstanceState: Bundle?,
-        rootKey: String?
-    ) {
-        setPreferencesFromResource(R.xml.settings, rootKey)
-    }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSettingsBinding.bind(view)
-        requireActivity().setupToolbar(
-            fragment = this,
+        postponeEnterTransition()
+        setupToolbar(
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
         )
+        binding.preferences.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = SettingsAdapter(listener = this@SettingsFragment)
+            addItemDecoration(VerticalDividerItemDecoration(context))
+            itemAnimator = null
+        }
         setFragmentResultListener(
-            DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
+            DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
         ) { _, bundle: Bundle ->
-            if (bundle.getBoolean(DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE)) {
-                viewModel.deleteCameraImages()
-            }
+            val value = bundle.getString(
+                DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX,
+                String.Empty
+            )
+            viewModel.storeDefaultDisplayNameSuffix(value)
         }
-        _preferences = mutableListOf<Preference>().apply {
-            for (categoryIndex in 0 until preferenceScreen.preferenceCount) {
-                val category = preferenceScreen[categoryIndex]
-                if (category is PreferenceCategory) {
-                    if (category.key == getString(R.string.key_file_system)) {
-                        setupPreferenceCategoryFileSystem(category)
-                    }
-                    for (preferenceIndex in 0 until category.preferenceCount) {
-                        add(category[preferenceIndex])
-                    }
-                }
-            }
+        setFragmentResultListener(
+            DefaultNightModeFragment.KEY_DEFAULT_NIGHT_MODE
+        ) { _, bundle: Bundle ->
+            val value = bundle.getInt(DefaultNightModeFragment.KEY_DEFAULT_NIGHT_MODE)
+            AppCompatDelegate.setDefaultNightMode(value)
+            viewModel.storeDefaultNightMode(value)
         }
-        preferences.forEachIndexed { index, preference ->
-            when (preference.key) {
-                getString(R.string.key_default_path_open) -> {
-                    setupPreferenceDefaultPathOpen(
-                        preference = preference as? ImageButtonPreference,
-                        layoutIndex = index
-                    )
-                }
-                getString(R.string.key_default_path_save) -> {
-                    setupPreferenceDefaultPathSave(
-                        preference = preference as? ImageButtonPreference,
-                        layoutIndex = index
-                    )
-                }
-                getString(R.string.key_delete_images) -> {
-                    setupPreferenceDeleteCameraImages(preference)
-                }
-                getString(R.string.key_default_display_name_suffix) -> {
-                    setupPreferenceDefaultDisplayNameSuffix(preference as? EditTextPreference)
-                }
-                getString(R.string.key_night_mode) -> {
-                    setupPreferenceDefaultNightMode(preference as? ListPreference)
-                }
-                getString(R.string.key_translate) -> {
-                    setupPreferenceTranslate(preference)
-                }
-                getString(R.string.key_bug_report) -> {
-                    setupPreferenceBugReport(preference)
-                }
-                getString(R.string.key_image_supported_formats) -> {
-                    setupPreferenceImageSupportedFormats(preference)
-                }
-                getString(R.string.key_version) -> {
-                    setupPreferenceVersion(preference)
-                }
-                else -> {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.container.stateFlow.collect { state ->
+                    renderState(state)
                 }
             }
         }
@@ -190,165 +119,92 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _preferences?.forEach { preference ->
-            preference.apply {
-                onPreferenceClickListener = null
-                onPreferenceChangeListener = null
-            }
-        }
-        _preferences = null
-        _binding = null
+    override fun bindLayout(view: View) = FragmentSettingsBinding.bind(view)
+
+    override fun onDefaultPathOpenSelected() {
+        viewModel.handleDefaultPathOpen()
+    }
+
+    override fun onDefaultPathOpenClear() {
+        viewModel.clearDefaultPathOpen()
+    }
+
+    override fun onDefaultPathSaveSelected() {
+        viewModel.handleDefaultPathSave()
+    }
+
+    override fun onDefaultPathSaveClear() {
+        viewModel.clearDefaultPathSave()
+    }
+
+    override fun onPreserveOrientationChanged(value: Boolean) {
+        viewModel.storePreserveOrientation(value)
+    }
+
+    override fun onShareByDefaultChanged(value: Boolean) {
+        viewModel.storeShareByDefault(value)
+    }
+
+    override fun onDefaultDisplayNameSuffixSelected() {
+        viewModel.handleDefaultDisplayNameSuffix()
+    }
+
+    override fun onDefaultNightModeSelected() {
+        viewModel.handleDefaultNightMode()
+    }
+
+    override fun onItemsUpdated() {
+        startPostponedEnterTransition()
+    }
+
+    private fun renderState(state: SettingsState) {
+        (binding.preferences.adapter as? SettingsAdapter)?.submitList(
+            listOf(
+                state.defaultPathOpenName,
+                state.defaultPathSaveName,
+                state.initialPreserveOrientation,
+                state.initialShareByDefault,
+                state.defaultDisplayNameSuffix,
+                state.defaultNightModeName
+            )
+        )
     }
 
     private fun handleSideEffect(sideEffect: SettingsSideEffect) {
-        if (sideEffect is SettingsSideEffect.ExternalPicturesDeleted) {
-            requireView().showSnackbar(
-                msg = getString(
-                    if (sideEffect.success) {
-                        R.string.delete_camera_images_success
-                    } else {
-                        R.string.delete_camera_images_failed
-                    }
+        @Exhaustive
+        when (sideEffect) {
+            is SettingsSideEffect.DefaultPathOpenClear -> {
+            }
+            is SettingsSideEffect.DefaultPathSaveClear -> {
+            }
+            is SettingsSideEffect.DefaultPathOpenSelect -> {
+                defaultPathOpen.launch(sideEffect.uri)
+            }
+            is SettingsSideEffect.DefaultPathSaveSelect -> {
+                defaultPathSave.launch(sideEffect.uri)
+            }
+            is SettingsSideEffect.DefaultPathOpenStore -> {
+            }
+            is SettingsSideEffect.DefaultPathSaveStore -> {
+            }
+            is SettingsSideEffect.NavigateToDefaultDisplayNameSuffix -> {
+                navigate(
+                    SettingsFragmentDirections.settingsToDefaultDisplayNameSuffix(
+                        sideEffect.defaultDisplayNameSuffix
+                    )
                 )
-            )
-        }
-    }
-
-    private fun setupPreferenceCategoryFileSystem(preferenceCategory: PreferenceCategory) {
-        for (child in 0 until preferenceCategory.preferenceCount) {
-            val preference = preferenceCategory.getPreference(child)
-            if (preference != null) {
-                if (preference.key != getString(R.string.key_delete_images)) {
-                    preference.isEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                }
+            }
+            is SettingsSideEffect.NavigateToDefaultNightMode -> {
+                navigate(
+                    SettingsFragmentDirections.settingsToDefaultNightMode(
+                        sideEffect.defaultNightMode
+                    )
+                )
+            }
+            is SettingsSideEffect.PreserveOrientation -> {
+            }
+            is SettingsSideEffect.ShareByDefault -> {
             }
         }
-    }
-
-    private fun setupPreferenceDefaultPathOpen(
-        preference: ImageButtonPreference?,
-        layoutIndex: Int
-    ) {
-        preference?.apply {
-            summary = viewModel.getDefaultOpenPathSummary()
-            setOnPreferenceClickListener {
-                defaultOpenPath.launch(viewModel.getDefaultOpenPath())
-                true
-            }
-            shouldShowClearButton = summary?.equals(getString(R.string.none))?.not() ?: false
-            doOnClear = { setDefaultOpenPath(preference, layoutIndex, Uri.EMPTY) }
-        }
-    }
-
-    private fun setupPreferenceDefaultPathSave(
-        preference: ImageButtonPreference?,
-        layoutIndex: Int
-    ) {
-        preference?.apply {
-            summary = viewModel.getDefaultSavePathSummary()
-            setOnPreferenceClickListener {
-                defaultSavePath.launch(viewModel.getDefaultSavePath())
-                true
-            }
-            shouldShowClearButton = summary?.equals(getString(R.string.none))?.not() ?: false
-            doOnClear = { setDefaultSavePath(preference, layoutIndex, Uri.EMPTY) }
-        }
-    }
-
-    private fun setupPreferenceDeleteCameraImages(preference: Preference) {
-        preference.setOnPreferenceClickListener {
-            findNavController().navigate(SettingsFragmentDirections.settingsToDeleteCameraImages())
-            true
-        }
-    }
-
-    private fun setupPreferenceDefaultDisplayNameSuffix(preference: EditTextPreference?) {
-        preference?.apply {
-            summary = if (text.isNullOrEmpty()) getString(R.string.none) else text
-            setOnPreferenceChangeListener { _, newValue ->
-                summary = if ((newValue as String).isEmpty()) {
-                    getString(R.string.none)
-                } else {
-                    newValue
-                }
-                true
-            }
-        }
-    }
-
-    private fun setupPreferenceDefaultNightMode(preference: ListPreference?) {
-        preference?.apply {
-            setSummaryProvider { preference.entry }
-            setOnPreferenceChangeListener { _, nightMode ->
-                (nightMode as? String)?.toIntOrNull()?.let { defaultNightMode ->
-                    AppCompatDelegate.setDefaultNightMode(defaultNightMode)
-                }
-                true
-            }
-        }
-    }
-
-    private fun setupPreferenceTranslate(preference: Preference) {
-        preference.setOnPreferenceClickListener {
-            viewUrl.launch(Uri.parse(URL_LOCALISATION))
-            true
-        }
-    }
-
-    private fun setupPreferenceBugReport(preference: Preference) {
-        preference.setOnPreferenceClickListener {
-            viewUrl.launch(URL_ISSUES.toUri())
-            true
-        }
-    }
-
-    private fun setupPreferenceImageSupportedFormats(preference: Preference) {
-        preference.summary = supportImageFormats.joinToString()
-    }
-
-    private fun setupPreferenceVersion(preference: Preference) {
-        preference.summary = viewModel.getPackageVersionName()
-    }
-
-    private fun setDefaultOpenPath(
-        preference: ImageButtonPreference?,
-        layoutIndex: Int,
-        path: Uri
-    ) {
-        viewModel.putDefaultOpenPath(
-            path = path,
-            releaseUriPermissions = !path.isNotEmpty()
-        )
-        preference?.apply {
-            summary = if (path.isNotEmpty()) {
-                viewModel.getDefaultOpenPathSummary()
-            } else {
-                getString(R.string.none)
-            }
-            shouldShowClearButton = path.isNotEmpty()
-        }
-        listView.adapter?.notifyItemChanged(layoutIndex)
-    }
-
-    private fun setDefaultSavePath(
-        preference: ImageButtonPreference?,
-        layoutIndex: Int,
-        path: Uri
-    ) {
-        viewModel.putDefaultSavePath(
-            path = path,
-            releaseUriPermissions = !path.isNotEmpty()
-        )
-        preference?.apply {
-            summary = if (path.isNotEmpty()) {
-                viewModel.getDefaultSavePathSummary()
-            } else {
-                getString(R.string.none)
-            }
-            shouldShowClearButton = path.isNotEmpty()
-        }
-        listView.adapter?.notifyItemChanged(layoutIndex)
     }
 }

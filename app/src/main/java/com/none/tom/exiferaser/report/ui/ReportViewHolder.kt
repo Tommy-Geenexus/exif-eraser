@@ -28,10 +28,10 @@ import coil.clear
 import coil.load
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.databinding.FragmentReportCardViewBinding
+import com.none.tom.exiferaser.databinding.ItemReportBinding
 
 class ReportViewHolder(
-    private val binding: FragmentReportCardViewBinding,
+    private val binding: ItemReportBinding,
     private val listener: ReportAdapter.Listener
 ) : RecyclerView.ViewHolder(binding.root) {
 

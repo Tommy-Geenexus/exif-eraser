@@ -27,17 +27,14 @@ import androidx.recyclerview.widget.ListAdapter
 import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
-import com.none.tom.exiferaser.databinding.FragmentMainCardViewBinding
-import com.none.tom.exiferaser.main.ACTIVITY_EXPANDED
-import com.none.tom.exiferaser.main.MainContentReceiver
-import com.none.tom.exiferaser.main.SimpleItemTouchHelperCallback
+import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
+import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.squareup.wire.AnyMessage
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 class MainAdapter(
-    private val listener: Listener,
-    private val receiver: MainContentReceiver
+    private val listener: Listener
 ) : ListAdapter<AnyMessage, MainViewHolder>(
     object : DiffUtil.ItemCallback<AnyMessage>() {
 
@@ -52,7 +49,7 @@ class MainAdapter(
         ) = oldItem == newItem
     }
 ),
-    SimpleItemTouchHelperCallback.OnRecyclerViewItemMoveListener {
+    MainItemTouchHelperCallback.OnRecyclerViewItemMoveListener {
 
     interface Listener {
         fun onImageItemSelected()
@@ -66,20 +63,17 @@ class MainAdapter(
         )
     }
 
-    var screenHeightRatio: Float = ACTIVITY_EXPANDED
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): MainViewHolder {
         return MainViewHolder(
-            binding = FragmentMainCardViewBinding.inflate(
+            binding = ItemImageSourceBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             ),
-            listener = listener,
-            receiver = receiver
+            listener = listener
         )
     }
 
@@ -89,16 +83,16 @@ class MainAdapter(
     ) {
         when (currentList.getOrNull(position)?.typeUrl) {
             ImageFileProto.ADAPTER.typeUrl -> {
-                holder.bindSelectImageItem(screenHeightRatio)
+                holder.bindSelectImageItem()
             }
             ImageFilesProto.ADAPTER.typeUrl -> {
-                holder.bindSelectImagesItem(screenHeightRatio)
+                holder.bindSelectImagesItem()
             }
             ImageDirectoryProto.ADAPTER.typeUrl -> {
-                holder.bindSelectImageDirectoryItem(screenHeightRatio)
+                holder.bindSelectImageDirectoryItem()
             }
             else -> {
-                holder.bindCameraItem(screenHeightRatio)
+                holder.bindCameraItem()
             }
         }
     }

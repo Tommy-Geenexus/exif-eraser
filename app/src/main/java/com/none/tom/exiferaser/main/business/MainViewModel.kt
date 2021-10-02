@@ -35,7 +35,7 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -58,220 +58,107 @@ class MainViewModel @Inject constructor(
     ViewModel() {
 
     private companion object {
-        const val KEY_TRANSITION = TOP_LEVEL_PACKAGE_NAME + "TRANSITION"
+        const val KEY_NAV_DESTINATION = TOP_LEVEL_PACKAGE_NAME + "NAV_DESTINATION"
     }
 
     override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),
         savedStateHandle = savedStateHandle,
         onCreate = {
-            prepareReadImageSources()
+            readDefaultNightMode()
             readImageSources()
         }
     )
 
-    var sharedTransitionAxis: Int
+    var navDestination: Int
         get() {
-            val axis = savedStateHandle.get<Int>(KEY_TRANSITION)
-            return if (axis != null) {
-                savedStateHandle.remove<Int>(KEY_TRANSITION)
-                axis
-            } else {
-                -1
-            }
+            val destination = savedStateHandle.get<Int>(KEY_NAV_DESTINATION)
+            return destination ?: -1
         }
-        set(value) = savedStateHandle.set(KEY_TRANSITION, value)
+        set(value) = savedStateHandle.set(KEY_NAV_DESTINATION, value)
 
-    private fun prepareReadImageSources() = intent {
-        reduce {
-            state.copy(imageSourcesFetching = true)
+    fun completeFlexibleUpdate() = intent {
+        val success = updateRepository.completeFlexibleAppUpdate()
+        if (!success) {
+            postSideEffect(MainSideEffect.FlexibleUpdateFailed)
         }
     }
 
-    private fun readImageSources() = intent {
-        imageSourceRepository.getImageSources().collect { imageSources ->
+    fun chooseImage(canReorderImageSources: Boolean) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
+        reduce {
+            state.copy(loading = true)
+        }
+        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
+        if (path != null) {
             reduce {
-                state.copy(
-                    imageSources = imageSources,
-                    imageSourcesFetching = false
-                )
+                state.copy(loading = false)
             }
+            postSideEffect(MainSideEffect.ChooseImage(path))
         }
     }
 
-    fun prepareReorderImageSources() = intent {
+    fun chooseImages(canReorderImageSources: Boolean) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
         reduce {
-            state.copy(
-                imageSourcesPersisting = false,
-                imageSourcesPersisted = false,
-                imageSourcesReordering = false,
-                imageSourcesReorder = true
-            )
+            state.copy(loading = true)
+        }
+        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
+        if (path != null) {
+            reduce {
+                state.copy(loading = false)
+            }
+            postSideEffect(MainSideEffect.ChooseImages(path))
         }
     }
 
-    fun reorderImageSources(
-        imageSources: MutableList<AnyMessage>,
-        oldIndex: Int,
-        newIndex: Int
-    ) = intent {
-        Collections.swap(imageSources, newIndex, oldIndex)
+    fun chooseImageDirectory(canReorderImageSources: Boolean) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
         reduce {
-            state.copy(
-                imageSources = imageSources,
-                imageSourcesPersisting = false,
-                imageSourcesPersisted = false,
-                imageSourcesReordering = true,
-                imageSourcesReorder = false
-            )
+            state.copy(loading = true)
+        }
+        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
+        if (path != null) {
+            reduce {
+                state.copy(loading = false)
+            }
+            postSideEffect(MainSideEffect.ChooseImageDirectory(path))
         }
     }
 
-    fun preparePutImageSources() = intent {
+    fun deleteCameraImages() = intent {
         reduce {
-            state.copy(
-                imageSourcesPersisting = true,
-                imageSourcesPersisted = false,
-                imageSourcesReordering = false,
-                imageSourcesReorder = false
-            )
+            state.copy(loading = true)
         }
-    }
-
-    fun putImageSources(imageSources: MutableList<AnyMessage>) = intent {
-        val success = imageSourceRepository.putImageSources(imageSources)
+        val result = imageRepository.deleteExternalPictures()
         reduce {
-            state.copy(
-                imageSourcesPersisting = false,
-                imageSourcesPersisted = success,
-                imageSourcesReordering = false,
-                imageSourcesReorder = false
-            )
+            state.copy(loading = false)
         }
+        postSideEffect(MainSideEffect.ExternalPicturesDeleted(success = result))
     }
 
-    fun <T> preparePutSelection(result: T?) = intent {
-        reduce {
-            state.copy(selectionPersisting = result != null)
-        }
+    fun handleDeleteCameraImages() = intent {
+        postSideEffect(MainSideEffect.DeleteCameraImages)
     }
 
-    fun putImageSelection(
-        imageUri: Uri?,
-        fromCamera: Boolean = false
-    ) = intent {
-        val success = selectionRepository.putSelection(
-            imageUri = imageUri,
-            fromCamera = fromCamera
+    fun handleHelp() = intent {
+        postSideEffect(MainSideEffect.NavigateToHelp)
+    }
+
+    fun handlePasteImages(uris: List<Uri>) = intent {
+        postSideEffect(
+            if (uris.isNotEmpty()) {
+                MainSideEffect.PasteImages(uris)
+            } else {
+                MainSideEffect.PasteImagesNone
+            }
         )
-        reduce {
-            state.copy(selectionPersisting = false)
-        }
-        if (success) {
-            postSideEffect(
-                if (fromCamera) {
-                    MainSideEffect.NavigateToSelection
-                } else {
-                    MainSideEffect.NavigateToSelectionSavePath
-                }
-            )
-        }
-    }
-
-    fun putImagesSelection(
-        imageUris: List<Uri>? = null,
-        intentImageUris: Array<Uri>? = null
-    ) = intent {
-        val success = selectionRepository.putSelection(
-            imageUris = imageUris,
-            intentImageUris = intentImageUris
-        )
-        reduce {
-            state.copy(selectionPersisting = false)
-        }
-        if (success) {
-            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
-        }
-    }
-
-    fun putImageDirectorySelection(treeUri: Uri?) = intent {
-        val success = if (treeUri.isNotNullOrEmpty()) {
-            val message = imageRepository.packDocumentTreeToAnyMessageOrNull(treeUri)
-            selectionRepository.putSelection(message)
-        } else {
-            false
-        }
-        reduce {
-            state.copy(selectionPersisting = false)
-        }
-        if (success) {
-            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
-        }
-    }
-
-    fun handleSettings() = intent {
-        postSideEffect(MainSideEffect.NavigateToSettings)
-    }
-
-    fun prepareChooseImagesOrLaunchCamera() = intent {
-        reduce {
-            state.copy(accessingPreferences = true)
-        }
-    }
-
-    fun chooseImage() = intent {
-        val path = settingsRepository.getDefaultOpenPathSuspending()
-        reduce {
-            state.copy(accessingPreferences = false)
-        }
-        postSideEffect(MainSideEffect.ChooseImage(path))
-    }
-
-    fun chooseImages() = intent {
-        val path = settingsRepository.getDefaultOpenPathSuspending()
-        reduce {
-            state.copy(accessingPreferences = false)
-        }
-        postSideEffect(MainSideEffect.ChooseImages(path))
-    }
-
-    fun chooseImageDirectory() = intent {
-        val path = settingsRepository.getDefaultOpenPathSuspending()
-        reduce {
-            state.copy(accessingPreferences = false)
-        }
-        postSideEffect(MainSideEffect.ChooseImageDirectory(path))
-    }
-
-    fun launchCamera(
-        fileProviderPackage: String,
-        displayName: String
-    ) = intent {
-        val uri =
-            imageRepository.getExternalPicturesFileProviderUriOrNull(
-                fileProviderPackage = fileProviderPackage,
-                displayName = displayName
-            )
-        reduce {
-            state.copy(accessingPreferences = false)
-        }
-        if (uri.isNotNullOrEmpty()) {
-            postSideEffect(MainSideEffect.LaunchCamera(uri))
-        }
-    }
-
-    fun handleShortcut(shortcutAction: String) = intent {
-        postSideEffect(MainSideEffect.ShortcutHandle(shortcutAction))
-    }
-
-    fun reportShortcutUsed(shortcutAction: String) = intent {
-        postSideEffect(MainSideEffect.ShortcutReportUsed(shortcutAction))
-    }
-
-    fun handleMultiWindowMode(isInMultiWindowMode: Boolean) = intent {
-        reduce {
-            state.copy(isInMultiWindowMode = isInMultiWindowMode)
-        }
     }
 
     fun handleReceivedImages(uris: List<Uri>) = intent {
@@ -286,20 +173,16 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun handlePasteImages(uris: List<Uri>) = intent {
-        val accessingStorage = state.imageSourcesFetching ||
-            state.imageSourcesPersisting ||
-            state.selectionPersisting ||
-            state.accessingPreferences
-        if (!accessingStorage) {
-            postSideEffect(
-                if (uris.isNotEmpty()) {
-                    MainSideEffect.PasteImages(uris)
-                } else {
-                    MainSideEffect.PasteImagesNone
-                }
-            )
-        }
+    fun handleSettings() = intent {
+        postSideEffect(MainSideEffect.NavigateToSettings)
+    }
+
+    fun handleShortcut(shortcutAction: String) = intent {
+        postSideEffect(MainSideEffect.Shortcut.Handle(shortcutAction))
+    }
+
+    fun reportShortcutUsed(shortcutAction: String) = intent {
+        postSideEffect(MainSideEffect.Shortcut.ReportUsage(shortcutAction))
     }
 
     fun handleFlexibleUpdateFailure() = intent {
@@ -322,10 +205,140 @@ class MainViewModel @Inject constructor(
         postSideEffect(MainSideEffect.FlexibleUpdateReadyToInstall)
     }
 
-    fun completeFlexibleUpdate() = intent {
-        val success = updateRepository.completeFlexibleAppUpdate()
-        if (!success) {
-            postSideEffect(MainSideEffect.FlexibleUpdateFailed)
+    fun launchCamera(
+        fileProviderPackage: String,
+        displayName: String,
+        canReorderImageSources: Boolean
+    ) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
+        reduce {
+            state.copy(loading = true)
+        }
+        val uri = imageRepository.getExternalPicturesFileProviderUriOrNull(
+            fileProviderPackage = fileProviderPackage,
+            displayName = displayName
+        )
+        reduce {
+            state.copy(loading = false)
+        }
+        if (uri.isNotNullOrEmpty()) {
+            postSideEffect(MainSideEffect.LaunchCamera(uri))
+        }
+    }
+
+    fun putImageSources(imageSources: MutableList<AnyMessage>) = intent {
+        reduce {
+            state.copy(loading = true)
+        }
+        imageSourceRepository.putImageSources(imageSources)
+        reduce {
+            state.copy(loading = false)
+        }
+    }
+
+    fun putImageSelection(
+        uri: Uri?,
+        fromCamera: Boolean = false,
+        canReorderImageSources: Boolean = false
+    ) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
+        reduce {
+            state.copy(loading = true)
+        }
+        val success = selectionRepository.putSelection(uri, fromCamera)
+        reduce {
+            state.copy(loading = false)
+        }
+        if (success) {
+            postSideEffect(
+                if (fromCamera) {
+                    MainSideEffect.NavigateToSelection
+                } else {
+                    MainSideEffect.NavigateToSelectionSavePath
+                }
+            )
+        }
+    }
+
+    fun putImagesSelection(
+        uris: List<Uri>? = null,
+        urisFromIntent: Array<Uri>? = null,
+        canReorderImageSources: Boolean = false
+    ) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
+        reduce {
+            state.copy(loading = true)
+        }
+        val success = selectionRepository.putSelection(uris, urisFromIntent)
+        reduce {
+            state.copy(loading = false)
+        }
+        if (success) {
+            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+        }
+    }
+
+    fun putImageDirectorySelection(
+        uri: Uri?,
+        canReorderImageSources: Boolean = false
+    ) = intent {
+        if (canReorderImageSources || state.loading) {
+            return@intent
+        }
+        val success = if (uri.isNotNullOrEmpty()) {
+            reduce {
+                state.copy(loading = true)
+            }
+            val message = imageRepository.packDocumentTreeToAnyMessageOrNull(uri)
+            selectionRepository.putSelection(message)
+        } else {
+            false
+        }
+        reduce {
+            state.copy(loading = false)
+        }
+        if (success) {
+            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+        }
+    }
+
+    private fun readDefaultNightMode() = intent {
+        val value = settingsRepository.getDefaultNightMode().firstOrNull()
+        if (value != null) {
+            postSideEffect(MainSideEffect.DefaultNightMode(value))
+        }
+    }
+
+    private fun readImageSources() = intent {
+        reduce {
+            state.copy(loading = true)
+        }
+        val imageSources = imageSourceRepository.getImageSources().firstOrNull()
+        if (imageSources != null) {
+            reduce {
+                state.copy(
+                    imageSources = imageSources,
+                    loading = false
+                )
+            }
+            postSideEffect(MainSideEffect.ImageSourcesReadComplete)
+        }
+    }
+
+    fun reorderImageSources(
+        imageSources: MutableList<AnyMessage>,
+        oldIndex: Int,
+        newIndex: Int
+    ) = intent {
+        Collections.swap(imageSources, newIndex, oldIndex)
+        reduce {
+            state.copy(imageSources = imageSources)
         }
     }
 }

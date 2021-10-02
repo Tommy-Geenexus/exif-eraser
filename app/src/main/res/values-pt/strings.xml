@@ -24,8 +24,6 @@
     <string name="clipboard_content_paste">Importar imagem do Clipboard</string>
     <string name="clipboard_content_unsupported">Conteúdo do Clipboard incompatível</string>
 
-    <string name="confirm">Confirmar</string>
-
     <string name="default_display_name_suffix">Sufixo padrão da imagem</string>
     <string name="default_path_open">Pasta padrão</string>
     <string name="default_path_save">Pasta padrão para salvar</string>
@@ -33,8 +31,6 @@
     <string name="delete">Excluir</string>
     <string name="delete_camera_images">Excluir imagens da câmera</string>
     <string name="delete_camera_images_all">Excluir todas as imagens da câmera feitas com o App (original e modificado)</string>
-    <string name="delete_camera_images_confirm">Excluir imagens da câmera?</string>
-    <string name="delete_camera_images_confirm_undone">Esta ação não pode ser desfeita.</string>
     <string name="delete_camera_images_failed">Falha ao excluir as imagens da câmera</string>
     <string name="delete_camera_images_success">Imagens da câmera excluídas com sucesso</string>
 
@@ -57,8 +53,6 @@
 
     <string name="low_batt_only">Quando bateria fraca detectada</string>
 
-    <string name="miscellaneous">Diversos</string>
-
     <string name="modified">Modificado</string>
 
     <string name="never">Nunca</string>
@@ -69,7 +63,6 @@
 
     <string name="of">de</string>
 
-    <string name="path_error">Falha em obter o nome da pasta</string>
     <string name="path_save_choose">Escolha pasta para salvar</string>
     <string name="path_save_custom">Pasta personalizada para salvar</string>
     <string name="path_save_default">Pasta padrão de arquivos</string>
@@ -78,8 +71,6 @@
 
     <string name="preserve_image_orientation_off">Não preservar a orientação original da imagem</string>
     <string name="preserve_image_orientation_on">Preservar a orientação original da imagem</string>
-
-    <string name="reorder">Reorganizar</string>
 
     <string name="report_bug">Relatar os bugs</string>
 

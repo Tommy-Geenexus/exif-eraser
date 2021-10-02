@@ -24,8 +24,10 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -34,6 +36,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 @HiltViewModel
 class SavePathViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -44,40 +47,40 @@ class SavePathViewModel @Inject constructor(
     override val container = container<SavePathState, SavePathSideEffect>(
         initialState = SavePathState(),
         savedStateHandle = savedStateHandle,
-        onCreate = { verifyHasPrivilegedDefaultSavePath() }
+        onCreate = {
+            verifyHasPrivilegedDefaultSavePath()
+        }
     )
 
-    fun verifyHasPrivilegedDefaultSavePath() = intent {
-        val result = settingsRepository.hasPrivilegedDefaultSavePath()
-        reduce {
-            state.copy(hasPrivilegedDefaultSavePath = result)
+    fun chooseSelectionSavePath(openPath: Uri = Uri.EMPTY) = intent {
+        val realOpenPath = if (openPath.isNotEmpty()) {
+            openPath
+        } else {
+            settingsRepository.getDefaultPathOpen().firstOrNull()
+        }
+        if (realOpenPath != null) {
+            postSideEffect(SavePathSideEffect.ChooseSavePath(realOpenPath))
         }
     }
 
-    fun chooseSelectionSavePath(openPath: Uri = Uri.EMPTY) = intent {
-        postSideEffect(
-            SavePathSideEffect.ChooseSavePath(
-                openPath = if (openPath.isNotEmpty()) {
-                    openPath
-                } else {
-                    settingsRepository.getDefaultOpenPathSuspending()
-                }
-            )
-        )
+    fun handleSelection(savePath: Uri? = null) = intent {
+        val realSavePath = if (savePath.isNotNullOrEmpty()) {
+            savePath
+        } else {
+            settingsRepository.getDefaultPathSave().firstOrNull()
+        }
+        if (realSavePath != null) {
+            postSideEffect(SavePathSideEffect.NavigateToSelection(realSavePath))
+        }
     }
 
-    @ExperimentalContracts
-    fun navigateToSelection(savePath: Uri? = null) = intent {
+    fun verifyHasPrivilegedDefaultSavePath() = intent {
+        val savePath = settingsRepository.getDefaultPathSave().firstOrNull()
         if (savePath != null) {
-            postSideEffect(
-                SavePathSideEffect.NavigateToSelection(
-                    savePath = if (savePath.isNotEmpty()) {
-                        savePath
-                    } else {
-                        settingsRepository.getDefaultSavePathSuspending()
-                    }
-                )
-            )
+            val result = settingsRepository.hasPrivilegedDefaultPathSave(savePath)
+            reduce {
+                state.copy(hasPrivilegedDefaultSavePath = result)
+            }
         }
     }
 }

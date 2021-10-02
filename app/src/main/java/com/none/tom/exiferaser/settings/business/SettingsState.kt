@@ -21,7 +21,15 @@
 package com.none.tom.exiferaser.settings.business
 
 import android.os.Parcelable
+import com.none.tom.exiferaser.Empty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-object SettingsState : Parcelable
+data class SettingsState(
+    val defaultPathOpenName: String = String.Empty,
+    val defaultPathSaveName: String = String.Empty,
+    val initialPreserveOrientation: Boolean = false,
+    val initialShareByDefault: Boolean = false,
+    val defaultDisplayNameSuffix: String = String.Empty,
+    val defaultNightModeName: String = String.Empty
+) : Parcelable

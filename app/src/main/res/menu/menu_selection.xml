@@ -6,5 +6,5 @@
         android:icon="@drawable/ic_share"
         android:title="@string/share"
         android:visible="false"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

@@ -4,39 +4,37 @@
   <CurrentIssues>
     <ID>ComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>ComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
-    <ID>ComplexMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
-    <ID>LargeClass:MainViewModelTest.kt$MainViewModelTest</ID>
+    <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
     <ID>LongMethod:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment$private fun renderState(state: ImageModifiedDetailsState)</ID>
     <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
-    <ID>LongMethod:MainViewHolder.kt$MainViewHolder$private fun setupDragAndDrop()</ID>
     <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImageSelection()</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
-    <ID>LongMethod:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongParameterList:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageModifiedDetailsViewModel.kt$ImageModifiedDetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
-    <ID>MagicNumber:MainViewHolder.kt$MainViewHolder$255</ID>
+    <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$3</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$4</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$5</ID>
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
-    <ID>NestedBlockDepth:MainContentReceiver.kt$MainContentReceiver$override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
-    <ID>NestedBlockDepth:SettingsFragment.kt$SettingsFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>ReturnCount:AnimationUtils.kt$ @ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
     <ID>ReturnCount:AnimationUtils.kt$ fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
-    <ID>ReturnCount:MainContentReceiver.kt$MainContentReceiver$override fun onReceiveContent( view: View, payload: ContentInfoCompat ): ContentInfoCompat?</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:VerticalDividerItemDecoration.kt$VerticalDividerItemDecoration$IllegalStateException()</ID>
     <ID>ThrowsCount:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
-    <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.Extensions.kt</ID>
     <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
-    <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListenerListener</ID>
+    <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:ReportFragment.kt$ReportFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:SelectionFragment.kt$SelectionFragment : BaseFragment</ID>
-    <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : PreferenceFragmentCompat</ID>
-    <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository : SettingsDelegate</ID>
+    <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : BaseFragmentListener</ID>
+    <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository</ID>
+    <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModelContainerHost</ID>
   </CurrentIssues>
 </SmellBaseline>

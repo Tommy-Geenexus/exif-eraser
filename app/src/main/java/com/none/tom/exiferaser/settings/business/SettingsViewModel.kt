@@ -20,51 +20,187 @@
 
 package com.none.tom.exiferaser.settings.business
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
+import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.Empty
-import com.none.tom.exiferaser.selection.data.ImageRepository
-import com.none.tom.exiferaser.settings.data.SettingsDelegate
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    @ApplicationContext context: Context,
-    private val imageRepository: ImageRepository,
+    savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository
-) : AndroidViewModel(context as Application),
-    ContainerHost<SettingsState, SettingsSideEffect>,
-    SettingsDelegate by settingsRepository {
+) : ViewModel(),
+    ContainerHost<SettingsState, SettingsSideEffect> {
 
-    override val container =
-        container<SettingsState, SettingsSideEffect>(initialState = SettingsState)
+    override val container = container<SettingsState, SettingsSideEffect>(
+        initialState = SettingsState(),
+        savedStateHandle = savedStateHandle,
+        onCreate = {
+            readDefaultValues()
+        }
+    )
 
-    fun getPackageVersionName(): String {
-        val context = getApplication<Application>()
-        return context
-            .packageManager
-            .runCatching {
-                getPackageInfo(context.packageName, 0).versionName
-            }
-            .getOrElse { exception ->
-                Timber.e(exception)
-                String.Empty
-            }
+    private fun readDefaultValues() = intent {
+        val defaultPathOpenName = settingsRepository.getDefaultPathOpenName()
+        val defaultPathSaveName: String = settingsRepository.getDefaultPathSaveName()
+        val initialPreserveOrientation =
+            settingsRepository.shouldPreserveOrientation().firstOrNull()
+        val initialShareByDefault = settingsRepository.shouldShareByDefault().firstOrNull()
+        val defaultDisplayNameSuffix =
+            settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
+        val defaultNightModeName = settingsRepository.getDefaultNightModeName()
+        reduce {
+            state.copy(
+                defaultPathOpenName = defaultPathOpenName,
+                defaultPathSaveName = defaultPathSaveName,
+                initialPreserveOrientation = initialPreserveOrientation == true,
+                initialShareByDefault = initialShareByDefault == true,
+                defaultDisplayNameSuffix = defaultDisplayNameSuffix.orEmpty(),
+                defaultNightModeName = defaultNightModeName
+            )
+        }
     }
 
-    fun deleteCameraImages() = intent {
-        val result = imageRepository.deleteExternalPictures()
-        postSideEffect(SettingsSideEffect.ExternalPicturesDeleted(success = result))
+    fun handleDefaultPathOpen() = intent {
+        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
+        postSideEffect(SettingsSideEffect.DefaultPathOpenSelect(uri ?: Uri.EMPTY))
+    }
+
+    fun clearDefaultPathOpen() = intent {
+        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
+        val success = if (uri.isNotNullOrEmpty()) {
+            settingsRepository.putDefaultPathOpen(
+                defaultPathOpenNew = Uri.EMPTY,
+                defaultPathOpenCurrent = uri,
+                releaseUriPermissions = true
+            )
+        } else {
+            false
+        }
+        if (success) {
+            reduce {
+                state.copy(defaultPathOpenName = String.Empty)
+            }
+        }
+        postSideEffect(SettingsSideEffect.DefaultPathOpenClear(success))
+    }
+
+    fun storeDefaultPathOpen(uriNew: Uri) = intent {
+        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
+        val success = if (uri.isNotNullOrEmpty()) {
+            settingsRepository.putDefaultPathOpen(
+                defaultPathOpenNew = uriNew,
+                defaultPathOpenCurrent = uri,
+                releaseUriPermissions = false
+            )
+        } else {
+            false
+        }
+        if (success) {
+            val name = settingsRepository.getDefaultPathOpenName()
+            reduce {
+                state.copy(defaultPathOpenName = name)
+            }
+        }
+        postSideEffect(SettingsSideEffect.DefaultPathOpenStore(success))
+    }
+
+    fun handleDefaultPathSave() = intent {
+        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
+        postSideEffect(SettingsSideEffect.DefaultPathSaveSelect(uri ?: Uri.EMPTY))
+    }
+
+    fun clearDefaultPathSave() = intent {
+        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
+        val success = if (uri.isNotNullOrEmpty()) {
+            settingsRepository.putDefaultPathSave(
+                defaultPathSaveNew = Uri.EMPTY,
+                defaultPathSaveCurrent = uri,
+                releaseUriPermissions = true
+            )
+        } else {
+            false
+        }
+        if (success) {
+            reduce {
+                state.copy(defaultPathSaveName = String.Empty)
+            }
+        }
+        postSideEffect(SettingsSideEffect.DefaultPathSaveClear(success))
+    }
+
+    fun storeDefaultPathSave(uriNew: Uri) = intent {
+        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
+        val success = if (uri.isNotNullOrEmpty()) {
+            settingsRepository.putDefaultPathSave(
+                defaultPathSaveNew = uriNew,
+                defaultPathSaveCurrent = uri,
+                releaseUriPermissions = false
+            )
+        } else {
+            false
+        }
+        if (success) {
+            val name = settingsRepository.getDefaultPathSaveName()
+            reduce {
+                state.copy(defaultPathSaveName = name)
+            }
+        }
+        postSideEffect(SettingsSideEffect.DefaultPathSaveStore(success))
+    }
+
+    fun storePreserveOrientation(value: Boolean) = intent {
+        val success = settingsRepository.putPreserveOrientation(value)
+        postSideEffect(SettingsSideEffect.PreserveOrientation(success))
+    }
+
+    fun storeShareByDefault(value: Boolean) = intent {
+        val success = settingsRepository.putShareByDefault(value)
+        postSideEffect(SettingsSideEffect.ShareByDefault(success))
+    }
+
+    fun handleDefaultDisplayNameSuffix() = intent {
+        val value = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
+        if (!value.isNullOrEmpty()) {
+            postSideEffect(SettingsSideEffect.NavigateToDefaultDisplayNameSuffix(value))
+        }
+    }
+
+    fun storeDefaultDisplayNameSuffix(value: String) = intent {
+        val success = settingsRepository.putDefaultDisplayNameSuffix(value)
+        if (success) {
+            reduce {
+                state.copy(defaultDisplayNameSuffix = value)
+            }
+        }
+    }
+
+    fun handleDefaultNightMode() = intent {
+        val value = settingsRepository.getDefaultNightMode().firstOrNull()
+        if (value != null) {
+            postSideEffect(SettingsSideEffect.NavigateToDefaultNightMode(value))
+        }
+    }
+
+    fun storeDefaultNightMode(value: Int) = intent {
+        val success = settingsRepository.putDefaultNightMode(value)
+        if (success) {
+            val name = settingsRepository.getDefaultNightModeName()
+            reduce {
+                state.copy(defaultNightModeName = name)
+            }
+        }
     }
 }

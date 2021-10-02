@@ -27,12 +27,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MainState(
     val imageSources: MutableList<AnyMessage> = mutableListOf(),
-    val imageSourcesFetching: Boolean = false,
-    val imageSourcesPersisting: Boolean = false,
-    val imageSourcesPersisted: Boolean = false,
-    val imageSourcesReordering: Boolean = false,
-    val imageSourcesReorder: Boolean = false,
-    val selectionPersisting: Boolean = false,
-    val accessingPreferences: Boolean = false,
-    val isInMultiWindowMode: Boolean = false
+    val loading: Boolean = false
 ) : Parcelable

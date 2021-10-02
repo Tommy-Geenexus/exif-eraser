@@ -4,7 +4,7 @@ ext {
     detekt_version = "1.18.1"
     exhaustive_version = "0.2.0"
     ktlint_version = "10.2.0"
-    nav_version = "2.4.0-beta01"
+    nav_version = "2.4.0-beta02"
     spotless_version = "5.17.1"
     versions_version = "0.39.0"
     wire_version = "4.0.0-alpha.15"
@@ -16,18 +16,19 @@ ext {
     def core_version = "1.7.0"
     def core_splash_version = "1.0.0-alpha02"
     def coroutines_version = "1.5.2"
+    def curtains_version = "1.2.2"
     def dagger_vm_compiler_version = "1.0.0"
     def data_store_version = "1.0.0"
     def desugar_version = "1.1.5"
     def exif_interface_version = "1.0.1"
-    def fragment_version = "1.4.0-beta01"
+    def fragment_version = "1.4.0-rc01"
+    def insetter_version = "0.6.0"
     def lifecycle_version = "2.4.0"
-    def material_version = "1.4.0"
+    def material_version = "1.5.0-alpha05"
     def mockK_version = "1.12.0"
     def orbit_version = "4.2.0"
     def play_core_version = "1.10.2"
     def play_core_ktx_version = "1.8.1"
-    def preference_version = "1.1.1"
     def recycler_view_version = "1.2.1"
     def roboelectric_version = "4.6.1"
     def strikt_version = "0.32.0"
@@ -59,11 +60,13 @@ ext {
             "core"               : "androidx.core:core-ktx:$core_version",
             "core_splash"        : "androidx.core:core-splashscreen:$core_splash_version",
             "coroutines"         : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
+            "curtains"           : "com.squareup.curtains:curtains:$curtains_version",
             "dagger_hilt"        : "com.google.dagger:hilt-android:$dagger_version",
             "data_store_prefs"   : "androidx.datastore:datastore-preferences:$data_store_version",
             "data_store_proto"   : "androidx.datastore:datastore-core:$data_store_version",
             "exif_interface"     : "io.github.tommy-geenexus:exif-interface-extended:$exif_interface_version",
             "fragment"           : "androidx.fragment:fragment-ktx:$fragment_version",
+            "insetter"           : "dev.chrisbanes.insetter:insetter:$insetter_version",
             "kotlin"             : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
             "lifecycle"          : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version",
             "material"           : "com.google.android.material:material:$material_version",
@@ -72,7 +75,6 @@ ext {
             "orbit_vm"           : "org.orbit-mvi:orbit-viewmodel:$orbit_version",
             "play_core"          : "com.google.android.play:core:$play_core_version",
             "play_core_ktx"      : "com.google.android.play:core-ktx:$play_core_ktx_version",
-            "preference"         : "androidx.preference:preference-ktx:$preference_version",
             "recycler_view"      : "androidx.recyclerview:recyclerview:$recycler_view_version",
             "timber"             : "com.jakewharton.timber:timber:$timber_version",
             "wire"               : "com.squareup.wire:wire-runtime:$wire_version"

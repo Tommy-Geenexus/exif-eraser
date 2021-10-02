@@ -53,13 +53,6 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun handleViewImage(position: Int) = intent {
-        val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
-        if (imageUri.isNotNullOrEmpty()) {
-            postSideEffect(ReportSideEffect.ViewImage(imageUri))
-        }
-    }
-
     fun handleImageModifiedDetails(position: Int) = intent {
         val summary = state.imageSummaries.getOrNull(position)
         if (summary != null) {
@@ -85,6 +78,13 @@ class ReportViewModel @Inject constructor(
             if (!imagePath.isNullOrEmpty()) {
                 postSideEffect(ReportSideEffect.NavigateToImageSavedDetails(imagePath))
             }
+        }
+    }
+
+    fun handleViewImage(position: Int) = intent {
+        val imageUri = state.imageSummaries.getOrNull(position)?.imageUri
+        if (imageUri.isNotNullOrEmpty()) {
+            postSideEffect(ReportSideEffect.ViewImage(imageUri))
         }
     }
 }

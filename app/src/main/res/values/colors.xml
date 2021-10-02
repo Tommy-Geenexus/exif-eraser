@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_teal_200">#80cbc4</color>or>
+    <color name="color_teal_200">#80cbc4</color>
     <color name="color_teal_500">#009688</color>
-    <color name="color_teal_500_light">#52c7b8</color>
+    <color name="color_teal_500_light">#4db6ac</color>
     <color name="color_teal_500_dark">#00675b</color>
-    <color name="color_green">#00b06f</color>
-    <color name="color_green_light">#66cfa9</color>
-    <color name="color_blue">#0041b0</color>
-    <color name="color_blue_light">#668dcf</color>
-    <color name="color_grey900">#212121</color>
-    <color name="color_grey_elevation_01">#05121212</color>
+    <color name="color_green_200">#a5d6a7</color>
+    <color name="color_green_500">#4caf50</color>
 </resources>

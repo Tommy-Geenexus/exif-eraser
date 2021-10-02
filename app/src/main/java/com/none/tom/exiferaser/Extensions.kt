@@ -20,85 +20,32 @@
 
 package com.none.tom.exiferaser
 
-import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.view.View
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.transition.MaterialSharedAxis
+import dev.chrisbanes.insetter.applyInsetter
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-fun FragmentActivity.setupToolbar(
-    fragment: Fragment,
-    toolbar: Toolbar,
-    @StringRes titleRes: Int = 0
-) {
-    toolbar.setTitle(titleRes)
-    (this as? AppCompatActivity)?.setSupportActionBar(toolbar)
-    fragment
-        .requireParentFragment()
-        .childFragmentManager
-        .backStackEntryCount
-        .takeIf { count -> count > 0 }
-        ?.let {
-            toolbar.apply {
-                setNavigationIcon(R.drawable.ic_arrow_back)
-                setNavigationOnClickListener {
-                    findNavController().navigateUp()
-                }
-            }
+fun View.applyInsetMargins() {
+    applyInsetter {
+        type(
+            navigationBars = true,
+            statusBars = true
+        ) {
+            margin()
         }
-}
-
-fun Fragment.navigate(navDirections: NavDirections) {
-    val navController = findNavController()
-    val action = navController.currentDestination?.getAction(navDirections.actionId)
-    if (action != null && action.destinationId != 0) {
-        navController.navigate(navDirections)
     }
 }
 
-fun Fragment.setTransitions(
-    transitionEnter: MaterialSharedAxis? = null,
-    transitionExit: MaterialSharedAxis? = null,
-    transitionReturn: MaterialSharedAxis? = null,
-    transitionReenter: MaterialSharedAxis? = null
-) {
-    enterTransition = transitionEnter?.apply {
-        duration = resources.getInteger(R.integer.anim_time_medium).toLong()
-    }
-    exitTransition = transitionExit?.apply {
-        duration = resources.getInteger(R.integer.anim_time_medium).toLong()
-    }
-    returnTransition = transitionReturn?.apply {
-        duration = resources.getInteger(R.integer.anim_time_medium).toLong()
-    }
-    reenterTransition = transitionReenter?.apply {
-        duration = resources.getInteger(R.integer.anim_time_medium).toLong()
-    }
-}
-
-fun Fragment.isActivityInMultiWindowMode(): Boolean {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && requireActivity().isInMultiWindowMode
-}
-
-@SuppressLint("ShowToast")
 fun View.showSnackbar(
     anchor: View? = null,
     msg: String,

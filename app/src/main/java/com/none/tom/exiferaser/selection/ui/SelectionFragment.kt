@@ -38,6 +38,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.applyInsetMargins
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
 import com.none.tom.exiferaser.report.lerp
 import com.none.tom.exiferaser.report.ui.ReportFragment
@@ -48,8 +49,6 @@ import com.none.tom.exiferaser.selection.business.SelectionViewModel
 import com.none.tom.exiferaser.selection.crossfade
 import com.none.tom.exiferaser.selection.fadeIn
 import com.none.tom.exiferaser.selection.toPercent
-import com.none.tom.exiferaser.setTransitions
-import com.none.tom.exiferaser.setupToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -87,8 +86,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
     ) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        requireActivity().setupToolbar(
-            fragment = this,
+        setupToolbar(
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.summary
         )
@@ -98,6 +96,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                 slideOffset = bundle.getFloat(ReportFragment.KEY_OFFSET_SLIDE)
             )
         }
+        binding.layout.applyInsetMargins()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->

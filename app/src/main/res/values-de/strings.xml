@@ -24,8 +24,6 @@
     <string name="clipboard_content_paste">Zwischenablageninhalt einfügen</string>
     <string name="clipboard_content_unsupported">Zwischenablageninhalt nicht unterstützt</string>
 
-    <string name="confirm">Übernehmen</string>
-
     <string name="default_display_name_suffix">Standard-Anzeigename-Zusatz</string>
     <string name="default_path_open">Standard-Öffnungspfad</string>
     <string name="default_path_save">Standard-Speicherpfad</string>
@@ -33,8 +31,6 @@
     <string name="delete">Löschen</string>
     <string name="delete_camera_images">Kamera-Bilder löschen</string>
     <string name="delete_camera_images_all">Alle Kamera-Bilder (original und modifiziert), die durch diese App aufgenommen wurden, löschen</string>
-    <string name="delete_camera_images_confirm">Kamera-Bilder löschen?</string>
-    <string name="delete_camera_images_confirm_undone">Diese Aktion kann nicht rückgängig gemacht werden.</string>
     <string name="delete_camera_images_failed">Kamera-Bilder konnten nicht gelöscht werden</string>
     <string name="delete_camera_images_success">Kamera-Bilder erfolgreich gelöscht</string>
 
@@ -57,8 +53,6 @@
 
     <string name="low_batt_only">Bei niedrigem Akkustand</string>
 
-    <string name="miscellaneous">Sonstiges</string>
-
     <string name="modified">Modifiziert</string>
 
     <string name="never">Niemals</string>
@@ -69,7 +63,6 @@
 
     <string name="of">von</string>
 
-    <string name="path_error">Pfadname konnte nicht ermittelt werden</string>
     <string name="path_save_choose">Wähle Speicherpfad</string>
     <string name="path_save_custom">Benutzerdefinierter Speicherpfad</string>
     <string name="path_save_default">Standard-Speicherpfad</string>
@@ -78,8 +71,6 @@
 
     <string name="preserve_image_orientation_off">Verwerfe die ursprüngliche Bildausrichtung</string>
     <string name="preserve_image_orientation_on">Behalte die ursprüngliche Bildausrichtung bei</string>
-
-    <string name="reorder">Neu anordnen</string>
 
     <string name="report_bug">Fehler melden</string>
 

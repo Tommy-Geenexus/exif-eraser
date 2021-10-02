@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/spacing_normal"
+    android:paddingStart="@dimen/spacing_normal"
+    android:paddingTop="@dimen/spacing_normal"
+    android:paddingEnd="@dimen/spacing_normal"
     android:scrollbars="none">
 
     <com.google.android.material.chip.ChipGroup
@@ -13,7 +15,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/extension"
-            style="@style/Widget.MaterialComponents.Chip.Action"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -21,7 +23,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/iccp"
-            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -30,7 +32,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/exif"
-            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -39,7 +41,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/photoshop"
-            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -48,7 +50,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/xmp"
-            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
@@ -57,7 +59,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/extended_xmp"
-            style="@style/Widget.ExifEraser.Chip.Action.Outlined"
+            style="?attr/chipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"

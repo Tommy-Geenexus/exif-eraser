@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:transitionGroup="true">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        style="?attr/toolbarSurfaceStyle"
         android:layout_width="match_parent"
         android:layout_height="?android:actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:logo="@drawable/ic_logo"
-        app:titleMarginStart="@dimen/spacing_large"
-        app:titleTextAppearance="@style/TextAppearance.ExifEraser.Title.Toolbar" />
+        android:elevation="@dimen/elevation_micro"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress"
+        style="?attr/linearProgressIndicatorStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
@@ -23,13 +33,15 @@
         android:layout_marginStart="@dimen/spacing_normal"
         android:layout_marginEnd="@dimen/spacing_normal"
         android:gravity="end"
+        android:textAppearance="?attr/textAppearanceHeadlineLarge"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/image_sources"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/progress" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_image_sources"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
@@ -42,35 +54,14 @@
         android:transitionGroup="true"
         app:layout_constraintTop_toBottomOf="@id/guideline_image_sources" />
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/spinner"
-        style="?android:progressBarStyle"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/image_sources_reorder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/spacing_normal"
+        android:contentDescription="@string/reorder_image_source_cards"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/image_sources_reorder_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/image_sources_reorder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/spacing_normal"
-            android:backgroundTint="?android:colorBackground"
-            android:textAllCaps="false"
-            android:textColor="?android:textColorPrimaryNoDisable"
-            app:iconTint="?attr/colorDrawable"
-            app:iconTintMode="src_in" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

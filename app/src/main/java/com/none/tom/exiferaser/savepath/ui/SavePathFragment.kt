@@ -32,10 +32,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import app.cash.exhaustive.Exhaustive
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.databinding.FragmentSavePathBinding
-import com.none.tom.exiferaser.navigate
 import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
 import com.none.tom.exiferaser.savepath.business.SavePathState
 import com.none.tom.exiferaser.savepath.business.SavePathViewModel
@@ -46,24 +44,13 @@ import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @AndroidEntryPoint
-class SavePathFragment : BottomSheetDialogFragment() {
+class SavePathFragment : BaseBottomSheetDialogFragment<FragmentSavePathBinding>() {
 
     private val viewModel: SavePathViewModel by viewModels()
     private val chooseSavePath = registerForActivityResult(
         ActivityResultContracts.OpenDocumentTree()
     ) { savePath ->
-        viewModel.navigateToSelection(savePath)
-    }
-    private var _binding: FragmentSavePathBinding? = null
-    private val binding: FragmentSavePathBinding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSavePathBinding.inflate(inflater, container, false)
-        return binding.root
+        viewModel.handleSelection(savePath)
     }
 
     override fun onViewCreated(
@@ -72,7 +59,7 @@ class SavePathFragment : BottomSheetDialogFragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding.pathSaveDefault.setOnClickListener {
-            viewModel.navigateToSelection(savePath = Uri.EMPTY)
+            viewModel.handleSelection(savePath = Uri.EMPTY)
         }
         binding.pathSaveCustom.setOnClickListener {
             viewModel.chooseSelectionSavePath()
@@ -93,12 +80,10 @@ class SavePathFragment : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun getTheme() = R.style.ThemeOverlay_ExifEraser_Sheet_Bottom
+    override fun inflateLayout(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSavePathBinding.inflate(inflater, container, false)
 
     private fun renderState(state: SavePathState) {
         binding.pathSaveDefault.isVisible = state.hasPrivilegedDefaultSavePath

@@ -35,6 +35,7 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -63,42 +64,6 @@ class SelectionViewModel @Inject constructor(
         }
     )
 
-    private fun readSelection(dropFirstN: Int) = intent {
-        selectionRepository.getSelection(dropFirstN).collect { selection ->
-            postSideEffect(SelectionSideEffect.ReadComplete(selection))
-        }
-    }
-
-    fun prepareReport() = intent {
-        val result = state.imageSummaries.filterNotNull()
-        if (result.isNotEmpty()) {
-            postSideEffect(SelectionSideEffect.PrepareReport(result))
-        }
-    }
-
-    fun shareImages() = intent {
-        val result = state
-            .imageSummaries
-            .filterNotNull()
-            .filter { summary ->
-                summary.imageModified && summary.imageSaved
-            }
-            .map { summary ->
-                summary.imageUri
-            }
-        if (!result.isNullOrEmpty()) {
-            postSideEffect(SelectionSideEffect.ShareImages(ArrayList(result)))
-        }
-    }
-
-    fun shareImagesByDefault() = intent {
-        if (settingsRepository.shouldShareImagesByDefaultSuspending()) {
-            shareImages()
-        }
-    }
-
-    fun hasSavedImages() = container.stateFlow.value.imagesSaved > 0
-
     fun handleSelection(
         selection: AnyMessage?,
         treeUri: Uri
@@ -124,11 +89,13 @@ class SelectionViewModel @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri
     ) = intent {
+        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
+        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
         imageRepository.removeMetadataSingle(
             selection = selection,
             treeUri = treeUri,
-            displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-            preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending()
+            displayNameSuffix = displayNameSuffix.orEmpty(),
+            preserveOrientation = preserveOrientation == true
         ).collect { result ->
             reduce {
                 @Exhaustive
@@ -176,11 +143,13 @@ class SelectionViewModel @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri
     ) = intent {
+        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
+        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
         imageRepository.removeMetadataBulk(
             selection = selection,
             treeUri = treeUri,
-            displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix(),
-            preserveOrientation = settingsRepository.shouldPreserveImageOrientationSuspending(),
+            displayNameSuffix = displayNameSuffix.orEmpty(),
+            preserveOrientation = preserveOrientation == true,
         ).collect { result ->
             reduce {
                 @Exhaustive
@@ -227,6 +196,43 @@ class SelectionViewModel @Inject constructor(
     fun handleUnsupportedSelection() = intent {
         reduce {
             state.copy(handledAll = true)
+        }
+    }
+
+    fun hasSavedImages() = container.stateFlow.value.imagesSaved > 0
+
+    fun prepareReport() = intent {
+        val result = state.imageSummaries.filterNotNull()
+        if (result.isNotEmpty()) {
+            postSideEffect(SelectionSideEffect.PrepareReport(result))
+        }
+    }
+
+    private fun readSelection(dropFirstN: Int) = intent {
+        val selection = selectionRepository.getSelection(dropFirstN).firstOrNull()
+        if (selection != null) {
+            postSideEffect(SelectionSideEffect.ReadComplete(selection))
+        }
+    }
+
+    fun shareImages() = intent {
+        val result = state
+            .imageSummaries
+            .filterNotNull()
+            .filter { summary ->
+                summary.imageModified && summary.imageSaved
+            }
+            .map { summary ->
+                summary.imageUri
+            }
+        if (!result.isNullOrEmpty()) {
+            postSideEffect(SelectionSideEffect.ShareImages(ArrayList(result)))
+        }
+    }
+
+    fun shareImagesByDefault() = intent {
+        if (settingsRepository.shouldShareByDefault().firstOrNull() == true) {
+            shareImages()
         }
     }
 }

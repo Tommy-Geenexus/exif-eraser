@@ -22,6 +22,7 @@ package com.none.tom.exiferaser.di
 
 import android.content.Context
 import androidx.datastore.dataStore
+import androidx.datastore.preferences.preferencesDataStore
 import com.none.tom.exiferaser.main.data.ImageSourcesSerializer
 import com.none.tom.exiferaser.main.data.SelectionSerializer
 import dagger.Module
@@ -43,6 +44,11 @@ object DataStoreModule {
     fun provideDataStoreImageSources(
         @ApplicationContext context: Context
     ) = context.selectionDataStore
+
+    @Provides
+    fun provideDataStoreSettings(
+        @ApplicationContext context: Context
+    ) = context.settingsDataStore
 }
 
 private val Context.imageSourcesDataStore by dataStore(
@@ -54,3 +60,5 @@ private val Context.selectionDataStore by dataStore(
     fileName = "selection.pb",
     serializer = SelectionSerializer()
 )
+
+private val Context.settingsDataStore by preferencesDataStore(name = "settings")

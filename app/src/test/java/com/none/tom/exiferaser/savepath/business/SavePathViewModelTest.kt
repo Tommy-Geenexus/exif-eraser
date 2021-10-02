@@ -30,6 +30,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,6 +39,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.contracts.ExperimentalContracts
 
+@ExperimentalContracts
 @ExperimentalCoroutinesApi
 @Config(sdk = [Build.VERSION_CODES.P])
 @RunWith(RobolectricTestRunner::class)
@@ -58,22 +60,25 @@ class SavePathViewModelTest {
             isolateFlow = false
         )
         coEvery {
-            settingsRepository.hasPrivilegedDefaultSavePath()
+            settingsRepository.getDefaultPathSave()
+        } returns flowOf(testUri)
+        coEvery {
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
         } returns true
         viewModel.testIntent {
             verifyHasPrivilegedDefaultSavePath()
         }
         coVerify(exactly = 1) {
-            settingsRepository.hasPrivilegedDefaultSavePath()
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
         }
         coEvery {
-            settingsRepository.hasPrivilegedDefaultSavePath()
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
         } returns false
         viewModel.testIntent {
             verifyHasPrivilegedDefaultSavePath()
         }
         coVerify(exactly = 2) {
-            settingsRepository.hasPrivilegedDefaultSavePath()
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
         }
         viewModel.assert(initialState) {
             states(
@@ -101,13 +106,13 @@ class SavePathViewModelTest {
             chooseSelectionSavePath(testUri)
         }
         coEvery {
-            settingsRepository.getDefaultOpenPathSuspending()
-        } returns testUri
+            settingsRepository.getDefaultPathOpen()
+        } returns flowOf(testUri)
         viewModel.testIntent {
             chooseSelectionSavePath(Uri.EMPTY)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultOpenPathSuspending()
+            settingsRepository.getDefaultPathOpen()
         }
         viewModel.assert(initialState) {
             postedSideEffects(
@@ -119,7 +124,7 @@ class SavePathViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_navigateToSelection() = runBlockingTest {
+    fun test_handleSelection() = runBlockingTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -128,20 +133,23 @@ class SavePathViewModelTest {
             initialState = initialState,
             isolateFlow = false
         )
+        coEvery {
+            settingsRepository.getDefaultPathSave()
+        } returns flowOf()
         viewModel.testIntent {
-            navigateToSelection(null)
-        }
-        viewModel.testIntent {
-            navigateToSelection(testUri)
+            handleSelection(null)
         }
         coEvery {
-            settingsRepository.getDefaultSavePathSuspending()
-        } returns testUri
+            settingsRepository.getDefaultPathSave()
+        } returns flowOf(testUri)
         viewModel.testIntent {
-            navigateToSelection(Uri.EMPTY)
+            handleSelection(testUri)
         }
-        coVerify(exactly = 1) {
-            settingsRepository.getDefaultSavePathSuspending()
+        viewModel.testIntent {
+            handleSelection(Uri.EMPTY)
+        }
+        coVerify(exactly = 2) {
+            settingsRepository.getDefaultPathSave()
         }
         viewModel.assert(initialState) {
             postedSideEffects(
