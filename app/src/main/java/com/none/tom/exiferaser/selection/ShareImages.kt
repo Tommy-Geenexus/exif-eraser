@@ -27,7 +27,7 @@ import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 
-class ShareImages : ActivityResultContract<Pair<String, ArrayList<Uri>>, Boolean>() {
+class ShareImages : ActivityResultContract<Pair<String, ArrayList<Uri>>?, Boolean>() {
 
     override fun createIntent(
         context: Context,
