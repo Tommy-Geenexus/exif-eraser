@@ -26,7 +26,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 
-class TakePicture : ActivityResultContract<Uri, Uri>() {
+class TakePicture : ActivityResultContract<Uri?, Uri?>() {
 
     private var uri: Uri? = null
 
