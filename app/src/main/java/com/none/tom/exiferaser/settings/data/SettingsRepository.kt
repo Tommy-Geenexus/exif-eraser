@@ -33,7 +33,6 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.documentfile.provider.DocumentFile
 import com.none.tom.exiferaser.Empty
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.settings.defaultNightMode
@@ -58,14 +57,15 @@ class SettingsRepository @Inject constructor(
     @DispatcherIo private val dispatcher: CoroutineDispatcher
 ) {
 
-    private companion object {
-        const val KEY_DEFAULT_OPEN_PATH = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_OPEN_PATH"
-        const val KEY_DEFAULT_SAVE_PATH = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_SAVE_PATH"
-        const val KEY_PRESERVE_ORIENTATION = TOP_LEVEL_PACKAGE_NAME + "PRESERVE_ORIENTATION"
-        const val KEY_SHARE_BY_DEFAULT = TOP_LEVEL_PACKAGE_NAME + "SHARE_BY_DEFAULT"
-        const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX =
-            TOP_LEVEL_PACKAGE_NAME + "DEFAULT_DISPLAY_NAME_SUFFIX"
-        const val KEY_DEFAULT_NIGHT_MODE = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_NIGHT_MODE"
+    companion object {
+
+        // Keys copied from settings SharedPreferences for DataStore migration
+        const val KEY_DEFAULT_OPEN_PATH = "default_path_open"
+        const val KEY_DEFAULT_SAVE_PATH = "default_path_save"
+        const val KEY_PRESERVE_ORIENTATION = "image_orientation"
+        const val KEY_SHARE_BY_DEFAULT = "image_share_by_default"
+        const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX = "default_display_name_suffix"
+        const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
     }
 
     private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
