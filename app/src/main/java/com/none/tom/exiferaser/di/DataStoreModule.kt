@@ -22,9 +22,11 @@ package com.none.tom.exiferaser.di
 
 import android.content.Context
 import androidx.datastore.dataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import com.none.tom.exiferaser.main.data.ImageSourcesSerializer
 import com.none.tom.exiferaser.main.data.SelectionSerializer
+import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,4 +63,21 @@ private val Context.selectionDataStore by dataStore(
     serializer = SelectionSerializer()
 )
 
-private val Context.settingsDataStore by preferencesDataStore(name = "settings")
+private val Context.settingsDataStore by preferencesDataStore(
+    name = "settings",
+    produceMigrations = { context ->
+        listOf(
+            SharedPreferencesMigration(
+                context = context,
+                sharedPreferencesName = context.packageName + "_preferences",
+                keysToMigrate = setOf(
+                    SettingsRepository.KEY_DEFAULT_OPEN_PATH,
+                    SettingsRepository.KEY_DEFAULT_SAVE_PATH,
+                    SettingsRepository.KEY_PRESERVE_ORIENTATION,
+                    SettingsRepository.KEY_SHARE_BY_DEFAULT,
+                    SettingsRepository.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
+                )
+            )
+        )
+    }
+)
