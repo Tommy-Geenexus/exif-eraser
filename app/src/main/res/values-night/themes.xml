@@ -2,7 +2,12 @@
 <resources>
 
     <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
-        <item name="linearProgressIndicatorStyle">@style/Widget.ExifEraser.LinearProgressIndicator</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.ExifEraser.MaterialAlertDialog
+        </item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.ExifEraser.LinearProgressIndicator
+        </item>
+        <item name="textInputOutlinedStyle">@style/Widget.ExifEraser.TextInputLayout.OutlinedBox
+        </item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimaryContainer">@color/color_teal_500_dark</item>
         <item name="colorSecondary">@color/color_teal_200</item>

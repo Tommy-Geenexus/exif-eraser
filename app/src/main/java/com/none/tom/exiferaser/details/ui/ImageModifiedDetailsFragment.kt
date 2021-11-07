@@ -91,6 +91,7 @@ class ImageModifiedDetailsFragment : DialogFragment() {
         _binding = FragmentImageModifiedDetailsBinding.inflate(
             LayoutInflater.from(requireContext())
         )
+        binding.title.text = arguments?.getString(KEY_DISPLAY_NAME, String.Empty)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModelImageModified.container.stateFlow.collect { state ->
@@ -99,7 +100,6 @@ class ImageModifiedDetailsFragment : DialogFragment() {
             }
         }
         return MaterialAlertDialogBuilder(requireActivity())
-            .setTitle(arguments?.getString(KEY_DISPLAY_NAME, String.Empty))
             .setView(binding.root)
             .setPositiveButton(android.R.string.ok, null)
             .create()
