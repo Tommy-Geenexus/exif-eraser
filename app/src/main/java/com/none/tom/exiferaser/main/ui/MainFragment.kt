@@ -33,6 +33,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -56,6 +57,7 @@ import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.applyInsetMargins
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
+import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.none.tom.exiferaser.main.MarginItemDecoration
 import com.none.tom.exiferaser.main.TakePicture
@@ -153,6 +155,15 @@ class MainFragment :
         setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_READY_TO_INSTALL) { _, _ ->
             viewModel.handleFlexibleUpdateReadyToInstall()
         }
+        ViewCompat.setOnReceiveContentListener(
+            binding.layout,
+            supportedMimeTypes,
+            MainContentReceiver(
+                onUrisReceived = { uris ->
+                    viewModel.handleReceivedImages(uris)
+                }
+            )
+        )
         binding.layout.applyInsetMargins()
         binding.title.text =
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
