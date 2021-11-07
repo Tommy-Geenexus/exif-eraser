@@ -2,17 +2,17 @@
 <resources>
 
     <style name="Base.Theme.ExifEraser" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="materialCardViewElevatedStyle">@style/Widget.Material3.CardView.Elevated</item>
-        <item name="materialCardViewFilledStyle">@style/Widget.Material3.CardView.Filled</item>
         <item name="checkboxStyle">@style/Widget.ExifEraser.CheckBox</item>
         <item name="chipStyle">@style/Widget.ExifEraser.Chip.Action.Outlined</item>
-        <item name="textInputOutlinedStyle">@style/Widget.ExifEraser.TextInputLayout.OutlinedBox
-        </item>
-        <item name="toolbarSurfaceStyle">@style/Widget.Material3.Toolbar.Surface</item>
     </style>
 
     <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
-        <item name="linearProgressIndicatorStyle">@style/Widget.ExifEraser.LinearProgressIndicator</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.ExifEraser.MaterialAlertDialog
+        </item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.ExifEraser.LinearProgressIndicator
+        </item>
+        <item name="textInputOutlinedStyle">@style/Widget.ExifEraser.TextInputLayout.OutlinedBox
+        </item>
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryContainer">@color/color_teal_500_light</item>
         <item name="colorSecondary">@color/color_teal_500</item>
@@ -33,7 +33,11 @@
         <item name="colorPrimary">?attr/colorSecondary</item>
     </style>
 
+    <style name="ThemeOverlay.ExifEraser.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">?attr/colorSecondary</item>
+    </style>
+
     <style name="ThemeOverlay.ExifEraser.TextInputEditText.OutlinedBox" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox">
-        <item name="android:colorControlActivated">?attr/colorSecondary</item>
+        <item name="colorPrimary">?attr/colorSecondary</item>
     </style>
 </resources>

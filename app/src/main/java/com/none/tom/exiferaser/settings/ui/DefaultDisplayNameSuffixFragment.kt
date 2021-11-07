@@ -29,7 +29,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentDefaultDisplayNameSuffixBinding
 
@@ -53,7 +52,6 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
             TextView.BufferType.EDITABLE
         )
         return MaterialAlertDialogBuilder(requireActivity())
-            .setTitle(R.string.default_display_name_suffix)
             .setView(binding.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 parentFragmentManager.setFragmentResult(
