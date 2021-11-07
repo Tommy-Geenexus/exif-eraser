@@ -24,8 +24,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.Empty
-import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
+import com.none.tom.exiferaser.settings.defaultNightModeValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
@@ -34,9 +34,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
-import kotlin.contracts.ExperimentalContracts
 
-@ExperimentalContracts
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -80,7 +78,7 @@ class SettingsViewModel @Inject constructor(
 
     fun clearDefaultPathOpen() = intent {
         val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
-        val success = if (uri.isNotNullOrEmpty()) {
+        val success = if (uri != null) {
             settingsRepository.putDefaultPathOpen(
                 defaultPathOpenNew = Uri.EMPTY,
                 defaultPathOpenCurrent = uri,
@@ -99,7 +97,7 @@ class SettingsViewModel @Inject constructor(
 
     fun storeDefaultPathOpen(uriNew: Uri) = intent {
         val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
-        val success = if (uri.isNotNullOrEmpty()) {
+        val success = if (uri != null) {
             settingsRepository.putDefaultPathOpen(
                 defaultPathOpenNew = uriNew,
                 defaultPathOpenCurrent = uri,
@@ -124,7 +122,7 @@ class SettingsViewModel @Inject constructor(
 
     fun clearDefaultPathSave() = intent {
         val uri = settingsRepository.getDefaultPathSave().firstOrNull()
-        val success = if (uri.isNotNullOrEmpty()) {
+        val success = if (uri != null) {
             settingsRepository.putDefaultPathSave(
                 defaultPathSaveNew = Uri.EMPTY,
                 defaultPathSaveCurrent = uri,
@@ -143,7 +141,7 @@ class SettingsViewModel @Inject constructor(
 
     fun storeDefaultPathSave(uriNew: Uri) = intent {
         val uri = settingsRepository.getDefaultPathSave().firstOrNull()
-        val success = if (uri.isNotNullOrEmpty()) {
+        val success = if (uri != null) {
             settingsRepository.putDefaultPathSave(
                 defaultPathSaveNew = uriNew,
                 defaultPathSaveCurrent = uri,
@@ -172,10 +170,8 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun handleDefaultDisplayNameSuffix() = intent {
-        val value = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
-        if (!value.isNullOrEmpty()) {
-            postSideEffect(SettingsSideEffect.NavigateToDefaultDisplayNameSuffix(value))
-        }
+        val value = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
+        postSideEffect(SettingsSideEffect.NavigateToDefaultDisplayNameSuffix(value))
     }
 
     fun storeDefaultDisplayNameSuffix(value: String) = intent {
@@ -188,10 +184,8 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun handleDefaultNightMode() = intent {
-        val value = settingsRepository.getDefaultNightMode().firstOrNull()
-        if (value != null) {
-            postSideEffect(SettingsSideEffect.NavigateToDefaultNightMode(value))
-        }
+        val value = settingsRepository.getDefaultNightMode().firstOrNull() ?: defaultNightModeValue
+        postSideEffect(SettingsSideEffect.NavigateToDefaultNightMode(value))
     }
 
     fun storeDefaultNightMode(value: Int) = intent {
