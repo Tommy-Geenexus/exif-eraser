@@ -58,7 +58,8 @@ class MainViewModel @Inject constructor(
     ViewModel() {
 
     private companion object {
-        const val KEY_NAV_DESTINATION = TOP_LEVEL_PACKAGE_NAME + "NAV_DESTINATION"
+
+        const val KEY_NAV_DESTINATION_ID = TOP_LEVEL_PACKAGE_NAME + "NAV_DESTINATION_ID"
     }
 
     override val container = container<MainState, MainSideEffect>(
@@ -70,12 +71,9 @@ class MainViewModel @Inject constructor(
         }
     )
 
-    var navDestination: Int
-        get() {
-            val destination = savedStateHandle.get<Int>(KEY_NAV_DESTINATION)
-            return destination ?: -1
-        }
-        set(value) = savedStateHandle.set(KEY_NAV_DESTINATION, value)
+    var navDestinationId: Int?
+        get() = savedStateHandle.get(KEY_NAV_DESTINATION_ID)
+        set(value) = savedStateHandle.set(KEY_NAV_DESTINATION_ID, value)
 
     fun completeFlexibleUpdate() = intent {
         val success = updateRepository.completeFlexibleAppUpdate()

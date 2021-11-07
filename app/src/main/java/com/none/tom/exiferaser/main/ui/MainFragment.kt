@@ -214,25 +214,28 @@ class MainFragment :
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 findNavController().currentBackStackEntryFlow.collect { navBackStackEntry ->
-                    val destinationId = navBackStackEntry.destination.id
-                    if (destinationId == R.id.fragment_main) {
-                        return@collect
-                    }
-                    viewModel.navDestination = destinationId
-                    when (destinationId) {
-                        R.id.fragment_selection,
-                        R.id.fragment_save_path -> {
-                            setTransitions(
-                                transitionExit = MaterialSharedAxis(MaterialSharedAxis.X, true),
-                                transitionReenter = MaterialSharedAxis(MaterialSharedAxis.X, false)
-                            )
-                        }
-                        else -> {
-                            setTransitions(
-                                transitionExit = MaterialSharedAxis(MaterialSharedAxis.Z, true),
-                                transitionReenter = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-                            )
-                        }
+                    val previousNavDestinationId = viewModel.navDestinationId
+                    val nextNavDestinationId = navBackStackEntry.destination.id
+                    if (nextNavDestinationId != previousNavDestinationId) {
+                        viewModel.navDestinationId = nextNavDestinationId
+                        setTransitions(
+                            transitionExit =
+                            if (nextNavDestinationId == R.id.fragment_selection ||
+                                nextNavDestinationId == R.id.fragment_save_path
+                            ) {
+                                MaterialSharedAxis(MaterialSharedAxis.X, true)
+                            } else {
+                                MaterialSharedAxis(MaterialSharedAxis.Z, true)
+                            },
+                            transitionReenter =
+                            if (previousNavDestinationId == R.id.fragment_selection ||
+                                previousNavDestinationId == R.id.fragment_save_path
+                            ) {
+                                MaterialSharedAxis(MaterialSharedAxis.X, false)
+                            } else {
+                                MaterialSharedAxis(MaterialSharedAxis.Z, false)
+                            }
+                        )
                     }
                 }
             }
