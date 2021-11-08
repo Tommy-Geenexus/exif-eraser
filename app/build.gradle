@@ -23,8 +23,8 @@ android {
         applicationId "com.none.tom.exiferaser"
         minSdkVersion 27
         targetSdkVersion 31
-        versionCode 28
-        versionName "4.3.2"
+        versionCode 29
+        versionName "5.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
