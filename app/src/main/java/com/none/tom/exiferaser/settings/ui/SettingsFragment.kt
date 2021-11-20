@@ -30,7 +30,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.Empty
@@ -171,7 +170,6 @@ class SettingsFragment :
     }
 
     private fun handleSideEffect(sideEffect: SettingsSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is SettingsSideEffect.DefaultPathOpenClear -> {
             }

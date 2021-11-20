@@ -43,7 +43,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import app.cash.exhaustive.Exhaustive
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.BaseFragment
@@ -227,7 +226,6 @@ class ReportFragment :
     }
 
     private fun handleSideEffect(sideEffect: ReportSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is ReportSideEffect.ViewImage -> {
                 viewImage.launch(

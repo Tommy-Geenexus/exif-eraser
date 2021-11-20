@@ -31,7 +31,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import app.cash.exhaustive.Exhaustive
 import com.none.tom.exiferaser.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.databinding.FragmentSavePathBinding
 import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
@@ -90,7 +89,6 @@ class SavePathFragment : BaseBottomSheetDialogFragment<FragmentSavePathBinding>(
     }
 
     private fun handleSideEffect(sideEffect: SavePathSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is SavePathSideEffect.ChooseSavePath -> {
                 chooseSavePath.launch(sideEffect.openPath)

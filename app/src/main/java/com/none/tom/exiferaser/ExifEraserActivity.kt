@@ -33,7 +33,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import app.cash.exhaustive.Exhaustive
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import com.none.tom.exiferaser.update.StartIntentSenderForResult
@@ -107,7 +106,6 @@ class ExifEraserActivity : AppCompatActivity() {
     }
 
     private fun handleSideEffect(sideEffect: UpdateSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is UpdateSideEffect.UpdateAvailable -> {
                 viewModel.beginOrResumeAppUpdate(sideEffect.info) { um, info, type, requestCode ->

@@ -4,15 +4,13 @@ buildscript {
 
     repositories {
         google()
-        //noinspection JcenterRepositoryObsolete
-        jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        classpath "app.cash.exhaustive:exhaustive-gradle:$exhaustive_version"
         classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotless_version"
         classpath "com.github.ben-manes:gradle-versions-plugin:$versions_version"
@@ -25,14 +23,6 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        //noinspection JcenterRepositoryObsolete
-        jcenter()
     }
 }
 
