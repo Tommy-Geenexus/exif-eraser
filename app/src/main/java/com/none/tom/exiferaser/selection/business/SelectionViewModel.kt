@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.selection.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import app.cash.exhaustive.Exhaustive
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.main.data.SelectionRepository
@@ -98,7 +97,6 @@ class SelectionViewModel @Inject constructor(
             preserveOrientation = preserveOrientation == true
         ).collect { result ->
             reduce {
-                @Exhaustive
                 when (result) {
                     is Result.Empty -> {
                         state.copy(imageResult = result)
@@ -152,7 +150,6 @@ class SelectionViewModel @Inject constructor(
             preserveOrientation = preserveOrientation == true,
         ).collect { result ->
             reduce {
-                @Exhaustive
                 when (result) {
                     is Result.Empty -> {
                         state.copy(imageResult = result)

@@ -45,7 +45,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
@@ -301,7 +300,6 @@ class MainFragment :
     }
 
     private fun handleSideEffect(sideEffect: MainSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is MainSideEffect.ChooseImage -> {
                 chooseImage.launch(supportedMimeTypes)

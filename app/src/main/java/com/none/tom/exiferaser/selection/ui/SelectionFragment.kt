@@ -33,7 +33,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import app.cash.exhaustive.Exhaustive
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
@@ -147,7 +146,6 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
     }
 
     private fun handleSideEffect(sideEffect: SelectionSideEffect) {
-        @Exhaustive
         when (sideEffect) {
             is SelectionSideEffect.PrepareReport -> {
                 childFragmentManager.setFragmentResult(
