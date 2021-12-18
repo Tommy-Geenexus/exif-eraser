@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:7.0.4'
         classpath "com.diffplug.spotless:spotless-plugin-gradle:$spotless_version"
         classpath "com.github.ben-manes:gradle-versions-plugin:$versions_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$dagger_version"
