@@ -33,8 +33,8 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -154,7 +154,8 @@ class MainFragment :
         setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_READY_TO_INSTALL) { _, _ ->
             viewModel.handleFlexibleUpdateReadyToInstall()
         }
-        ViewCompat.setOnReceiveContentListener(
+        DropHelper.configureView(
+            requireActivity(),
             binding.layout,
             supportedMimeTypes,
             MainContentReceiver(
