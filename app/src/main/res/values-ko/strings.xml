@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">완료함!</string>
+
+    <string name="always">켜짐</string>
+
+    <string name="automatically">시스템 기본</string>
+
+    <string name="camera">카메라</string>
+
+    <string name="choose_image">이미지 선택</string>
+    <string name="choose_your">당신의</string>
+
+    <string name="delete">삭제</string>
+
+    <string name="help">도움말 및 피드백</string>
+
+    <string name="image">이미지</string>
+
+    <string name="low_batt_only">배터리 부족일떄만</string>
+
+    <string name="night_mode">다크 모드</string>
+
+    <string name="saved">저장됨</string>
+
+    <string name="settings">설정</string>
+
+    <string name="share">공유</string>
+
+    <string name="ui">UI</string>
+</resources>
