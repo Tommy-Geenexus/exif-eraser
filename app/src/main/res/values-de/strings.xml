@@ -38,6 +38,8 @@
 
     <string name="file_system">Dateisystem</string>
 
+    <string name="help">Hilfe und Feedback</string>
+
     <string name="image">Bild</string>
     <string name="image_directory">Bildordner</string>
     <string name="image_file">Bilddatei</string>
@@ -71,6 +73,8 @@
 
     <string name="preserve_image_orientation_off">Verwerfe die ursprüngliche Bildausrichtung</string>
     <string name="preserve_image_orientation_on">Behalte die ursprüngliche Bildausrichtung bei</string>
+
+    <string name="reorder_image_source_cards">Bildquellen neu anordnen</string>
 
     <string name="report_bug">Fehler melden</string>
 
