@@ -31,7 +31,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
@@ -46,11 +46,10 @@ import kotlin.contracts.ExperimentalContracts
 class SavePathViewModelTest {
 
     private val settingsRepository = mockk<SettingsRepository>()
-
     private val testUri = ContentResolver.SCHEME_CONTENT.toUri()
 
     @Test
-    fun test_verifyHasPrivilegedDefaultSavePath() = runBlockingTest {
+    fun test_verifyHasPrivilegedDefaultSavePath() = runTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -93,7 +92,7 @@ class SavePathViewModelTest {
     }
 
     @Test
-    fun test_chooseSelectionSavePath() = runBlockingTest {
+    fun test_chooseSelectionSavePath() = runTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -124,7 +123,7 @@ class SavePathViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleSelection() = runBlockingTest {
+    fun test_handleSelection() = runTest {
         val initialState = SavePathState()
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
