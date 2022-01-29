@@ -46,7 +46,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
@@ -96,7 +96,7 @@ class SelectionViewModelTest {
     )
 
     @Test
-    fun test_readSelection() = runBlockingTest {
+    fun test_readSelection() = runTest {
         coEvery {
             selectionRepository.getSelection(dropFirstN = 0)
         } returns flowOf(testImageSelection)
@@ -120,7 +120,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_prepareReport() = runBlockingTest {
+    fun test_prepareReport() = runTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -139,7 +139,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_shareImages() = runBlockingTest {
+    fun test_shareImages() = runTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -158,7 +158,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_shareImagesByDefault() = runBlockingTest {
+    fun test_shareImagesByDefault() = runTest {
         val initialState = SelectionState(
             imageSummaries = arrayOf(testSummary)
         )
@@ -180,7 +180,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_hasSavedImages() = runBlockingTest {
+    fun test_hasSavedImages() = runTest {
         val initialState = SelectionState(
             imagesSaved = 1
         )
@@ -196,7 +196,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_handleUserImageSelection() = runBlockingTest {
+    fun test_handleUserImageSelection() = runTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -271,7 +271,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_handleUserImagesSelection() = runBlockingTest {
+    fun test_handleUserImagesSelection() = runTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -372,7 +372,7 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_handleUnsupportedSelection() = runBlockingTest {
+    fun test_handleUnsupportedSelection() = runTest {
         val initialState = SelectionState()
         val viewModel = SelectionViewModel(
             savedStateHandle = SavedStateHandle(),

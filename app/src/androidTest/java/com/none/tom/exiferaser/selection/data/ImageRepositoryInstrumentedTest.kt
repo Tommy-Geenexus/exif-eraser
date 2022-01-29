@@ -46,8 +46,8 @@ import com.none.tom.exiferaser.selection.toProgress
 import com.squareup.wire.AnyMessage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -199,7 +199,7 @@ class ImageRepositoryInstrumentedTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        testDispatcher = TestCoroutineDispatcher()
+        testDispatcher = UnconfinedTestDispatcher()
         testRepository = ImageRepository(context, testDispatcher)
         copyResourcesToPictures()
     }
@@ -216,7 +216,7 @@ class ImageRepositoryInstrumentedTest {
     @Test
     fun test_getExternalPicturesFileProviderUriOrNull() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
-            runBlockingTest {
+            runTest {
                 val uri = getExternalPicturesFileProviderUri(displayName, extension)
                 expectThat(uri) {
                     isNotNull()
@@ -229,7 +229,7 @@ class ImageRepositoryInstrumentedTest {
     @Test
     fun test_removeMetaDataSingle() {
         resources.forEachIndexed { index, (_, displayName, extension) ->
-            runBlockingTest {
+            runTest {
                 val uri = getExternalPicturesFileProviderUri(displayName, extension)
                 expectThat(uri).isNotNull()
                 testRepository.removeMetadataSingle(
@@ -253,7 +253,7 @@ class ImageRepositoryInstrumentedTest {
     }
 
     @Test
-    fun test_removeMetaDataBulk() = runBlockingTest {
+    fun test_removeMetaDataBulk() = runTest {
         val selection = mutableListOf<UserImageSelectionProto>()
         resources.forEach { (_, displayName, extension) ->
             val uri = getExternalPicturesFileProviderUri(displayName, extension)

@@ -33,7 +33,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
@@ -53,7 +53,7 @@ class SettingsViewModelTest {
     private val testDefaultNightModeName = "Always"
 
     @Test
-    fun test_readDefaultValues() = runBlockingTest {
+    fun test_readDefaultValues() = runTest {
         coEvery {
             settingsRepository.getDefaultPathOpenName()
         } returns testDefaultPathOpenName
@@ -106,7 +106,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_handleDefaultPathOpen() = runBlockingTest {
+    fun test_handleDefaultPathOpen() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -127,7 +127,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_clearDefaultPathOpen() = runBlockingTest {
+    fun test_clearDefaultPathOpen() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -157,7 +157,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storeDefaultPathOpen() = runBlockingTest {
+    fun test_storeDefaultPathOpen() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -191,7 +191,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_handleDefaultPathSave() = runBlockingTest {
+    fun test_handleDefaultPathSave() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -212,7 +212,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_clearDefaultPathSave() = runBlockingTest {
+    fun test_clearDefaultPathSave() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -242,7 +242,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storeDefaultPathSave() = runBlockingTest {
+    fun test_storeDefaultPathSave() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -276,7 +276,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storePreserveOrientation() = runBlockingTest {
+    fun test_storePreserveOrientation() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -297,7 +297,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storeShareByDefault() = runBlockingTest {
+    fun test_storeShareByDefault() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -318,7 +318,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_handleDefaultDisplayNameSuffix() = runBlockingTest {
+    fun test_handleDefaultDisplayNameSuffix() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -343,7 +343,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storeDefaultDisplayNameSuffix() = runBlockingTest {
+    fun test_storeDefaultDisplayNameSuffix() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -368,7 +368,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_handleDefaultNightMode() = runBlockingTest {
+    fun test_handleDefaultNightMode() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -393,7 +393,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun test_storeDefaultNightMode() = runBlockingTest {
+    fun test_storeDefaultNightMode() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),

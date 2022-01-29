@@ -24,7 +24,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.orbitmvi.orbit.test
 
@@ -32,7 +32,7 @@ import org.orbitmvi.orbit.test
 class ImageModifiedDetailsViewModelTest {
 
     @Test
-    fun test_handleImageDetails() = runBlockingTest {
+    fun test_handleImageDetails() = runTest {
         val initialState = ImageModifiedDetailsState()
         val viewModel = ImageModifiedDetailsViewModel(SavedStateHandle()).test(initialState)
         viewModel.testIntent {

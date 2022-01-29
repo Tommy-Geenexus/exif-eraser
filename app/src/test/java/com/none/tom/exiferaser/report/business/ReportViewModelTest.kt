@@ -32,7 +32,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
@@ -65,7 +65,7 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageSummaries() = runBlockingTest {
+    fun test_handleImageSummaries() = runTest {
         val initialState = ReportState()
         val viewModel = ReportViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -86,7 +86,7 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleViewImage() = runBlockingTest {
+    fun test_handleViewImage() = runTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
         val viewModel = ReportViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -102,7 +102,7 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageModifiedDetails() = runBlockingTest {
+    fun test_handleImageModifiedDetails() = runTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
         val viewModel = ReportViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -129,7 +129,7 @@ class ReportViewModelTest {
 
     @ExperimentalContracts
     @Test
-    fun test_handleImageSavedDetails() = runBlockingTest {
+    fun test_handleImageSavedDetails() = runTest {
         val initialState = ReportState(imageSummaries = listOf(summary))
         val viewModel = ReportViewModel(
             savedStateHandle = SavedStateHandle(),

@@ -42,7 +42,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
@@ -74,7 +74,7 @@ class MainViewModelTest {
     )
 
     @Test
-    fun test_readImageSources() = runBlockingTest {
+    fun test_readImageSources() = runTest {
         coEvery {
             settingsRepository.getDefaultNightMode()
         } returns flowOf(0)
@@ -118,7 +118,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_reorderImageSources() = runBlockingTest {
+    fun test_reorderImageSources() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -150,7 +150,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImageSources() = runBlockingTest {
+    fun test_putImageSources() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -185,7 +185,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImageSelection() = runBlockingTest {
+    fun test_putImageSelection() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -257,7 +257,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImagesSelection() = runBlockingTest {
+    fun test_putImagesSelection() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -279,6 +279,7 @@ class MainViewModelTest {
                 urisFromIntent = testUris.toTypedArray()
             )
         }
+        // runCurrent()
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
                 uris = testUris,
@@ -299,7 +300,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_putImageDirectorySelection() = runBlockingTest {
+    fun test_putImageDirectorySelection() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -337,7 +338,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleSettings() = runBlockingTest {
+    fun test_handleSettings() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -356,7 +357,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImage() = runBlockingTest {
+    fun test_chooseImage() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -389,7 +390,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImages() = runBlockingTest {
+    fun test_chooseImages() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -422,7 +423,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_chooseImageDirectory() = runBlockingTest {
+    fun test_chooseImageDirectory() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -455,7 +456,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_launchCamera() = runBlockingTest {
+    fun test_launchCamera() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -498,7 +499,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleShortcut() = runBlockingTest {
+    fun test_handleShortcut() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -517,7 +518,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_reportShortcutUsed() = runBlockingTest {
+    fun test_reportShortcutUsed() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -536,7 +537,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handleReceivedImages() = runBlockingTest {
+    fun test_handleReceivedImages() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -567,7 +568,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_handlePasteImages() = runBlockingTest {
+    fun test_handlePasteImages() = runTest {
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
