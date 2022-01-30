@@ -39,7 +39,6 @@ import com.none.tom.exiferaser.update.StartIntentSenderForResult
 import com.none.tom.exiferaser.update.business.UpdateSideEffect
 import com.none.tom.exiferaser.update.business.UpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
 

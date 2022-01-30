@@ -103,11 +103,8 @@ class ItemImageViewHolder(
                 onOff.isChecked = initialShareByDefault
             }
         }
-        binding.defaultDisplayNameSuffix.summaryPreference.text =
-            if (defaultDisplayNameSuffix.isEmpty()) {
-                itemView.context.getString(R.string.none)
-            } else {
-                defaultDisplayNameSuffix
-            }
+        binding.defaultDisplayNameSuffix.summaryPreference.text = defaultDisplayNameSuffix.ifEmpty {
+            itemView.context.getString(R.string.none)
+        }
     }
 }

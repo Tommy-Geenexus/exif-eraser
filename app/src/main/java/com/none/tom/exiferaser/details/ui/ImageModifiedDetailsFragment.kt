@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.details.ui
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -41,7 +40,6 @@ import com.none.tom.exiferaser.databinding.FragmentImageModifiedDetailsBinding
 import com.none.tom.exiferaser.details.business.ImageModifiedDetailsState
 import com.none.tom.exiferaser.details.business.ImageModifiedDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -88,9 +86,7 @@ class ImageModifiedDetailsFragment : DialogFragment() {
     private val binding: FragmentImageModifiedDetailsBinding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = FragmentImageModifiedDetailsBinding.inflate(
-            LayoutInflater.from(requireContext())
-        )
+        _binding = FragmentImageModifiedDetailsBinding.inflate(layoutInflater)
         binding.title.text = arguments?.getString(KEY_DISPLAY_NAME, String.Empty)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

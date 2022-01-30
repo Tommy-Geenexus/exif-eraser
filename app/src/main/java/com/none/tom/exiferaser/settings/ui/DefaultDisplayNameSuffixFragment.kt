@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.settings.ui
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -46,7 +45,7 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
     internal val binding: FragmentDefaultDisplayNameSuffixBinding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = FragmentDefaultDisplayNameSuffixBinding.inflate(LayoutInflater.from(context))
+        _binding = FragmentDefaultDisplayNameSuffixBinding.inflate(layoutInflater)
         binding.defaultDisplayNameSuffix.setText(
             args.defaultDisplayNameSuffix,
             TextView.BufferType.EDITABLE

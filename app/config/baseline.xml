@@ -1,6 +1,6 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='UTF-8'?>
 <SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>ComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>ComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
