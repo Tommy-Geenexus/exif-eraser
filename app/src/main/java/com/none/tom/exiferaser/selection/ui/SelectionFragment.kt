@@ -49,7 +49,6 @@ import com.none.tom.exiferaser.selection.crossfade
 import com.none.tom.exiferaser.selection.fadeIn
 import com.none.tom.exiferaser.selection.toPercent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
 
@@ -97,14 +96,14 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         }
         binding.layout.applyInsetMargins()
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
                     renderState(state)
                 }
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.sideEffectFlow.collect { sideEffect ->
                     handleSideEffect(sideEffect)
                 }

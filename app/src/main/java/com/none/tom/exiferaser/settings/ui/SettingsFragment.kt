@@ -40,7 +40,6 @@ import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
 
@@ -103,14 +102,14 @@ class SettingsFragment :
             viewModel.storeDefaultNightMode(value)
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
                     renderState(state)
                 }
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.sideEffectFlow.collect { sideEffect ->
                     handleSideEffect(sideEffect)
                 }

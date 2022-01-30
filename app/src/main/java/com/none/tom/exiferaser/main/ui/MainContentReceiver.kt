@@ -18,7 +18,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.main
+package com.none.tom.exiferaser.main.ui
 
 import android.net.Uri
 import android.view.View

@@ -54,7 +54,6 @@ import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.applyInsetMargins
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
-import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.none.tom.exiferaser.main.MarginItemDecoration
 import com.none.tom.exiferaser.main.TakePicture
@@ -68,7 +67,6 @@ import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
 
@@ -192,21 +190,21 @@ class MainFragment :
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
                     renderState(state)
                 }
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.sideEffectFlow.collect { sideEffect ->
                     handleSideEffect(sideEffect)
                 }
             }
         }
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 findNavController().currentBackStackEntryFlow.collect { navBackStackEntry ->
                     val previousNavDestinationId = viewModel.navDestinationId
                     val nextNavDestinationId = navBackStackEntry.destination.id
