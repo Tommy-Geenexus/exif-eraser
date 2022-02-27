@@ -48,8 +48,9 @@ android {
     }
 
     packagingOptions {
-        exclude "META-INF/AL2.0"
-        exclude "META-INF/LGPL2.1"
+        resources {
+            excludes += ['META-INF/AL2.0', 'META-INF/LGPL2.1']
+        }
     }
 
     testOptions {
@@ -60,15 +61,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-kotlin {
-    sourceSets.all {
-        languageSettings {
-            languageVersion = "1.6"
-            progressiveMode = true
-        }
     }
 }
 
