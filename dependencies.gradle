@@ -25,7 +25,7 @@ ext {
     def insetter_version = "0.6.1"
     def lifecycle_version = "2.4.1"
     def material_version = "1.6.0-alpha03"
-    def mockK_version = "1.12.2"
+    def mockK_version = "1.12.3"
     def orbit_version = "4.3.2"
     def play_core_version = "1.10.3"
     def play_core_ktx_version = "1.8.1"
