@@ -25,7 +25,7 @@ ext {
     def insetter_version = "0.6.1"
     def lifecycle_version = "2.4.1"
     def material_version = "1.6.0-alpha03"
-    def mockK_version = "1.12.2"
+    def mockK_version = "1.12.3"
     def orbit_version = "4.3.2"
     def recycler_view_version = "1.2.1"
     def roboelectric_version = "4.7.3"
