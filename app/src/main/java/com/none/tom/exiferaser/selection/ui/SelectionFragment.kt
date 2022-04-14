@@ -26,6 +26,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -83,7 +84,31 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        val menuProvider = object : MenuProvider {
+
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater
+            ) {
+                menuInflater.inflate(R.menu.menu_selection, menu)
+            }
+
+            override fun onPrepareMenu(menu: Menu) {
+                menu.findItem(R.id.action_share).apply {
+                    isVisible = binding.done.isVisible && viewModel.hasSavedImages()
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return if (menuItem.itemId == R.id.action_share) {
+                    viewModel.shareImages()
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         setupToolbar(
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.summary
@@ -108,30 +133,6 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                     handleSideEffect(sideEffect)
                 }
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(
-        menu: Menu,
-        inflater: MenuInflater
-    ) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_selection, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.action_share).apply {
-            isVisible = binding.done.isVisible && viewModel.hasSavedImages()
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.action_share) {
-            viewModel.shareImages()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
         }
     }
 
