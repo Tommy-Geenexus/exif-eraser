@@ -32,7 +32,6 @@
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:ReportFragment.kt$ReportFragment : BaseFragmentListener</ID>
-    <ID>TooManyFunctions:SelectionFragment.kt$SelectionFragment : BaseFragment</ID>
     <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository</ID>
     <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModelContainerHost</ID>

@@ -1,18 +1,18 @@
 import io.gitlab.arturbosch.detekt.Detekt
 
-apply plugin: "com.android.application"
-apply plugin: "kotlin-android"
-apply plugin: "kotlin-parcelize"
-apply plugin: "org.jetbrains.kotlin.kapt"
-apply plugin: "androidx.navigation.safeargs.kotlin"
-apply plugin: "com.diffplug.spotless"
-apply plugin: "com.github.ben-manes.versions"
-apply plugin: "com.squareup.wire"
-apply plugin: "dagger.hilt.android.plugin"
-apply plugin: "io.gitlab.arturbosch.detekt"
-apply plugin: "org.jlleitschuh.gradle.ktlint"
-
-apply from: "../dependencies.gradle"
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.navigation.safe.args)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.versions)
+    alias(libs.plugins.wire)
+}
 
 android {
     compileSdkVersion 32
@@ -95,14 +95,15 @@ ktlint {
     disabledRules.set(["import-ordering"])
     filter {
         exclude { element -> element.file.path.contains("generated/") }
-        include("**/kotlin/**")
+        include("**/*.kt")
     }
 }
 
 spotless {
     kotlin {
-        target("src/*/java/**/*.kt")
-        targetExclude("src/*/java/**/AnimationUtils.kt")
+        target("**/*.kt")
+        targetExclude("**/AnimationUtils.kt")
+        //noinspection GroovyImplicitNullArgumentCall
         ktlint()
         endWithNewline()
         licenseHeaderFile rootProject.file("spotless/copyright.txt")
@@ -110,11 +111,10 @@ spotless {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    androidTestImplementation android_test_dependencies.values()
-    implementation implementation_dependencies.values()
-    coreLibraryDesugaring core_library_desugaring_dependencies.values()
-    debugImplementation debug_implementation_dependencies.values()
-    kapt kapt_dependencies.values()
-    testImplementation test_dependencies.values()
+    androidTestImplementation libs.bundles.implementation.test.android
+    coreLibraryDesugaring libs.desugar.jdk.libs
+    debugImplementation libs.leakcanary
+    implementation libs.bundles.implementation
+    kapt libs.bundles.kapt
+    testImplementation libs.bundles.implementation.test
 }

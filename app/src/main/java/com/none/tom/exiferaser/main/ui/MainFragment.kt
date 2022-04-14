@@ -33,6 +33,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
@@ -130,7 +131,38 @@ class MainFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
+        val menuProvider = object : MenuProvider {
+
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater
+            ) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.content_paste -> {
+                        viewModel.handlePasteImages(requireContext().getClipImages())
+                        true
+                    }
+                    R.id.action_delete_camera_images -> {
+                        viewModel.handleDeleteCameraImages()
+                        true
+                    }
+                    R.id.action_settings -> {
+                        viewModel.handleSettings()
+                        true
+                    }
+                    R.id.action_help -> {
+                        viewModel.handleHelp()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
         setupToolbar(toolbar = binding.toolbar)
         setFragmentResultListener(
             DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
@@ -249,35 +281,6 @@ class MainFragment :
                     }
                 }
             }
-        }
-    }
-
-    override fun onCreateOptionsMenu(
-        menu: Menu,
-        inflater: MenuInflater
-    ) {
-        inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.content_paste -> {
-                viewModel.handlePasteImages(requireContext().getClipImages())
-                true
-            }
-            R.id.action_delete_camera_images -> {
-                viewModel.handleDeleteCameraImages()
-                true
-            }
-            R.id.action_settings -> {
-                viewModel.handleSettings()
-                true
-            }
-            R.id.action_help -> {
-                viewModel.handleHelp()
-                true
-            }
-            else -> false
         }
     }
 

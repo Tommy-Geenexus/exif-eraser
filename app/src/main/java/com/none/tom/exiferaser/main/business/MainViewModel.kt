@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
     )
 
     var navDestinationId: Int?
-        get() = savedStateHandle.get(KEY_NAV_DESTINATION_ID)
+        get() = savedStateHandle[KEY_NAV_DESTINATION_ID]
         set(value) = savedStateHandle.set(KEY_NAV_DESTINATION_ID, value)
 
     fun completeFlexibleUpdate() = intent {
