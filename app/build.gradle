@@ -15,6 +15,7 @@ plugins {
 }
 
 android {
+    namespace 'com.none.tom.exiferaser'
     compileSdkVersion 32
 
     defaultConfig {

@@ -24,7 +24,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import coil.clear
+import coil.dispose
 import coil.load
 import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.R
@@ -104,6 +104,6 @@ class ReportViewHolder(
     }
 
     fun releaseResources() {
-        binding.imageCropped.clear()
+        binding.imageCropped.dispose()
     }
 }
