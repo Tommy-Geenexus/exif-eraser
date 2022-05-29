@@ -137,7 +137,7 @@ class SettingsAdapter(
         previousList: MutableList<Any>,
         currentList: MutableList<Any>
     ) {
-        if (!currentList.isNullOrEmpty()) {
+        if (currentList.isNotEmpty()) {
             listener.onItemsUpdated()
         }
     }

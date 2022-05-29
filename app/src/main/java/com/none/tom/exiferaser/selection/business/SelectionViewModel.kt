@@ -221,7 +221,7 @@ class SelectionViewModel @Inject constructor(
             .map { summary ->
                 summary.imageUri
             }
-        if (!result.isNullOrEmpty()) {
+        if (result.isNotEmpty()) {
             postSideEffect(SelectionSideEffect.ShareImages(ArrayList(result)))
         }
     }
