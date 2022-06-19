@@ -120,7 +120,10 @@ class SelectionRepository @Inject constructor(
         uris: List<Uri>? = null,
         urisFromIntent: Array<Uri>? = null
     ): Boolean {
-        val selection = uris ?: urisFromIntent?.toList() ?: return false
+        val selection = uris ?: urisFromIntent?.toList()
+        if (selection.isNullOrEmpty()) {
+            return false
+        }
         return withContext(dispatcher) {
             runCatching {
                 dataStore.updateData { proto ->
