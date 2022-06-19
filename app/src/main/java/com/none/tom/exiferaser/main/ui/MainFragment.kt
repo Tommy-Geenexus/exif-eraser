@@ -30,6 +30,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
@@ -91,7 +92,7 @@ class MainFragment :
     private val args: MainFragmentArgs by navArgs()
     private val viewModel: MainViewModel by viewModels()
     private val chooseImage = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
+        ActivityResultContracts.PickVisualMedia()
     ) { result ->
         viewModel.putImageSelection(
             uri = result,
@@ -99,7 +100,7 @@ class MainFragment :
         )
     }
     private val chooseImages = registerForActivityResult(
-        ActivityResultContracts.OpenMultipleDocuments()
+        ActivityResultContracts.PickMultipleVisualMedia()
     ) { result ->
         viewModel.putImagesSelection(
             uris = result,
@@ -304,10 +305,14 @@ class MainFragment :
     private fun handleSideEffect(sideEffect: MainSideEffect) {
         when (sideEffect) {
             is MainSideEffect.ChooseImage -> {
-                chooseImage.launch(supportedMimeTypes)
+                chooseImage.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
             }
             is MainSideEffect.ChooseImages -> {
-                chooseImages.launch(supportedMimeTypes)
+                chooseImages.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
             }
             is MainSideEffect.ChooseImageDirectory -> {
                 chooseImageDirectory.launch(sideEffect.openPath)
