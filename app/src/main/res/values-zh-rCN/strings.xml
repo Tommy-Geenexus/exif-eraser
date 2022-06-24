@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">已完成！</string>
+
+    <string name="always">总是</string>
+
+    <string name="app_update_download">更新下载</string>
+    <string name="app_update_downloaded">更新下载成功</string>
+    <string name="app_update_failed">更新失败</string>
+    <string name="app_update_install">点击此处安装</string>
+    <string name="app_update_ready">已准备好安装更新</string>
+
+    <string name="automatically">自动</string>
+
+    <string name="become_translator">帮助翻译</string>
+
+    <string name="camera">相机</string>
+
+    <string name="choose_image">选择单张图片</string>
+    <string name="choose_image_directory">选择图片目录</string>
+    <string name="choose_images">选择多张图片</string>
+    <string name="choose_your">选择你的</string>
+
+    <string name="clipboard_content_paste">黏贴剪贴板图片</string>
+    <string name="clipboard_content_unsupported">剪贴板内容不支持</string>
+
+    <string name="default_display_name_suffix">默认显示名称后缀</string>
+    <string name="default_path_open">默认打开路径</string>
+    <string name="default_path_save">默认保存路径</string>
+
+    <string name="delete">删除</string>
+    <string name="delete_camera_images">删除相册中的图片</string>
+    <string name="delete_camera_images_all">删除该应用获取的全部图片（包括原图和修改图）</string>
+    <string name="delete_camera_images_failed">删除相册图片失败</string>
+    <string name="delete_camera_images_success">成功删除相册图片</string>
+
+    <string name="details">更多</string>
+
+    <string name="file_system">文件系统</string>
+
+    <string name="help">帮助与反馈</string>
+
+    <string name="image">图片</string>
+    <string name="image_directory">图片路径</string>
+    <string name="image_file">单个图片文件</string>
+    <string name="image_files">多个图片文件</string>
+    <string name="image_orientation">保留图片朝向</string>
+    <string name="image_path">图片路径</string>
+    <string name="image_share_by_default">默认分享</string>
+    <string name="image_supported_formats">支持的图片格式</string>
+
+    <string name="images_modified">更改后的图片</string>
+
+    <string name="install">安装</string>
+
+    <string name="low_batt_only">仅在低电量时</string>
+
+    <string name="modified">已更改</string>
+
+    <string name="never">从不</string>
+
+    <string name="night_mode">夜间模式</string>
+
+    <string name="none">无</string>
+
+    <string name="of">的</string>
+
+    <string name="path_save_choose">选择保存路径</string>
+    <string name="path_save_custom">自定义保存路径</string>
+    <string name="path_save_default">默认保存路径</string>
+
+    <string name="preferred_image_source">图片源</string>
+
+    <string name="preserve_image_orientation_off">不保存原始图片朝向</string>
+    <string name="preserve_image_orientation_on">保存原始图片朝向</string>
+
+    <string name="reorder_image_source_cards">重排图片源</string>
+
+    <string name="report_bug">报告问题</string>
+
+    <string name="saved">已保存</string>
+
+    <string name="settings">设置</string>
+
+    <string name="share">分享</string>
+    <string name="share_images_by_default_off">修改后不默认自动分享</string>
+    <string name="share_images_by_default_on">修改后默认自动分享</string>
+    <string name="share_via">分享至</string>
+
+    <string name="suffix">后缀</string>
+
+    <string name="summary">总结</string>
+
+    <string name="take_picture">拍照</string>
+
+    <string name="ui">界面</string>
+
+    <string name="unmodified">未修改的</string>
+
+    <string name="unsaved">未保存的</string>
+
+    <string name="version">版本</string>
+</resources>
