@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">Tümü bitti!</string>
+
+    <string name="always">Daima</string>
+
+    <string name="app_update_download">Güncelleme indiriliyor</string>
+    <string name="app_update_downloaded">Güncelleme başarıyla indirildi</string>
+    <string name="app_update_failed">Güncelleme başarısız oldu</string>
+    <string name="app_update_install">Yüklemek için buraya tıklayın</string>
+    <string name="app_update_ready">Güncelleme yüklenmeye hazır</string>
+
+    <string name="automatically">Otomatik olarak</string>
+
+    <string name="camera">Kamera</string>
+
+    <string name="choose_image">Görseli seç</string>
+    <string name="choose_image_directory">Görselin dizinini seç</string>
+    <string name="choose_images">Görselleri seç</string>
+
+    <string name="clipboard_content_paste">Panodaki görseli yapıştır</string>
+    <string name="clipboard_content_unsupported">Desteklenmeyen pano içeriği</string>
+
+    <string name="default_display_name_suffix">Varsayılan görüntü adı son eki</string>
+    <string name="default_path_open">Varsayılan kaynak lokasyonu</string>
+    <string name="default_path_save">Varsayılan kayıt lokasyonu</string>
+
+    <string name="delete">Sil</string>
+    <string name="delete_camera_images_all">Bu uygulamayla oluşturulmuş tüm kamera görsellerini sil (orijinal ve degiştirilmiş)</string>
+    <string name="delete_camera_images_failed">Kamera görsellerini silme başarısız oldu</string>
+    <string name="delete_camera_images_success">Kamera görselleri başarıyla silindi</string>
+
+    <string name="details">Ayrıntılar</string>
+
+    <string name="file_system">Dosya sistemi</string>
+
+    <string name="help">Yardım ve geribildirim</string>
+
+    <string name="image">Görsel</string>
+    <string name="image_directory">Görsel dizini</string>
+    <string name="image_file">Görsel dosyası</string>
+    <string name="image_files">Görsel dosyaları</string>
+    <string name="image_orientation">Rotasyonu koru</string>
+    <string name="image_supported_formats">Desteklenen dosya biçimleri</string>
+
+    <string name="modified">Değiştirilmiş</string>
+
+    <string name="never">Asla</string>
+
+    <string name="night_mode">Gece modu</string>
+
+    <string name="path_save_choose">Kayıt lokasyonunu seç</string>
+    <string name="path_save_default">Varsayılan kayıt lokasyonu</string>
+
+    <string name="preferred_image_source">Tercih edilen görsel kaynağı</string>
+
+    <string name="report_bug">Sorun bildir</string>
+
+    <string name="saved">Kaydedildi</string>
+
+    <string name="settings">Ayarlar</string>
+
+    <string name="share">Paylaş</string>
+
+    <string name="suffix">Son ek</string>
+
+    <string name="summary">Özet</string>
+
+    <string name="take_picture">Fotoğraf çek</string>
+
+    <string name="ui">Kullanıcı arayüzü</string>
+
+    <string name="unmodified">Degiştirilmedi</string>
+
+    <string name="unsaved">Kaydedilmedi</string>
+
+    <string name="version">Sürüm</string>
+</resources>
