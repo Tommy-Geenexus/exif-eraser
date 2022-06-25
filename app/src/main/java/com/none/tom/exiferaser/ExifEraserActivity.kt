@@ -32,7 +32,8 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import com.none.tom.exiferaser.update.StartIntentSenderForResult
@@ -81,6 +82,11 @@ class ExifEraserActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.applyInsetMargins()
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        binding.toolbar.setupWithNavController(navHostFragment.navController)
         window.statusBarColor = SurfaceColors.getColorForElevation(
             this,
             resources.getDimension(R.dimen.elevation_micro)
@@ -158,7 +164,10 @@ class ExifEraserActivity : AppCompatActivity() {
                 } else {
                     bundleOf(KEY_IMAGE_SELECTION to imageUris.first())
                 }
-                findNavController(R.id.nav_controller).navigate(R.id.global_to_main, args)
+                val navHostFragment = supportFragmentManager.findFragmentById(
+                    R.id.nav_host_fragment
+                ) as NavHostFragment
+                navHostFragment.navController.navigate(R.id.global_to_main, args)
             }
         }
     }
@@ -166,7 +175,10 @@ class ExifEraserActivity : AppCompatActivity() {
     private fun handleShortcutIntent() {
         if (!intent.hasExtra(INTENT_EXTRA_CONSUMED) && isShortcutIntent()) {
             val args = bundleOf(KEY_SHORTCUT to intent.action)
-            findNavController(R.id.nav_controller)
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navHostFragment
+                .navController
                 .createDeepLink()
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragment_main)

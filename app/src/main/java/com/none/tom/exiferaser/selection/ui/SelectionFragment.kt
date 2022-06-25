@@ -25,6 +25,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -67,8 +68,8 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
     private val elevationNone by lazy(LazyThreadSafetyMode.NONE) {
         resources.getDimension(R.dimen.elevation_none)
     }
-    private val elevationToolbar by lazy(LazyThreadSafetyMode.NONE) {
-        binding.toolbarInclude.toolbar.elevation
+    private val elevationMicro by lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimension(R.dimen.elevation_micro)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,10 +110,6 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             }
         }
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupToolbar(
-            toolbar = binding.toolbarInclude.toolbar,
-            titleRes = R.string.summary
-        )
         setFragmentResultListener(ReportFragment.KEY_REPORT_SLIDE) { _, bundle: Bundle ->
             adjustToolbarElevation(
                 endFraction = bundle.getFloat(ReportFragment.KEY_FRACTION_END),
@@ -200,8 +197,8 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         endFraction: Float,
         slideOffset: Float
     ) {
-        binding.toolbarInclude.toolbar.elevation = lerp(
-            startValue = elevationToolbar,
+        (requireActivity() as? AppCompatActivity)?.supportActionBar?.elevation = lerp(
+            startValue = elevationMicro,
             endValue = elevationNone,
             startFraction = ReportFragment.FRACTION_OUT_START,
             endFraction = endFraction,

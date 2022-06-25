@@ -75,10 +75,6 @@ class SettingsFragment :
     ) {
         super.onViewCreated(view, savedInstanceState)
         postponeEnterTransition()
-        setupToolbar(
-            toolbar = binding.toolbarInclude.toolbar,
-            titleRes = R.string.settings
-        )
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)

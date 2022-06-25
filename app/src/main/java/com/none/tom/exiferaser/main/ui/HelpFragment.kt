@@ -52,10 +52,6 @@ class HelpFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(
-            toolbar = binding.includeToolbar.toolbar,
-            titleRes = R.string.help
-        )
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

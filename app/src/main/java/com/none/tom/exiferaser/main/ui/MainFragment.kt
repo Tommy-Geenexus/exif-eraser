@@ -164,7 +164,6 @@ class MainFragment :
             }
         }
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupToolbar(toolbar = binding.toolbar)
         setFragmentResultListener(
             DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
         ) { _, bundle: Bundle ->
