@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">Finito!</string>
+
+    <string name="always">Sempre</string>
+
+    <string name="app_update_download">Aggiornamento in scaricamento </string>
+    <string name="app_update_downloaded">Aggiornamento scaricato con successo</string>
+    <string name="app_update_failed">Aggiornamento non riuscito</string>
+    <string name="app_update_install">Premi qui per installare</string>
+    <string name="app_update_ready">Aggiornamento pronto per l\'installazione</string>
+
+    <string name="automatically">Automaticamente</string>
+
+    <string name="become_translator">Aiuta a tradurre</string>
+
+    <string name="camera">Fotocamera</string>
+
+    <string name="choose_image">Scegli immagine</string>
+    <string name="choose_image_directory">Scegli la cartella dell\'immagine</string>
+    <string name="choose_images">Scegli immagini</string>
+    <string name="choose_your">Scegli la tua</string>
+
+    <string name="clipboard_content_paste">Incolla immagine dagli appunti</string>
+    <string name="clipboard_content_unsupported">Contenuto degli appunti non supportato</string>
+
+    <string name="default_display_name_suffix">Suffisso predefinito del nome visualizzato</string>
+    <string name="default_path_open">Percorso di apertura predefinito</string>
+    <string name="default_path_save">Percorso di salvataggio predefinito</string>
+
+    <string name="delete">Elimina</string>
+    <string name="delete_camera_images">Elimina immmagini della fotocamera</string>
+    <string name="delete_camera_images_all">Elimina tutte le immagini scattate con la fotocamera di questa app (originali e modificate)</string>
+    <string name="delete_camera_images_failed">Eliminazione delle immmagini della fotocamera non riuscita</string>
+    <string name="delete_camera_images_success">Immagini della fotocamera eliminate con successo</string>
+
+    <string name="details">dettagli</string>
+
+    <string name="file_system">Filesystem</string>
+
+    <string name="help">Aiuto e feedback</string>
+
+    <string name="image">Immagine</string>
+    <string name="image_directory">Cartella immagine</string>
+    <string name="image_file">File immagine</string>
+    <string name="image_files">File immagini</string>
+    <string name="image_orientation">Mantieni orientamento</string>
+    <string name="image_path">Percorso immagine</string>
+    <string name="image_share_by_default">Condividi per impostazione predefinita</string>
+    <string name="image_supported_formats">Formati immagine supportati</string>
+
+    <string name="images_modified">immagine modificata</string>
+
+    <string name="install">Installa</string>
+
+    <string name="low_batt_only">Solo batteria scarica</string>
+
+    <string name="modified">Modificata</string>
+
+    <string name="never">Mai</string>
+
+    <string name="night_mode">Modalità notte</string>
+
+    <string name="none">Nessuno</string>
+
+    <string name="of">di</string>
+
+    <string name="path_save_choose">Scegli percorso di salvataggio</string>
+    <string name="path_save_custom">Percorso di salvataggio personalizzato</string>
+    <string name="path_save_default">Percorso di salvataggio preedefinito</string>
+
+    <string name="preferred_image_source">fonte preferita dell\'immagine</string>
+
+    <string name="preserve_image_orientation_off">Non mantenere l\'orientamento originale dell'immagine</string>
+    <string name="preserve_image_orientation_on">Mantieni l\'orientamento originale dell\'immagine</string>
+
+    <string name="reorder_image_source_cards">Riordina le schede sorgente delle immagini</string>
+
+    <string name="report_bug">Segnala un problema</string>
+
+    <string name="saved">Salvata</string>
+
+    <string name="settings">Impostazioni</string>
+
+    <string name="share">Condividi</string>
+    <string name="share_images_by_default_off">Non condividere le immagini per impostazione predefinita dopo la modifica</string>
+    <string name="share_images_by_default_on">Condividi le immagini per impostazione predefinita dopo la modifica</string>
+    <string name="share_via">Condividi tramite</string>
+
+    <string name="suffix">Suffisso</string>
+
+    <string name="summary">Sintesi</string>
+
+    <string name="take_picture">Scatta foto</string>
+
+    <string name="ui">UI</string>
+
+    <string name="unmodified">Non modificata</string>
+
+    <string name="unsaved">Non salvata</string>
+
+    <string name="version">Versione</string>
+</resources>
