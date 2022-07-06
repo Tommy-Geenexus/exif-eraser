@@ -20,6 +20,8 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
@@ -87,12 +89,20 @@ class HelpViewHolder(
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun getBuildVersion(): String {
         val context = itemView.context
         return context
             .packageManager
             .runCatching {
-                getPackageInfo(context.packageName, 0).versionName
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    getPackageInfo(
+                        context.packageName,
+                        PackageManager.PackageInfoFlags.of(0)
+                    ).versionName
+                } else {
+                    getPackageInfo(context.packageName, 0).versionName
+                }
             }
             .getOrElse { exception ->
                 Timber.e(exception)

@@ -10,7 +10,7 @@
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
-    <ID>LongMethod:ReportFragment.kt$ReportFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
+    <ID>LongMethod:ReportFragment.kt$ReportFragment$@Suppress("DEPRECATION") override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImageSelection()</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
