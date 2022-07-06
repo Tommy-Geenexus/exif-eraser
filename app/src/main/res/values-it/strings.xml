@@ -71,7 +71,7 @@
 
     <string name="preferred_image_source">fonte preferita dell\'immagine</string>
 
-    <string name="preserve_image_orientation_off">Non mantenere l\'orientamento originale dell'immagine</string>
+    <string name="preserve_image_orientation_off">Non mantenere l\'orientamento originale dell\'immagine</string>
     <string name="preserve_image_orientation_on">Mantieni l\'orientamento originale dell\'immagine</string>
 
     <string name="reorder_image_source_cards">Riordina le schede sorgente delle immagini</string>
