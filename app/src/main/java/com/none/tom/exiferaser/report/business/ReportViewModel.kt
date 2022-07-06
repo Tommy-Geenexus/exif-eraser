@@ -65,7 +65,7 @@ class ReportViewModel @Inject constructor(
                     containsExif = summary.containsExif,
                     containsPhotoshopImageResources = summary.containsPhotoshopImageResources,
                     containsXmp = summary.containsXmp,
-                    containsExtendedXmp = summary.containsExtendedXmp,
+                    containsExtendedXmp = summary.containsExtendedXmp
                 )
             )
         }
