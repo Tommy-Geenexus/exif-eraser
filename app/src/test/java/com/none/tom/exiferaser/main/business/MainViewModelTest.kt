@@ -108,7 +108,7 @@ class MainViewModelTest {
                         imageSources = testImageSources,
                         loading = false
                     )
-                },
+                }
             )
             postedSideEffects(
                 MainSideEffect.DefaultNightMode(0),

@@ -146,7 +146,7 @@ class SelectionViewModel @Inject constructor(
             selection = selection,
             treeUri = treeUri,
             displayNameSuffix = displayNameSuffix.orEmpty(),
-            preserveOrientation = preserveOrientation == true,
+            preserveOrientation = preserveOrientation == true
         ).collect { result ->
             reduce {
                 when (result) {

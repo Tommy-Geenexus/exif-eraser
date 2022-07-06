@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ImageModifiedDetailsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ContainerHost<ImageModifiedDetailsState, Nothing>,
     ViewModel() {
 
