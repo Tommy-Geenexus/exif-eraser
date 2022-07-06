@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.report.ui
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -114,6 +115,7 @@ class ReportFragment :
     private var _behaviour: ReportFragmentBehaviour<ReportConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -122,9 +124,16 @@ class ReportFragment :
         _viewModel = ViewModelProvider(this).get()
         setFragmentResultListener(SelectionFragment.KEY_REPORT_PREPARE) { _, args: Bundle ->
             viewModel.handleImageSummaries(
-                args
-                    .getParcelableArrayList<Summary>(SelectionFragment.KEY_REPORT_PREPARE)
-                    .orEmpty()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    args.getParcelableArrayList(
+                        SelectionFragment.KEY_REPORT_PREPARE,
+                        Summary::class.java
+                    ).orEmpty()
+                } else {
+                    args.getParcelableArrayList<Summary>(
+                        SelectionFragment.KEY_REPORT_PREPARE
+                    ).orEmpty()
+                }
             )
         }
         _behaviour = BottomSheetBehavior.from(binding.layout) as
