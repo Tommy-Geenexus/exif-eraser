@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,7 +81,9 @@ class ExifEraserActivity : AppCompatActivity() {
                 } else {
                     bundleOf(KEY_IMAGE_SELECTION to imageUris.first())
                 }
-                findNavController(R.id.nav_controller).navigate(R.id.global_to_main, args)
+                (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
+                    ?.navController
+                    ?.navigate(R.id.global_to_main, args)
             }
         }
     }
@@ -89,13 +91,14 @@ class ExifEraserActivity : AppCompatActivity() {
     private fun handleShortcutIntent() {
         if (!intent.hasExtra(INTENT_EXTRA_CONSUMED) && isShortcutIntent()) {
             val args = bundleOf(KEY_SHORTCUT to intent.action)
-            findNavController(R.id.nav_controller)
-                .createDeepLink()
-                .setGraph(R.navigation.nav_graph)
-                .setDestination(R.id.fragment_main)
-                .setArguments(args)
-                .createTaskStackBuilder()
-                .startActivities()
+            (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
+                ?.navController
+                ?.createDeepLink()
+                ?.setGraph(R.navigation.nav_graph)
+                ?.setDestination(R.id.fragment_main)
+                ?.setArguments(args)
+                ?.createTaskStackBuilder()
+                ?.startActivities()
         }
     }
 

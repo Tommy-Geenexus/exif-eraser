@@ -9,7 +9,7 @@
     <dimen name="spacing_preference_end">76dp</dimen>
 
     <dimen name="elevation_none">0dp</dimen>
-    <dimen name="elevation_micro">4dp</dimen>
+    <dimen name="elevation_micro">3dp</dimen>
     <dimen name="elevation_bottom_sheet">6dp</dimen>
 
     <dimen name="corner_size_cut">0dp</dimen>
