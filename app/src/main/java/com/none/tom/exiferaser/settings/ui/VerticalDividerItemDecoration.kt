@@ -26,6 +26,7 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.none.tom.exiferaser.Empty
 import kotlin.math.roundToInt
 
 class VerticalDividerItemDecoration(
@@ -37,7 +38,7 @@ class VerticalDividerItemDecoration(
 
     init {
         val a = context.obtainStyledAttributes(intArrayOf(android.R.attr.listDivider))
-        val d = a.getDrawable(0) ?: throw IllegalStateException()
+        val d = a.getDrawable(0) ?: error(String.Empty)
         divider = d
         a.recycle()
     }

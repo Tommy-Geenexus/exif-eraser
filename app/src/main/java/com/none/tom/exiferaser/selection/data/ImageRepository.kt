@@ -128,7 +128,7 @@ class ImageRepository @Inject constructor(
                     if (cursor.moveToFirst()) {
                         packChildDocumentsToAnyMessageOrNull(cursor, treeUri)
                     } else {
-                        throw IllegalStateException("Empty cursor")
+                        error("Empty cursor")
                     }
                 }
             }.getOrElse { exception ->
@@ -154,7 +154,7 @@ class ImageRepository @Inject constructor(
                         selection.add(UserImageSelectionProto(documentUri.toString()))
                     }
                     if (!cursor.moveToNext() && !cursor.isAfterLast) {
-                        throw IllegalStateException("Failed to move cursor to next row")
+                        error("Failed to move cursor to next row")
                     }
                 }
                 when {
@@ -165,7 +165,7 @@ class ImageRepository @Inject constructor(
                         AnyMessage.pack(selection.first())
                     }
                     else -> {
-                        throw IllegalStateException("No child documents found")
+                        error("No child documents found")
                     }
                 }
             }.getOrElse { exception ->
@@ -305,7 +305,7 @@ class ImageRepository @Inject constructor(
                             displayName
                         )
                     } else {
-                        throw IllegalStateException("Failed to resolve tree uri")
+                        error("Failed to resolve tree uri")
                     }
                 } else {
                     if (displayName.isEmpty() || extension.isEmpty()) {
@@ -377,7 +377,7 @@ class ImageRepository @Inject constructor(
                         val columnName = MediaStore.Images.ImageColumns.DISPLAY_NAME
                         cursor.getString(cursor.getColumnIndexOrThrow(columnName))
                     } else {
-                        throw IllegalStateException("Empty cursor")
+                        error("Empty cursor")
                     }
                 }
             }.getOrElse { exception ->
