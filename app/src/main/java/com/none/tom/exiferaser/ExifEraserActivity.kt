@@ -48,6 +48,14 @@ class ExifEraserActivity : AppCompatActivity() {
         const val KEY_SHORTCUT = "shortcut"
     }
 
+    init {
+        addOnNewIntentListener { intent ->
+            setIntent(intent)
+            handleSendIntent()
+            handleShortcutIntent()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -58,13 +66,6 @@ class ExifEraserActivity : AppCompatActivity() {
             this,
             resources.getDimension(R.dimen.elevation_micro)
         )
-        handleSendIntent()
-        handleShortcutIntent()
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        setIntent(intent)
         handleSendIntent()
         handleShortcutIntent()
     }
