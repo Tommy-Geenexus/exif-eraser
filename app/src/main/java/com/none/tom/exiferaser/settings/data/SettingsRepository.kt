@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -66,6 +66,8 @@ class SettingsRepository @Inject constructor(
         const val KEY_SHARE_BY_DEFAULT = "image_share_by_default"
         const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX = "default_display_name_suffix"
         const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
+
+        const val KEY_SAVE_PATH_SELECTION_SKIP = "save_path_selection_skip"
     }
 
     private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
@@ -73,6 +75,7 @@ class SettingsRepository @Inject constructor(
     private val keyPreserveOrientation = booleanPreferencesKey(KEY_PRESERVE_ORIENTATION)
     private val keyShareByDefault = booleanPreferencesKey(KEY_SHARE_BY_DEFAULT)
     private val keyDefaultDisplayNameSuffix = stringPreferencesKey(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+    private val keySavePathSelectionSkip = booleanPreferencesKey(KEY_SAVE_PATH_SELECTION_SKIP)
     private val keyDefaultNightMode = intPreferencesKey(KEY_DEFAULT_NIGHT_MODE)
 
     suspend fun putDefaultPathOpen(
@@ -282,6 +285,32 @@ class SettingsRepository @Inject constructor(
             }
             .map { preferences ->
                 preferences[keyDefaultDisplayNameSuffix] ?: String.Empty
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun putSavePathSelectionSkip(value: Boolean): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keySavePathSelectionSkip] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
+        }
+    }
+
+    fun shouldSkipSavePathSelection(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keySavePathSelectionSkip] ?: false
             }
             .flowOn(dispatcher)
     }

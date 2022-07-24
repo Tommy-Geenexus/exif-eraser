@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -70,6 +70,9 @@ class SettingsViewModelTest {
             settingsRepository.getDefaultDisplayNameSuffix()
         } returns flowOf(testDefaultDisplayNameSuffix)
         coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(true)
+        coEvery {
             settingsRepository.getDefaultNightModeName()
         } returns testDefaultNightModeName
         val initialState = SettingsState()
@@ -87,6 +90,7 @@ class SettingsViewModelTest {
             settingsRepository.shouldPreserveOrientation()
             settingsRepository.shouldShareByDefault()
             settingsRepository.getDefaultDisplayNameSuffix()
+            settingsRepository.shouldSkipSavePathSelection()
             settingsRepository.getDefaultNightModeName()
         }
         viewModel.assert(initialState) {
@@ -98,6 +102,7 @@ class SettingsViewModelTest {
                         initialPreserveOrientation = true,
                         initialShareByDefault = true,
                         defaultDisplayNameSuffix = testDefaultDisplayNameSuffix,
+                        skipSavePathSelection = true,
                         defaultNightModeName = testDefaultNightModeName
                     )
                 }
@@ -364,6 +369,27 @@ class SettingsViewModelTest {
                     copy(defaultDisplayNameSuffix = testDefaultDisplayNameSuffix)
                 }
             )
+        }
+    }
+
+    @Test
+    fun test_storeSavePathSelectionSkip() = runTest {
+        val initialState = SettingsState()
+        val viewModel = SettingsViewModel(
+            savedStateHandle = SavedStateHandle(),
+            settingsRepository = settingsRepository
+        ).test(initialState)
+        coEvery {
+            settingsRepository.putSavePathSelectionSkip(any())
+        } returns true
+        viewModel.testIntent {
+            storeSavePathSelectionSkip(true)
+        }
+        coVerify(exactly = 1) {
+            settingsRepository.putSavePathSelectionSkip(any())
+        }
+        viewModel.assert(initialState) {
+            postedSideEffects(SettingsSideEffect.SavePathSelectionSkip(success = true))
         }
     }
 

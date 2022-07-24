@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -58,6 +58,7 @@ class SettingsViewModel @Inject constructor(
         val initialShareByDefault = settingsRepository.shouldShareByDefault().firstOrNull()
         val defaultDisplayNameSuffix =
             settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
+        val skipSavePathSelection = settingsRepository.shouldSkipSavePathSelection().firstOrNull()
         val defaultNightModeName = settingsRepository.getDefaultNightModeName()
         reduce {
             state.copy(
@@ -66,6 +67,7 @@ class SettingsViewModel @Inject constructor(
                 initialPreserveOrientation = initialPreserveOrientation == true,
                 initialShareByDefault = initialShareByDefault == true,
                 defaultDisplayNameSuffix = defaultDisplayNameSuffix.orEmpty(),
+                skipSavePathSelection = skipSavePathSelection == true,
                 defaultNightModeName = defaultNightModeName
             )
         }
@@ -181,6 +183,11 @@ class SettingsViewModel @Inject constructor(
                 state.copy(defaultDisplayNameSuffix = value)
             }
         }
+    }
+
+    fun storeSavePathSelectionSkip(value: Boolean) = intent {
+        val success = settingsRepository.putSavePathSelectionSkip(value)
+        postSideEffect(SettingsSideEffect.SavePathSelectionSkip(success))
     }
 
     fun handleDefaultNightMode() = intent {
