@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,6 +30,23 @@ class ItemUiViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
+        binding.savePathCustomSkip.apply {
+            layoutPreferenceCheckBox.setOnClickListener {
+                onOff.isChecked = !onOff.isChecked
+            }
+            onOff.setOnCheckedChangeListener { _, value ->
+                summaryPreferenceCheckBox.setText(
+                    if (value) {
+                        R.string.save_path_custom_skip_on
+                    } else {
+                        R.string.save_path_custom_skip_off
+                    }
+                )
+                listener.onSavePathSelectionSkipChanged(value)
+            }
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_straight)
+            titlePreferenceCheckBox.setText(R.string.save_path_custom_skip)
+        }
         binding.nightMode.apply {
             layoutPreference.setOnClickListener {
                 listener.onDefaultNightModeSelected()
@@ -40,7 +57,22 @@ class ItemUiViewHolder(
         binding.ui.category.setText(R.string.ui)
     }
 
-    fun bindUiItem(defaultNightModeName: String) {
+    fun bindUiItem(
+        skipSavePathSelection: Boolean,
+        defaultNightModeName: String
+    ) {
+        binding.savePathCustomSkip.apply {
+            if (summaryPreferenceCheckBox.text.isNullOrEmpty()) {
+                summaryPreferenceCheckBox.setText(
+                    if (skipSavePathSelection) {
+                        R.string.save_path_custom_skip_on
+                    } else {
+                        R.string.save_path_custom_skip_off
+                    }
+                )
+                onOff.isChecked = skipSavePathSelection
+            }
+        }
         binding.nightMode.summaryPreference.text = defaultNightModeName
     }
 }

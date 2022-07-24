@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -130,6 +130,25 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun chooseSelectionNavigationRoute(fromCamera: Boolean = false) = intent {
+        if (fromCamera) {
+            postSideEffect(MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY))
+            return@intent
+        }
+        val skipSavePathSelection = settingsRepository.shouldSkipSavePathSelection().firstOrNull()
+        if (skipSavePathSelection == true) {
+            val savePath = settingsRepository.getDefaultPathSave().firstOrNull()
+            if (savePath != null) {
+                val result = settingsRepository.hasPrivilegedDefaultPathSave(savePath)
+                if (result) {
+                    postSideEffect(MainSideEffect.NavigateToSelection(savePath))
+                    return@intent
+                }
+            }
+        }
+        postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+    }
+
     fun deleteCameraImages() = intent {
         reduce {
             state.copy(loading = true)
@@ -252,13 +271,7 @@ class MainViewModel @Inject constructor(
             state.copy(loading = false)
         }
         if (success) {
-            postSideEffect(
-                if (fromCamera) {
-                    MainSideEffect.NavigateToSelection
-                } else {
-                    MainSideEffect.NavigateToSelectionSavePath
-                }
-            )
+            chooseSelectionNavigationRoute(fromCamera)
         }
     }
 
@@ -278,7 +291,7 @@ class MainViewModel @Inject constructor(
             state.copy(loading = false)
         }
         if (success) {
-            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+            chooseSelectionNavigationRoute()
         }
     }
 
@@ -302,7 +315,7 @@ class MainViewModel @Inject constructor(
             state.copy(loading = false)
         }
         if (success) {
-            postSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+            chooseSelectionNavigationRoute()
         }
     }
 

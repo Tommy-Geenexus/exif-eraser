@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,6 @@ import android.content.Context
 import android.content.pm.ShortcutManager
 import android.content.res.Configuration
 import android.graphics.drawable.Animatable
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -388,7 +387,7 @@ class MainFragment :
                 navigate(MainFragmentDirections.mainToHelp())
             }
             is MainSideEffect.NavigateToSelection -> {
-                navigate(MainFragmentDirections.mainToSelection(savePath = Uri.EMPTY))
+                navigate(MainFragmentDirections.mainToSelection(savePath = sideEffect.savePath))
             }
             is MainSideEffect.NavigateToSelectionSavePath -> {
                 navigate(MainFragmentDirections.mainToSelectionSavePath())

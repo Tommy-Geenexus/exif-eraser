@@ -78,6 +78,10 @@
 
     <string name="report_bug">Fehler melden</string>
 
+    <string name="save_path_custom_skip">Überspringe Speicherpfad-Auswahl</string>
+    <string name="save_path_custom_skip_off">Überspringe die Speicherpfad-Auswahl nicht falls der Standard-Speicherpfad ausgewählt ist</string>
+    <string name="save_path_custom_skip_on">Überspringe die Speicherpfad-Auswahl falls der Standard-Speicherpfad ausgewählt ist</string>
+
     <string name="saved">Gespeichert</string>
 
     <string name="settings">Einstellungen</string>

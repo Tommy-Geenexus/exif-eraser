@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -21,6 +21,7 @@
 package com.none.tom.exiferaser.main.business
 
 import android.content.ContentResolver
+import android.net.Uri
 import android.os.Build
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
@@ -204,6 +205,9 @@ class MainViewModelTest {
                 fromCamera = false
             )
         } returns true
+        coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(false)
         viewModel.testIntent {
             putImageSelection(
                 uri = testUri,
@@ -251,7 +255,7 @@ class MainViewModelTest {
             )
             postedSideEffects(
                 MainSideEffect.NavigateToSelectionSavePath,
-                MainSideEffect.NavigateToSelection
+                MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY)
             )
         }
     }
@@ -266,20 +270,25 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
+        ).test(
+            initialState = initialState,
+            isolateFlow = false
+        )
         coEvery {
             selectionRepository.putSelection(
                 uris = testUris,
                 urisFromIntent = testUris.toTypedArray()
             )
         } returns true
+        coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(false)
         viewModel.testIntent {
             putImagesSelection(
                 uris = testUris,
                 urisFromIntent = testUris.toTypedArray()
             )
         }
-        // runCurrent()
         coVerify(exactly = 1) {
             selectionRepository.putSelection(
                 uris = testUris,
@@ -309,7 +318,10 @@ class MainViewModelTest {
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
+        ).test(
+            initialState = initialState,
+            isolateFlow = false
+        )
         val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
         coEvery {
             imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
@@ -317,6 +329,9 @@ class MainViewModelTest {
         coEvery {
             selectionRepository.putSelection(result)
         } returns true
+        coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(false)
         viewModel.testIntent {
             putImageDirectorySelection(uri = testUri)
         }
@@ -452,6 +467,58 @@ class MainViewModelTest {
                 }
             )
             postedSideEffects(MainSideEffect.ChooseImageDirectory(openPath = testUri))
+        }
+    }
+
+    @Test
+    fun test_chooseSelectionNavigationRoute() = runTest {
+        val initialState = MainState()
+        val viewModel = MainViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageRepository = imageRepository,
+            imageSourceRepository = imageSourceRepository,
+            selectionRepository = selectionRepository,
+            settingsRepository = settingsRepository,
+            updateRepository = updateRepository
+        ).test(
+            initialState = initialState,
+            isolateFlow = false
+        )
+        coEvery {
+            settingsRepository.getDefaultPathOpen()
+        } returns flowOf(testUri)
+        viewModel.testIntent {
+            chooseSelectionNavigationRoute(fromCamera = true)
+        }
+        coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(true)
+        coEvery {
+            settingsRepository.getDefaultPathSave()
+        } returns flowOf(testUri)
+        coEvery {
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
+        } returns true
+        viewModel.testIntent {
+            chooseSelectionNavigationRoute()
+        }
+        coVerify(ordering = Ordering.ALL) {
+            settingsRepository.shouldSkipSavePathSelection()
+            settingsRepository.getDefaultPathSave()
+            settingsRepository.hasPrivilegedDefaultPathSave(any())
+        }
+        coEvery {
+            settingsRepository.shouldSkipSavePathSelection()
+        } returns flowOf(false)
+        viewModel.testIntent {
+            chooseSelectionNavigationRoute()
+        }
+        viewModel.assert(initialState) {
+            postedSideEffects(
+                MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY),
+                MainSideEffect.NavigateToSelection(savePath = testUri),
+                MainSideEffect.NavigateToSelectionSavePath
+            )
         }
     }
 

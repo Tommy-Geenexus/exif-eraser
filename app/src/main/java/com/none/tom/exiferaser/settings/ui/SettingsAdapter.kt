@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -63,6 +63,7 @@ class SettingsAdapter(
         fun onPreserveOrientationChanged(value: Boolean)
         fun onShareByDefaultChanged(value: Boolean)
         fun onDefaultDisplayNameSuffixSelected()
+        fun onSavePathSelectionSkipChanged(value: Boolean)
         fun onDefaultNightModeSelected()
         fun onItemsUpdated()
     }
@@ -125,7 +126,8 @@ class SettingsAdapter(
             }
             ITEM_TYPE_UI -> {
                 (holder as ItemUiViewHolder).bindUiItem(
-                    defaultNightModeName = (currentList.getOrNull(5) as? String) ?: String.Empty
+                    skipSavePathSelection = currentList.getOrNull(5) as? Boolean ?: false,
+                    defaultNightModeName = (currentList.getOrNull(6) as? String) ?: String.Empty
                 )
             }
             else -> {

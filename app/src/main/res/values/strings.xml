@@ -94,6 +94,10 @@
 
     <string name="report_bug">Report issue</string>
 
+    <string name="save_path_custom_skip">Skip save path selection</string>
+    <string name="save_path_custom_skip_off">Don\'t skip the save path selection if the default save path is set</string>
+    <string name="save_path_custom_skip_on">Skip the save path selection if the default save path is set</string>
+
     <string name="saved">Saved</string>
 
     <string name="settings">Settings</string>

@@ -33,7 +33,6 @@
         android:layout_marginStart="@dimen/spacing_preference_start"
         android:layout_marginTop="@dimen/spacing_normal"
         android:layout_marginEnd="@dimen/spacing_normal"
-        android:text="@string/image_supported_formats"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         app:layout_constraintBottom_toTopOf="@+id/summary_preference_check_box"
         app:layout_constraintEnd_toStartOf="@id/guideline_preference_check_box"
