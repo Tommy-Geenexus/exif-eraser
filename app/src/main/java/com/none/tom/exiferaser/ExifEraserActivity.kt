@@ -75,6 +75,14 @@ class ExifEraserActivity : AppCompatActivity() {
         }
     }
 
+    init {
+        addOnNewIntentListener { intent ->
+            setIntent(intent)
+            handleSendIntent()
+            handleShortcutIntent()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -95,13 +103,6 @@ class ExifEraserActivity : AppCompatActivity() {
             }
         }
         viewModel.checkAppUpdateAvailability()
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        handleSendIntent()
-        handleShortcutIntent()
     }
 
     private fun handleSideEffect(sideEffect: UpdateSideEffect) {
