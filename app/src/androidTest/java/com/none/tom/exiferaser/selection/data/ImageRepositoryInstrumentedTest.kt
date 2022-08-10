@@ -29,7 +29,7 @@ import androidx.annotation.RawRes
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import app.cash.turbine.FlowTurbine
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.EXTENSION_PNG
@@ -280,7 +280,7 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    private suspend fun FlowTurbine<Result>.expectImageHandled(
+    private suspend fun ReceiveTurbine<Result>.expectImageHandled(
         summary: Summary,
         @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) progress: Int
     ) {
