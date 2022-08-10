@@ -7,18 +7,19 @@
     <application
         android:name="com.none.tom.exiferaser.ExifEraserApplication"
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.ExifEraser.Launcher"
-        android:dataExtractionRules="@xml/data_extraction_rules"
         tools:targetApi="s">
 
         <activity
             android:name="com.none.tom.exiferaser.ExifEraserActivity"
-            android:launchMode="singleTask"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +29,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/png" />
                 <data android:mimeType="image/webp" />
@@ -36,6 +38,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/jpeg" />
                 <data android:mimeType="image/png" />
                 <data android:mimeType="image/webp" />
