@@ -87,7 +87,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentImageModifiedDetailsBinding.inflate(layoutInflater)
-        binding.title.text = arguments?.getString(KEY_DISPLAY_NAME, String.Empty)
+        val displayName = arguments?.getString(KEY_DISPLAY_NAME, String.Empty)
+        if (displayName.isNullOrEmpty()) {
+            binding.title.isVisible = false
+        } else {
+            binding.title.text = displayName
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModelImageModified.container.stateFlow.collect { state ->
