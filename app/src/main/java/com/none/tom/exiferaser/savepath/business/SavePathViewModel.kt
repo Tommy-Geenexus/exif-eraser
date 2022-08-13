@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -27,7 +27,6 @@ import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -56,31 +55,26 @@ class SavePathViewModel @Inject constructor(
         val realOpenPath = if (openPath.isNotEmpty()) {
             openPath
         } else {
-            settingsRepository.getDefaultPathOpen().firstOrNull()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
-        if (realOpenPath != null) {
-            postSideEffect(SavePathSideEffect.ChooseSavePath(realOpenPath))
-        }
+        postSideEffect(SavePathSideEffect.ChooseSavePath(realOpenPath))
     }
 
     fun handleSelection(savePath: Uri? = null) = intent {
         val realSavePath = if (savePath.isNotNullOrEmpty()) {
             savePath
         } else {
-            settingsRepository.getDefaultPathSave().firstOrNull()
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
-        if (realSavePath != null) {
+        if (realSavePath.isNotEmpty()) {
             postSideEffect(SavePathSideEffect.NavigateToSelection(realSavePath))
         }
     }
 
     fun verifyHasPrivilegedDefaultSavePath() = intent {
-        val savePath = settingsRepository.getDefaultPathSave().firstOrNull()
-        if (savePath != null) {
-            val result = settingsRepository.hasPrivilegedDefaultPathSave(savePath)
-            reduce {
-                state.copy(hasPrivilegedDefaultSavePath = result)
-            }
+        val savePath = settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        reduce {
+            state.copy(hasPrivilegedDefaultSavePath = savePath.isNotEmpty())
         }
     }
 }
