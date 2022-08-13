@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,7 +30,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,25 +58,22 @@ class SavePathViewModelTest {
             isolateFlow = false
         )
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
-        coEvery {
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
-        } returns true
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             verifyHasPrivilegedDefaultSavePath()
         }
         coVerify(exactly = 1) {
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
         coEvery {
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
-        } returns false
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns Uri.EMPTY
         viewModel.testIntent {
             verifyHasPrivilegedDefaultSavePath()
         }
         coVerify(exactly = 2) {
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
         viewModel.assert(initialState) {
             states(
@@ -105,13 +101,13 @@ class SavePathViewModelTest {
             chooseSelectionSavePath(testUri)
         }
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseSelectionSavePath(Uri.EMPTY)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathOpen()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
         viewModel.assert(initialState) {
             postedSideEffects(
@@ -133,14 +129,14 @@ class SavePathViewModelTest {
             isolateFlow = false
         )
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf()
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns Uri.EMPTY
         viewModel.testIntent {
             handleSelection(null)
         }
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             handleSelection(testUri)
         }
@@ -148,7 +144,7 @@ class SavePathViewModelTest {
             handleSelection(Uri.EMPTY)
         }
         coVerify(exactly = 2) {
-            settingsRepository.getDefaultPathSave()
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
         viewModel.assert(initialState) {
             postedSideEffects(

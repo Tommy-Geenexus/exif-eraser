@@ -74,21 +74,16 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun handleDefaultPathOpen() = intent {
-        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
-        postSideEffect(SettingsSideEffect.DefaultPathOpenSelect(uri ?: Uri.EMPTY))
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        postSideEffect(SettingsSideEffect.DefaultPathOpenSelect(pathOpen))
     }
 
     fun clearDefaultPathOpen() = intent {
-        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
-        val success = if (uri != null) {
-            settingsRepository.putDefaultPathOpen(
-                defaultPathOpenNew = Uri.EMPTY,
-                defaultPathOpenCurrent = uri,
-                releaseUriPermissions = true
-            )
-        } else {
-            false
-        }
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        val success = settingsRepository.putDefaultPathOpen(
+            defaultPathOpenNew = Uri.EMPTY,
+            defaultPathOpenCurrent = pathOpen
+        )
         if (success) {
             reduce {
                 state.copy(defaultPathOpenName = String.Empty)
@@ -98,16 +93,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun storeDefaultPathOpen(uriNew: Uri) = intent {
-        val uri = settingsRepository.getDefaultPathOpen().firstOrNull()
-        val success = if (uri != null) {
-            settingsRepository.putDefaultPathOpen(
-                defaultPathOpenNew = uriNew,
-                defaultPathOpenCurrent = uri,
-                releaseUriPermissions = false
-            )
-        } else {
-            false
-        }
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        val success = settingsRepository.putDefaultPathOpen(
+            defaultPathOpenNew = uriNew,
+            defaultPathOpenCurrent = pathOpen
+        )
         if (success) {
             val name = settingsRepository.getDefaultPathOpenName()
             reduce {
@@ -118,21 +108,16 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun handleDefaultPathSave() = intent {
-        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
-        postSideEffect(SettingsSideEffect.DefaultPathSaveSelect(uri ?: Uri.EMPTY))
+        val pathSave = settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        postSideEffect(SettingsSideEffect.DefaultPathSaveSelect(pathSave))
     }
 
     fun clearDefaultPathSave() = intent {
-        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
-        val success = if (uri != null) {
-            settingsRepository.putDefaultPathSave(
-                defaultPathSaveNew = Uri.EMPTY,
-                defaultPathSaveCurrent = uri,
-                releaseUriPermissions = true
-            )
-        } else {
-            false
-        }
+        val pathSave = settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        val success = settingsRepository.putDefaultPathSave(
+            defaultPathSaveNew = Uri.EMPTY,
+            defaultPathSaveCurrent = pathSave
+        )
         if (success) {
             reduce {
                 state.copy(defaultPathSaveName = String.Empty)
@@ -142,16 +127,11 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun storeDefaultPathSave(uriNew: Uri) = intent {
-        val uri = settingsRepository.getDefaultPathSave().firstOrNull()
-        val success = if (uri != null) {
-            settingsRepository.putDefaultPathSave(
-                defaultPathSaveNew = uriNew,
-                defaultPathSaveCurrent = uri,
-                releaseUriPermissions = false
-            )
-        } else {
-            false
-        }
+        val pathSave = settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        val success = settingsRepository.putDefaultPathSave(
+            defaultPathSaveNew = uriNew,
+            defaultPathSaveCurrent = pathSave
+        )
         if (success) {
             val name = settingsRepository.getDefaultPathSaveName()
             reduce {

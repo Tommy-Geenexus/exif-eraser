@@ -374,13 +374,13 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseImage(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathOpen()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
         viewModel.assert(initialState) {
             states(
@@ -406,13 +406,13 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseImages(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathOpen()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
         viewModel.assert(initialState) {
             states(
@@ -438,13 +438,13 @@ class MainViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseImageDirectory(canReorderImageSources = false)
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathOpen()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
         viewModel.assert(initialState) {
             states(
@@ -473,8 +473,8 @@ class MainViewModelTest {
             isolateFlow = false
         )
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseSelectionNavigationRoute(fromCamera = true)
         }
@@ -482,18 +482,14 @@ class MainViewModelTest {
             settingsRepository.shouldSkipSavePathSelection()
         } returns flowOf(true)
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
-        coEvery {
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
-        } returns true
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             chooseSelectionNavigationRoute()
         }
         coVerify(ordering = Ordering.ALL) {
             settingsRepository.shouldSkipSavePathSelection()
-            settingsRepository.getDefaultPathSave()
-            settingsRepository.hasPrivilegedDefaultPathSave(any())
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
         coEvery {
             settingsRepository.shouldSkipSavePathSelection()

@@ -118,13 +118,13 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             handleDefaultPathOpen()
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathOpen()
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         }
         viewModel.assert(initialState) {
             postedSideEffects(SettingsSideEffect.DefaultPathOpenSelect(testUri))
@@ -139,17 +139,17 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         coEvery {
-            settingsRepository.putDefaultPathOpen(any(), any(), any())
+            settingsRepository.putDefaultPathOpen(any(), any())
         } returns true
         viewModel.testIntent {
             clearDefaultPathOpen()
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getDefaultPathOpen()
-            settingsRepository.putDefaultPathOpen(any(), any(), any())
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            settingsRepository.putDefaultPathOpen(any(), any())
         }
         viewModel.assert(initialState) {
             states(
@@ -169,10 +169,10 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathOpen()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        } returns testUri
         coEvery {
-            settingsRepository.putDefaultPathOpen(any(), any(), any())
+            settingsRepository.putDefaultPathOpen(any(), any())
         } returns true
         coEvery {
             settingsRepository.getDefaultPathOpenName()
@@ -181,8 +181,8 @@ class SettingsViewModelTest {
             storeDefaultPathOpen(testUri)
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getDefaultPathOpen()
-            settingsRepository.putDefaultPathOpen(any(), any(), any())
+            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            settingsRepository.putDefaultPathOpen(any(), any())
             settingsRepository.getDefaultPathOpenName()
         }
         viewModel.assert(initialState) {
@@ -203,13 +203,13 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         viewModel.testIntent {
             handleDefaultPathSave()
         }
         coVerify(exactly = 1) {
-            settingsRepository.getDefaultPathSave()
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         }
         viewModel.assert(initialState) {
             postedSideEffects(SettingsSideEffect.DefaultPathSaveSelect(testUri))
@@ -224,17 +224,17 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         coEvery {
-            settingsRepository.putDefaultPathSave(any(), any(), any())
+            settingsRepository.putDefaultPathSave(any(), any())
         } returns true
         viewModel.testIntent {
             clearDefaultPathSave()
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getDefaultPathSave()
-            settingsRepository.putDefaultPathSave(any(), any(), any())
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            settingsRepository.putDefaultPathSave(any(), any())
         }
         viewModel.assert(initialState) {
             states(
@@ -254,10 +254,10 @@ class SettingsViewModelTest {
             settingsRepository = settingsRepository
         ).test(initialState)
         coEvery {
-            settingsRepository.getDefaultPathSave()
-        } returns flowOf(testUri)
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+        } returns testUri
         coEvery {
-            settingsRepository.putDefaultPathSave(any(), any(), any())
+            settingsRepository.putDefaultPathSave(any(), any())
         } returns true
         coEvery {
             settingsRepository.getDefaultPathSaveName()
@@ -266,8 +266,8 @@ class SettingsViewModelTest {
             storeDefaultPathSave(testUri)
         }
         coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getDefaultPathSave()
-            settingsRepository.putDefaultPathSave(any(), any(), any())
+            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            settingsRepository.putDefaultPathSave(any(), any())
             settingsRepository.getDefaultPathSaveName()
         }
         viewModel.assert(initialState) {

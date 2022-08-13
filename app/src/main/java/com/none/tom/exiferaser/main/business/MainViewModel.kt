@@ -24,6 +24,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
@@ -77,13 +78,11 @@ class MainViewModel @Inject constructor(
         reduce {
             state.copy(loading = true)
         }
-        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
-        if (path != null) {
-            reduce {
-                state.copy(loading = false)
-            }
-            postSideEffect(MainSideEffect.ChooseImage(path))
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        reduce {
+            state.copy(loading = false)
         }
+        postSideEffect(MainSideEffect.ChooseImage(pathOpen))
     }
 
     fun chooseImages(canReorderImageSources: Boolean) = intent {
@@ -93,13 +92,11 @@ class MainViewModel @Inject constructor(
         reduce {
             state.copy(loading = true)
         }
-        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
-        if (path != null) {
-            reduce {
-                state.copy(loading = false)
-            }
-            postSideEffect(MainSideEffect.ChooseImages(path))
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        reduce {
+            state.copy(loading = false)
         }
+        postSideEffect(MainSideEffect.ChooseImages(pathOpen))
     }
 
     fun chooseImageDirectory(canReorderImageSources: Boolean) = intent {
@@ -109,13 +106,11 @@ class MainViewModel @Inject constructor(
         reduce {
             state.copy(loading = true)
         }
-        val path = settingsRepository.getDefaultPathOpen().firstOrNull()
-        if (path != null) {
-            reduce {
-                state.copy(loading = false)
-            }
-            postSideEffect(MainSideEffect.ChooseImageDirectory(path))
+        val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+        reduce {
+            state.copy(loading = false)
         }
+        postSideEffect(MainSideEffect.ChooseImageDirectory(pathOpen))
     }
 
     fun chooseSelectionNavigationRoute(fromCamera: Boolean = false) = intent {
@@ -125,13 +120,10 @@ class MainViewModel @Inject constructor(
         }
         val skipSavePathSelection = settingsRepository.shouldSkipSavePathSelection().firstOrNull()
         if (skipSavePathSelection == true) {
-            val savePath = settingsRepository.getDefaultPathSave().firstOrNull()
-            if (savePath != null) {
-                val result = settingsRepository.hasPrivilegedDefaultPathSave(savePath)
-                if (result) {
-                    postSideEffect(MainSideEffect.NavigateToSelection(savePath))
-                    return@intent
-                }
+            val savePath = settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            if (savePath.isNotEmpty()) {
+                postSideEffect(MainSideEffect.NavigateToSelection(savePath))
+                return@intent
             }
         }
         postSideEffect(MainSideEffect.NavigateToSelectionSavePath)

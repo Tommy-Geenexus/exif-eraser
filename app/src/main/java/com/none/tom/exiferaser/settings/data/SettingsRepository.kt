@@ -35,6 +35,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
+import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.defaultNightMode
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import com.none.tom.exiferaser.settings.name
@@ -42,14 +43,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.contracts.ExperimentalContracts
 
+@OptIn(ExperimentalContracts::class)
 @Singleton
 class SettingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -80,23 +83,15 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putDefaultPathOpen(
         defaultPathOpenNew: Uri,
-        defaultPathOpenCurrent: Uri,
-        releaseUriPermissions: Boolean
+        defaultPathOpenCurrent: Uri
     ): Boolean {
         if (defaultPathOpenNew.isNotEmpty()) {
-            takePersistablePermissions(
-                resolver = context.contentResolver,
-                uri = defaultPathOpenNew,
-                read = true,
-                write = false
-            )
-        } else if (releaseUriPermissions) {
-            releasePersistablePermissions(
-                resolver = context.contentResolver,
-                uri = defaultPathOpenCurrent,
-                read = true,
-                write = false
-            )
+            if (!takePersistablePermissions(context.contentResolver, defaultPathOpenNew)) {
+                return false
+            }
+        }
+        if (defaultPathOpenCurrent.isNotEmpty()) {
+            releasePersistablePermissions(context.contentResolver, defaultPathOpenCurrent)
         }
         return withContext(dispatcher) {
             runCatching {
@@ -106,12 +101,15 @@ class SettingsRepository @Inject constructor(
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
+                if (defaultPathOpenNew.isNotEmpty()) {
+                    releasePersistablePermissions(context.contentResolver, defaultPathOpenNew)
+                }
                 false
             }
         }
     }
 
-    fun getDefaultPathOpen(): Flow<Uri> {
+    private fun getDefaultPathOpen(): Flow<Uri> {
         return dataStore
             .data
             .catch { exception ->
@@ -125,9 +123,9 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun getDefaultPathOpenName(): String {
-        val defaultPathOpen = getDefaultPathOpen().first()
+        val defaultPathOpen = getDefaultPathOpen().firstOrNull()
         return runCatching {
-            if (defaultPathOpen.isNotEmpty()) {
+            if (defaultPathOpen.isNotNullOrEmpty()) {
                 DocumentFile.fromTreeUri(context, defaultPathOpen)?.name.orEmpty()
             } else {
                 String.Empty
@@ -138,23 +136,55 @@ class SettingsRepository @Inject constructor(
         }
     }
 
+    suspend fun getPrivilegedDefaultPathOpenOrEmpty(): Uri {
+        return withContext(dispatcher) {
+            runCatching {
+                val defaultPathOpen = getDefaultPathOpen().firstOrNull()
+                if (defaultPathOpen == null || defaultPathOpen == Uri.EMPTY) {
+                    return@runCatching Uri.EMPTY
+                }
+                val exists = DocumentFile.fromTreeUri(context, defaultPathOpen)?.exists() == true
+                if (!exists) {
+                    releasePersistablePermissions(
+                        resolver = context.contentResolver,
+                        uri = defaultPathOpen
+                    )
+                    return@runCatching Uri.EMPTY
+                }
+                if (hasPersistablePermissions(
+                        resolver = context.contentResolver,
+                        uri = defaultPathOpen
+                    )
+                ) {
+                    defaultPathOpen
+                } else {
+                    Uri.EMPTY
+                }
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                Uri.EMPTY
+            }
+        }
+    }
+
     suspend fun putDefaultPathSave(
         defaultPathSaveNew: Uri,
-        defaultPathSaveCurrent: Uri,
-        releaseUriPermissions: Boolean
+        defaultPathSaveCurrent: Uri
     ): Boolean {
         if (defaultPathSaveNew.isNotEmpty()) {
-            takePersistablePermissions(
+            val success = takePersistablePermissions(
                 resolver = context.contentResolver,
                 uri = defaultPathSaveNew,
-                read = true,
                 write = true
             )
-        } else if (releaseUriPermissions) {
+            if (!success) {
+                return false
+            }
+        }
+        if (defaultPathSaveCurrent.isNotEmpty()) {
             releasePersistablePermissions(
                 resolver = context.contentResolver,
                 uri = defaultPathSaveCurrent,
-                read = true,
                 write = true
             )
         }
@@ -166,12 +196,19 @@ class SettingsRepository @Inject constructor(
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
+                if (defaultPathSaveNew.isNotEmpty()) {
+                    releasePersistablePermissions(
+                        resolver = context.contentResolver,
+                        uri = defaultPathSaveNew,
+                        write = true
+                    )
+                }
                 false
             }
         }
     }
 
-    fun getDefaultPathSave(): Flow<Uri> {
+    private fun getDefaultPathSave(): Flow<Uri> {
         return dataStore
             .data
             .catch { exception ->
@@ -185,9 +222,9 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun getDefaultPathSaveName(): String {
-        val defaultPathSave = getDefaultPathSave().first()
+        val defaultPathSave = getDefaultPathSave().firstOrNull()
         return runCatching {
-            if (defaultPathSave.isNotEmpty()) {
+            if (defaultPathSave.isNotNullOrEmpty()) {
                 DocumentFile.fromTreeUri(context, defaultPathSave)?.name.orEmpty()
             } else {
                 String.Empty
@@ -198,15 +235,36 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    suspend fun hasPrivilegedDefaultPathSave(defaultSavePath: Uri): Boolean {
+    suspend fun getPrivilegedDefaultPathSaveOrEmpty(): Uri {
         return withContext(dispatcher) {
-            defaultSavePath.isNotEmpty() &&
-                hasPersistablePermissions(
-                    resolver = context.contentResolver,
-                    uri = defaultSavePath,
-                    read = true,
-                    write = true
-                )
+            runCatching {
+                val defaultPathSave = getDefaultPathSave().firstOrNull()
+                if (defaultPathSave == null || defaultPathSave == Uri.EMPTY) {
+                    return@runCatching Uri.EMPTY
+                }
+                val exists = DocumentFile.fromTreeUri(context, defaultPathSave)?.exists() == true
+                if (!exists) {
+                    releasePersistablePermissions(
+                        resolver = context.contentResolver,
+                        uri = defaultPathSave,
+                        write = true
+                    )
+                    return@runCatching Uri.EMPTY
+                }
+                if (hasPersistablePermissions(
+                        resolver = context.contentResolver,
+                        uri = defaultPathSave,
+                        write = true
+                    )
+                ) {
+                    defaultPathSave
+                } else {
+                    Uri.EMPTY
+                }
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                Uri.EMPTY
+            }
         }
     }
 
@@ -330,7 +388,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun getDefaultNightModeName(): String {
         val defaultNightMode by context.defaultNightMode()
-        val defaultNightModeCurrent = getDefaultNightMode().first()
+        val defaultNightModeCurrent = getDefaultNightMode().firstOrNull()
         return defaultNightMode
             .entries
             .find { entry -> entry.value == defaultNightModeCurrent }
@@ -352,67 +410,77 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    @Suppress("SameParameterValue")
-    private fun hasPersistablePermissions(
+    private suspend fun hasPersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
-        read: Boolean,
-        write: Boolean
+        read: Boolean = true,
+        write: Boolean = false
     ): Boolean {
-        return resolver.persistedUriPermissions.any { permission ->
-            if (permission.uri != uri) {
+        return withContext(dispatcher) {
+            runCatching {
+                resolver.persistedUriPermissions.any { permission ->
+                    if (permission.uri != uri) {
+                        false
+                    } else {
+                        if (read && !permission.isReadPermission) {
+                            return@any false
+                        }
+                        if (write && !permission.isWritePermission) {
+                            return@any false
+                        }
+                        true
+                    }
+                }
+            }.getOrElse { exception ->
+                Timber.e(exception)
                 false
-            } else {
-                if (read && !permission.isReadPermission) {
-                    return@any false
-                }
-                if (write && !permission.isWritePermission) {
-                    return@any false
-                }
-                true
             }
         }
     }
 
-    @Suppress("SameParameterValue")
-    private fun takePersistablePermissions(
+    private suspend fun takePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
-        read: Boolean,
-        write: Boolean
-    ) {
-        var flags = 0
-        if (read) {
-            flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
-        }
-        if (write) {
-            flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        }
-        runCatching {
-            resolver.takePersistableUriPermission(uri, flags)
-        }.getOrElse { exception ->
-            Timber.e(exception)
+        read: Boolean = true,
+        write: Boolean = false
+    ): Boolean {
+        return withContext(dispatcher) {
+            var flags = 0
+            if (read) {
+                flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            if (write) {
+                flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            }
+            runCatching {
+                resolver.takePersistableUriPermission(uri, flags)
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
         }
     }
 
-    @Suppress("SameParameterValue")
-    private fun releasePersistablePermissions(
+    private suspend fun releasePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
-        read: Boolean,
-        write: Boolean
+        read: Boolean = true,
+        write: Boolean = false
     ) {
-        var flags = 0
-        if (read) {
-            flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
-        }
-        if (write) {
-            flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        }
-        runCatching {
-            resolver.releasePersistableUriPermission(uri, flags)
-        }.getOrElse { exception ->
-            Timber.e(exception)
+        withContext(dispatcher) {
+            var flags = 0
+            if (read) {
+                flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            if (write) {
+                flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            }
+            runCatching {
+                resolver.releasePersistableUriPermission(uri, flags)
+            }.getOrElse { exception ->
+                Timber.e(exception)
+            }
         }
     }
 }
