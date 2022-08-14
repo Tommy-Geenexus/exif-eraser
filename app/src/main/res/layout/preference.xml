@@ -25,11 +25,18 @@
         android:layout_marginStart="@dimen/spacing_preference_start"
         android:layout_marginTop="@dimen/spacing_normal"
         android:layout_marginEnd="@dimen/spacing_normal"
-        android:text="@string/image_supported_formats"
         android:textAppearance="?attr/textAppearanceBodyLarge"
         app:layout_constraintBottom_toTopOf="@+id/summary_preference"
         app:layout_constraintStart_toEndOf="@id/icon_preference"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_preference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_end="@dimen/spacing_preference_end" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/summary_preference"
@@ -39,9 +46,12 @@
         android:layout_marginTop="@dimen/spacing_micro"
         android:layout_marginEnd="@dimen/spacing_normal"
         android:layout_marginBottom="@dimen/spacing_normal"
+        android:ellipsize="start"
+        android:maxLines="1"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_preference"
         app:layout_constraintStart_toEndOf="@id/icon_preference"
         app:layout_constraintTop_toBottomOf="@+id/title_preference" />
 </androidx.constraintlayout.widget.ConstraintLayout>
