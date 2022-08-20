@@ -28,8 +28,8 @@ import kotlinx.parcelize.Parcelize
 data class SettingsState(
     val defaultPathOpenName: String = String.Empty,
     val defaultPathSaveName: String = String.Empty,
-    val initialPreserveOrientation: Boolean = false,
-    val initialShareByDefault: Boolean = false,
+    val preserveOrientation: Boolean = false,
+    val shareByDefault: Boolean = false,
     val defaultDisplayNameSuffix: String = String.Empty,
     val skipSavePathSelection: Boolean = false,
     val defaultNightModeName: String = String.Empty

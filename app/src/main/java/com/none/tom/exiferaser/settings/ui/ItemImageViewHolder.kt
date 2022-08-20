@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2022, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -36,13 +36,6 @@ class ItemImageViewHolder(
                 onOff.isChecked = !onOff.isChecked
             }
             onOff.setOnCheckedChangeListener { _, value ->
-                summaryPreferenceCheckBox.setText(
-                    if (value) {
-                        R.string.preserve_image_orientation_on
-                    } else {
-                        R.string.preserve_image_orientation_off
-                    }
-                )
                 listener.onPreserveOrientationChanged(value)
             }
             iconPreferenceCheckBox.setImageResource(R.drawable.ic_preserve_image_orientation)
@@ -53,13 +46,6 @@ class ItemImageViewHolder(
                 onOff.isChecked = !onOff.isChecked
             }
             onOff.setOnCheckedChangeListener { _, value ->
-                summaryPreferenceCheckBox.setText(
-                    if (value) {
-                        R.string.share_images_by_default_on
-                    } else {
-                        R.string.share_images_by_default_off
-                    }
-                )
                 listener.onShareByDefaultChanged(value)
             }
             iconPreferenceCheckBox.setImageResource(R.drawable.ic_share_image_by_default)
@@ -75,33 +61,29 @@ class ItemImageViewHolder(
     }
 
     fun bindImageItem(
-        initialPreserveOrientation: Boolean,
-        initialShareByDefault: Boolean,
+        preserveOrientation: Boolean,
+        shareByDefault: Boolean,
         defaultDisplayNameSuffix: String
     ) {
         binding.preserveOrientation.apply {
-            if (summaryPreferenceCheckBox.text.isNullOrEmpty()) {
-                summaryPreferenceCheckBox.setText(
-                    if (initialPreserveOrientation) {
-                        R.string.preserve_image_orientation_on
-                    } else {
-                        R.string.preserve_image_orientation_off
-                    }
-                )
-                onOff.isChecked = initialPreserveOrientation
-            }
+            summaryPreferenceCheckBox.setText(
+                if (preserveOrientation) {
+                    R.string.preserve_image_orientation_on
+                } else {
+                    R.string.preserve_image_orientation_off
+                }
+            )
+            onOff.isChecked = preserveOrientation
         }
         binding.shareByDefault.apply {
-            if (summaryPreferenceCheckBox.text.isNullOrEmpty()) {
-                summaryPreferenceCheckBox.setText(
-                    if (initialShareByDefault) {
-                        R.string.share_images_by_default_on
-                    } else {
-                        R.string.share_images_by_default_off
-                    }
-                )
-                onOff.isChecked = initialShareByDefault
-            }
+            summaryPreferenceCheckBox.setText(
+                if (shareByDefault) {
+                    R.string.share_images_by_default_on
+                } else {
+                    R.string.share_images_by_default_off
+                }
+            )
+            onOff.isChecked = shareByDefault
         }
         binding.defaultDisplayNameSuffix.summaryPreference.text = defaultDisplayNameSuffix.ifEmpty {
             itemView.context.getString(R.string.none)

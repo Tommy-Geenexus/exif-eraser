@@ -74,7 +74,6 @@ class SettingsFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
         setupToolbar(
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
@@ -82,8 +81,8 @@ class SettingsFragment :
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)
-            addItemDecoration(VerticalDividerItemDecoration(context))
             itemAnimator = null
+            addItemDecoration(VerticalDividerItemDecoration(context))
         }
         setFragmentResultListener(
             DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
@@ -155,20 +154,16 @@ class SettingsFragment :
         viewModel.handleDefaultNightMode()
     }
 
-    override fun onItemsUpdated() {
-        startPostponedEnterTransition()
-    }
-
     private fun renderState(state: SettingsState) {
         (binding.preferences.adapter as? SettingsAdapter)?.submitList(
             listOf(
-                state.defaultPathOpenName,
-                state.defaultPathSaveName,
-                state.initialPreserveOrientation,
-                state.initialShareByDefault,
-                state.defaultDisplayNameSuffix,
-                state.skipSavePathSelection,
-                state.defaultNightModeName
+                0 to state.defaultPathOpenName,
+                1 to state.defaultPathSaveName,
+                2 to state.preserveOrientation.toString(),
+                3 to state.shareByDefault.toString(),
+                4 to state.defaultDisplayNameSuffix,
+                5 to state.skipSavePathSelection.toString(),
+                6 to state.defaultNightModeName
             )
         )
     }

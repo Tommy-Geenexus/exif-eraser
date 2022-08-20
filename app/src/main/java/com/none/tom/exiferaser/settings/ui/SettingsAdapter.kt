@@ -25,25 +25,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.databinding.ItemFsBinding
 import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
 
 class SettingsAdapter(
     private val listener: Listener
-) : ListAdapter<Any, RecyclerView.ViewHolder>(
-    object : DiffUtil.ItemCallback<Any>() {
+) : ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
+    object : DiffUtil.ItemCallback<Pair<Int, String>>() {
 
         override fun areItemsTheSame(
-            oldItem: Any,
-            newItem: Any
-        ): Boolean = false
+            oldItem: Pair<Int, String>,
+            newItem: Pair<Int, String>
+        ) = oldItem.first == newItem.first
 
         override fun areContentsTheSame(
-            oldItem: Any,
-            newItem: Any
-        ): Boolean = false
+            oldItem: Pair<Int, String>,
+            newItem: Pair<Int, String>
+        ) = false
     }
 ) {
 
@@ -65,7 +64,10 @@ class SettingsAdapter(
         fun onDefaultDisplayNameSuffixSelected()
         fun onSavePathSelectionSkipChanged(value: Boolean)
         fun onDefaultNightModeSelected()
-        fun onItemsUpdated()
+    }
+
+    init {
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(
@@ -113,21 +115,21 @@ class SettingsAdapter(
         when (getItemViewType(position)) {
             ITEM_TYPE_FS -> {
                 (holder as ItemFsViewHolder).bindItemFs(
-                    defaultOpenPathName = (currentList.firstOrNull() as? String) ?: String.Empty,
-                    defaultSavePathName = (currentList.getOrNull(1) as? String) ?: String.Empty
+                    defaultOpenPathName = currentList.firstOrNull()?.second.orEmpty(),
+                    defaultSavePathName = currentList.getOrNull(1)?.second.orEmpty()
                 )
             }
             ITEM_TYPE_IMAGE -> {
                 (holder as ItemImageViewHolder).bindImageItem(
-                    initialPreserveOrientation = currentList.getOrNull(2) as? Boolean ?: false,
-                    initialShareByDefault = currentList.getOrNull(3) as? Boolean ?: false,
-                    defaultDisplayNameSuffix = (currentList.getOrNull(4) as? String) ?: String.Empty
+                    preserveOrientation = currentList.getOrNull(2)?.second.toBoolean(),
+                    shareByDefault = currentList.getOrNull(3)?.second.toBoolean(),
+                    defaultDisplayNameSuffix = currentList.getOrNull(4)?.second.orEmpty()
                 )
             }
             ITEM_TYPE_UI -> {
                 (holder as ItemUiViewHolder).bindUiItem(
-                    skipSavePathSelection = currentList.getOrNull(5) as? Boolean ?: false,
-                    defaultNightModeName = (currentList.getOrNull(6) as? String) ?: String.Empty
+                    skipSavePathSelection = currentList.getOrNull(5)?.second.toBoolean(),
+                    defaultNightModeName = currentList.getOrNull(6)?.second.orEmpty()
                 )
             }
             else -> {
@@ -135,16 +137,16 @@ class SettingsAdapter(
         }
     }
 
-    override fun onCurrentListChanged(
-        previousList: MutableList<Any>,
-        currentList: MutableList<Any>
-    ) {
-        if (currentList.isNotEmpty()) {
-            listener.onItemsUpdated()
+    override fun getItemCount() = 3
+
+    override fun getItemId(position: Int): Long {
+        return when (position) {
+            0 -> ITEM_TYPE_FS.toLong()
+            1 -> ITEM_TYPE_IMAGE.toLong()
+            2 -> ITEM_TYPE_UI.toLong()
+            else -> 0
         }
     }
-
-    override fun getItemCount() = 3
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {

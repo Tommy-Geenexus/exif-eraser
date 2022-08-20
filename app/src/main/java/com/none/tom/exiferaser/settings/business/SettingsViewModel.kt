@@ -53,9 +53,8 @@ class SettingsViewModel @Inject constructor(
     private fun readDefaultValues() = intent {
         val defaultPathOpenName = settingsRepository.getDefaultPathOpenName()
         val defaultPathSaveName: String = settingsRepository.getDefaultPathSaveName()
-        val initialPreserveOrientation =
-            settingsRepository.shouldPreserveOrientation().firstOrNull()
-        val initialShareByDefault = settingsRepository.shouldShareByDefault().firstOrNull()
+        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
+        val shareByDefault = settingsRepository.shouldShareByDefault().firstOrNull()
         val defaultDisplayNameSuffix =
             settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
         val skipSavePathSelection = settingsRepository.shouldSkipSavePathSelection().firstOrNull()
@@ -64,8 +63,8 @@ class SettingsViewModel @Inject constructor(
             state.copy(
                 defaultPathOpenName = defaultPathOpenName,
                 defaultPathSaveName = defaultPathSaveName,
-                initialPreserveOrientation = initialPreserveOrientation == true,
-                initialShareByDefault = initialShareByDefault == true,
+                preserveOrientation = preserveOrientation == true,
+                shareByDefault = shareByDefault == true,
                 defaultDisplayNameSuffix = defaultDisplayNameSuffix.orEmpty(),
                 skipSavePathSelection = skipSavePathSelection == true,
                 defaultNightModeName = defaultNightModeName
@@ -143,11 +142,21 @@ class SettingsViewModel @Inject constructor(
 
     fun storePreserveOrientation(value: Boolean) = intent {
         val success = settingsRepository.putPreserveOrientation(value)
+        if (success) {
+            reduce {
+                state.copy(preserveOrientation = value)
+            }
+        }
         postSideEffect(SettingsSideEffect.PreserveOrientation(success))
     }
 
     fun storeShareByDefault(value: Boolean) = intent {
         val success = settingsRepository.putShareByDefault(value)
+        if (success) {
+            reduce {
+                state.copy(shareByDefault = value)
+            }
+        }
         postSideEffect(SettingsSideEffect.ShareByDefault(success))
     }
 
@@ -167,6 +176,11 @@ class SettingsViewModel @Inject constructor(
 
     fun storeSavePathSelectionSkip(value: Boolean) = intent {
         val success = settingsRepository.putSavePathSelectionSkip(value)
+        if (success) {
+            reduce {
+                state.copy(skipSavePathSelection = value)
+            }
+        }
         postSideEffect(SettingsSideEffect.SavePathSelectionSkip(success))
     }
 
