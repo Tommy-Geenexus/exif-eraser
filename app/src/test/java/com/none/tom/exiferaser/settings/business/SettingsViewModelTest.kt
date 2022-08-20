@@ -99,8 +99,8 @@ class SettingsViewModelTest {
                     copy(
                         defaultPathOpenName = testDefaultPathOpenName,
                         defaultPathSaveName = testDefaultPathSaveName,
-                        initialPreserveOrientation = true,
-                        initialShareByDefault = true,
+                        preserveOrientation = true,
+                        shareByDefault = true,
                         defaultDisplayNameSuffix = testDefaultDisplayNameSuffix,
                         skipSavePathSelection = true,
                         defaultNightModeName = testDefaultNightModeName
@@ -297,6 +297,11 @@ class SettingsViewModelTest {
             settingsRepository.putPreserveOrientation(any())
         }
         viewModel.assert(initialState) {
+            states(
+                {
+                    copy(preserveOrientation = true)
+                }
+            )
             postedSideEffects(SettingsSideEffect.PreserveOrientation(success = true))
         }
     }
@@ -318,6 +323,11 @@ class SettingsViewModelTest {
             settingsRepository.putShareByDefault(any())
         }
         viewModel.assert(initialState) {
+            states(
+                {
+                    copy(shareByDefault = true)
+                }
+            )
             postedSideEffects(SettingsSideEffect.ShareByDefault(success = true))
         }
     }
@@ -389,6 +399,11 @@ class SettingsViewModelTest {
             settingsRepository.putSavePathSelectionSkip(any())
         }
         viewModel.assert(initialState) {
+            states(
+                {
+                    copy(skipSavePathSelection = true)
+                }
+            )
             postedSideEffects(SettingsSideEffect.SavePathSelectionSkip(success = true))
         }
     }

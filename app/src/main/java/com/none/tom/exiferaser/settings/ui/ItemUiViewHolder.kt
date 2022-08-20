@@ -35,13 +35,6 @@ class ItemUiViewHolder(
                 onOff.isChecked = !onOff.isChecked
             }
             onOff.setOnCheckedChangeListener { _, value ->
-                summaryPreferenceCheckBox.setText(
-                    if (value) {
-                        R.string.save_path_custom_skip_on
-                    } else {
-                        R.string.save_path_custom_skip_off
-                    }
-                )
                 listener.onSavePathSelectionSkipChanged(value)
             }
             iconPreferenceCheckBox.setImageResource(R.drawable.ic_straight)
@@ -62,16 +55,14 @@ class ItemUiViewHolder(
         defaultNightModeName: String
     ) {
         binding.savePathCustomSkip.apply {
-            if (summaryPreferenceCheckBox.text.isNullOrEmpty()) {
-                summaryPreferenceCheckBox.setText(
-                    if (skipSavePathSelection) {
-                        R.string.save_path_custom_skip_on
-                    } else {
-                        R.string.save_path_custom_skip_off
-                    }
-                )
-                onOff.isChecked = skipSavePathSelection
-            }
+            summaryPreferenceCheckBox.setText(
+                if (skipSavePathSelection) {
+                    R.string.save_path_custom_skip_on
+                } else {
+                    R.string.save_path_custom_skip_off
+                }
+            )
+            onOff.isChecked = skipSavePathSelection
         }
         binding.nightMode.summaryPreference.text = defaultNightModeName
     }
