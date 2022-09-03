@@ -66,9 +66,13 @@
     <string name="preserve_image_orientation_off">Non mantenere l\'orientamento originale dell\'immagine</string>
     <string name="preserve_image_orientation_on">Mantieni l\'orientamento originale dell\'immagine</string>
 
-    <string name="reorder_image_source_cards">Riordina le schede sorgente delle immagini</string>
+    <string name="reorder_image_source_cards">Riordina le schede di selezione immagine</string>
 
     <string name="report_bug">Segnala un problema</string>
+
+    <string name="save_path_custom_skip">Salta selezione percorso salvataggio</string>
+    <string name="save_path_custom_skip_off">Non saltare la selezione del percorso di salvataggio se è impostato il percorso di salvataggio predefinito</string>
+    <string name="save_path_custom_skip_on">Salta la selezione del percorso di salvataggio se è impostato il percorso di salvataggio predefinito</string>
 
     <string name="saved">Salvata</string>
 
