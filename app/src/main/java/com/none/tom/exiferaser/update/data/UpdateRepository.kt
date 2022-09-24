@@ -20,6 +20,7 @@
 
 package com.none.tom.exiferaser.update.data
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -27,7 +28,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import androidx.annotation.IntRange
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.material.color.MaterialColors
@@ -192,6 +192,7 @@ class UpdateRepository @Inject constructor(
             availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
     }
 
+    @SuppressLint("MissingPermission")
     fun showAppUpdateProgressNotification(
         @IntRange(
             from = PROGRESS_MIN.toLong(),
@@ -200,20 +201,24 @@ class UpdateRepository @Inject constructor(
         failed: Boolean = false
     ) {
         registerNotificationChannel()
-        notificationManager.notify(
-            NOTIFICATION_ID,
-            when {
-                failed -> {
-                    createAppUpdateFailedNotification()
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+            notificationManager.areNotificationsEnabled()
+        ) {
+            notificationManager.notify(
+                NOTIFICATION_ID,
+                when {
+                    failed -> {
+                        createAppUpdateFailedNotification()
+                    }
+                    progress >= PROGRESS_MAX -> {
+                        createAppUpdateReadyToInstallNotification()
+                    }
+                    else -> {
+                        createAppUpdateInProgressNotification(progress)
+                    }
                 }
-                progress >= PROGRESS_MAX -> {
-                    createAppUpdateReadyToInstallNotification()
-                }
-                else -> {
-                    createAppUpdateInProgressNotification(progress)
-                }
-            }
-        )
+            )
+        }
     }
 
     private fun createAppUpdateFailedNotification(): Notification {
@@ -277,7 +282,6 @@ class UpdateRepository @Inject constructor(
             .build()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun registerNotificationChannel() {
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
             .createNotificationChannel(

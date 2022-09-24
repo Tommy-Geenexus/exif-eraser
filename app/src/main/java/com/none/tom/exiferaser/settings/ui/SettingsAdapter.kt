@@ -29,6 +29,7 @@ import com.none.tom.exiferaser.databinding.ItemFsBinding
 import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
 
+@Suppress("SameReturnValue")
 class SettingsAdapter(
     private val listener: Listener
 ) : ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
