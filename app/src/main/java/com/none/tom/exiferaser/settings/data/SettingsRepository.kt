@@ -438,6 +438,7 @@ class SettingsRepository @Inject constructor(
         }
     }
 
+    @Suppress("SameParameterValue")
     private suspend fun takePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
@@ -462,6 +463,7 @@ class SettingsRepository @Inject constructor(
         }
     }
 
+    @Suppress("SameParameterValue")
     private suspend fun releasePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,

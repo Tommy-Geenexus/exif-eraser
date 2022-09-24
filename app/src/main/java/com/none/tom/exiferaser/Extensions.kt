@@ -108,6 +108,7 @@ fun ClipData.addUrisToSet(resultSet: LinkedHashSet<Uri>) {
     }
 }
 
+@Suppress("BooleanMethodIsAlwaysInverted")
 fun ClipDescription.areMimeTypesSupported(): Boolean {
     for (i in 0 until mimeTypeCount) {
         val mimeType = getMimeType(i)
@@ -128,4 +129,5 @@ fun Uri?.isNotNullOrEmpty(): Boolean {
     return this != null && isNotEmpty()
 }
 
+@Suppress("BooleanMethodIsAlwaysInverted")
 fun Uri.isNotEmpty() = this != Uri.EMPTY

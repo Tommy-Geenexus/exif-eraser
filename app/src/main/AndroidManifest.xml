@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.ExifEraser.Launcher"
-        tools:targetApi="s">
+        tools:targetApi="tiramisu">
 
         <activity
             android:name="com.none.tom.exiferaser.ExifEraserActivity"

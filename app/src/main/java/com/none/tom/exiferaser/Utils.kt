@@ -18,6 +18,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+@file:Suppress("SameReturnValue")
+
 package com.none.tom.exiferaser
 
 const val TOP_LEVEL_PACKAGE_NAME = "com.none.tom.exiferaser."
