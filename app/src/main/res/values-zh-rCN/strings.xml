@@ -78,6 +78,10 @@
 
     <string name="report_bug">报告问题</string>
 
+    <string name="save_path_custom_skip">跳过选择保存路径</string>
+    <string name="save_path_custom_skip_off">如果已设置默认保存路径，请勿跳过选择</string>
+    <string name="save_path_custom_skip_on">如果已设置默认保存路径，请跳过选择</string>
+
     <string name="saved">已保存</string>
 
     <string name="settings">设置</string>
