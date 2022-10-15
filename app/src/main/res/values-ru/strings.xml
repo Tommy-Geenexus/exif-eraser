@@ -1,4 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
+    <string name="all_done">Все готово</string>
+
+    <string name="always">Всегда</string>
+
+    <string name="app_update_download">"Загрузка объявлений "</string>
+    <string name="app_update_downloaded">"Обновление успешно загружено "</string>
+    <string name="app_update_failed">Сбой обновления</string>
+    <string name="app_update_install">Нажмите сюда, чтобы установить</string>
+    <string name="app_update_ready">Обновление готово к установке</string>
+
+    <string name="automatically">Автоматический</string>
+
+    <string name="become_translator">"Помощь в переводе "</string>
+
+    <string name="camera">"Камера "</string>
+
+    <string name="choose_image">"Обзор изображений "</string>
+    <string name="choose_image_directory">"Выберите каталог изображений "</string>
+    <string name="choose_images">"Выберите изображения "</string>
+    <string name="choose_your">Выбрать свой</string>
+
+    <string name="clipboard_content_paste">Вставка изображения из буфера обмена</string>
+    <string name="clipboard_content_unsupported">Неподдерживаемое содержимое буфера обмена</string>
+
+    <string name="default_display_name_suffix">Суффикс отображаемого имени по умолчанию</string>
+    <string name="default_path_open">"Выбранный путь по умолчанию "</string>
+    <string name="default_path_save">"Путь сохранения по умолчанию "</string>
+
+    <string name="delete">"Удалить "</string>
+    <string name="delete_camera_images">Удалить изображения камеры</string>
+    <string name="delete_camera_images_all">Удалить все изображения камеры, сделанные из этого приложения (оригинальные и измененные)</string>
+    <string name="delete_camera_images_failed">Не удалось удалить изображения с камеры</string>
+    <string name="delete_camera_images_success">Успешно удаленные изображения с камеры</string>
+
+    <string name="details">Детали</string>
+
+    <string name="file_system">Файловая система</string>
+
     <string name="help">Справка и поддержка</string>
+
+    <string name="image">"Изображение "</string>
+    <string name="image_directory">"Каталог изображений "</string>
+    <string name="image_file">"Файл изображения "</string>
+    <string name="image_files">"Файлы изображений "</string>
+    <string name="image_orientation">"Сохранение ориентации "</string>
+    <string name="image_path">Путь к изображению</string>
+    <string name="image_share_by_default">"Поделиться по умолчанию "</string>
+    <string name="image_supported_formats">Поддерживаемые форматы изображений</string>
+
+    <string name="images_modified">"Изображения модифицированы "</string>
+
+    <string name="install">"Установка "</string>
+
+    <string name="low_batt_only">Только низкий заряд батареи</string>
+
+    <string name="modified">Модификация</string>
+
+    <string name="never">"Никогда "</string>
+
+    <string name="night_mode">Ночной мод</string>
+
+    <string name="none">"Никакой "</string>
+
+    <string name="of">Из</string>
+
+    <string name="path_save_choose">"Выберите путь сохранения "</string>
+    <string name="path_save_custom">Настраиваемый путь сохранения</string>
+    <string name="path_save_default">"Путь сохранения по умолчанию "</string>
+
+    <string name="preferred_image_source">предпочтительный источник изображения</string>
+
+    <string name="preserve_image_orientation_off">Не сохранять исходную ориентацию изображения</string>
+    <string name="preserve_image_orientation_on">Сохранение исходной ориентации изображения</string>
+
+    <string name="reorder_image_source_cards">Изменение порядка карт источника изображений</string>
+
+    <string name="report_bug">"Сообщить о проблеме "</string>
+
+    <string name="save_path_custom_skip">"Пропустить выбор папки сохранения "</string>
+    <string name="save_path_custom_skip_off">"Не пропускать путь сохранения (по умолчанию) "</string>
+    <string name="save_path_custom_skip_on">"Пропустить выбор папки сохранения, выбрана папка по умолчанию "</string>
+
+    <string name="saved">Сохраненые</string>
+
+    <string name="settings">"Настройки "</string>
+
+    <string name="share">"Поделиться "</string>
+    <string name="share_images_by_default_off">Не делиться изображениями по умолчанию после изменения</string>
+    <string name="share_images_by_default_on">Общий доступ к изображениям по умолчанию после изменения</string>
+    <string name="share_via">"Поделиться через "</string>
+
+    <string name="suffix">"Суффикс "</string>
+
+    <string name="summary">"Отчёт "</string>
+
+    <string name="take_picture">"Сфотографировать "</string>
+
+    <string name="ui">"Пользовательский интерфейс "</string>
+
+    <string name="unmodified">Неизменные</string>
+
+    <string name="unsaved">Несохраненные</string>
+
+    <string name="version">Версия</string>
 </resources>
