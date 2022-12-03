@@ -1,9 +1,8 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues/>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>ComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
-    <ID>ComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
+    <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
     <ID>LongMethod:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment$private fun renderState(state: ImageModifiedDetailsState)</ID>
     <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
@@ -30,7 +29,6 @@
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
     <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
     <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
-    <ID>ThrowsCount:ImageRepository.kt$ImageRepository$private suspend fun createDocument( uri: Uri, defaultTreeUri: Uri = Uri.EMPTY, displayName: String = String.Empty, mimeType: String = String.Empty, extension: String = String.Empty ): Uri?</ID>
     <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>

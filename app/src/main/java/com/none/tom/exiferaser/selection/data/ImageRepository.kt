@@ -277,13 +277,9 @@ class ImageRepository @Inject constructor(
     ): Uri? {
         return withContext(dispatcher) {
             runCatching {
-                if (uri.scheme != ContentResolver.SCHEME_CONTENT) {
-                    throw IllegalArgumentException("Invalid uri")
-                }
+                require(uri.scheme == ContentResolver.SCHEME_CONTENT)
                 if (DocumentFile.isDocumentUri(context, uri) || !uri.isFileProviderUri()) {
-                    if (displayName.isEmpty() || mimeType.isEmpty()) {
-                        throw IllegalArgumentException("Invalid displayName or mimeType")
-                    }
+                    require(displayName.isNotEmpty() && mimeType.isNotEmpty())
                     var treeUri: Uri? = null
                     if (defaultTreeUri.isNotNullOrEmpty()) {
                         val file = DocumentFile.fromTreeUri(context, defaultTreeUri)
@@ -308,9 +304,7 @@ class ImageRepository @Inject constructor(
                         error("Failed to resolve tree uri")
                     }
                 } else {
-                    if (displayName.isEmpty() || extension.isEmpty()) {
-                        throw IllegalArgumentException("Invalid displayName or extension")
-                    }
+                    require(displayName.isNotEmpty() && extension.isNotEmpty())
                     getExternalPicturesFileProviderUriOrNull(
                         displayName = displayName + '_' + context.getString(R.string.modified),
                         extension = extension
