@@ -21,3 +21,4 @@ It relies on [exif-interface-extended](https://github.com/Tommy-Geenexus/exif-in
 
 ## Download
 <a href='https://play.google.com/store/apps/details?id=com.none.tom.exiferaser&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height='80' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+<a href="https://accrescent.app/app/com.none.tom.exiferaser"><img alt="Get it on Accrescent" height='80' src="https://accrescent.app/badges/get-it-on.png"></a>
