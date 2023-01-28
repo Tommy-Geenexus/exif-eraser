@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="all_done">Όλα έτοιμα!</string>
+
+    <string name="always">Πάντα</string>
+
+    <string name="app_update_download">Λήψη ενημέρωσης</string>
+    <string name="app_update_downloaded">Η ενημέρωση λήφθηκε με επιτυχία</string>
+    <string name="app_update_failed">Η ενημέρωση απέτυχε</string>
+    <string name="app_update_install">Πατήστε εδώ για εγκατάσταση</string>
+    <string name="app_update_ready">Ενημέρωση έτοιμη για εγκατάσταση</string>
+
+    <string name="automatically">Αυτόματα</string>
+
+    <string name="become_translator">Βοηθήστε στη μετάφραση</string>
+
+    <string name="camera">Κάμερα</string>
+
+    <string name="choose_image">Επιλέξτε εικόνα</string>
+    <string name="choose_image_directory">Επιλέξτε κατάλογο εικόνων</string>
+    <string name="choose_images">Επιλέξτε εικόνες</string>
+    <string name="choose_your">Επιλέξτε το δικό σας</string>
+
+    <string name="clipboard_content_paste">Επικόλληση εικόνας πρόχειρου</string>
+    <string name="clipboard_content_unsupported">Μη υποστηριζόμενο περιεχόμενο του προχείρου</string>
+
+    <string name="default_display_name_suffix">Προεπιλεγμένη κατάληξη εμφανιζόμενου ονόματος</string>
+    <string name="default_path_open">Άνοιγμα προεπιλεγμένης διαδρομής</string>
+    <string name="default_path_save">Προεπιλεγμένη διαδρομή αποθήκευσης</string>
+
+    <string name="delete">Διαγραφή</string>
+    <string name="delete_camera_images">Διαγραφή εικόνων κάμερας</string>
+    <string name="delete_camera_images_all">Διαγραφή όλων των εικόνων κάμερας που λαμβάνονται από αυτήν την εφαρμογή (πρωτότυπες και τροποποιημένες)</string>
+    <string name="delete_camera_images_failed">Αποτυχία διαγραφής εικόνων κάμερας</string>
+    <string name="delete_camera_images_success">Οι εικόνες της κάμερας διαγράφηκαν επιτυχώς</string>
+
+    <string name="details">Λεπτομέριες</string>
+
+    <string name="file_system">Σύστημα αρχείων</string>
+
+    <string name="help">Βοήθεια και σχόλια</string>
+
+    <string name="image">Εικόνα</string>
+    <string name="image_directory">Κατάλογος εικόνων</string>
+    <string name="image_file">Αρχείο εικόνας</string>
+    <string name="image_files">Αρχεία εικόνας</string>
+    <string name="image_orientation">Διατήρηση προσανατολισμού</string>
+    <string name="image_path">Διαδρομή εικόνας</string>
+    <string name="image_share_by_default">Κοινή χρήση από προεπιλογή</string>
+    <string name="image_supported_formats">Υποστηριζόμενες μορφές εικόνας</string>
+
+    <string name="images_modified">τροποποιημένες εικόνες</string>
+
+    <string name="install">Εγκατάσταση</string>
+
+    <string name="low_batt_only">Μόνο χαμηλή μπαταρία</string>
+
+    <string name="modified">Τροποποιήθηκε</string>
+
+    <string name="never">Ποτέ</string>
+
+    <string name="night_mode">Νυχτερινή λειτουργία</string>
+
+    <string name="none">Κανένα</string>
+
+    <string name="of">από</string>
+
+    <string name="path_save_choose">Επιλέξτε διαδρομή αποθήκευσης</string>
+    <string name="path_save_custom">Προσαρμοσμένη διαδρομή αποθήκευσης</string>
+    <string name="path_save_default">Προεπιλεγμένη διαδρομή αποθήκευσης</string>
+
+    <string name="preferred_image_source">προτιμώμενη πηγή εικόνας</string>
+
+    <string name="preserve_image_orientation_off">Να μην γίνεται διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
+    <string name="preserve_image_orientation_on">Διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
+
+    <string name="reorder_image_source_cards">Αναδιάταξη καρτών πηγής εικόνας</string>
+
+    <string name="report_bug">Αναφορά προβλήματος</string>
+
+    <string name="save_path_custom_skip">Παράλειψη επιλογής διαδρομής αποθήκευσης</string>
+    <string name="save_path_custom_skip_off">Να μην παραλείπεται η επιλογή διαδρομής αποθήκευσης εάν έχει οριστεί η προεπιλεγμένη διαδρομή αποθήκευσης</string>
+    <string name="save_path_custom_skip_on">Παράληψη της επιλογής διαδρομής αποθήκευσης εάν έχει οριστεί η προεπιλεγμένη διαδρομή αποθήκευσης</string>
+
+    <string name="saved">Αποθηκεύτηκε</string>
+
+    <string name="settings">Ρυθμίσεις</string>
+
+    <string name="share">Κοινή χρήση</string>
+    <string name="share_images_by_default_off">Να μην γίνεται κοινή χρήση εικόνων από προεπιλογή μετά την τροποποίηση</string>
+    <string name="share_images_by_default_on">Κοινή χρήση εικόνων από προεπιλογή μετά την τροποποίηση</string>
+    <string name="share_via">Κοινοποίηση μέσω</string>
+
+    <string name="suffix">Κατάληξη</string>
+
+    <string name="summary">Περίληψη</string>
+
+    <string name="take_picture">Τραβήξετε φωτογραφία</string>
+
+    <string name="ui">Διεπαφή Χρήστη</string>
+
+    <string name="unmodified">Μη τροποποιημένο</string>
+
+    <string name="unsaved">Μη αποθηκευμένο</string>
+
+    <string name="version">Έκδοση</string>
+</resources>
