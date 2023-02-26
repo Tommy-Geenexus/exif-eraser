@@ -42,9 +42,8 @@ android {
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     packagingOptions {
@@ -60,7 +59,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
@@ -114,7 +113,6 @@ spotless {
 
 dependencies {
     androidTestImplementation libs.bundles.implementation.test.android
-    coreLibraryDesugaring libs.desugar.jdk.libs
     debugImplementation libs.leakcanary
     implementation libs.bundles.implementation
     kapt libs.bundles.kapt
