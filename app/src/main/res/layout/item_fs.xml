@@ -15,5 +15,4 @@
     <include
         android:id="@+id/default_path_save"
         layout="@layout/preference_fs" />
-
 </LinearLayout>

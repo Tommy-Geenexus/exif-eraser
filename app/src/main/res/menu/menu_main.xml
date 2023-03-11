@@ -4,22 +4,29 @@
 
     <item
         android:id="@+id/content_paste"
-        android:icon="@drawable/ic_image_paste"
+        android:contentDescription="@string/clipboard_content_paste"
+        android:icon="@drawable/ic_content_paste_go"
         android:title="@string/clipboard_content_paste"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_delete_camera_images"
+        android:contentDescription="@string/delete_camera_images"
+        android:icon="@drawable/ic_folder_delete"
         android:title="@string/delete_camera_images"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_settings"
+        android:contentDescription="@string/settings"
+        android:icon="@drawable/ic_settings"
         android:title="@string/settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_help"
+        android:contentDescription="@string/help"
+        android:icon="@drawable/ic_help"
         android:title="@string/help"
         app:showAsAction="never" />
 </menu>

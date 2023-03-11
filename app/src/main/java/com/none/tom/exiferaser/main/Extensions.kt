@@ -40,21 +40,21 @@ import com.none.tom.exiferaser.areMimeTypesSupported
 import kotlin.contracts.ExperimentalContracts
 
 fun FloatingActionButton.addIconAnimation(
-    @DrawableRes iconResStart: Int,
-    @DrawableRes iconResEnd: Int
+    @DrawableRes animatedVectorDrawable: Int,
+    @DrawableRes animatedVectorDrawableInverse: Int
 ) {
-    setImageResource(iconResStart)
-    tag = iconResStart
+    setImageResource(animatedVectorDrawable)
+    tag = animatedVectorDrawable
     val callback = object : Animatable2Compat.AnimationCallback() {
 
         override fun onAnimationEnd(drawableEnd: Drawable?) {
             AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
-            tag = if (tag == iconResEnd) {
-                setImageResource(iconResStart)
-                iconResStart
+            tag = if (tag == animatedVectorDrawableInverse) {
+                setImageResource(animatedVectorDrawable)
+                animatedVectorDrawable
             } else {
-                setImageResource(iconResEnd)
-                iconResEnd
+                setImageResource(animatedVectorDrawableInverse)
+                animatedVectorDrawableInverse
             }
             AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this)
         }

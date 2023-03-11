@@ -66,7 +66,7 @@ class ReportViewHolder(
                 if (imageModified) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_edit)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                     setText(R.string.modified)
                     setOnClickListener {
@@ -75,7 +75,7 @@ class ReportViewHolder(
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_edit_failed)
+                    setChipIconResource(R.drawable.ic_error)
                     setTextColor(colorError)
                     setText(R.string.unmodified)
                 }
@@ -85,7 +85,7 @@ class ReportViewHolder(
                 if (imageSaved) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_save)
+                    setChipIconResource(R.drawable.ic_task_alt)
                     setTextColor(colorOk)
                     setText(R.string.saved)
                     setOnClickListener {
@@ -94,7 +94,7 @@ class ReportViewHolder(
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_save_failed)
+                    setChipIconResource(R.drawable.ic_error)
                     setTextColor(colorError)
                     setText(R.string.unsaved)
                 }

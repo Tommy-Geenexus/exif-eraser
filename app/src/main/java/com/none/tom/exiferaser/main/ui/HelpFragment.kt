@@ -30,6 +30,7 @@ import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.URL_ISSUES
 import com.none.tom.exiferaser.URL_LOCALISATION
+import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentHelpBinding
 import com.none.tom.exiferaser.settings.ViewUrl
 
@@ -56,6 +57,7 @@ class HelpFragment :
             toolbar = binding.includeToolbar.toolbar,
             titleRes = R.string.help
         )
+        binding.layout.applyInsetsToMargins()
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

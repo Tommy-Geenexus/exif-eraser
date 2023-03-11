@@ -3,7 +3,6 @@
 
     <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
         <item name="colorOk">@color/color_green_200</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.ExifEraser.Launcher" parent="Theme.ExifEraser" />

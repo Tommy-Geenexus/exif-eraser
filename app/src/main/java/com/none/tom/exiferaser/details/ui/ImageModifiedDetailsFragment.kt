@@ -128,28 +128,33 @@ class ImageModifiedDetailsFragment : DialogFragment() {
 
     private fun renderState(state: ImageModifiedDetailsState) {
         binding.apply {
+            val colorOk = ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorOk))
+            val colorError =
+                ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorError))
+            val colorOnSurfaceVariant =
+                ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorOnSurfaceVariant))
             extension.apply {
                 if (state.extension.isNotEmpty()) {
                     text = state.extension
+                    chipStrokeColor = colorOnSurfaceVariant
+                    chipIconTint = colorOnSurfaceVariant
+                    setChipIconResource(R.drawable.ic_extension)
+                    setTextColor(colorOnSurfaceVariant)
                     isVisible = true
                 } else {
                     isVisible = false
                 }
             }
-            val colorOk = ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorOk))
-            val colorError = ColorStateList.valueOf(
-                MaterialColors.getColor(root, R.attr.colorError)
-            )
             iccp.apply {
                 if (state.containsIccProfile) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
+                    setChipIconResource(R.drawable.ic_data_check)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_block)
+                    setChipIconResource(R.drawable.ic_search_off)
                     setTextColor(colorError)
                 }
             }
@@ -157,12 +162,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
                 if (state.containsExif) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
+                    setChipIconResource(R.drawable.ic_data_check)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_block)
+                    setChipIconResource(R.drawable.ic_search_off)
                     setTextColor(colorError)
                 }
             }
@@ -170,12 +175,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
                 if (state.containsXmp) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
+                    setChipIconResource(R.drawable.ic_data_check)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_block)
+                    setChipIconResource(R.drawable.ic_search_off)
                     setTextColor(colorError)
                 }
             }
@@ -183,12 +188,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
                 if (state.containsPhotoshopImageResources) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
+                    setChipIconResource(R.drawable.ic_data_check)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_block)
+                    setChipIconResource(R.drawable.ic_search_off)
                     setTextColor(colorError)
                 }
                 isVisible = state.mimeType == MIME_TYPE_JPEG
@@ -197,12 +202,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
                 if (state.containsExtendedXmp) {
                     chipStrokeColor = colorOk
                     chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
+                    setChipIconResource(R.drawable.ic_data_check)
                     setTextColor(colorOk)
                 } else {
                     chipStrokeColor = colorError
                     chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_block)
+                    setChipIconResource(R.drawable.ic_search_off)
                     setTextColor(colorError)
                 }
                 isVisible = state.mimeType == MIME_TYPE_JPEG

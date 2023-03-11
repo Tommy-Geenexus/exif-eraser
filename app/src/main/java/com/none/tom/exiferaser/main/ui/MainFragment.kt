@@ -22,18 +22,19 @@ package com.none.tom.exiferaser.main.ui
 
 import android.content.Context
 import android.content.pm.ShortcutManager
-import android.content.res.Configuration
+import android.graphics.Typeface
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuProvider
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
@@ -46,15 +47,20 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+
+import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
+import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.applyInsetMargins
+import com.none.tom.exiferaser.WindowSizeClass
+import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
+import com.none.tom.exiferaser.isOrientationPortrait
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.none.tom.exiferaser.main.MarginItemDecoration
 import com.none.tom.exiferaser.main.TakePicture
@@ -79,13 +85,9 @@ class MainFragment :
 
     private companion object {
 
-        const val IMG_SOURCES_CNT_VERTICAL = 2
-
-        @DrawableRes
-        const val IMG_SOURCES_AVD_REORDER = R.drawable.avd_drag_to_done_all
-
-        @DrawableRes
-        const val IMG_SOURCES_AVD_ORDER_SAVE = R.drawable.avd_done_all_to_drag
+        const val GRID_SIZE_COMPACT = 1
+        const val GRID_SIZE_MEDIUM = 2
+        const val GRID_SIZE_EXPANDED = 2
     }
 
     private val args: MainFragmentArgs by navArgs()
@@ -127,98 +129,25 @@ class MainFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        val menuProvider = object : MenuProvider {
-
-            override fun onCreateMenu(
-                menu: Menu,
-                menuInflater: MenuInflater
-            ) {
-                menuInflater.inflate(R.menu.menu_main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.content_paste -> {
-                        viewModel.handlePasteImages(requireContext().getClipImages())
-                        true
-                    }
-                    R.id.action_delete_camera_images -> {
-                        viewModel.handleDeleteCameraImages()
-                        true
-                    }
-                    R.id.action_settings -> {
-                        viewModel.handleSettings()
-                        true
-                    }
-                    R.id.action_help -> {
-                        viewModel.handleHelp()
-                        true
-                    }
-                    else -> false
-                }
-            }
+        requireActivity().window.apply {
+            statusBarColor = SurfaceColors.SURFACE_0.getColor(requireActivity())
+            navigationBarColor = SurfaceColors.SURFACE_2.getColor(requireActivity())
         }
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.STARTED)
-        setupToolbar(toolbar = binding.toolbar)
+        binding.layout.applyInsetsToMargins()
+        setupAppBars()
+        setupTitle()
+        setupImageSources()
+        DropHelper.configureView(
+            requireActivity(),
+            binding.layout,
+            supportedMimeTypes,
+            MainContentReceiver(onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) })
+        )
         setFragmentResultListener(
             DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
         ) { _, bundle: Bundle ->
             if (bundle.getBoolean(DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE)) {
                 viewModel.deleteCameraImages()
-            }
-        }
-        DropHelper.configureView(
-            requireActivity(),
-            binding.layout,
-            supportedMimeTypes,
-            MainContentReceiver(
-                onUrisReceived = { uris ->
-                    viewModel.handleReceivedImages(uris)
-                }
-            )
-        )
-        binding.layout.applyInsetMargins()
-        binding.title.text =
-            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                getString(
-                    R.string.choose_your_preferred_image_source_placeholder,
-                    getString(R.string.choose_your),
-                    getString(R.string.preferred_image_source)
-                )
-            } else {
-                "${getString(R.string.choose_your)} ${getString(R.string.preferred_image_source)}"
-            }
-        binding.imageSources.apply {
-            layoutManager = StaggeredGridLayoutManager(
-                IMG_SOURCES_CNT_VERTICAL,
-                RecyclerView.HORIZONTAL
-            )
-            adapter = MainAdapter(listener = this@MainFragment)
-            addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_micro)))
-            addItemTouchHelper(
-                ItemTouchHelper(
-                    MainItemTouchHelperCallback(
-                        callback = adapter as MainAdapter,
-                        canMoveItem = {
-                            binding.imageSourcesReorder.tag == IMG_SOURCES_AVD_ORDER_SAVE
-                        }
-                    )
-                )
-            )
-        }
-        binding.imageSourcesReorder.apply {
-            addIconAnimation(
-                iconResStart = IMG_SOURCES_AVD_REORDER,
-                iconResEnd = IMG_SOURCES_AVD_ORDER_SAVE
-            )
-            setOnClickListener {
-                (binding.imageSourcesReorder.drawable as? Animatable)?.start()
-                if (tag == IMG_SOURCES_AVD_ORDER_SAVE) {
-                    val imageSources = (binding.imageSources.adapter as? MainAdapter)?.currentList
-                    if (imageSources != null) {
-                        viewModel.putImageSources(imageSources)
-                    }
-                }
             }
         }
         lifecycleScope.launch {
@@ -263,6 +192,14 @@ class MainFragment :
                     }
                 }
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().window.apply {
+            statusBarColor = SurfaceColors.SURFACE_2.getColor(requireActivity())
+            navigationBarColor = SurfaceColors.SURFACE_0.getColor(requireActivity())
         }
     }
 
@@ -324,9 +261,8 @@ class MainFragment :
             }
             is MainSideEffect.ExternalPicturesDeleted -> {
                 requireView().showSnackbar(
-                    anchor = binding.imageSourcesReorder,
-                    msg =
-                    if (sideEffect.success) {
+                    anchor = binding.bottomBarLayout,
+                    msg = if (sideEffect.success) {
                         R.string.delete_camera_images_success
                     } else {
                         R.string.delete_camera_images_failed
@@ -357,7 +293,7 @@ class MainFragment :
             }
             is MainSideEffect.PasteImagesNone -> {
                 requireView().showSnackbar(
-                    anchor = binding.imageSourcesReorder,
+                    anchor = binding.bottomBarLayout,
                     msg = R.string.clipboard_content_unsupported
                 )
             }
@@ -383,7 +319,7 @@ class MainFragment :
     }
 
     private fun canReorderImageSources(): Boolean {
-        return binding.imageSourcesReorder.tag == IMG_SOURCES_AVD_ORDER_SAVE
+        return binding.imageSourcesReorder.tag == R.drawable.avd_done_all_to_drag
     }
 
     private fun consumeSharedImages() {
@@ -437,6 +373,143 @@ class MainFragment :
         }
         if (info != null) {
             sm.reportShortcutUsed(info.id)
+        }
+    }
+
+    private fun setupAppBars() {
+        setupToolbar(toolbar = binding.toolbar)
+        val menuProvider = object : MenuProvider {
+
+            override fun onCreateMenu(
+                menu: Menu,
+                menuInflater: MenuInflater
+            ) {
+                menuInflater.inflate(R.menu.menu_main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.content_paste -> {
+                        viewModel.handlePasteImages(requireContext().getClipImages())
+                        true
+                    }
+                    R.id.action_delete_camera_images -> {
+                        viewModel.handleDeleteCameraImages()
+                        true
+                    }
+                    R.id.action_settings -> {
+                        viewModel.handleSettings()
+                        true
+                    }
+                    R.id.action_help -> {
+                        viewModel.handleHelp()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+        binding.bottomBar.addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.STARTED)
+        binding.bottomBarLayout.doOnLayout {
+            val imageSourcesCoordinates = IntArray(size = 2) { 0 }
+            val bottomBarCoordinates = IntArray(size = 2) { 0 }
+            binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
+            binding.bottomBarLayout.getLocationInWindow(bottomBarCoordinates)
+            val imageSourcesBottomY = imageSourcesCoordinates[1] +
+                    binding.imageSources.measuredHeight
+            if (imageSourcesBottomY > bottomBarCoordinates[1]) {
+                binding.bottomBarLayout.isVisible = false
+            }
+        }
+        binding.imageSourcesReorder.apply {
+            addIconAnimation(
+                animatedVectorDrawable = R.drawable.avd_drag_to_done_all,
+                animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag
+            )
+            setOnClickListener {
+                (binding.imageSourcesReorder.drawable as? Animatable)?.start()
+                if (tag == R.drawable.avd_done_all_to_drag) {
+                    val imageSources = (binding.imageSources.adapter as? MainAdapter)?.currentList
+                    if (imageSources != null) {
+                        viewModel.putImageSources(imageSources)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupImageSources() {
+        binding.imageSources.apply {
+            val windowSizeClass = (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+            val gridSize = when (windowSizeClass) {
+                WindowSizeClass.Unspecified,
+                WindowSizeClass.Compact -> GRID_SIZE_COMPACT
+                WindowSizeClass.Medium -> GRID_SIZE_MEDIUM
+                WindowSizeClass.Expanded -> GRID_SIZE_EXPANDED
+            }
+            layoutManager = StaggeredGridLayoutManager(gridSize, RecyclerView.HORIZONTAL)
+            adapter = MainAdapter(
+                listener = this@MainFragment,
+                windowSizeClass = windowSizeClass
+            )
+            addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_micro)))
+            addItemTouchHelper(
+                ItemTouchHelper(
+                    MainItemTouchHelperCallback(
+                        callback = adapter as MainAdapter,
+                        canMoveItem = { canReorderImageSources() }
+                    )
+                )
+            )
+        }
+    }
+
+    private fun setupTitle() {
+        binding.title.apply {
+            val windowSizeClassWidth =
+                (requireActivity() as ExifEraserActivity).windowSizeClassWidth
+            if (requireActivity().isOrientationPortrait()) {
+                gravity = if (windowSizeClassWidth == WindowSizeClass.Compact) {
+                    Gravity.END
+                } else {
+                    Gravity.START
+                }
+                text = getString(
+                    R.string.choose_your_preferred_image_source_placeholder_portrait,
+                    getString(R.string.choose_your),
+                    getString(R.string.preferred_image_source)
+                )
+            } else {
+                gravity = Gravity.START
+                text = getString(
+                    R.string.choose_your_preferred_image_source_placeholder_landscape,
+                    getString(R.string.choose_your),
+                    getString(R.string.preferred_image_source)
+                )
+            }
+            val windowSizeClassHeight =
+                (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+            typeface = when (windowSizeClassHeight) {
+                WindowSizeClass.Compact -> {
+                    setTextAppearance(
+                        com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
+                    )
+                    Typeface.DEFAULT_BOLD
+                }
+                WindowSizeClass.Unspecified,
+                WindowSizeClass.Medium -> {
+                    setTextAppearance(
+                        com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
+                    )
+                    Typeface.DEFAULT_BOLD
+                }
+                WindowSizeClass.Expanded -> {
+                    setTextAppearance(
+                        com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
+                    )
+                    Typeface.DEFAULT_BOLD
+                }
+            }
         }
     }
 }

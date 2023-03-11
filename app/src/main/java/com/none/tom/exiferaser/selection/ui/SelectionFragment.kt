@@ -38,7 +38,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
-import com.none.tom.exiferaser.applyInsetMargins
+import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
 import com.none.tom.exiferaser.report.lerp
 import com.none.tom.exiferaser.report.ui.ReportFragment
@@ -119,7 +119,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                 slideOffset = bundle.getFloat(ReportFragment.KEY_OFFSET_SLIDE)
             )
         }
-        binding.layout.applyInsetMargins()
+        binding.layout.applyInsetsToMargins()
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->

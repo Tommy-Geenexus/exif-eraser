@@ -22,11 +22,14 @@ package com.none.tom.exiferaser
 
 import android.content.Intent
 import android.os.Bundle
+import android.content.res.Configuration
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.fragment.NavHostFragment
+import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,6 +51,9 @@ class ExifEraserActivity : AppCompatActivity() {
         const val KEY_SHORTCUT = "shortcut"
     }
 
+    internal var windowSizeClassHeight: WindowSizeClass = WindowSizeClass.Unspecified
+    internal var windowSizeClassWidth: WindowSizeClass = WindowSizeClass.Unspecified
+
     init {
         addOnNewIntentListener { intent ->
             setIntent(intent)
@@ -60,12 +66,16 @@ class ExifEraserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = SurfaceColors.SURFACE_2.getColor(this)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        window.statusBarColor = SurfaceColors.getColorForElevation(
-            this,
-            resources.getDimension(R.dimen.elevation_micro)
-        )
+        binding.layout.addView(object : View(this) {
+            override fun onConfigurationChanged(newConfig: Configuration?) {
+                super.onConfigurationChanged(newConfig)
+                computeWindowSizeClasses()
+            }
+        })
+        computeWindowSizeClasses()
         handleSendIntent()
         handleShortcutIntent()
     }
@@ -120,5 +130,13 @@ class ExifEraserActivity : AppCompatActivity() {
             intent.action == INTENT_ACTION_CHOOSE_IMAGES ||
             intent.action == INTENT_ACTION_CHOOSE_IMAGE_DIR ||
             intent.action == INTENT_ACTION_LAUNCH_CAM
+    }
+
+    private fun computeWindowSizeClasses() {
+        val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
+        val widthDp = metrics.bounds.width() / resources.displayMetrics.density
+        val heightDp = metrics.bounds.height() / resources.displayMetrics.density
+        windowSizeClassWidth = WindowSizeClass.calculate(widthDp, height = false)
+        windowSizeClassHeight = WindowSizeClass.calculate(heightDp, height = true)
     }
 }

@@ -19,5 +19,4 @@
     <include
         android:id="@+id/default_display_name_suffix"
         layout="@layout/preference" />
-
 </LinearLayout>
