@@ -34,6 +34,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.business.SettingsSideEffect
@@ -78,6 +79,7 @@ class SettingsFragment :
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
         )
+        binding.layout.applyInsetsToMargins()
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)

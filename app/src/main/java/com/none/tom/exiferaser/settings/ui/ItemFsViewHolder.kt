@@ -38,7 +38,7 @@ class ItemFsViewHolder(
             clear.setOnClickListener {
                 listener.onDefaultPathOpenClear()
             }
-            iconPreferenceFs.setImageResource(R.drawable.ic_image_folder_open)
+            iconPreferenceFs.setImageResource(R.drawable.ic_folder_open)
             titlePreferenceFs.setText(R.string.default_path_open)
         }
         binding.defaultPathSave.apply {
@@ -48,7 +48,7 @@ class ItemFsViewHolder(
             clear.setOnClickListener {
                 listener.onDefaultPathSaveClear()
             }
-            iconPreferenceFs.setImageResource(R.drawable.ic_image_folder_save)
+            iconPreferenceFs.setImageResource(R.drawable.ic_folder_special)
             titlePreferenceFs.setText(R.string.default_path_save)
         }
         binding.fs.category.setText(R.string.file_system)

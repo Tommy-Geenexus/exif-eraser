@@ -20,18 +20,53 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 class MainViewHolder(
     private val binding: ItemImageSourceBinding,
-    private val listener: MainAdapter.Listener
+    private val listener: MainAdapter.Listener,
+    private val windowSizeClass: WindowSizeClass
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
+        binding.image.updateLayoutParams {
+            binding.image.layoutParams.apply {
+                val dimen = when (windowSizeClass) {
+                    WindowSizeClass.Compact -> {
+                        itemView.context.resources.getDimension(R.dimen.image_source_compact)
+                    }
+                    WindowSizeClass.Unspecified,
+                    WindowSizeClass.Medium -> {
+                        itemView.context.resources.getDimension(R.dimen.image_source_medium)
+                    }
+                    WindowSizeClass.Expanded -> {
+                        itemView.context.resources.getDimension(R.dimen.image_source_expanded)
+                    }
+                }.toInt()
+                height = dimen
+                width = dimen
+            }
+        }
+        binding.method.setTextAppearance(
+            when (windowSizeClass) {
+                WindowSizeClass.Compact -> {
+                    com.google.android.material.R.style.TextAppearance_Material3_BodySmall
+                }
+                WindowSizeClass.Unspecified,
+                WindowSizeClass.Medium -> {
+                    com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
+                }
+                WindowSizeClass.Expanded -> {
+                    com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
+                }
+            }
+        )
         binding.imageSource.setOnClickListener {
             with(itemView.context) {
                 when (binding.method.text) {

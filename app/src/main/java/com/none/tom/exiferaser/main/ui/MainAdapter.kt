@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
+import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.squareup.wire.AnyMessage
@@ -34,7 +35,8 @@ import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 class MainAdapter(
-    private val listener: Listener
+    private val listener: Listener,
+    private val windowSizeClass: WindowSizeClass
 ) : ListAdapter<AnyMessage, MainViewHolder>(
     object : DiffUtil.ItemCallback<AnyMessage>() {
 
@@ -73,7 +75,8 @@ class MainAdapter(
                 parent,
                 false
             ),
-            listener = listener
+            listener = listener,
+            windowSizeClass = windowSizeClass
         )
     }
 

@@ -224,7 +224,7 @@ class UpdateRepository @Inject constructor(
     private fun createAppUpdateFailedNotification(): Notification {
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_logo_update_error)
+            .setSmallIcon(R.drawable.ic_logo)
             .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_failed))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -245,7 +245,7 @@ class UpdateRepository @Inject constructor(
     ): Notification {
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_logo_update_downloading)
+            .setSmallIcon(R.drawable.ic_logo)
             .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_download))
             .setProgress(PROGRESS_MAX, progress, false)
@@ -265,7 +265,7 @@ class UpdateRepository @Inject constructor(
     private fun createAppUpdateReadyToInstallNotification(): Notification {
         return NotificationCompat
             .Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_logo_update_downloaded)
+            .setSmallIcon(R.drawable.ic_logo)
             .setColor(MaterialColors.getColor(context, R.attr.colorSecondary, null))
             .setContentTitle(context.getString(R.string.app_update_downloaded))
             .setContentText(context.getString(R.string.app_update_install))

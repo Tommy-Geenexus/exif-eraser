@@ -38,7 +38,7 @@ class ItemImageViewHolder(
             onOff.setOnCheckedChangeListener { _, value ->
                 listener.onPreserveOrientationChanged(value)
             }
-            iconPreferenceCheckBox.setImageResource(R.drawable.ic_preserve_image_orientation)
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_looks)
             titlePreferenceCheckBox.setText(R.string.image_orientation)
         }
         binding.shareByDefault.apply {
@@ -48,7 +48,7 @@ class ItemImageViewHolder(
             onOff.setOnCheckedChangeListener { _, value ->
                 listener.onShareByDefaultChanged(value)
             }
-            iconPreferenceCheckBox.setImageResource(R.drawable.ic_share_image_by_default)
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_share)
             titlePreferenceCheckBox.setText(R.string.image_share_by_default)
         }
         binding.defaultDisplayNameSuffix.apply {

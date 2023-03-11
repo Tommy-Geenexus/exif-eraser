@@ -17,8 +17,6 @@
         <item name="colorPrimaryContainer">@color/color_teal_500_light</item>
         <item name="colorSecondary">@color/color_teal_500</item>
         <item name="colorOk">@color/color_green_500</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>

@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_normal"
         android:layout_marginEnd="@dimen/spacing_normal"
-        app:icon="@drawable/ic_clear"
+        app:icon="@drawable/ic_folder_off"
         app:iconTint="?attr/colorControlNormal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideline_preference_fs"

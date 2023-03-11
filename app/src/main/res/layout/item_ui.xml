@@ -15,5 +15,4 @@
     <include
         android:id="@+id/night_mode"
         layout="@layout/preference" />
-
 </LinearLayout>

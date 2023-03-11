@@ -10,7 +10,6 @@
 
     <dimen name="elevation_none">0dp</dimen>
     <dimen name="elevation_micro">3dp</dimen>
-    <dimen name="elevation_bottom_sheet">6dp</dimen>
 
     <dimen name="corner_size_cut">0dp</dimen>
     <dimen name="corner_size_large">24dp</dimen>
@@ -19,5 +18,7 @@
 
     <dimen name="progress_width">240dp</dimen>
 
-    <dimen name="icon_image_source">48dp</dimen>
+    <dimen name="image_source_compact">36dp</dimen>
+    <dimen name="image_source_medium">48dp</dimen>
+    <dimen name="image_source_expanded">72dp</dimen>
 </resources>

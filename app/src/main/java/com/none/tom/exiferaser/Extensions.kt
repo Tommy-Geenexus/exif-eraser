@@ -22,7 +22,9 @@ package com.none.tom.exiferaser
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.view.View
 import androidx.annotation.StringRes
@@ -35,7 +37,10 @@ import dev.chrisbanes.insetter.applyInsetter
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
-fun View.applyInsetMargins() {
+fun Context.isOrientationPortrait() =
+    resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+
+fun View.applyInsetsToMargins() {
     applyInsetter {
         type(
             navigationBars = true,

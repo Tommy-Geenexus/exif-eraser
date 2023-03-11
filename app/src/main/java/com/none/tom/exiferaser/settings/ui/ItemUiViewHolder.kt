@@ -44,7 +44,7 @@ class ItemUiViewHolder(
             layoutPreference.setOnClickListener {
                 listener.onDefaultNightModeSelected()
             }
-            iconPreference.setImageResource(R.drawable.ic_mode_night)
+            iconPreference.setImageResource(R.drawable.ic_dark_mode)
             titlePreference.setText(R.string.night_mode)
         }
         binding.ui.category.setText(R.string.ui)

@@ -50,10 +50,7 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        view.phoneWindow?.navigationBarColor = SurfaceColors.getColorForElevation(
-            requireActivity(),
-            resources.getDimension(R.dimen.elevation_bottom_sheet)
-        )
+        view.phoneWindow?.navigationBarColor = SurfaceColors.SURFACE_1.getColor(requireActivity())
     }
 
     override fun onDestroyView() {
