@@ -458,7 +458,7 @@ class MainFragment :
             binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
             binding.bottomBarLayout.getLocationInWindow(bottomBarCoordinates)
             val imageSourcesBottomY = imageSourcesCoordinates[1] +
-                    binding.imageSources.measuredHeight
+                binding.imageSources.measuredHeight
             if (imageSourcesBottomY > bottomBarCoordinates[1]) {
                 binding.bottomBarLayout.isVisible = false
             }
