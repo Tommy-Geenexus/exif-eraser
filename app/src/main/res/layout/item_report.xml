@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Cut" />
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.None" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
