@@ -70,11 +70,13 @@ class SettingsRepository @Inject constructor(
         const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX = "default_display_name_suffix"
         const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
 
+        const val KEY_AUTO_DELETE = "auto_delete"
         const val KEY_SAVE_PATH_SELECTION_SKIP = "save_path_selection_skip"
     }
 
     private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
     private val keyDefaultSavePath = stringPreferencesKey(KEY_DEFAULT_SAVE_PATH)
+    private val keyAutoDelete = booleanPreferencesKey(KEY_AUTO_DELETE)
     private val keyPreserveOrientation = booleanPreferencesKey(KEY_PRESERVE_ORIENTATION)
     private val keyShareByDefault = booleanPreferencesKey(KEY_SHARE_BY_DEFAULT)
     private val keyDefaultDisplayNameSuffix = stringPreferencesKey(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
@@ -266,6 +268,32 @@ class SettingsRepository @Inject constructor(
                 Uri.EMPTY
             }
         }
+    }
+
+    suspend fun putAutoDelete(value: Boolean): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyAutoDelete] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
+        }
+    }
+
+    fun shouldAutoDelete(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keyAutoDelete] ?: false
+            }
+            .flowOn(dispatcher)
     }
 
     suspend fun putPreserveOrientation(value: Boolean): Boolean {

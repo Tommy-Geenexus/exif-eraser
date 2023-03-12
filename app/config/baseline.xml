@@ -2,10 +2,11 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
+    <ID>CyclomaticComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false ): Result.Report</ID>
     <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
     <ID>LongMethod:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment$private fun renderState(state: ImageModifiedDetailsState)</ID>
-    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, preserveOrientation: Boolean = false ): Result.Report</ID>
+    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
@@ -22,10 +23,12 @@
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$4</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$5</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$6</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$7</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$3</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$4</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$5</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$6</ID>
+    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$7</ID>
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
     <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
     <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>

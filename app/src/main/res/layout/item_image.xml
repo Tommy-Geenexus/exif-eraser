@@ -9,6 +9,10 @@
         layout="@layout/preference_category" />
 
     <include
+        android:id="@+id/auto_delete"
+        layout="@layout/preference_check_box" />
+
+    <include
         android:id="@+id/preserve_orientation"
         layout="@layout/preference_check_box" />
 

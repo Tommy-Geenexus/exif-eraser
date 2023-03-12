@@ -60,6 +60,7 @@ class SettingsAdapter(
         fun onDefaultPathOpenClear()
         fun onDefaultPathSaveSelected()
         fun onDefaultPathSaveClear()
+        fun onAutoDeleteChanged(value: Boolean)
         fun onPreserveOrientationChanged(value: Boolean)
         fun onShareByDefaultChanged(value: Boolean)
         fun onDefaultDisplayNameSuffixSelected()
@@ -122,15 +123,16 @@ class SettingsAdapter(
             }
             ITEM_TYPE_IMAGE -> {
                 (holder as ItemImageViewHolder).bindImageItem(
-                    preserveOrientation = currentList.getOrNull(2)?.second.toBoolean(),
-                    shareByDefault = currentList.getOrNull(3)?.second.toBoolean(),
-                    defaultDisplayNameSuffix = currentList.getOrNull(4)?.second.orEmpty()
+                    autoDelete = currentList.getOrNull(2)?.second.toBoolean(),
+                    preserveOrientation = currentList.getOrNull(3)?.second.toBoolean(),
+                    shareByDefault = currentList.getOrNull(4)?.second.toBoolean(),
+                    defaultDisplayNameSuffix = currentList.getOrNull(5)?.second.orEmpty()
                 )
             }
             ITEM_TYPE_UI -> {
                 (holder as ItemUiViewHolder).bindUiItem(
-                    skipSavePathSelection = currentList.getOrNull(5)?.second.toBoolean(),
-                    defaultNightModeName = currentList.getOrNull(6)?.second.orEmpty()
+                    skipSavePathSelection = currentList.getOrNull(6)?.second.toBoolean(),
+                    defaultNightModeName = currentList.getOrNull(7)?.second.orEmpty()
                 )
             }
             else -> {

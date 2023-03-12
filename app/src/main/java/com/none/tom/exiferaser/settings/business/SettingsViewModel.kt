@@ -140,6 +140,16 @@ class SettingsViewModel @Inject constructor(
         postSideEffect(SettingsSideEffect.DefaultPathSaveStore(success))
     }
 
+    fun storeAutoDelete(value: Boolean) = intent {
+        val success = settingsRepository.putAutoDelete(value)
+        if (success) {
+            reduce {
+                state.copy(autoDelete = value)
+            }
+        }
+        postSideEffect(SettingsSideEffect.AutoDelete(success))
+    }
+
     fun storePreserveOrientation(value: Boolean) = intent {
         val success = settingsRepository.putPreserveOrientation(value)
         if (success) {

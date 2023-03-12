@@ -72,6 +72,7 @@ class ImageRepository @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
+        autoDelete: Boolean = false,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
         return flow {
@@ -84,6 +85,7 @@ class ImageRepository @Inject constructor(
                         selection = imageSelection,
                         treeUri = treeUri,
                         displayNameSuffix = displayNameSuffix,
+                        autoDelete = autoDelete,
                         preserveOrientation = preserveOrientation
                     )
                 )
@@ -99,6 +101,7 @@ class ImageRepository @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
+        autoDelete: Boolean = false,
         preserveOrientation: Boolean = false
     ): Flow<Result> {
         return flow {
@@ -107,6 +110,7 @@ class ImageRepository @Inject constructor(
                     selection = selection.unpack(UserImageSelectionProto.ADAPTER),
                     treeUri = treeUri,
                     displayNameSuffix = displayNameSuffix,
+                    autoDelete = autoDelete,
                     preserveOrientation = preserveOrientation
                 )
             )
@@ -179,6 +183,7 @@ class ImageRepository @Inject constructor(
         selection: UserImageSelectionProto,
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
+        autoDelete: Boolean = false,
         preserveOrientation: Boolean = false
     ): Result.Report {
         var uri = Uri.EMPTY
@@ -238,6 +243,11 @@ class ImageRepository @Inject constructor(
                         context.contentResolver.openOutputStreamOrThrow(modifiedUri).use { sink ->
                             exifInterfaceExtended.saveExclusive(source, sink, preserveOrientation)
                             imageSaved = true
+                        }
+                    }
+                    if (autoDelete && imageSaved && DocumentsContract.isDocumentUri(context, uri)) {
+                        if (DocumentFile.fromSingleUri(context, uri)?.delete() != true) {
+                            Timber.e("Failed to delete %s", uri)
                         }
                     }
                     displayName = DocumentFile

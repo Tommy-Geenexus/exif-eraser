@@ -87,13 +87,17 @@ class SelectionViewModel @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri
     ) = intent {
-        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
-        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
+        val displayNameSuffix =
+            settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
+        val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
+        val preserveOrientation =
+            settingsRepository.shouldPreserveOrientation().firstOrNull() == true
         imageRepository.removeMetadataSingle(
             selection = selection,
             treeUri = treeUri,
-            displayNameSuffix = displayNameSuffix.orEmpty(),
-            preserveOrientation = preserveOrientation == true
+            displayNameSuffix = displayNameSuffix,
+            autoDelete = autoDelete,
+            preserveOrientation = preserveOrientation
         ).collect { result ->
             reduce {
                 when (result) {
@@ -140,13 +144,17 @@ class SelectionViewModel @Inject constructor(
         selection: AnyMessage,
         treeUri: Uri
     ) = intent {
-        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
-        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
+        val displayNameSuffix =
+            settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
+        val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
+        val preserveOrientation =
+            settingsRepository.shouldPreserveOrientation().firstOrNull() == true
         imageRepository.removeMetadataBulk(
             selection = selection,
             treeUri = treeUri,
-            displayNameSuffix = displayNameSuffix.orEmpty(),
-            preserveOrientation = preserveOrientation == true
+            displayNameSuffix = displayNameSuffix,
+            autoDelete = autoDelete,
+            preserveOrientation = preserveOrientation
         ).collect { result ->
             reduce {
                 when (result) {
