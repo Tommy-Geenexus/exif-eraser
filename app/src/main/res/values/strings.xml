@@ -6,6 +6,9 @@
 
     <string name="app_name" translatable="false">ExifEraser</string>
 
+    <string name="auto_delete_image_off">Don\'t delete images after modification</string>
+    <string name="auto_delete_image_on">Delete images after modification</string>
+
     <string name="automatically">Automatically</string>
 
     <string name="become_translator">Help translate</string>
@@ -48,6 +51,7 @@
     <string name="icc_profile" translatable="false">ICC Profile</string>
 
     <string name="image">Image</string>
+    <string name="image_auto_delete">Auto-delete</string>
     <string name="image_directory">Image directory</string>
     <string name="image_file">Image file</string>
     <string name="image_files">Image files</string>

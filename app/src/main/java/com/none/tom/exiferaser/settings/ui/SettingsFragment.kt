@@ -136,6 +136,10 @@ class SettingsFragment :
         viewModel.clearDefaultPathSave()
     }
 
+    override fun onAutoDeleteChanged(value: Boolean) {
+        viewModel.storeAutoDelete(value)
+    }
+
     override fun onPreserveOrientationChanged(value: Boolean) {
         viewModel.storePreserveOrientation(value)
     }
@@ -161,19 +165,20 @@ class SettingsFragment :
             listOf(
                 0 to state.defaultPathOpenName,
                 1 to state.defaultPathSaveName,
-                2 to state.preserveOrientation.toString(),
-                3 to state.shareByDefault.toString(),
-                4 to state.defaultDisplayNameSuffix,
-                5 to state.skipSavePathSelection.toString(),
-                6 to state.defaultNightModeName
+                2 to state.autoDelete.toString(),
+                3 to state.preserveOrientation.toString(),
+                4 to state.shareByDefault.toString(),
+                5 to state.defaultDisplayNameSuffix,
+                6 to state.skipSavePathSelection.toString(),
+                7 to state.defaultNightModeName
             )
         )
     }
 
     private fun handleSideEffect(sideEffect: SettingsSideEffect) {
         when (sideEffect) {
-            is SettingsSideEffect.DefaultPathOpenClear -> {
-            }
+            is SettingsSideEffect.AutoDelete,
+            is SettingsSideEffect.DefaultPathOpenClear,
             is SettingsSideEffect.DefaultPathSaveClear -> {
             }
             is SettingsSideEffect.DefaultPathOpenSelect -> {
@@ -182,8 +187,7 @@ class SettingsFragment :
             is SettingsSideEffect.DefaultPathSaveSelect -> {
                 defaultPathSave.launch(sideEffect.uri)
             }
-            is SettingsSideEffect.DefaultPathOpenStore -> {
-            }
+            is SettingsSideEffect.DefaultPathOpenStore,
             is SettingsSideEffect.DefaultPathSaveStore -> {
             }
             is SettingsSideEffect.NavigateToDefaultDisplayNameSuffix -> {
@@ -200,10 +204,8 @@ class SettingsFragment :
                     )
                 )
             }
-            is SettingsSideEffect.PreserveOrientation -> {
-            }
-            is SettingsSideEffect.SavePathSelectionSkip -> {
-            }
+            is SettingsSideEffect.PreserveOrientation,
+            is SettingsSideEffect.SavePathSelectionSkip,
             is SettingsSideEffect.ShareByDefault -> {
             }
         }

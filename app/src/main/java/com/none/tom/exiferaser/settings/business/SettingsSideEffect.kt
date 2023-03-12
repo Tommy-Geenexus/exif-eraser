@@ -67,6 +67,11 @@ sealed class SettingsSideEffect : Parcelable {
     ) : SettingsSideEffect()
 
     @Parcelize
+    data class AutoDelete(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
     data class PreserveOrientation(
         val success: Boolean
     ) : SettingsSideEffect()

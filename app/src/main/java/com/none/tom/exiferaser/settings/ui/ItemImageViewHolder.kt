@@ -31,6 +31,16 @@ class ItemImageViewHolder(
 
     init {
         binding.image.category.setText(R.string.image)
+        binding.autoDelete.apply {
+            layoutPreferenceCheckBox.setOnClickListener {
+                onOff.isChecked = !onOff.isChecked
+            }
+            onOff.setOnCheckedChangeListener { _, value ->
+                listener.onAutoDeleteChanged(value)
+            }
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_auto_delete)
+            titlePreferenceCheckBox.setText(R.string.image_auto_delete)
+        }
         binding.preserveOrientation.apply {
             layoutPreferenceCheckBox.setOnClickListener {
                 onOff.isChecked = !onOff.isChecked
@@ -61,10 +71,21 @@ class ItemImageViewHolder(
     }
 
     fun bindImageItem(
+        autoDelete: Boolean,
         preserveOrientation: Boolean,
         shareByDefault: Boolean,
         defaultDisplayNameSuffix: String
     ) {
+        binding.autoDelete.apply {
+            summaryPreferenceCheckBox.setText(
+                if (autoDelete) {
+                    R.string.auto_delete_image_on
+                } else {
+                    R.string.auto_delete_image_off
+                }
+            )
+            onOff.isChecked = autoDelete
+        }
         binding.preserveOrientation.apply {
             summaryPreferenceCheckBox.setText(
                 if (preserveOrientation) {
