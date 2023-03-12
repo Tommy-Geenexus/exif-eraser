@@ -47,7 +47,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
@@ -137,10 +136,6 @@ class MainFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().window.apply {
-            statusBarColor = SurfaceColors.SURFACE_0.getColor(requireActivity())
-            navigationBarColor = SurfaceColors.SURFACE_2.getColor(requireActivity())
-        }
         binding.layout.applyInsetsToMargins()
         setupAppBars()
         setupTitle()
@@ -216,14 +211,6 @@ class MainFragment :
             }
         }
         viewModel.readDefaultValues()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        requireActivity().window.apply {
-            statusBarColor = SurfaceColors.SURFACE_2.getColor(requireActivity())
-            navigationBarColor = SurfaceColors.SURFACE_0.getColor(requireActivity())
-        }
     }
 
     override fun bindLayout(view: View) = FragmentMainBinding.bind(view)
