@@ -18,21 +18,33 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.settings.business
+package com.none.tom.exiferaser.main
 
-import android.os.Parcelable
-import com.none.tom.exiferaser.Empty
-import kotlinx.parcelize.Parcelize
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.provider.MediaStore
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 
-@Parcelize
-data class SettingsState(
-    val defaultPathOpenName: String = String.Empty,
-    val defaultPathSaveName: String = String.Empty,
-    val autoDelete: Boolean = false,
-    val preserveOrientation: Boolean = false,
-    val shareByDefault: Boolean = false,
-    val defaultDisplayNameSuffix: String = String.Empty,
-    val legacyImageSelection: Boolean = false,
-    val skipSavePathSelection: Boolean = false,
-    val defaultNightModeName: String = String.Empty
-) : Parcelable
+internal class PickVisualMedia2(
+    private val usePhotoPicker: () -> Boolean
+) : ActivityResultContracts.PickVisualMedia() {
+
+    @SuppressLint("MissingSuperCall", "InlinedApi")
+    override fun createIntent(
+        context: Context,
+        input: PickVisualMediaRequest
+    ): Intent {
+        return if (usePhotoPicker() && isPhotoPickerAvailable()) {
+            Intent(MediaStore.ACTION_PICK_IMAGES).apply {
+                type = MIME_TYPE_IMAGE
+            }
+        } else {
+            Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                type = MIME_TYPE_IMAGE
+            }
+        }
+    }
+}

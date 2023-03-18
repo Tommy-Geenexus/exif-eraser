@@ -64,6 +64,8 @@ import com.none.tom.exiferaser.isOrientationPortrait
 import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.none.tom.exiferaser.main.MarginItemDecoration
+import com.none.tom.exiferaser.main.PickMultipleVisualMedia2
+import com.none.tom.exiferaser.main.PickVisualMedia2
 import com.none.tom.exiferaser.main.TakePicture
 import com.none.tom.exiferaser.main.addIconAnimation
 import com.none.tom.exiferaser.main.addItemTouchHelper
@@ -95,7 +97,9 @@ class MainFragment :
     private val args: MainFragmentArgs by navArgs()
     private val viewModel: MainViewModel by viewModels()
     private val chooseImage = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
+        PickVisualMedia2(
+            usePhotoPicker = { !viewModel.container.stateFlow.value.legacyImageSelection }
+        )
     ) { result ->
         viewModel.putImageSelection(
             uri = result,
@@ -103,7 +107,9 @@ class MainFragment :
         )
     }
     private val chooseImages = registerForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia()
+        PickMultipleVisualMedia2(
+            usePhotoPicker = { !viewModel.container.stateFlow.value.legacyImageSelection }
+        )
     ) { result ->
         viewModel.putImagesSelection(
             uris = result,
@@ -209,6 +215,7 @@ class MainFragment :
                 }
             }
         }
+        viewModel.readDefaultValues()
     }
 
     override fun onDestroyView() {

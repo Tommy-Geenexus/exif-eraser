@@ -11,8 +11,8 @@
     <string name="app_update_install">Tap here to install</string>
     <string name="app_update_ready">Update ready to install</string>
 
-    <string name="auto_delete_image_off">Don\'t delete images after modification</string>
-    <string name="auto_delete_image_on">Delete images after modification</string>
+    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
 
     <string name="automatically">Automatically</string>
 
@@ -62,6 +62,9 @@
     <string name="image_files">Image files</string>
     <string name="image_orientation">Preserve orientation</string>
     <string name="image_path">Image path</string>
+    <string name="image_selection_legacy">Legacy image selection</string>
+    <string name="image_selection_legacy_off">Select images using the photo picker</string>
+    <string name="image_selection_legacy_on">Select images using the default document provider</string>
     <string name="image_share_by_default">Share by default</string>
     <string name="image_supported_formats">Supported image formats</string>
 

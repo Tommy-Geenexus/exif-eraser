@@ -24,11 +24,15 @@
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$5</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$6</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$7</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$8</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$9</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$3</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$4</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$5</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$6</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$7</ID>
+    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$8</ID>
+    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$9</ID>
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
     <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
     <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
@@ -37,6 +41,7 @@
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:ReportFragment.kt$ReportFragment : BaseFragmentListener</ID>
+    <ID>TooManyFunctions:SettingsAdapter.kt$SettingsAdapter$Listener</ID>
     <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository</ID>
     <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModelContainerHost</ID>

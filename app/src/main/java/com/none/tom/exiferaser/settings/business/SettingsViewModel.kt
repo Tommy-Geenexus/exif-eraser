@@ -53,20 +53,27 @@ class SettingsViewModel @Inject constructor(
     private fun readDefaultValues() = intent {
         val defaultPathOpenName = settingsRepository.getDefaultPathOpenName()
         val defaultPathSaveName: String = settingsRepository.getDefaultPathSaveName()
-        val preserveOrientation = settingsRepository.shouldPreserveOrientation().firstOrNull()
-        val shareByDefault = settingsRepository.shouldShareByDefault().firstOrNull()
+        val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
+        val preserveOrientation =
+            settingsRepository.shouldPreserveOrientation().firstOrNull() == true
+        val shareByDefault = settingsRepository.shouldShareByDefault().firstOrNull() == true
         val defaultDisplayNameSuffix =
-            settingsRepository.getDefaultDisplayNameSuffix().firstOrNull()
-        val skipSavePathSelection = settingsRepository.shouldSkipSavePathSelection().firstOrNull()
+            settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
+        val legacyImageSelection =
+            settingsRepository.shouldSelectImagesLegacy().firstOrNull() == true
+        val skipSavePathSelection =
+            settingsRepository.shouldSkipSavePathSelection().firstOrNull() == true
         val defaultNightModeName = settingsRepository.getDefaultNightModeName()
         reduce {
             state.copy(
                 defaultPathOpenName = defaultPathOpenName,
                 defaultPathSaveName = defaultPathSaveName,
-                preserveOrientation = preserveOrientation == true,
-                shareByDefault = shareByDefault == true,
-                defaultDisplayNameSuffix = defaultDisplayNameSuffix.orEmpty(),
-                skipSavePathSelection = skipSavePathSelection == true,
+                autoDelete = autoDelete,
+                preserveOrientation = preserveOrientation,
+                shareByDefault = shareByDefault,
+                defaultDisplayNameSuffix = defaultDisplayNameSuffix,
+                legacyImageSelection = legacyImageSelection,
+                skipSavePathSelection = skipSavePathSelection,
                 defaultNightModeName = defaultNightModeName
             )
         }
@@ -182,6 +189,16 @@ class SettingsViewModel @Inject constructor(
                 state.copy(defaultDisplayNameSuffix = value)
             }
         }
+    }
+
+    fun storeLegacyImageSelection(value: Boolean) = intent {
+        val success = settingsRepository.putSelectImagesLegacy(value)
+        if (success) {
+            reduce {
+                state.copy(legacyImageSelection = value)
+            }
+        }
+        postSideEffect(SettingsSideEffect.LegacyImageSelection(success))
     }
 
     fun storeSavePathSelectionSkip(value: Boolean) = intent {

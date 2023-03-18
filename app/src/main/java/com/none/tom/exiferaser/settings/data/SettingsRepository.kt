@@ -71,6 +71,7 @@ class SettingsRepository @Inject constructor(
         const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
 
         const val KEY_AUTO_DELETE = "auto_delete"
+        const val KEY_LEGACY_IMAGE_SELECTION = "legacy_image_selection"
         const val KEY_SAVE_PATH_SELECTION_SKIP = "save_path_selection_skip"
     }
 
@@ -80,6 +81,7 @@ class SettingsRepository @Inject constructor(
     private val keyPreserveOrientation = booleanPreferencesKey(KEY_PRESERVE_ORIENTATION)
     private val keyShareByDefault = booleanPreferencesKey(KEY_SHARE_BY_DEFAULT)
     private val keyDefaultDisplayNameSuffix = stringPreferencesKey(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+    private val keyLegacyImageSelection = booleanPreferencesKey(KEY_LEGACY_IMAGE_SELECTION)
     private val keySavePathSelectionSkip = booleanPreferencesKey(KEY_SAVE_PATH_SELECTION_SKIP)
     private val keyDefaultNightMode = intPreferencesKey(KEY_DEFAULT_NIGHT_MODE)
 
@@ -234,6 +236,32 @@ class SettingsRepository @Inject constructor(
         }.getOrElse { exception ->
             Timber.e(exception)
             String.Empty
+        }
+    }
+
+    fun shouldSelectImagesLegacy(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keyLegacyImageSelection] ?: false
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun putSelectImagesLegacy(value: Boolean): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyLegacyImageSelection] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
         }
     }
 

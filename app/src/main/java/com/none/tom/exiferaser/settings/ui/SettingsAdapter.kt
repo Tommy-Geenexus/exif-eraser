@@ -29,7 +29,6 @@ import com.none.tom.exiferaser.databinding.ItemFsBinding
 import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
 
-@Suppress("SameReturnValue")
 class SettingsAdapter(
     private val listener: Listener
 ) : ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
@@ -64,6 +63,7 @@ class SettingsAdapter(
         fun onPreserveOrientationChanged(value: Boolean)
         fun onShareByDefaultChanged(value: Boolean)
         fun onDefaultDisplayNameSuffixSelected()
+        fun onLegacyImageSelectionChanged(value: Boolean)
         fun onSavePathSelectionSkipChanged(value: Boolean)
         fun onDefaultNightModeSelected()
     }
@@ -114,6 +114,7 @@ class SettingsAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
+        val legacyImageSelection = currentList.getOrNull(7)?.second.toBoolean()
         when (getItemViewType(position)) {
             ITEM_TYPE_FS -> {
                 (holder as ItemFsViewHolder).bindItemFs(
@@ -123,6 +124,7 @@ class SettingsAdapter(
             }
             ITEM_TYPE_IMAGE -> {
                 (holder as ItemImageViewHolder).bindImageItem(
+                    legacyImageSelection = legacyImageSelection,
                     autoDelete = currentList.getOrNull(2)?.second.toBoolean(),
                     preserveOrientation = currentList.getOrNull(3)?.second.toBoolean(),
                     shareByDefault = currentList.getOrNull(4)?.second.toBoolean(),
@@ -131,8 +133,10 @@ class SettingsAdapter(
             }
             ITEM_TYPE_UI -> {
                 (holder as ItemUiViewHolder).bindUiItem(
-                    skipSavePathSelection = currentList.getOrNull(6)?.second.toBoolean(),
-                    defaultNightModeName = currentList.getOrNull(7)?.second.orEmpty()
+                    hasDefaultSavePath = currentList.getOrNull(6)?.second.toBoolean(),
+                    legacyImageSelection = legacyImageSelection,
+                    skipSavePathSelection = currentList.getOrNull(8)?.second.toBoolean(),
+                    defaultNightModeName = currentList.getOrNull(9)?.second.orEmpty()
                 )
             }
             else -> {
