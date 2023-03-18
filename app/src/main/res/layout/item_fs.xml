@@ -9,6 +9,10 @@
         layout="@layout/preference_category" />
 
     <include
+        android:id="@+id/randomize_file_names"
+        layout="@layout/preference_check_box" />
+
+    <include
         android:id="@+id/default_path_open"
         layout="@layout/preference_fs" />
 

@@ -57,6 +57,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.contracts.ExperimentalContracts
@@ -73,7 +74,8 @@ class ImageRepository @Inject constructor(
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         autoDelete: Boolean = false,
-        preserveOrientation: Boolean = false
+        preserveOrientation: Boolean = false,
+        randomizeFileNames: Boolean = false
     ): Flow<Result> {
         return flow {
             val imagesSelection = selection
@@ -86,7 +88,8 @@ class ImageRepository @Inject constructor(
                         treeUri = treeUri,
                         displayNameSuffix = displayNameSuffix,
                         autoDelete = autoDelete,
-                        preserveOrientation = preserveOrientation
+                        preserveOrientation = preserveOrientation,
+                        randomizeFileNames = randomizeFileNames
                     )
                 )
                 emit(Result.Handled(progress = (index + 1).toProgress(imagesSelection.size)))
@@ -102,7 +105,8 @@ class ImageRepository @Inject constructor(
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         autoDelete: Boolean = false,
-        preserveOrientation: Boolean = false
+        preserveOrientation: Boolean = false,
+        randomizeFileNames: Boolean = false
     ): Flow<Result> {
         return flow {
             emit(
@@ -111,7 +115,8 @@ class ImageRepository @Inject constructor(
                     treeUri = treeUri,
                     displayNameSuffix = displayNameSuffix,
                     autoDelete = autoDelete,
-                    preserveOrientation = preserveOrientation
+                    preserveOrientation = preserveOrientation,
+                    randomizeFileNames = randomizeFileNames
                 )
             )
             emit(Result.Handled(progress = PROGRESS_MAX))
@@ -184,7 +189,8 @@ class ImageRepository @Inject constructor(
         treeUri: Uri = Uri.EMPTY,
         displayNameSuffix: String = String.Empty,
         autoDelete: Boolean = false,
-        preserveOrientation: Boolean = false
+        preserveOrientation: Boolean = false,
+        randomizeFileNames: Boolean = false
     ): Result.Report {
         var uri = Uri.EMPTY
         var modifiedUri = Uri.EMPTY
@@ -218,12 +224,16 @@ class ImageRepository @Inject constructor(
                         containsXmp ||
                         containsExtendedXmp
                 }
-                displayName = getDisplayNameOrNull(uri)
-                    .orEmpty()
-                    .replaceAfter(delimiter = '.', replacement = "")
-                    .trimEnd { c -> c == '.' }
+                displayName = if (randomizeFileNames) {
+                    UUID.randomUUID().toString()
+                } else {
+                    getDisplayNameOrNull(uri)
+                        .orEmpty()
+                        .replaceAfter(delimiter = '.', replacement = "")
+                        .trimEnd { c -> c == '.' }
+                }
                 if (displayNameSuffix.isNotEmpty()) {
-                    val displayNameWithSuffix = displayName + '_' + displayNameSuffix
+                    val displayNameWithSuffix = displayName + displayNameSuffix
                     if (FileUtilsKt.isValidExtFilename(displayNameWithSuffix)) {
                         displayName = displayNameWithSuffix
                     }

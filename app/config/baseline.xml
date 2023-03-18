@@ -2,11 +2,11 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false ): Result.Report</ID>
+    <ID>CyclomaticComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
     <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
     <ID>LongMethod:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment$private fun renderState(state: ImageModifiedDetailsState)</ID>
-    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false ): Result.Report</ID>
+    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
@@ -16,9 +16,12 @@
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
     <ID>LongParameterList:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageModifiedDetailsViewModel.kt$ImageModifiedDetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
+    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: AnyMessage, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
+    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
+    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$10</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$3</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$4</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$5</ID>
@@ -26,6 +29,7 @@
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$7</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$8</ID>
     <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$9</ID>
+    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$10</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$3</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$4</ID>
     <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$5</ID>

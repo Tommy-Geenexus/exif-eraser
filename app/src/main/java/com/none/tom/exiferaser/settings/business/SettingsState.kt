@@ -26,6 +26,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SettingsState(
+    val randomizeFileNames: Boolean = false,
     val defaultPathOpenName: String = String.Empty,
     val defaultPathSaveName: String = String.Empty,
     val autoDelete: Boolean = false,

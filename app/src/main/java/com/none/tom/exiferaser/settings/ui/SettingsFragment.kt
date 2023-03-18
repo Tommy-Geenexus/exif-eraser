@@ -120,6 +120,10 @@ class SettingsFragment :
 
     override fun bindLayout(view: View) = FragmentSettingsBinding.bind(view)
 
+    override fun onRandomizeFileNamesChanged(value: Boolean) {
+        viewModel.storeRandomizeFileNames(value)
+    }
+
     override fun onDefaultPathOpenSelected() {
         viewModel.handleDefaultPathOpen()
     }
@@ -167,16 +171,17 @@ class SettingsFragment :
     private fun renderState(state: SettingsState) {
         (binding.preferences.adapter as? SettingsAdapter)?.submitList(
             listOf(
-                0 to state.defaultPathOpenName,
-                1 to state.defaultPathSaveName,
-                2 to state.autoDelete.toString(),
-                3 to state.preserveOrientation.toString(),
-                4 to state.shareByDefault.toString(),
-                5 to state.defaultDisplayNameSuffix,
-                6 to state.defaultPathSaveName.isNotEmpty().toString(),
-                7 to state.legacyImageSelection.toString(),
-                8 to state.skipSavePathSelection.toString(),
-                9 to state.defaultNightModeName
+                0 to state.randomizeFileNames.toString(),
+                1 to state.defaultPathOpenName,
+                2 to state.defaultPathSaveName,
+                3 to state.autoDelete.toString(),
+                4 to state.preserveOrientation.toString(),
+                5 to state.shareByDefault.toString(),
+                6 to state.defaultDisplayNameSuffix,
+                7 to state.defaultPathSaveName.isNotEmpty().toString(),
+                8 to state.legacyImageSelection.toString(),
+                9 to state.skipSavePathSelection.toString(),
+                10 to state.defaultNightModeName
             )
         )
     }
@@ -212,6 +217,7 @@ class SettingsFragment :
                 )
             }
             is SettingsSideEffect.PreserveOrientation,
+            is SettingsSideEffect.RandomizeFileNames,
             is SettingsSideEffect.SavePathSelectionSkip,
             is SettingsSideEffect.ShareByDefault -> {
             }

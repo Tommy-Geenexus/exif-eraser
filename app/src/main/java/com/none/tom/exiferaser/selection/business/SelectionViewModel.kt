@@ -92,12 +92,14 @@ class SelectionViewModel @Inject constructor(
         val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
         val preserveOrientation =
             settingsRepository.shouldPreserveOrientation().firstOrNull() == true
+        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().firstOrNull() == true
         imageRepository.removeMetadataSingle(
             selection = selection,
             treeUri = treeUri,
             displayNameSuffix = displayNameSuffix,
             autoDelete = autoDelete,
-            preserveOrientation = preserveOrientation
+            preserveOrientation = preserveOrientation,
+            randomizeFileNames = randomizeFileNames
         ).collect { result ->
             reduce {
                 when (result) {
@@ -149,12 +151,14 @@ class SelectionViewModel @Inject constructor(
         val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
         val preserveOrientation =
             settingsRepository.shouldPreserveOrientation().firstOrNull() == true
+        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().firstOrNull() == true
         imageRepository.removeMetadataBulk(
             selection = selection,
             treeUri = treeUri,
             displayNameSuffix = displayNameSuffix,
             autoDelete = autoDelete,
-            preserveOrientation = preserveOrientation
+            preserveOrientation = preserveOrientation,
+            randomizeFileNames = randomizeFileNames
         ).collect { result ->
             reduce {
                 when (result) {

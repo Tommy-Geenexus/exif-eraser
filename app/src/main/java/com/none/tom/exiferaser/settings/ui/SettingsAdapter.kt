@@ -55,6 +55,7 @@ class SettingsAdapter(
 
     interface Listener {
 
+        fun onRandomizeFileNamesChanged(value: Boolean)
         fun onDefaultPathOpenSelected()
         fun onDefaultPathOpenClear()
         fun onDefaultPathSaveSelected()
@@ -114,29 +115,30 @@ class SettingsAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        val legacyImageSelection = currentList.getOrNull(7)?.second.toBoolean()
+        val legacyImageSelection = currentList.getOrNull(8)?.second.toBoolean()
         when (getItemViewType(position)) {
             ITEM_TYPE_FS -> {
                 (holder as ItemFsViewHolder).bindItemFs(
-                    defaultOpenPathName = currentList.firstOrNull()?.second.orEmpty(),
-                    defaultSavePathName = currentList.getOrNull(1)?.second.orEmpty()
+                    randomizeFileNames = currentList.firstOrNull()?.second.toBoolean(),
+                    defaultOpenPathName = currentList.getOrNull(1)?.second.orEmpty(),
+                    defaultSavePathName = currentList.getOrNull(2)?.second.orEmpty()
                 )
             }
             ITEM_TYPE_IMAGE -> {
                 (holder as ItemImageViewHolder).bindImageItem(
                     legacyImageSelection = legacyImageSelection,
-                    autoDelete = currentList.getOrNull(2)?.second.toBoolean(),
-                    preserveOrientation = currentList.getOrNull(3)?.second.toBoolean(),
-                    shareByDefault = currentList.getOrNull(4)?.second.toBoolean(),
-                    defaultDisplayNameSuffix = currentList.getOrNull(5)?.second.orEmpty()
+                    autoDelete = currentList.getOrNull(3)?.second.toBoolean(),
+                    preserveOrientation = currentList.getOrNull(4)?.second.toBoolean(),
+                    shareByDefault = currentList.getOrNull(5)?.second.toBoolean(),
+                    defaultDisplayNameSuffix = currentList.getOrNull(6)?.second.orEmpty()
                 )
             }
             ITEM_TYPE_UI -> {
                 (holder as ItemUiViewHolder).bindUiItem(
-                    hasDefaultSavePath = currentList.getOrNull(6)?.second.toBoolean(),
+                    hasDefaultSavePath = currentList.getOrNull(7)?.second.toBoolean(),
                     legacyImageSelection = legacyImageSelection,
-                    skipSavePathSelection = currentList.getOrNull(8)?.second.toBoolean(),
-                    defaultNightModeName = currentList.getOrNull(9)?.second.orEmpty()
+                    skipSavePathSelection = currentList.getOrNull(9)?.second.toBoolean(),
+                    defaultNightModeName = currentList.getOrNull(10)?.second.orEmpty()
                 )
             }
             else -> {
