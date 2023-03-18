@@ -27,5 +27,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class MainState(
     val imageSources: MutableList<AnyMessage> = mutableListOf(),
+    val legacyImageSelection: Boolean = true,
     val loading: Boolean = false
 ) : Parcelable

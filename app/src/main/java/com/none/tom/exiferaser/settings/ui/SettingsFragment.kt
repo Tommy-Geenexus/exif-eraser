@@ -152,6 +152,10 @@ class SettingsFragment :
         viewModel.handleDefaultDisplayNameSuffix()
     }
 
+    override fun onLegacyImageSelectionChanged(value: Boolean) {
+        viewModel.storeLegacyImageSelection(value)
+    }
+
     override fun onSavePathSelectionSkipChanged(value: Boolean) {
         viewModel.storeSavePathSelectionSkip(value)
     }
@@ -169,8 +173,10 @@ class SettingsFragment :
                 3 to state.preserveOrientation.toString(),
                 4 to state.shareByDefault.toString(),
                 5 to state.defaultDisplayNameSuffix,
-                6 to state.skipSavePathSelection.toString(),
-                7 to state.defaultNightModeName
+                6 to state.defaultPathSaveName.isNotEmpty().toString(),
+                7 to state.legacyImageSelection.toString(),
+                8 to state.skipSavePathSelection.toString(),
+                9 to state.defaultNightModeName
             )
         )
     }
@@ -188,7 +194,8 @@ class SettingsFragment :
                 defaultPathSave.launch(sideEffect.uri)
             }
             is SettingsSideEffect.DefaultPathOpenStore,
-            is SettingsSideEffect.DefaultPathSaveStore -> {
+            is SettingsSideEffect.DefaultPathSaveStore,
+            is SettingsSideEffect.LegacyImageSelection -> {
             }
             is SettingsSideEffect.NavigateToDefaultDisplayNameSuffix -> {
                 navigate(

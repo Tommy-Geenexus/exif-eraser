@@ -60,11 +60,7 @@ class MainViewModel @Inject constructor(
 
     override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),
-        savedStateHandle = savedStateHandle,
-        onCreate = {
-            readDefaultNightMode()
-            readImageSources()
-        }
+        savedStateHandle = savedStateHandle
     )
 
     var navDestinationId: Int?
@@ -279,26 +275,26 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun readDefaultNightMode() = intent {
-        val value = settingsRepository.getDefaultNightMode().firstOrNull()
-        if (value != null) {
-            postSideEffect(MainSideEffect.DefaultNightMode(value))
-        }
-    }
-
-    private fun readImageSources() = intent {
+    fun readDefaultValues() = intent {
         reduce {
             state.copy(loading = true)
         }
-        val imageSources = imageSourceRepository.getImageSources().firstOrNull()
-        if (imageSources != null) {
-            reduce {
-                state.copy(
-                    imageSources = imageSources,
-                    loading = false
-                )
-            }
+        val defaultNightMode = settingsRepository.getDefaultNightMode().firstOrNull()
+        val imageSources = imageSourceRepository.getImageSources().firstOrNull() ?: mutableListOf()
+        val legacyImageSelection =
+            settingsRepository.shouldSelectImagesLegacy().firstOrNull() == true
+        reduce {
+            state.copy(
+                imageSources = imageSources,
+                legacyImageSelection = legacyImageSelection,
+                loading = false
+            )
+        }
+        if (imageSources.isNotEmpty()) {
             postSideEffect(MainSideEffect.ImageSourcesReadComplete)
+        }
+        if (defaultNightMode != null) {
+            postSideEffect(MainSideEffect.DefaultNightMode(defaultNightMode))
         }
     }
 

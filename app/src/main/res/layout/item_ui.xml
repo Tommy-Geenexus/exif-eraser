@@ -9,6 +9,10 @@
         layout="@layout/preference_category" />
 
     <include
+        android:id="@+id/image_selection_legacy"
+        layout="@layout/preference_check_box" />
+
+    <include
         android:id="@+id/save_path_custom_skip"
         layout="@layout/preference_check_box" />
 

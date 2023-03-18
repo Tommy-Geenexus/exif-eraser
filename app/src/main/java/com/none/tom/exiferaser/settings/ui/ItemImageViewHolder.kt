@@ -71,6 +71,7 @@ class ItemImageViewHolder(
     }
 
     fun bindImageItem(
+        legacyImageSelection: Boolean,
         autoDelete: Boolean,
         preserveOrientation: Boolean,
         shareByDefault: Boolean,
@@ -84,6 +85,11 @@ class ItemImageViewHolder(
                     R.string.auto_delete_image_off
                 }
             )
+            layoutPreferenceCheckBox.isEnabled = legacyImageSelection
+            iconPreferenceCheckBox.isEnabled = legacyImageSelection
+            titlePreferenceCheckBox.isEnabled = legacyImageSelection
+            summaryPreferenceCheckBox.isEnabled = legacyImageSelection
+            onOff.isEnabled = legacyImageSelection
             onOff.isChecked = autoDelete
         }
         binding.preserveOrientation.apply {

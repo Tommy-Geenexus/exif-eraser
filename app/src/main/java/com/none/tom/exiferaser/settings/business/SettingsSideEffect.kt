@@ -77,6 +77,11 @@ sealed class SettingsSideEffect : Parcelable {
     ) : SettingsSideEffect()
 
     @Parcelize
+    data class LegacyImageSelection(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
     data class SavePathSelectionSkip(
         val success: Boolean
     ) : SettingsSideEffect()

@@ -30,6 +30,16 @@ class ItemUiViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
+        binding.imageSelectionLegacy.apply {
+            layoutPreferenceCheckBox.setOnClickListener {
+                onOff.isChecked = !onOff.isChecked
+            }
+            onOff.setOnCheckedChangeListener { _, value ->
+                listener.onLegacyImageSelectionChanged(value)
+            }
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_gallery_thumbnail)
+            titlePreferenceCheckBox.setText(R.string.image_selection_legacy)
+        }
         binding.savePathCustomSkip.apply {
             layoutPreferenceCheckBox.setOnClickListener {
                 onOff.isChecked = !onOff.isChecked
@@ -51,9 +61,21 @@ class ItemUiViewHolder(
     }
 
     fun bindUiItem(
+        hasDefaultSavePath: Boolean,
+        legacyImageSelection: Boolean,
         skipSavePathSelection: Boolean,
         defaultNightModeName: String
     ) {
+        binding.imageSelectionLegacy.apply {
+            summaryPreferenceCheckBox.setText(
+                if (legacyImageSelection) {
+                    R.string.image_selection_legacy_on
+                } else {
+                    R.string.image_selection_legacy_off
+                }
+            )
+            onOff.isChecked = legacyImageSelection
+        }
         binding.savePathCustomSkip.apply {
             summaryPreferenceCheckBox.setText(
                 if (skipSavePathSelection) {
@@ -62,6 +84,11 @@ class ItemUiViewHolder(
                     R.string.save_path_custom_skip_off
                 }
             )
+            layoutPreferenceCheckBox.isEnabled = hasDefaultSavePath
+            iconPreferenceCheckBox.isEnabled = hasDefaultSavePath
+            titlePreferenceCheckBox.isEnabled = hasDefaultSavePath
+            summaryPreferenceCheckBox.isEnabled = hasDefaultSavePath
+            onOff.isEnabled = hasDefaultSavePath
             onOff.isChecked = skipSavePathSelection
         }
         binding.nightMode.summaryPreference.text = defaultNightModeName
