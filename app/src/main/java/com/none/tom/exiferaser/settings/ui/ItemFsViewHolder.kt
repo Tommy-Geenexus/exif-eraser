@@ -31,6 +31,16 @@ class ItemFsViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
+        binding.randomizeFileNames.apply {
+            layoutPreferenceCheckBox.setOnClickListener {
+                onOff.isChecked = !onOff.isChecked
+            }
+            onOff.setOnCheckedChangeListener { _, value ->
+                listener.onRandomizeFileNamesChanged(value)
+            }
+            iconPreferenceCheckBox.setImageResource(R.drawable.ic_shuffle)
+            titlePreferenceCheckBox.setText(R.string.randomize_file_names)
+        }
         binding.defaultPathOpen.apply {
             layoutPreferenceFs.setOnClickListener {
                 listener.onDefaultPathOpenSelected()
@@ -55,9 +65,20 @@ class ItemFsViewHolder(
     }
 
     fun bindItemFs(
+        randomizeFileNames: Boolean,
         defaultOpenPathName: String,
         defaultSavePathName: String
     ) {
+        binding.randomizeFileNames.apply {
+            summaryPreferenceCheckBox.setText(
+                if (randomizeFileNames) {
+                    R.string.randomize_file_names_on
+                } else {
+                    R.string.randomize_file_names_off
+                }
+            )
+            onOff.isChecked = randomizeFileNames
+        }
         binding.defaultPathOpen.apply {
             val hasPath = defaultOpenPathName.isNotEmpty()
             clear.isVisible = hasPath

@@ -27,6 +27,11 @@ import kotlinx.parcelize.Parcelize
 sealed class SettingsSideEffect : Parcelable {
 
     @Parcelize
+    data class AutoDelete(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
     data class DefaultPathOpenClear(
         val success: Boolean
     ) : SettingsSideEffect()
@@ -57,6 +62,11 @@ sealed class SettingsSideEffect : Parcelable {
     ) : SettingsSideEffect()
 
     @Parcelize
+    data class LegacyImageSelection(
+        val success: Boolean
+    ) : SettingsSideEffect()
+
+    @Parcelize
     data class NavigateToDefaultDisplayNameSuffix(
         val defaultDisplayNameSuffix: String
     ) : SettingsSideEffect()
@@ -67,17 +77,12 @@ sealed class SettingsSideEffect : Parcelable {
     ) : SettingsSideEffect()
 
     @Parcelize
-    data class AutoDelete(
-        val success: Boolean
-    ) : SettingsSideEffect()
-
-    @Parcelize
     data class PreserveOrientation(
         val success: Boolean
     ) : SettingsSideEffect()
 
     @Parcelize
-    data class LegacyImageSelection(
+    data class RandomizeFileNames(
         val success: Boolean
     ) : SettingsSideEffect()
 

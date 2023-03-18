@@ -98,6 +98,10 @@
     <string name="preserve_image_orientation_off">Don\'t preserve the original image orientation</string>
     <string name="preserve_image_orientation_on">Preserve the original image orientation</string>
 
+    <string name="randomize_file_names">Randomize file names</string>
+    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
+    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+
     <string name="reorder_image_source_cards">Reorder image source cards</string>
 
     <string name="report_bug">Report issue</string>

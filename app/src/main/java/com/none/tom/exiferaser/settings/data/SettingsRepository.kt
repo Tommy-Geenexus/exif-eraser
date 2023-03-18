@@ -70,11 +70,13 @@ class SettingsRepository @Inject constructor(
         const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX = "default_display_name_suffix"
         const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
 
+        const val KEY_RANDOMIZE_FILE_NAMES = "randomize_file_names"
         const val KEY_AUTO_DELETE = "auto_delete"
         const val KEY_LEGACY_IMAGE_SELECTION = "legacy_image_selection"
         const val KEY_SAVE_PATH_SELECTION_SKIP = "save_path_selection_skip"
     }
 
+    private val keyRandomizeFileNames = booleanPreferencesKey(KEY_RANDOMIZE_FILE_NAMES)
     private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
     private val keyDefaultSavePath = stringPreferencesKey(KEY_DEFAULT_SAVE_PATH)
     private val keyAutoDelete = booleanPreferencesKey(KEY_AUTO_DELETE)
@@ -236,6 +238,32 @@ class SettingsRepository @Inject constructor(
         }.getOrElse { exception ->
             Timber.e(exception)
             String.Empty
+        }
+    }
+
+    fun shouldRandomizeFileNames(): Flow<Boolean> {
+        return dataStore
+            .data
+            .catch { exception ->
+                Timber.e(exception)
+            }
+            .map { preferences ->
+                preferences[keyRandomizeFileNames] ?: false
+            }
+            .flowOn(dispatcher)
+    }
+
+    suspend fun putRandomizeFileNames(value: Boolean): Boolean {
+        return withContext(dispatcher) {
+            runCatching {
+                dataStore.edit { preferences ->
+                    preferences[keyRandomizeFileNames] = value
+                }
+                true
+            }.getOrElse { exception ->
+                Timber.e(exception)
+                false
+            }
         }
     }
 

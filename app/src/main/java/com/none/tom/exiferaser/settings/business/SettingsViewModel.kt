@@ -51,6 +51,8 @@ class SettingsViewModel @Inject constructor(
     )
 
     private fun readDefaultValues() = intent {
+        val randomizeFileNames =
+            settingsRepository.shouldRandomizeFileNames().firstOrNull() == true
         val defaultPathOpenName = settingsRepository.getDefaultPathOpenName()
         val defaultPathSaveName: String = settingsRepository.getDefaultPathSaveName()
         val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
@@ -66,6 +68,7 @@ class SettingsViewModel @Inject constructor(
         val defaultNightModeName = settingsRepository.getDefaultNightModeName()
         reduce {
             state.copy(
+                randomizeFileNames = randomizeFileNames,
                 defaultPathOpenName = defaultPathOpenName,
                 defaultPathSaveName = defaultPathSaveName,
                 autoDelete = autoDelete,
@@ -77,6 +80,16 @@ class SettingsViewModel @Inject constructor(
                 defaultNightModeName = defaultNightModeName
             )
         }
+    }
+
+    fun storeRandomizeFileNames(value: Boolean) = intent {
+        val success = settingsRepository.putRandomizeFileNames(value)
+        if (success) {
+            reduce {
+                state.copy(randomizeFileNames = value)
+            }
+        }
+        postSideEffect(SettingsSideEffect.RandomizeFileNames(success))
     }
 
     fun handleDefaultPathOpen() = intent {
