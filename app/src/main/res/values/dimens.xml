@@ -20,5 +20,5 @@
 
     <dimen name="image_source_compact">36dp</dimen>
     <dimen name="image_source_medium">48dp</dimen>
-    <dimen name="image_source_expanded">72dp</dimen>
+    <dimen name="image_source_expanded">60dp</dimen>
 </resources>
