@@ -106,10 +106,9 @@ class SelectionViewModelTest {
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.runOnCreate()
         coVerify(exactly = 1) {
             selectionRepository.getSelection(dropFirstN = 0)
@@ -208,16 +207,26 @@ class SelectionViewModelTest {
             settingsRepository.getDefaultDisplayNameSuffix()
         } returns flowOf(String.Empty)
         coEvery {
+            settingsRepository.shouldAutoDelete()
+        } returns flowOf(false)
+        coEvery {
             settingsRepository.shouldPreserveOrientation()
         } returns flowOf(false)
+        coEvery {
+            settingsRepository.shouldRandomizeFileNames()
+        } returns flowOf(false)
         val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+        val autoDelete = settingsRepository.shouldAutoDelete().first()
         val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
+        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
         coEvery {
             imageRepository.removeMetadataSingle(
                 selection = testImageSelection,
                 treeUri = Uri.EMPTY,
                 displayNameSuffix = displayNameSuffix,
-                preserveOrientation = preserveOrientation
+                autoDelete = autoDelete,
+                preserveOrientation = preserveOrientation,
+                randomizeFileNames = randomizeFileNames
             )
         } returns flow {
             emit(Result.Report(summary = testSummary))
@@ -231,13 +240,17 @@ class SelectionViewModelTest {
             )
         }
         coVerify(ordering = Ordering.ALL) {
+            settingsRepository.shouldAutoDelete()
             settingsRepository.shouldPreserveOrientation()
+            settingsRepository.shouldRandomizeFileNames()
             settingsRepository.getDefaultDisplayNameSuffix()
             imageRepository.removeMetadataSingle(
                 selection = testImageSelection,
                 treeUri = Uri.EMPTY,
                 displayNameSuffix = displayNameSuffix,
-                preserveOrientation = preserveOrientation
+                autoDelete = autoDelete,
+                preserveOrientation = preserveOrientation,
+                randomizeFileNames = randomizeFileNames
             )
         }
         viewModel.assert(initialState) {
@@ -283,16 +296,26 @@ class SelectionViewModelTest {
             settingsRepository.getDefaultDisplayNameSuffix()
         } returns flowOf(String.Empty)
         coEvery {
+            settingsRepository.shouldAutoDelete()
+        } returns flowOf(false)
+        coEvery {
             settingsRepository.shouldPreserveOrientation()
         } returns flowOf(false)
+        coEvery {
+            settingsRepository.shouldRandomizeFileNames()
+        } returns flowOf(false)
         val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+        val autoDelete = settingsRepository.shouldAutoDelete().first()
         val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
+        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
         coEvery {
             imageRepository.removeMetadataBulk(
                 selection = testImagesSelection,
                 treeUri = Uri.EMPTY,
                 displayNameSuffix = displayNameSuffix,
-                preserveOrientation = preserveOrientation
+                autoDelete = autoDelete,
+                preserveOrientation = preserveOrientation,
+                randomizeFileNames = randomizeFileNames
             )
         } returns flow {
             emit(Result.Report(summary = testSummary))
@@ -308,13 +331,17 @@ class SelectionViewModelTest {
             )
         }
         coVerify(ordering = Ordering.ALL) {
+            settingsRepository.shouldAutoDelete()
             settingsRepository.shouldPreserveOrientation()
+            settingsRepository.shouldRandomizeFileNames()
             settingsRepository.getDefaultDisplayNameSuffix()
             imageRepository.removeMetadataBulk(
                 selection = testImagesSelection,
                 treeUri = Uri.EMPTY,
                 displayNameSuffix = displayNameSuffix,
-                preserveOrientation = preserveOrientation
+                autoDelete = autoDelete,
+                preserveOrientation = preserveOrientation,
+                randomizeFileNames = randomizeFileNames
             )
         }
         viewModel.assert(initialState) {

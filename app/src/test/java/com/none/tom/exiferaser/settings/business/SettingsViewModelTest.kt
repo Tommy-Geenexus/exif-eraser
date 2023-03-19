@@ -55,11 +55,17 @@ class SettingsViewModelTest {
     @Test
     fun test_readDefaultValues() = runTest {
         coEvery {
+            settingsRepository.shouldRandomizeFileNames()
+        } returns flowOf(true)
+        coEvery {
             settingsRepository.getDefaultPathOpenName()
         } returns testDefaultPathOpenName
         coEvery {
             settingsRepository.getDefaultPathSaveName()
         } returns testDefaultPathSaveName
+        coEvery {
+            settingsRepository.shouldAutoDelete()
+        } returns flowOf(true)
         coEvery {
             settingsRepository.shouldPreserveOrientation()
         } returns flowOf(true)
@@ -70,6 +76,9 @@ class SettingsViewModelTest {
             settingsRepository.getDefaultDisplayNameSuffix()
         } returns flowOf(testDefaultDisplayNameSuffix)
         coEvery {
+            settingsRepository.shouldSelectImagesLegacy()
+        } returns flowOf(true)
+        coEvery {
             settingsRepository.shouldSkipSavePathSelection()
         } returns flowOf(true)
         coEvery {
@@ -79,17 +88,19 @@ class SettingsViewModelTest {
         val viewModel = SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.runOnCreate()
         coVerify(ordering = Ordering.ALL) {
+            settingsRepository.shouldRandomizeFileNames()
             settingsRepository.getDefaultPathOpenName()
             settingsRepository.getDefaultPathSaveName()
+            settingsRepository.shouldAutoDelete()
             settingsRepository.shouldPreserveOrientation()
             settingsRepository.shouldShareByDefault()
             settingsRepository.getDefaultDisplayNameSuffix()
+            settingsRepository.shouldSelectImagesLegacy()
             settingsRepository.shouldSkipSavePathSelection()
             settingsRepository.getDefaultNightModeName()
         }
@@ -97,16 +108,45 @@ class SettingsViewModelTest {
             states(
                 {
                     copy(
+                        randomizeFileNames = true,
                         defaultPathOpenName = testDefaultPathOpenName,
                         defaultPathSaveName = testDefaultPathSaveName,
+                        autoDelete = true,
                         preserveOrientation = true,
                         shareByDefault = true,
                         defaultDisplayNameSuffix = testDefaultDisplayNameSuffix,
+                        legacyImageSelection = true,
                         skipSavePathSelection = true,
                         defaultNightModeName = testDefaultNightModeName
                     )
                 }
             )
+        }
+    }
+
+    @Test
+    fun test_storeRandomizeFileNames() = runTest {
+        val initialState = SettingsState()
+        val viewModel = SettingsViewModel(
+            savedStateHandle = SavedStateHandle(),
+            settingsRepository = settingsRepository
+        ).test(initialState)
+        coEvery {
+            settingsRepository.putRandomizeFileNames(any())
+        } returns true
+        viewModel.testIntent {
+            storeRandomizeFileNames(true)
+        }
+        coVerify(exactly = 1) {
+            settingsRepository.putRandomizeFileNames(any())
+        }
+        viewModel.assert(initialState) {
+            states(
+                {
+                    copy(randomizeFileNames = true)
+                }
+            )
+            postedSideEffects(SettingsSideEffect.RandomizeFileNames(success = true))
         }
     }
 
@@ -281,6 +321,32 @@ class SettingsViewModelTest {
     }
 
     @Test
+    fun test_storeAutoDelete() = runTest {
+        val initialState = SettingsState()
+        val viewModel = SettingsViewModel(
+            savedStateHandle = SavedStateHandle(),
+            settingsRepository = settingsRepository
+        ).test(initialState)
+        coEvery {
+            settingsRepository.putAutoDelete(any())
+        } returns true
+        viewModel.testIntent {
+            storeAutoDelete(true)
+        }
+        coVerify(exactly = 1) {
+            settingsRepository.putAutoDelete(any())
+        }
+        viewModel.assert(initialState) {
+            states(
+                {
+                    copy(autoDelete = true)
+                }
+            )
+            postedSideEffects(SettingsSideEffect.AutoDelete(success = true))
+        }
+    }
+
+    @Test
     fun test_storePreserveOrientation() = runTest {
         val initialState = SettingsState()
         val viewModel = SettingsViewModel(
@@ -379,6 +445,32 @@ class SettingsViewModelTest {
                     copy(defaultDisplayNameSuffix = testDefaultDisplayNameSuffix)
                 }
             )
+        }
+    }
+
+    @Test
+    fun test_storeLegacyImageSelection() = runTest {
+        val initialState = SettingsState()
+        val viewModel = SettingsViewModel(
+            savedStateHandle = SavedStateHandle(),
+            settingsRepository = settingsRepository
+        ).test(initialState)
+        coEvery {
+            settingsRepository.putSelectImagesLegacy(any())
+        } returns true
+        viewModel.testIntent {
+            storeLegacyImageSelection(true)
+        }
+        coVerify(exactly = 1) {
+            settingsRepository.putSelectImagesLegacy(any())
+        }
+        viewModel.assert(initialState) {
+            states(
+                {
+                    copy(legacyImageSelection = true)
+                }
+            )
+            postedSideEffects(SettingsSideEffect.LegacyImageSelection(success = true))
         }
     }
 

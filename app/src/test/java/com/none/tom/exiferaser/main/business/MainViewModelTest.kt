@@ -73,13 +73,16 @@ class MainViewModelTest {
     )
 
     @Test
-    fun test_readImageSources() = runTest {
+    fun test_readDefaultValues() = runTest {
         coEvery {
             settingsRepository.getDefaultNightMode()
         } returns flowOf(0)
         coEvery {
             imageSourceRepository.getImageSources()
         } returns flowOf(testImageSources)
+        coEvery {
+            settingsRepository.shouldSelectImagesLegacy()
+        } returns flowOf(true)
         val initialState = MainState()
         val viewModel = MainViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -87,14 +90,16 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
-        viewModel.runOnCreate()
+        }
+        viewModel.testIntent {
+            readDefaultValues()
+        }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultNightMode()
             imageSourceRepository.getImageSources()
+            settingsRepository.shouldSelectImagesLegacy()
         }
         viewModel.assert(initialState) {
             states(
@@ -104,13 +109,14 @@ class MainViewModelTest {
                 {
                     copy(
                         imageSources = testImageSources,
+                        legacyImageSelection = true,
                         loading = false
                     )
                 }
             )
             postedSideEffects(
-                MainSideEffect.DefaultNightMode(0),
-                MainSideEffect.ImageSourcesReadComplete
+                MainSideEffect.ImageSourcesReadComplete,
+                MainSideEffect.DefaultNightMode(0)
             )
         }
     }
@@ -124,10 +130,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         val reorderedImageSources = testImageSources.toMutableList()
         Collections.swap(reorderedImageSources, 1, 0)
         viewModel.testIntent {
@@ -155,10 +160,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             imageSourceRepository.putImageSources(testImageSources)
         } returns true
@@ -189,10 +193,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             selectionRepository.putSelection(
                 uri = testUri,
@@ -263,10 +266,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             selectionRepository.putSelection(
                 uris = testUris,
@@ -309,12 +311,10 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
         coEvery {
             imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
@@ -468,10 +468,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         } returns testUri
@@ -593,10 +592,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.testIntent {
             handleReceivedImages(emptyList())
         }
@@ -623,10 +621,9 @@ class MainViewModelTest {
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.testIntent {
             handlePasteImages(emptyList())
         }

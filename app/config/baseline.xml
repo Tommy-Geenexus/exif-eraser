@@ -14,6 +14,7 @@
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImageSelection()</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
+    <ID>LongMethod:SettingsViewModelTest.kt$SettingsViewModelTest$@Test fun test_readDefaultValues()</ID>
     <ID>LongParameterList:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageModifiedDetailsViewModel.kt$ImageModifiedDetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: AnyMessage, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
