@@ -10,6 +10,9 @@
     <string name="app_update_install">Hier klicken zum Installieren</string>
     <string name="app_update_ready">Update bereit zur Installation</string>
 
+    <string name="auto_delete_image_off">Behalte Bilder nach Bearbeitung falls die veraltete Bildauswahl aktiviert ist</string>
+    <string name="auto_delete_image_on">Lösche Bilder nach Bearbeitung falls die veraltete Bildauswahl aktiviert ist</string>
+
     <string name="automatically">Automatisch</string>
 
     <string name="become_translator">Übersetzen helfen</string>
@@ -41,11 +44,15 @@
     <string name="help">Hilfe und Feedback</string>
 
     <string name="image">Bild</string>
+    <string name="image_auto_delete">Selbstlöschung</string>
     <string name="image_directory">Bildordner</string>
     <string name="image_file">Bilddatei</string>
     <string name="image_files">Bilddateien</string>
     <string name="image_orientation">Ausrichtung beibehalten</string>
     <string name="image_path">Bildpfad</string>
+    <string name="image_selection_legacy">Veraltete Bildauswahl</string>
+    <string name="image_selection_legacy_off">Bildauswahl mit Fotopicker</string>
+    <string name="image_selection_legacy_on">Bildauswahl mit dem Standard-Dokumentbereitsteller</string>
     <string name="image_share_by_default">Standardmäßig teilen</string>
     <string name="image_supported_formats">Unterstützte Bildformate</string>
 
@@ -73,6 +80,10 @@
 
     <string name="preserve_image_orientation_off">Verwerfe die ursprüngliche Bildausrichtung</string>
     <string name="preserve_image_orientation_on">Behalte die ursprüngliche Bildausrichtung bei</string>
+
+    <string name="randomize_file_names">Randomisierte Dateinamen</string>
+    <string name="randomize_file_names_off">Randomisiere keine Dateinamen von Bildern vor dem Speichern</string>
+    <string name="randomize_file_names_on">Randomisiere Dateinamen von Bildern vor dem Speichern</string>
 
     <string name="reorder_image_source_cards">Bildquellen neu anordnen</string>
 
