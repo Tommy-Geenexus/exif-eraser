@@ -31,7 +31,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.orbitmvi.orbit.test
 
@@ -41,7 +41,7 @@ class UpdateViewModelTest {
     private val updateRepository = mockk<UpdateRepository>()
 
     @Test
-    fun test_beginOrResumeAppUpdate() = runBlockingTest {
+    fun test_beginOrResumeAppUpdate() = runTest {
         val initialState = UpdateState
         val viewModel = UpdateViewModel(updateRepository).test(initialState = initialState)
         val info = mockk<AppUpdateInfo>()
@@ -73,12 +73,11 @@ class UpdateViewModelTest {
     }
 
     @Test
-    fun test_checkAppUpdateAvailability() = runBlockingTest {
+    fun test_checkAppUpdateAvailability() = runTest {
         val initialState = UpdateState
-        val viewModel = UpdateViewModel(updateRepository).test(
-            initialState = initialState,
+        val viewModel = UpdateViewModel(updateRepository).test(initialState) {
             isolateFlow = false
-        )
+        }
         val info = mockk<AppUpdateInfo>()
         coEvery {
             updateRepository.getAppUpdateInfo()
@@ -129,12 +128,11 @@ class UpdateViewModelTest {
     }
 
     @Test
-    fun test_handleAppUpdateResult() = runBlockingTest {
+    fun test_handleAppUpdateResult() = runTest {
         val initialState = UpdateState
-        val viewModel = UpdateViewModel(updateRepository).test(
-            initialState = initialState,
+        val viewModel = UpdateViewModel(updateRepository).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.testIntent {
             handleAppUpdateResult(
                 result = -1, // Activity.RESULT_OK

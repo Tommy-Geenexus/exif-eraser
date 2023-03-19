@@ -53,10 +53,9 @@ class SavePathViewModelTest {
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         } returns testUri
@@ -93,10 +92,9 @@ class SavePathViewModelTest {
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         viewModel.testIntent {
             chooseSelectionSavePath(testUri)
         }
@@ -124,10 +122,9 @@ class SavePathViewModelTest {
         val viewModel = SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(
-            initialState = initialState,
+        ).test(initialState) {
             isolateFlow = false
-        )
+        }
         coEvery {
             settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
         } returns Uri.EMPTY
