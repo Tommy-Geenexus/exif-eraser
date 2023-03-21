@@ -39,14 +39,14 @@ class MainViewHolder(
             binding.image.layoutParams.apply {
                 val dimen = when (windowSizeClass) {
                     WindowSizeClass.Compact -> {
-                        itemView.context.resources.getDimension(R.dimen.image_source_compact)
+                        itemView.context.resources.getDimension(R.dimen.icon_compact)
                     }
                     WindowSizeClass.Unspecified,
                     WindowSizeClass.Medium -> {
-                        itemView.context.resources.getDimension(R.dimen.image_source_medium)
+                        itemView.context.resources.getDimension(R.dimen.icon_medium)
                     }
                     WindowSizeClass.Expanded -> {
-                        itemView.context.resources.getDimension(R.dimen.image_source_expanded)
+                        itemView.context.resources.getDimension(R.dimen.icon_expanded)
                     }
                 }.toInt()
                 height = dimen
