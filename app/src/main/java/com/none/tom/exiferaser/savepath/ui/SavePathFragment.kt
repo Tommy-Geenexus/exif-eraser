@@ -37,8 +37,8 @@ import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
 import com.none.tom.exiferaser.savepath.business.SavePathState
 import com.none.tom.exiferaser.savepath.business.SavePathViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint

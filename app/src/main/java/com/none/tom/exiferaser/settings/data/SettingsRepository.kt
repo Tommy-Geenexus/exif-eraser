@@ -40,6 +40,9 @@ import com.none.tom.exiferaser.settings.defaultNightMode
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import com.none.tom.exiferaser.settings.name
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -48,9 +51,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.contracts.ExperimentalContracts
 
 @OptIn(ExperimentalContracts::class)
 @Singleton

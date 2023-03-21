@@ -53,8 +53,8 @@ import com.none.tom.exiferaser.selection.crossfade
 import com.none.tom.exiferaser.selection.fadeIn
 import com.none.tom.exiferaser.selection.toPercent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint

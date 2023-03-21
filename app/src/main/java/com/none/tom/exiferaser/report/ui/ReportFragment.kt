@@ -64,8 +64,8 @@ import com.none.tom.exiferaser.selection.MaterialColor
 import com.none.tom.exiferaser.selection.data.Summary
 import com.none.tom.exiferaser.selection.ui.SelectionFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint

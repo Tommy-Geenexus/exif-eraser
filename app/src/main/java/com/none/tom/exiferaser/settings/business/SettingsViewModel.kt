@@ -27,13 +27,13 @@ import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(

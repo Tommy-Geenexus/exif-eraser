@@ -15,7 +15,8 @@ plugins {
 }
 
 android {
-    namespace 'com.none.tom.exiferaser'
+    namespace "com.none.tom.exiferaser"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -48,7 +49,7 @@ android {
 
     packagingOptions {
         resources {
-            excludes += ['META-INF/AL2.0', 'META-INF/LGPL2.1']
+            excludes += ["META-INF/AL2.0", "META-INF/LGPL2.1"]
         }
     }
 
@@ -91,8 +92,7 @@ detekt {
 }
 
 ktlint {
-    android.set(true)
-    disabledRules.set(["import-ordering"])
+    android = true
     filter {
         exclude { element -> element.file.path.contains("generated/") }
         include("**/*.kt")
@@ -104,9 +104,6 @@ spotless {
         ratchetFrom("origin/main")
         target("**/*.kt")
         targetExclude("**/AnimationUtils.kt")
-        ktlint("0.47.1")
-        trimTrailingWhitespace()
-        endWithNewline()
         licenseHeaderFile rootProject.file("spotless/copyright.txt")
     }
 }

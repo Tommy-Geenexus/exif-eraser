@@ -29,6 +29,7 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -36,7 +37,6 @@ import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @ExperimentalCoroutinesApi
