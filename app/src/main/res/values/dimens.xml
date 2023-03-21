@@ -18,7 +18,7 @@
 
     <dimen name="progress_width">240dp</dimen>
 
-    <dimen name="image_source_compact">36dp</dimen>
-    <dimen name="image_source_medium">48dp</dimen>
-    <dimen name="image_source_expanded">60dp</dimen>
+    <dimen name="icon_compact">36dp</dimen>
+    <dimen name="icon_medium">48dp</dimen>
+    <dimen name="icon_expanded">60dp</dimen>
 </resources>

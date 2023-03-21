@@ -28,6 +28,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -36,8 +37,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
+import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
 import com.none.tom.exiferaser.report.lerp
@@ -113,6 +116,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.summary
         )
+        setupCenterViews()
         setFragmentResultListener(ReportFragment.KEY_REPORT_SLIDE) { _, bundle: Bundle ->
             adjustToolbarElevation(
                 endFraction = bundle.getFloat(ReportFragment.KEY_FRACTION_END),
@@ -207,5 +211,52 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             endFraction = endFraction,
             fraction = slideOffset
         )
+    }
+
+    private fun setupCenterViews() {
+        val windowSizeClass = (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+        binding.image.updateLayoutParams {
+            val dimen = when (windowSizeClass) {
+                WindowSizeClass.Compact -> {
+                    resources.getDimension(R.dimen.icon_compact)
+                }
+                WindowSizeClass.Unspecified,
+                WindowSizeClass.Medium -> {
+                    resources.getDimension(R.dimen.icon_medium)
+                }
+                WindowSizeClass.Expanded -> {
+                    resources.getDimension(R.dimen.icon_expanded)
+                }
+            }.toInt()
+            height = dimen
+            width = dimen
+        }
+        when (windowSizeClass) {
+            WindowSizeClass.Compact -> {
+                binding.heading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
+                )
+                binding.subheading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_BodySmall
+                )
+            }
+            WindowSizeClass.Unspecified,
+            WindowSizeClass.Medium -> {
+                binding.heading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
+                )
+                binding.subheading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
+                )
+            }
+            WindowSizeClass.Expanded -> {
+                binding.heading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
+                )
+                binding.subheading.setTextAppearance(
+                    com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
+                )
+            }
+        }
     }
 }

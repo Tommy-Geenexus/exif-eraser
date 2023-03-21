@@ -51,25 +51,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@id/guideline"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="@id/guideline_image_end"
-            app:layout_constraintStart_toStartOf="@id/guideline_image_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_insights"
             app:tint="?attr/colorOnSurface" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_image_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.45" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_image_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.55" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
@@ -84,7 +69,6 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/all_done"
-            android:textAppearance="?attr/textAppearanceHeadlineMedium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guideline" />
@@ -95,7 +79,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/spacing_small"
             android:gravity="center"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/heading" />
