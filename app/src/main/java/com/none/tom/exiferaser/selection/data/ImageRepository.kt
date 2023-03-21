@@ -49,6 +49,11 @@ import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import com.tomg.exifinterfaceextended.ExifInterfaceExtended
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.io.File
+import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
@@ -56,11 +61,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.io.File
-import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.contracts.ExperimentalContracts
 
 @ExperimentalContracts
 @Singleton

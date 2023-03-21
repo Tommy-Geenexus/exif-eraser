@@ -45,6 +45,9 @@ import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -52,9 +55,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.math.roundToInt
 
 @Singleton
 class UpdateRepository @Inject constructor(

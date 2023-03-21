@@ -41,8 +41,8 @@ import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import kotlin.contracts.ExperimentalContracts
+import kotlinx.coroutines.launch
 
 @ExperimentalContracts
 @AndroidEntryPoint
