@@ -61,8 +61,8 @@ class ItemUiViewHolder(
     }
 
     fun bindUiItem(
-        hasDefaultSavePath: Boolean,
         legacyImageSelection: Boolean,
+        hasDefaultSavePath: Boolean,
         skipSavePathSelection: Boolean,
         defaultNightModeName: String
     ) {

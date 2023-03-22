@@ -19,28 +19,11 @@
     <ID>LongParameterList:ImageModifiedDetailsViewModel.kt$ImageModifiedDetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: AnyMessage, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
     <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
-    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
-    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$10</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$3</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$4</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$5</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$6</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$7</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$8</ID>
-    <ID>MagicNumber:SettingsAdapter.kt$SettingsAdapter$9</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$10</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$3</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$4</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$5</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$6</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$7</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$8</ID>
-    <ID>MagicNumber:SettingsFragment.kt$SettingsFragment$9</ID>
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
-    <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
-    <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
+    <ID>TooGenericExceptionCaught:Extensions.kt$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:UpdateRepository.kt$UpdateRepository$e: Exception</ID>
     <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>

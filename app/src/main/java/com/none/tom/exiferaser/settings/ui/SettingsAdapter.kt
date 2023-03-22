@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.databinding.ItemFsBinding
 import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
+import java.util.concurrent.atomic.AtomicInteger
 
 class SettingsAdapter(
     private val listener: Listener
@@ -51,6 +52,9 @@ class SettingsAdapter(
         const val ITEM_TYPE_FS = 1
         const val ITEM_TYPE_IMAGE = 2
         const val ITEM_TYPE_UI = 3
+
+        const val INDEX_START_ITEM_TYPE_IMAGE = 3
+        const val INDEX_START_ITEM_TYPE_UI = 8
     }
 
     interface Listener {
@@ -115,30 +119,44 @@ class SettingsAdapter(
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {
-        val legacyImageSelection = currentList.getOrNull(8)?.second.toBoolean()
         when (getItemViewType(position)) {
             ITEM_TYPE_FS -> {
+                val index = AtomicInteger()
                 (holder as ItemFsViewHolder).bindItemFs(
-                    randomizeFileNames = currentList.firstOrNull()?.second.toBoolean(),
-                    defaultOpenPathName = currentList.getOrNull(1)?.second.orEmpty(),
-                    defaultSavePathName = currentList.getOrNull(2)?.second.orEmpty()
+                    randomizeFileNames =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    defaultOpenPathName =
+                    currentList.getOrNull(index.getAndIncrement())?.second.orEmpty(),
+                    defaultSavePathName =
+                    currentList.getOrNull(index.getAndIncrement())?.second.orEmpty()
                 )
             }
             ITEM_TYPE_IMAGE -> {
+                val index = AtomicInteger(INDEX_START_ITEM_TYPE_IMAGE)
                 (holder as ItemImageViewHolder).bindImageItem(
-                    legacyImageSelection = legacyImageSelection,
-                    autoDelete = currentList.getOrNull(3)?.second.toBoolean(),
-                    preserveOrientation = currentList.getOrNull(4)?.second.toBoolean(),
-                    shareByDefault = currentList.getOrNull(5)?.second.toBoolean(),
-                    defaultDisplayNameSuffix = currentList.getOrNull(6)?.second.orEmpty()
+                    legacyImageSelection =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    autoDelete =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    preserveOrientation =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    shareByDefault =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    defaultDisplayNameSuffix =
+                    currentList.getOrNull(index.getAndIncrement())?.second.orEmpty()
                 )
             }
             ITEM_TYPE_UI -> {
+                val index = AtomicInteger(INDEX_START_ITEM_TYPE_UI)
                 (holder as ItemUiViewHolder).bindUiItem(
-                    hasDefaultSavePath = currentList.getOrNull(7)?.second.toBoolean(),
-                    legacyImageSelection = legacyImageSelection,
-                    skipSavePathSelection = currentList.getOrNull(9)?.second.toBoolean(),
-                    defaultNightModeName = currentList.getOrNull(10)?.second.orEmpty()
+                    legacyImageSelection =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    hasDefaultSavePath =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    skipSavePathSelection =
+                    currentList.getOrNull(index.getAndIncrement())?.second.toBoolean(),
+                    defaultNightModeName =
+                    currentList.getOrNull(index.getAndIncrement())?.second.orEmpty()
                 )
             }
             else -> {

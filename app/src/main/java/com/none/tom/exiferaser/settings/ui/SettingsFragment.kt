@@ -41,6 +41,7 @@ import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
@@ -169,21 +170,26 @@ class SettingsFragment :
     }
 
     private fun renderState(state: SettingsState) {
-        (binding.preferences.adapter as? SettingsAdapter)?.submitList(
-            listOf(
-                0 to state.randomizeFileNames.toString(),
-                1 to state.defaultPathOpenName,
-                2 to state.defaultPathSaveName,
-                3 to state.autoDelete.toString(),
-                4 to state.preserveOrientation.toString(),
-                5 to state.shareByDefault.toString(),
-                6 to state.defaultDisplayNameSuffix,
-                7 to state.defaultPathSaveName.isNotEmpty().toString(),
-                8 to state.legacyImageSelection.toString(),
-                9 to state.skipSavePathSelection.toString(),
-                10 to state.defaultNightModeName
+        (binding.preferences.adapter as? SettingsAdapter)?.run {
+            val index = AtomicInteger()
+            val legacyImageSelection = state.legacyImageSelection.toString()
+            submitList(
+                listOf(
+                    index.getAndIncrement() to state.randomizeFileNames.toString(),
+                    index.getAndIncrement() to state.defaultPathOpenName,
+                    index.getAndIncrement() to state.defaultPathSaveName,
+                    index.getAndIncrement() to legacyImageSelection,
+                    index.getAndIncrement() to state.autoDelete.toString(),
+                    index.getAndIncrement() to state.preserveOrientation.toString(),
+                    index.getAndIncrement() to state.shareByDefault.toString(),
+                    index.getAndIncrement() to state.defaultDisplayNameSuffix,
+                    index.getAndIncrement() to legacyImageSelection,
+                    index.getAndIncrement() to state.defaultPathSaveName.isNotEmpty().toString(),
+                    index.getAndIncrement() to state.skipSavePathSelection.toString(),
+                    index.getAndIncrement() to state.defaultNightModeName
+                )
             )
-        )
+        }
     }
 
     private fun handleSideEffect(sideEffect: SettingsSideEffect) {

@@ -37,9 +37,8 @@ import androidx.core.view.marginEnd
 import androidx.core.view.marginStart
 import androidx.core.view.marginTop
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -84,8 +83,7 @@ class ReportFragment :
         private const val FRACTION_OUT_END = 0.19f
     }
 
-    private var _viewModel: ReportViewModel? = null
-    private val viewModel: ReportViewModel get() = _viewModel!!
+    private val viewModel: ReportViewModel by viewModels()
     private val viewImage = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) {}
@@ -119,7 +117,6 @@ class ReportFragment :
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        _viewModel = ViewModelProvider(this).get()
         setFragmentResultListener(SelectionFragment.KEY_REPORT_PREPARE) { _, args: Bundle ->
             viewModel.handleImageSummaries(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -213,7 +210,6 @@ class ReportFragment :
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _viewModel = null
         behaviour.removeBottomSheetCallback(reportCallback)
         _reportCallback = null
         _behaviour = null

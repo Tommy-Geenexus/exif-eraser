@@ -35,6 +35,18 @@ class HelpAdapter(
         fun onFeedbackSelected()
     }
 
+    private companion object {
+
+        const val ITEM_TYPE_IMAGE_FORMATS = 0
+        const val ITEM_TYPE_TRANSLATE = 1
+        const val ITEM_TYPE_FEEDBACK = 2
+        const val ITEM_TYPE_VERSION = 3
+    }
+
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -51,15 +63,35 @@ class HelpAdapter(
         holder: HelpViewHolder,
         position: Int
     ) {
-        when (position) {
-            0 -> holder.bindItemSupportedImageFormats()
-            1 -> holder.bindItemHelpTranslate()
-            2 -> holder.bindItemFeedback()
-            3 -> holder.bindItemBuildVersion()
+        when (getItemViewType(position)) {
+            ITEM_TYPE_IMAGE_FORMATS -> holder.bindItemSupportedImageFormats()
+            ITEM_TYPE_TRANSLATE -> holder.bindItemHelpTranslate()
+            ITEM_TYPE_FEEDBACK -> holder.bindItemFeedback()
+            ITEM_TYPE_VERSION -> holder.bindItemBuildVersion()
             else -> {
             }
         }
     }
 
     override fun getItemCount() = 4
+
+    override fun getItemId(position: Int): Long {
+        return when (position) {
+            0 -> ITEM_TYPE_IMAGE_FORMATS.toLong()
+            1 -> ITEM_TYPE_TRANSLATE.toLong()
+            2 -> ITEM_TYPE_FEEDBACK.toLong()
+            3 -> ITEM_TYPE_VERSION.toLong()
+            else -> 0
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> ITEM_TYPE_IMAGE_FORMATS
+            1 -> ITEM_TYPE_TRANSLATE
+            2 -> ITEM_TYPE_FEEDBACK
+            3 -> ITEM_TYPE_VERSION
+            else -> 0
+        }
+    }
 }
