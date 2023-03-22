@@ -22,8 +22,10 @@ package com.none.tom.exiferaser.main.ui
 
 import android.content.Context
 import android.content.pm.ShortcutManager
+import android.content.res.Configuration
 import android.graphics.Typeface
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
@@ -32,6 +34,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuProvider
 import androidx.core.view.doOnLayout
@@ -40,6 +44,9 @@ import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -47,6 +54,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.vectordrawable.graphics.drawable.Animatable2Compat
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
@@ -59,21 +69,17 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
-import com.none.tom.exiferaser.isOrientationPortrait
 import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.none.tom.exiferaser.main.MarginItemDecoration
 import com.none.tom.exiferaser.main.PickMultipleVisualMedia2
 import com.none.tom.exiferaser.main.PickVisualMedia2
 import com.none.tom.exiferaser.main.TakePicture
-import com.none.tom.exiferaser.main.addIconAnimation
-import com.none.tom.exiferaser.main.addItemTouchHelper
 import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
 import com.none.tom.exiferaser.main.getClipImages
 import com.none.tom.exiferaser.selection.PROGRESS_MIN
-import com.none.tom.exiferaser.showSnackbar
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -270,7 +276,7 @@ class MainFragment :
                 navigate(MainFragmentDirections.mainToDeleteCameraImages())
             }
             is MainSideEffect.ExternalPicturesDeleted -> {
-                requireView().showSnackbar(
+                showSnackbar(
                     anchor = binding.bottomBarLayout,
                     msg = getString(
                         if (sideEffect.success) {
@@ -282,7 +288,7 @@ class MainFragment :
                 )
             }
             MainSideEffect.FlexibleUpdateReadyToInstall -> {
-                requireView().showSnackbar(
+                showSnackbar(
                     anchor = binding.bottomBarLayout,
                     msg = getString(R.string.app_update_ready),
                     actionMsg = R.string.install,
@@ -293,13 +299,13 @@ class MainFragment :
                 )
             }
             MainSideEffect.FlexibleUpdateFailed -> {
-                requireView().showSnackbar(
+                showSnackbar(
                     anchor = binding.bottomBarLayout,
                     msg = getString(R.string.app_update_failed)
                 )
             }
             is MainSideEffect.FlexibleUpdateInProgress -> {
-                requireView().showSnackbar(
+                showSnackbar(
                     anchor = binding.bottomBarLayout,
                     msg = getString(R.string.app_update_download),
                     length = Snackbar.LENGTH_INDEFINITE
@@ -328,7 +334,7 @@ class MainFragment :
                 viewModel.handleReceivedImages(sideEffect.uris)
             }
             is MainSideEffect.PasteImagesNone -> {
-                requireView().showSnackbar(
+                showSnackbar(
                     anchor = binding.bottomBarLayout,
                     msg = getString(R.string.clipboard_content_unsupported)
                 )
@@ -459,6 +465,7 @@ class MainFragment :
         }
         binding.imageSourcesReorder.apply {
             addIconAnimation(
+                fab = binding.imageSourcesReorder,
                 animatedVectorDrawable = R.drawable.avd_drag_to_done_all,
                 animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag
             )
@@ -489,7 +496,8 @@ class MainFragment :
                 windowSizeClass = windowSizeClass
             )
             addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.spacing_micro)))
-            addItemTouchHelper(
+            attachItemTouchHelper(
+                binding.imageSources,
                 ItemTouchHelper(
                     MainItemTouchHelperCallback(
                         callback = adapter as MainAdapter,
@@ -504,7 +512,7 @@ class MainFragment :
         binding.title.apply {
             val windowSizeClassWidth =
                 (requireActivity() as ExifEraserActivity).windowSizeClassWidth
-            if (requireActivity().isOrientationPortrait()) {
+            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 gravity = if (windowSizeClassWidth == WindowSizeClass.Compact) {
                     Gravity.END
                 } else {
@@ -547,5 +555,131 @@ class MainFragment :
                 }
             }
         }
+    }
+
+    private fun showSnackbar(
+        anchor: View? = null,
+        msg: String,
+        @StringRes actionMsg: Int = 0,
+        onActionClick: View.OnClickListener? = null,
+        length: Int = Snackbar.LENGTH_SHORT
+    ) {
+        val view = requireView()
+        var backingSnackbar: Snackbar? = Snackbar
+            .make(view, msg, length)
+            .setAnchorView(anchor)
+            .setAction(if (actionMsg != 0) getString(actionMsg) else null, onActionClick)
+        val snackbar = backingSnackbar
+        val lifecycle = view.findViewTreeLifecycleOwner()?.lifecycle
+        if (snackbar != null && lifecycle != null) {
+            lifecycle.addObserver(
+                object : LifecycleEventObserver {
+
+                    override fun onStateChanged(
+                        source: LifecycleOwner,
+                        event: Lifecycle.Event
+                    ) {
+                        when (event) {
+                            Lifecycle.Event.ON_STOP -> {
+                                lifecycle.removeObserver(this)
+                                snackbar.dismiss()
+                                backingSnackbar = null
+                            }
+                            else -> {
+                            }
+                        }
+                    }
+                }
+            )
+            snackbar.show()
+        } else {
+            backingSnackbar = null
+        }
+    }
+
+    private fun attachItemTouchHelper(
+        recyclerView: RecyclerView,
+        itemTouchHelper: ItemTouchHelper
+    ) {
+        val lifecycle = recyclerView.findViewTreeLifecycleOwner()?.lifecycle
+        lifecycle?.addObserver(
+            object : LifecycleEventObserver {
+
+                override fun onStateChanged(
+                    source: LifecycleOwner,
+                    event: Lifecycle.Event
+                ) {
+                    when (event) {
+                        Lifecycle.Event.ON_START -> {
+                            itemTouchHelper.attachToRecyclerView(recyclerView)
+                        }
+                        Lifecycle.Event.ON_STOP -> {
+                            itemTouchHelper.attachToRecyclerView(null)
+                        }
+                        Lifecycle.Event.ON_DESTROY -> {
+                            lifecycle.removeObserver(this)
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    private fun addIconAnimation(
+        fab: FloatingActionButton,
+        @DrawableRes animatedVectorDrawable: Int,
+        @DrawableRes animatedVectorDrawableInverse: Int
+    ) {
+        fab.setImageResource(animatedVectorDrawable)
+        fab.tag = animatedVectorDrawable
+        val callback = object : Animatable2Compat.AnimationCallback() {
+
+            override fun onAnimationEnd(drawableEnd: Drawable?) {
+                AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
+                fab.tag = if (fab.tag == animatedVectorDrawableInverse) {
+                    fab.setImageResource(animatedVectorDrawable)
+                    animatedVectorDrawable
+                } else {
+                    fab.setImageResource(animatedVectorDrawableInverse)
+                    animatedVectorDrawableInverse
+                }
+                AnimatedVectorDrawableCompat.registerAnimationCallback(fab.drawable, this)
+            }
+        }
+        val lifecycle = fab.findViewTreeLifecycleOwner()?.lifecycle
+        lifecycle?.addObserver(
+            object : LifecycleEventObserver {
+
+                override fun onStateChanged(
+                    source: LifecycleOwner,
+                    event: Lifecycle.Event
+                ) {
+                    when (event) {
+                        Lifecycle.Event.ON_START -> {
+                            AnimatedVectorDrawableCompat.registerAnimationCallback(
+                                fab.drawable,
+                                callback
+                            )
+                        }
+                        Lifecycle.Event.ON_STOP -> {
+                            if (fab.drawable is Animatable) {
+                                (fab.drawable as Animatable).stop()
+                            }
+                            AnimatedVectorDrawableCompat.unregisterAnimationCallback(
+                                fab.drawable,
+                                callback
+                            )
+                        }
+                        Lifecycle.Event.ON_DESTROY -> {
+                            lifecycle.removeObserver(this)
+                        }
+                        else -> {
+                        }
+                    }
+                }
+            }
+        )
     }
 }

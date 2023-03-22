@@ -22,17 +22,9 @@ package com.none.tom.exiferaser
 
 import android.content.ClipData
 import android.content.ClipDescription
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.view.View
-import androidx.annotation.StringRes
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -46,9 +38,6 @@ suspend fun <T> CoroutineContext.suspendRunCatching(block: suspend () -> T): Res
     Result.failure(exception)
 }
 
-fun Context.isOrientationPortrait() =
-    resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-
 fun View.applyInsetsToMargins() {
     applyInsetter {
         type(
@@ -57,45 +46,6 @@ fun View.applyInsetsToMargins() {
         ) {
             margin()
         }
-    }
-}
-
-fun View.showSnackbar(
-    anchor: View? = null,
-    msg: String,
-    @StringRes actionMsg: Int = 0,
-    onActionClick: View.OnClickListener? = null,
-    length: Int = Snackbar.LENGTH_SHORT
-) {
-    var backingSnackbar: Snackbar? = Snackbar
-        .make(this, msg, length)
-        .setAnchorView(anchor)
-        .setAction(if (actionMsg != 0) context.getString(actionMsg) else null, onActionClick)
-    val snackbar = backingSnackbar
-    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
-    if (snackbar != null && lifecycle != null) {
-        lifecycle.addObserver(
-            object : LifecycleEventObserver {
-
-                override fun onStateChanged(
-                    source: LifecycleOwner,
-                    event: Lifecycle.Event
-                ) {
-                    when (event) {
-                        Lifecycle.Event.ON_STOP -> {
-                            lifecycle.removeObserver(this)
-                            snackbar.dismiss()
-                            backingSnackbar = null
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            }
-        )
-        snackbar.show()
-    } else {
-        backingSnackbar = null
     }
 }
 

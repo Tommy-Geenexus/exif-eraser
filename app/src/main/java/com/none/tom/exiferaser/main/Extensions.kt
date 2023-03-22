@@ -22,98 +22,10 @@ package com.none.tom.exiferaser.main
 
 import android.content.ClipboardManager
 import android.content.Context
-import android.graphics.drawable.Animatable
-import android.graphics.drawable.Drawable
 import android.net.Uri
-import androidx.annotation.DrawableRes
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.areMimeTypesSupported
 import kotlin.contracts.ExperimentalContracts
-
-fun FloatingActionButton.addIconAnimation(
-    @DrawableRes animatedVectorDrawable: Int,
-    @DrawableRes animatedVectorDrawableInverse: Int
-) {
-    setImageResource(animatedVectorDrawable)
-    tag = animatedVectorDrawable
-    val callback = object : Animatable2Compat.AnimationCallback() {
-
-        override fun onAnimationEnd(drawableEnd: Drawable?) {
-            AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
-            tag = if (tag == animatedVectorDrawableInverse) {
-                setImageResource(animatedVectorDrawable)
-                animatedVectorDrawable
-            } else {
-                setImageResource(animatedVectorDrawableInverse)
-                animatedVectorDrawableInverse
-            }
-            AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this)
-        }
-    }
-    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
-    lifecycle?.addObserver(
-        object : LifecycleEventObserver {
-
-            override fun onStateChanged(
-                source: LifecycleOwner,
-                event: Lifecycle.Event
-            ) {
-                when (event) {
-                    Lifecycle.Event.ON_START -> {
-                        AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, callback)
-                    }
-                    Lifecycle.Event.ON_STOP -> {
-                        if (drawable is Animatable) {
-                            (drawable as Animatable).stop()
-                        }
-                        AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawable, callback)
-                    }
-                    Lifecycle.Event.ON_DESTROY -> {
-                        lifecycle.removeObserver(this)
-                    }
-                    else -> {
-                    }
-                }
-            }
-        }
-    )
-}
-
-fun RecyclerView.addItemTouchHelper(itemTouchHelper: ItemTouchHelper) {
-    val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
-    lifecycle?.addObserver(
-        object : LifecycleEventObserver {
-
-            override fun onStateChanged(
-                source: LifecycleOwner,
-                event: Lifecycle.Event
-            ) {
-                when (event) {
-                    Lifecycle.Event.ON_START -> {
-                        itemTouchHelper.attachToRecyclerView(this@addItemTouchHelper)
-                    }
-                    Lifecycle.Event.ON_STOP -> {
-                        itemTouchHelper.attachToRecyclerView(null)
-                    }
-                    Lifecycle.Event.ON_DESTROY -> {
-                        lifecycle.removeObserver(this)
-                    }
-                    else -> {
-                    }
-                }
-            }
-        }
-    )
-}
 
 @ExperimentalContracts
 fun Context.getClipImages(): List<Uri> {
