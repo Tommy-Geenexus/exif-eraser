@@ -29,6 +29,7 @@ import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNullOrEmpty
+import com.none.tom.exiferaser.suspendRunCatching
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -98,7 +99,7 @@ class SelectionRepository @Inject constructor(
             return false
         }
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     proto.copy(
                         user_image_selection_proto = UserImageSelectionProto(
@@ -125,7 +126,7 @@ class SelectionRepository @Inject constructor(
             return false
         }
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     proto.copy(
                         user_image_selection_proto = null,
@@ -151,7 +152,7 @@ class SelectionRepository @Inject constructor(
             return false
         }
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     var imageProto: UserImageSelectionProto? = null
                     var imagesProto: UserImagesSelectionProto? = null

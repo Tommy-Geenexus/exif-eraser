@@ -46,6 +46,7 @@ import com.none.tom.exiferaser.selection.openOutputStreamOrThrow
 import com.none.tom.exiferaser.selection.queryOrThrow
 import com.none.tom.exiferaser.selection.toProgress
 import com.none.tom.exiferaser.supportedMimeTypes
+import com.none.tom.exiferaser.suspendRunCatching
 import com.squareup.wire.AnyMessage
 import com.tomg.exifinterfaceextended.ExifInterfaceExtended
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -128,7 +129,7 @@ class ImageRepository @Inject constructor(
 
     suspend fun packDocumentTreeToAnyMessageOrNull(treeUri: Uri): AnyMessage? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                     treeUri,
                     DocumentsContract.getTreeDocumentId(treeUri)
@@ -152,7 +153,7 @@ class ImageRepository @Inject constructor(
         treeUri: Uri
     ): AnyMessage? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 val selection = mutableListOf<UserImageSelectionProto>()
                 while (!cursor.isAfterLast) {
                     val columnName = DocumentsContract.Document.COLUMN_DOCUMENT_ID
@@ -205,7 +206,7 @@ class ImageRepository @Inject constructor(
         var containsXmp = false
         var containsExtendedXmp = false
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 uri = selection.image_path.toUri()
                 mimeType = getMimeTypeOrNull(uri).orEmpty()
                 extension = mimeType.getExtensionFromMimeTypeOrEmpty()
@@ -239,7 +240,7 @@ class ImageRepository @Inject constructor(
                     }
                 }
                 if (!containsMetadata) {
-                    return@runCatching
+                    return@suspendRunCatching
                 }
                 modifiedUri = createDocument(
                     uri = uri,
@@ -296,7 +297,7 @@ class ImageRepository @Inject constructor(
         extension: String = String.Empty
     ): Uri? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 require(uri.scheme == ContentResolver.SCHEME_CONTENT)
                 if (DocumentFile.isDocumentUri(context, uri) || !uri.isFileProviderUri()) {
                     require(displayName.isNotEmpty() && mimeType.isNotEmpty())
@@ -343,7 +344,7 @@ class ImageRepository @Inject constructor(
         extension: String = EXTENSION_JPEG
     ): Uri? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 FileProvider.getUriForFile(
                     context,
                     fileProviderPackage,
@@ -361,14 +362,14 @@ class ImageRepository @Inject constructor(
 
     suspend fun deleteExternalPictures(): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 val pictures = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 if (pictures != null) {
                     val files = pictures.listFiles()?.filterNotNull()
                     if (!files.isNullOrEmpty()) {
                         files.forEach { file ->
                             if (!file.delete()) {
-                                return@runCatching false
+                                return@suspendRunCatching false
                             }
                         }
                     }
@@ -385,7 +386,7 @@ class ImageRepository @Inject constructor(
 
     private suspend fun getDisplayNameOrNull(uri: Uri): String? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 context.contentResolver.queryOrThrow(uri).use { cursor ->
                     if (cursor.moveToFirst()) {
                         val columnName = MediaStore.Images.ImageColumns.DISPLAY_NAME
@@ -403,7 +404,7 @@ class ImageRepository @Inject constructor(
 
     private suspend fun getMimeTypeOrNull(uri: Uri): String? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 context.contentResolver.getType(uri)
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -414,7 +415,7 @@ class ImageRepository @Inject constructor(
 
     suspend fun getDocumentPathOrNull(uri: Uri): String? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 DocumentsContract
                     .findDocumentPath(context.contentResolver, uri)
                     ?.path

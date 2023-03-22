@@ -20,7 +20,6 @@
 
 package com.none.tom.exiferaser.main.data
 
-import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.none.tom.exiferaser.ImageSourcesProto
 import java.io.InputStream
@@ -30,15 +29,8 @@ class ImageSourcesSerializer(
     override val defaultValue: ImageSourcesProto = ImageSourcesProto()
 ) : Serializer<ImageSourcesProto> {
 
-    override suspend fun readFrom(input: InputStream): ImageSourcesProto {
-        return runCatching {
-            ImageSourcesProto.ADAPTER.decode(input)
-        }.getOrElse { exception ->
-            throw CorruptionException("Can't read proto", exception)
-        }
-    }
+    override suspend fun readFrom(input: InputStream) = ImageSourcesProto.ADAPTER.decode(input)
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun writeTo(
         t: ImageSourcesProto,
         output: OutputStream

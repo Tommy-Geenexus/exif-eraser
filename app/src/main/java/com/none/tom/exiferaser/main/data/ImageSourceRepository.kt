@@ -27,6 +27,7 @@ import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
 import com.none.tom.exiferaser.di.DispatcherIo
+import com.none.tom.exiferaser.suspendRunCatching
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -110,7 +111,7 @@ class ImageSourceRepository @Inject constructor(
 
     suspend fun putImageSources(imageSources: List<AnyMessage>): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     var imageFileProto: ImageFileProto? = null
                     var imageFilesProto: ImageFilesProto? = null

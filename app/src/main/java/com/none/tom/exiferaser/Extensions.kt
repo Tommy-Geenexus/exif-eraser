@@ -36,6 +36,15 @@ import com.google.android.material.snackbar.Snackbar
 import dev.chrisbanes.insetter.applyInsetter
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.ensureActive
+
+suspend fun <T> CoroutineContext.suspendRunCatching(block: suspend () -> T): Result<T> = try {
+    Result.success(block())
+} catch (exception: Exception) {
+    ensureActive()
+    Result.failure(exception)
+}
 
 fun Context.isOrientationPortrait() =
     resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
