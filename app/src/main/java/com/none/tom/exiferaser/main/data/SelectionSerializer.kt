@@ -20,7 +20,6 @@
 
 package com.none.tom.exiferaser.main.data
 
-import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.none.tom.exiferaser.SelectionProto
 import java.io.InputStream
@@ -30,15 +29,8 @@ class SelectionSerializer(
     override val defaultValue: SelectionProto = SelectionProto()
 ) : Serializer<SelectionProto> {
 
-    override suspend fun readFrom(input: InputStream): SelectionProto {
-        return runCatching {
-            SelectionProto.ADAPTER.decode(input)
-        }.getOrElse { throwable ->
-            throw CorruptionException("Can't read proto", throwable)
-        }
-    }
+    override suspend fun readFrom(input: InputStream) = SelectionProto.ADAPTER.decode(input)
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun writeTo(
         t: SelectionProto,
         output: OutputStream

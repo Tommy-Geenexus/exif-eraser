@@ -44,6 +44,7 @@ import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import com.none.tom.exiferaser.suspendRunCatching
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -77,7 +78,7 @@ class UpdateRepository @Inject constructor(
 
     suspend fun getAppUpdateInfo(): AppUpdateInfo? {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 appUpdateManager.requestAppUpdateInfo()
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -89,7 +90,7 @@ class UpdateRepository @Inject constructor(
     suspend fun completeFlexibleAppUpdate(): Boolean {
         notificationManager.cancel(NOTIFICATION_ID)
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 appUpdateManager.requestCompleteUpdate()
                 true
             }.getOrElse { exception ->
@@ -103,10 +104,10 @@ class UpdateRepository @Inject constructor(
         info: AppUpdateInfo,
         onBeginUpdate: (AppUpdateManager, AppUpdateInfo, Int, Int) -> Boolean
     ): Flow<UpdateResult>? {
-        return runCatching {
+        return try {
             val updatePriority = getAppUpdatePriority(info)
             if (updatePriority == UpdatePriority.Low) {
-                return@runCatching null
+                return null
             }
             val appUpdateType = if (updatePriority == UpdatePriority.High) {
                 AppUpdateType.IMMEDIATE
@@ -149,8 +150,8 @@ class UpdateRepository @Inject constructor(
             } else {
                 null
             }
-        }.getOrElse { exception ->
-            Timber.e(exception)
+        } catch (e: Exception) {
+            Timber.e(e)
             null
         }
     }

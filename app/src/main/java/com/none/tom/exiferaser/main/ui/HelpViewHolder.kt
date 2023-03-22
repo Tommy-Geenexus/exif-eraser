@@ -92,21 +92,18 @@ class HelpViewHolder(
     @Suppress("DEPRECATION")
     private fun getBuildVersion(): String {
         val context = itemView.context
-        return context
-            .packageManager
-            .runCatching {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    getPackageInfo(
-                        context.packageName,
-                        PackageManager.PackageInfoFlags.of(0)
-                    ).versionName
-                } else {
-                    getPackageInfo(context.packageName, 0).versionName
-                }
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.PackageInfoFlags.of(0)
+                ).versionName
+            } else {
+                context.packageManager.getPackageInfo(context.packageName, 0).versionName
             }
-            .getOrElse { exception ->
-                Timber.e(exception)
-                String.Empty
-            }
+        } catch (e: Exception) {
+            Timber.e(e)
+            String.Empty
+        }
     }
 }

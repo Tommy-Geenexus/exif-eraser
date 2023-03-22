@@ -39,6 +39,7 @@ import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.defaultNightMode
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import com.none.tom.exiferaser.settings.name
+import com.none.tom.exiferaser.suspendRunCatching
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -100,7 +101,7 @@ class SettingsRepository @Inject constructor(
             releasePersistablePermissions(context.contentResolver, defaultPathOpenCurrent)
         }
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultOpenPath] = defaultPathOpenNew.toString()
                 }
@@ -129,25 +130,27 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun getDefaultPathOpenName(): String {
-        val defaultPathOpen = getDefaultPathOpen().firstOrNull()
-        return runCatching {
-            if (defaultPathOpen.isNotNullOrEmpty()) {
-                DocumentFile.fromTreeUri(context, defaultPathOpen)?.name.orEmpty()
-            } else {
+        return withContext(dispatcher) {
+            val defaultPathOpen = getDefaultPathOpen().firstOrNull()
+            coroutineContext.suspendRunCatching {
+                if (defaultPathOpen.isNotNullOrEmpty()) {
+                    DocumentFile.fromTreeUri(context, defaultPathOpen)?.name.orEmpty()
+                } else {
+                    String.Empty
+                }
+            }.getOrElse { exception ->
+                Timber.e(exception)
                 String.Empty
             }
-        }.getOrElse { exception ->
-            Timber.e(exception)
-            String.Empty
         }
     }
 
     suspend fun getPrivilegedDefaultPathOpenOrEmpty(): Uri {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 val defaultPathOpen = getDefaultPathOpen().firstOrNull()
                 if (defaultPathOpen == null || defaultPathOpen == Uri.EMPTY) {
-                    return@runCatching Uri.EMPTY
+                    return@suspendRunCatching Uri.EMPTY
                 }
                 val exists = DocumentFile.fromTreeUri(context, defaultPathOpen)?.exists() == true
                 if (!exists) {
@@ -155,7 +158,7 @@ class SettingsRepository @Inject constructor(
                         resolver = context.contentResolver,
                         uri = defaultPathOpen
                     )
-                    return@runCatching Uri.EMPTY
+                    return@suspendRunCatching Uri.EMPTY
                 }
                 if (hasPersistablePermissions(
                         resolver = context.contentResolver,
@@ -195,7 +198,7 @@ class SettingsRepository @Inject constructor(
             )
         }
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultSavePath] = defaultPathSaveNew.toString()
                 }
@@ -228,16 +231,18 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun getDefaultPathSaveName(): String {
-        val defaultPathSave = getDefaultPathSave().firstOrNull()
-        return runCatching {
-            if (defaultPathSave.isNotNullOrEmpty()) {
-                DocumentFile.fromTreeUri(context, defaultPathSave)?.name.orEmpty()
-            } else {
+        return withContext(dispatcher) {
+            val defaultPathSave = getDefaultPathSave().firstOrNull()
+            coroutineContext.suspendRunCatching {
+                if (defaultPathSave.isNotNullOrEmpty()) {
+                    DocumentFile.fromTreeUri(context, defaultPathSave)?.name.orEmpty()
+                } else {
+                    String.Empty
+                }
+            }.getOrElse { exception ->
+                Timber.e(exception)
                 String.Empty
             }
-        }.getOrElse { exception ->
-            Timber.e(exception)
-            String.Empty
         }
     }
 
@@ -255,7 +260,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putRandomizeFileNames(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyRandomizeFileNames] = value
                 }
@@ -281,7 +286,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putSelectImagesLegacy(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyLegacyImageSelection] = value
                 }
@@ -295,10 +300,10 @@ class SettingsRepository @Inject constructor(
 
     suspend fun getPrivilegedDefaultPathSaveOrEmpty(): Uri {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 val defaultPathSave = getDefaultPathSave().firstOrNull()
                 if (defaultPathSave == null || defaultPathSave == Uri.EMPTY) {
-                    return@runCatching Uri.EMPTY
+                    return@suspendRunCatching Uri.EMPTY
                 }
                 val exists = DocumentFile.fromTreeUri(context, defaultPathSave)?.exists() == true
                 if (!exists) {
@@ -307,7 +312,7 @@ class SettingsRepository @Inject constructor(
                         uri = defaultPathSave,
                         write = true
                     )
-                    return@runCatching Uri.EMPTY
+                    return@suspendRunCatching Uri.EMPTY
                 }
                 if (hasPersistablePermissions(
                         resolver = context.contentResolver,
@@ -328,7 +333,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putAutoDelete(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyAutoDelete] = value
                 }
@@ -354,7 +359,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putPreserveOrientation(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyPreserveOrientation] = value
                 }
@@ -380,7 +385,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putShareByDefault(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyShareByDefault] = value
                 }
@@ -406,7 +411,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putDefaultDisplayNameSuffix(value: String): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultDisplayNameSuffix] = value
                 }
@@ -433,7 +438,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putSavePathSelectionSkip(value: Boolean): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keySavePathSelectionSkip] = value
                 }
@@ -482,7 +487,7 @@ class SettingsRepository @Inject constructor(
 
     suspend fun putDefaultNightMode(value: Int): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultNightMode] = value
                 }
@@ -501,7 +506,7 @@ class SettingsRepository @Inject constructor(
         write: Boolean = false
     ): Boolean {
         return withContext(dispatcher) {
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 resolver.persistedUriPermissions.any { permission ->
                     if (permission.uri != uri) {
                         false
@@ -537,7 +542,7 @@ class SettingsRepository @Inject constructor(
             if (write) {
                 flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             }
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 resolver.takePersistableUriPermission(uri, flags)
                 true
             }.getOrElse { exception ->
@@ -562,7 +567,7 @@ class SettingsRepository @Inject constructor(
             if (write) {
                 flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             }
-            runCatching {
+            coroutineContext.suspendRunCatching {
                 resolver.releasePersistableUriPermission(uri, flags)
             }.getOrElse { exception ->
                 Timber.e(exception)
