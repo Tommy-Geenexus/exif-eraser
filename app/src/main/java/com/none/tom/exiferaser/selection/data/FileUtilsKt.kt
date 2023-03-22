@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets
 /**
  * @see FileUtils
  */
+@Suppress("MagicNumber")
 object FileUtilsKt {
 
     fun isValidExtFilename(name: String?): Boolean {
