@@ -10,6 +10,9 @@
     <string name="app_update_install">Πατήστε εδώ για εγκατάσταση</string>
     <string name="app_update_ready">Ενημέρωση έτοιμη για εγκατάσταση</string>
 
+    <string name="auto_delete_image_off">Μη διαγραφή εικόνων μετά την τροποποίηση, εάν είναι ενεργοποιημένη η επιλογή παλαιού τύπου εικόνας</string>
+    <string name="auto_delete_image_on">Διαγραφή εικόνων μετά την τροποποίηση εάν είναι ενεργοποιημένη η επιλογή παλαιού τύπου εικόνας</string>
+
     <string name="automatically">Αυτόματα</string>
 
     <string name="become_translator">Βοηθήστε στη μετάφραση</string>
@@ -41,11 +44,15 @@
     <string name="help">Βοήθεια και σχόλια</string>
 
     <string name="image">Εικόνα</string>
+    <string name="image_auto_delete">Αυτόματη διαγραφή</string>
     <string name="image_directory">Κατάλογος εικόνων</string>
     <string name="image_file">Αρχείο εικόνας</string>
     <string name="image_files">Αρχεία εικόνας</string>
     <string name="image_orientation">Διατήρηση προσανατολισμού</string>
     <string name="image_path">Διαδρομή εικόνας</string>
+    <string name="image_selection_legacy">Επιλογή εικόνας παλαιού τύπου</string>
+    <string name="image_selection_legacy_off">Επιλέξτε εικόνες χρησιμοποιώντας το εργαλείο επιλογής φωτογραφιών</string>
+    <string name="image_selection_legacy_on">Επιλέξτε εικόνες χρησιμοποιώντας τον προεπιλεγμένο πάροχο εγγράφων</string>
     <string name="image_share_by_default">Κοινή χρήση από προεπιλογή</string>
     <string name="image_supported_formats">Υποστηριζόμενες μορφές εικόνας</string>
 
@@ -73,6 +80,10 @@
 
     <string name="preserve_image_orientation_off">Να μην γίνεται διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
     <string name="preserve_image_orientation_on">Διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
+
+    <string name="randomize_file_names">Τυχαιοποίηση ονομάτων αρχείων</string>
+    <string name="randomize_file_names_off">Μη τυχαιοποίηση ονομάτων αρχείων των εικόνων πριν την αποθήκευση</string>
+    <string name="randomize_file_names_on">Τυχαιοποίηση ονομάτων αρχείων των εικόνων πριν την αποθήκευση</string>
 
     <string name="reorder_image_source_cards">Αναδιάταξη καρτών πηγής εικόνας</string>
 
