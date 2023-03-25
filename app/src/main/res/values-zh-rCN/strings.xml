@@ -10,6 +10,9 @@
     <string name="app_update_install">点击此处安装</string>
     <string name="app_update_ready">已准备好安装更新</string>
 
+    <string name="auto_delete_image_off">如果启用传统图片选择，不在修改后删除图片</string>
+    <string name="auto_delete_image_on">如果启用传统图片选择，在修改后删除图片</string>
+
     <string name="automatically">自动</string>
 
     <string name="become_translator">帮助翻译</string>
@@ -41,11 +44,15 @@
     <string name="help">帮助与反馈</string>
 
     <string name="image">图片</string>
+    <string name="image_auto_delete">自动删除</string>
     <string name="image_directory">图片路径</string>
     <string name="image_file">单个图片文件</string>
     <string name="image_files">多个图片文件</string>
     <string name="image_orientation">保留图片朝向</string>
     <string name="image_path">图片路径</string>
+    <string name="image_selection_legacy">传统图片选择</string>
+    <string name="image_selection_legacy_off">通过照片选择器选择图片</string>
+    <string name="image_selection_legacy_on">使用默认的文档提供程序来选择图片</string>
     <string name="image_share_by_default">默认分享</string>
     <string name="image_supported_formats">支持的图片格式</string>
 
@@ -73,6 +80,10 @@
 
     <string name="preserve_image_orientation_off">不保存原始图片朝向</string>
     <string name="preserve_image_orientation_on">保存原始图片朝向</string>
+
+    <string name="randomize_file_names">随机生成文件名</string>
+    <string name="randomize_file_names_off">在保存前不随机生成文件名</string>
+    <string name="randomize_file_names_on">在保存前随机生成文件名</string>
 
     <string name="reorder_image_source_cards">重排图片源</string>
 
