@@ -59,7 +59,6 @@ internal class PickVisualMedia2(
         return getSystemFallbackPicker(context) != null
     }
 
-    @Suppress("DEPRECATION")
     private fun getSystemFallbackPicker(context: Context): ResolveInfo? {
         return context.packageManager.resolveActivity(
             Intent(ACTION_SYSTEM_FALLBACK_PICK_IMAGES),
@@ -71,7 +70,6 @@ internal class PickVisualMedia2(
         return getGmsPicker(context) != null
     }
 
-    @Suppress("DEPRECATION")
     private fun getGmsPicker(context: Context): ResolveInfo? {
         return context.packageManager.resolveActivity(
             Intent(GMS_ACTION_PICK_IMAGES),

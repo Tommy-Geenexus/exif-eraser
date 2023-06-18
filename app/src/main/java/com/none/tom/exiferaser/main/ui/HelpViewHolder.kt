@@ -89,7 +89,6 @@ class HelpViewHolder(
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun getBuildVersion(): String {
         val context = itemView.context
         return try {

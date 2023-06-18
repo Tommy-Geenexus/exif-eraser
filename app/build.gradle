@@ -17,12 +17,12 @@ plugins {
 android {
     namespace "com.none.tom.exiferaser"
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.none.tom.exiferaser"
         minSdkVersion 27
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 35
         versionName "6.0.0"
 
