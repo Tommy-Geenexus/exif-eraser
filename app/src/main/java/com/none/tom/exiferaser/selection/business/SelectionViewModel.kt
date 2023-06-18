@@ -55,7 +55,7 @@ class SelectionViewModel @Inject constructor(
     override val container = container<SelectionState, SelectionSideEffect>(
         savedStateHandle = savedStateHandle,
         initialState = SelectionState(),
-        onCreate = { state ->
+        onCreate = {
             if (!state.handledAll) {
                 readSelection(state.imagesTotal)
             }
