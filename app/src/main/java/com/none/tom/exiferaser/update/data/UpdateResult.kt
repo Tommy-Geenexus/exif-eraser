@@ -29,10 +29,10 @@ import kotlinx.parcelize.Parcelize
 sealed class UpdateResult : Parcelable {
 
     @Parcelize
-    object NotAvailable : UpdateResult()
+    data object NotAvailable : UpdateResult()
 
     @Parcelize
-    object Available : UpdateResult()
+    data object Available : UpdateResult()
 
     @Parcelize
     data class InProgress(
@@ -40,8 +40,8 @@ sealed class UpdateResult : Parcelable {
     ) : UpdateResult()
 
     @Parcelize
-    object ReadyToInstall : UpdateResult()
+    data object ReadyToInstall : UpdateResult()
 
     @Parcelize
-    object FailedToInstall : UpdateResult()
+    data object FailedToInstall : UpdateResult()
 }

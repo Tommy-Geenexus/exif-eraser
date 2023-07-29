@@ -29,7 +29,7 @@ import kotlinx.parcelize.Parcelize
 sealed class Result : Parcelable {
 
     @Parcelize
-    object Empty : Result()
+    data object Empty : Result()
 
     @Parcelize
     data class Report(
@@ -43,5 +43,5 @@ sealed class Result : Parcelable {
     ) : Result()
 
     @Parcelize
-    object HandledAll : Result()
+    data object HandledAll : Result()
 }

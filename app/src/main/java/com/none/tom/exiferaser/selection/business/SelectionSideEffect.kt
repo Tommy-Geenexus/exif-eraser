@@ -39,7 +39,7 @@ sealed class SelectionSideEffect : Parcelable {
     ) : SelectionSideEffect()
 
     @Parcelize
-    object SelectionHandled : SelectionSideEffect()
+    data object SelectionHandled : SelectionSideEffect()
 
     @Parcelize
     data class ShareImages(

@@ -26,11 +26,11 @@ import kotlinx.parcelize.Parcelize
 sealed class UpdatePriority : Parcelable {
 
     @Parcelize
-    object Low : UpdatePriority()
+    data object Low : UpdatePriority()
 
     @Parcelize
-    object Medium : UpdatePriority()
+    data object Medium : UpdatePriority()
 
     @Parcelize
-    object High : UpdatePriority()
+    data object High : UpdatePriority()
 }
