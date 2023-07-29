@@ -47,7 +47,7 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
-    object DeleteCameraImages : MainSideEffect()
+    data object DeleteCameraImages : MainSideEffect()
 
     @Parcelize
     data class ExternalPicturesDeleted(
@@ -55,7 +55,7 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
-    object ImageSourcesReadComplete : MainSideEffect()
+    data object ImageSourcesReadComplete : MainSideEffect()
 
     @Parcelize
     data class LaunchCamera(
@@ -68,13 +68,13 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
-    object NavigateToSelectionSavePath : MainSideEffect()
+    data object NavigateToSelectionSavePath : MainSideEffect()
 
     @Parcelize
-    object NavigateToSettings : MainSideEffect()
+    data object NavigateToSettings : MainSideEffect()
 
     @Parcelize
-    object NavigateToHelp : MainSideEffect()
+    data object NavigateToHelp : MainSideEffect()
 
     @Parcelize
     data class PasteImages(
@@ -82,7 +82,7 @@ sealed class MainSideEffect : Parcelable {
     ) : MainSideEffect()
 
     @Parcelize
-    object PasteImagesNone : MainSideEffect()
+    data object PasteImagesNone : MainSideEffect()
 
     @Parcelize
     data class ReceivedImage(

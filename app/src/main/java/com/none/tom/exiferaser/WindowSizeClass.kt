@@ -53,14 +53,14 @@ sealed class WindowSizeClass : Parcelable {
     }
 
     @Parcelize
-    object Unspecified : WindowSizeClass()
+    data object Unspecified : WindowSizeClass()
 
     @Parcelize
-    object Compact : WindowSizeClass()
+    data object Compact : WindowSizeClass()
 
     @Parcelize
-    object Medium : WindowSizeClass()
+    data object Medium : WindowSizeClass()
 
     @Parcelize
-    object Expanded : WindowSizeClass()
+    data object Expanded : WindowSizeClass()
 }

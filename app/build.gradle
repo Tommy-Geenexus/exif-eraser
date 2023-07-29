@@ -17,7 +17,7 @@ plugins {
 android {
     namespace "com.none.tom.exiferaser"
 
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.none.tom.exiferaser"
@@ -42,21 +42,15 @@ android {
         viewBinding true
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    packagingOptions {
-        resources {
-            excludes += ["META-INF/AL2.0", "META-INF/LGPL2.1"]
-        }
-    }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
