@@ -23,43 +23,41 @@ package com.none.tom.exiferaser.details.business
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.EXTENSION_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 
-@ExperimentalCoroutinesApi
 class ImageModifiedDetailsViewModelTest {
 
     @Test
     fun test_handleImageDetails() = runTest {
-        val initialState = ImageModifiedDetailsState()
-        val viewModel = ImageModifiedDetailsViewModel(SavedStateHandle()).test(initialState)
-        viewModel.testIntent {
-            handleImageDetails(
-                extension = EXTENSION_JPEG,
-                mimeType = MIME_TYPE_JPEG,
-                containsIccProfile = true,
-                containsExif = true,
-                containsPhotoshopImageResources = true,
-                containsXmp = true,
-                containsExtendedXmp = true
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(
-                        extension = EXTENSION_JPEG,
-                        mimeType = MIME_TYPE_JPEG,
-                        containsIccProfile = true,
-                        containsExif = true,
-                        containsPhotoshopImageResources = true,
-                        containsXmp = true,
-                        containsExtendedXmp = true
-                    )
-                }
-            )
+        ImageModifiedDetailsViewModel(SavedStateHandle()).test(
+            testScope = this,
+            initialState = ImageModifiedDetailsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleImageDetails(
+                    extension = EXTENSION_JPEG,
+                    mimeType = MIME_TYPE_JPEG,
+                    containsIccProfile = true,
+                    containsExif = true,
+                    containsPhotoshopImageResources = true,
+                    containsXmp = true,
+                    containsExtendedXmp = true
+                )
+            }.join()
+            expectState {
+                copy(
+                    extension = EXTENSION_JPEG,
+                    mimeType = MIME_TYPE_JPEG,
+                    containsIccProfile = true,
+                    containsExif = true,
+                    containsPhotoshopImageResources = true,
+                    containsXmp = true,
+                    containsExtendedXmp = true
+                )
+            }
         }
     }
 }

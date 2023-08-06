@@ -29,18 +29,14 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlin.contracts.ExperimentalContracts
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@ExperimentalContracts
-@ExperimentalCoroutinesApi
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @RunWith(RobolectricTestRunner::class)
 class SavePathViewModelTest {
 
@@ -49,105 +45,98 @@ class SavePathViewModelTest {
 
     @Test
     fun test_verifyHasPrivilegedDefaultSavePath() = runTest {
-        val initialState = SavePathState()
-        val viewModel = SavePathViewModel(
+        SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            verifyHasPrivilegedDefaultSavePath()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns Uri.EMPTY
-        viewModel.testIntent {
-            verifyHasPrivilegedDefaultSavePath()
-        }
-        coVerify(exactly = 2) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(hasPrivilegedDefaultSavePath = true)
-                },
-                {
-                    copy(hasPrivilegedDefaultSavePath = false)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = SavePathState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                verifyHasPrivilegedDefaultSavePath()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            }
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns Uri.EMPTY
+                verifyHasPrivilegedDefaultSavePath()
+            }.join()
+            coVerify(exactly = 2) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            }
+            expectState {
+                copy(hasPrivilegedDefaultSavePath = true)
+            }
+            expectState {
+                copy(hasPrivilegedDefaultSavePath = false)
+            }
         }
     }
 
     @Test
     fun test_chooseSelectionSavePath() = runTest {
-        val initialState = SavePathState()
-        val viewModel = SavePathViewModel(
+        SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.testIntent {
-            chooseSelectionSavePath(testUri)
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseSelectionSavePath(Uri.EMPTY)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                SavePathSideEffect.ChooseSavePath(openPath = testUri),
-                SavePathSideEffect.ChooseSavePath(openPath = testUri)
-            )
+        ).test(
+            testScope = this,
+            initialState = SavePathState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                chooseSelectionSavePath(testUri)
+            }.join()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                chooseSelectionSavePath(Uri.EMPTY)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            }
+            expectSideEffect(SavePathSideEffect.ChooseSavePath(openPath = testUri))
+            expectSideEffect(SavePathSideEffect.ChooseSavePath(openPath = testUri))
         }
     }
 
-    @ExperimentalContracts
     @Test
     fun test_handleSelection() = runTest {
-        val initialState = SavePathState()
-        val viewModel = SavePathViewModel(
+        SavePathViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns Uri.EMPTY
-        viewModel.testIntent {
-            handleSelection(null)
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            handleSelection(testUri)
-        }
-        viewModel.testIntent {
-            handleSelection(Uri.EMPTY)
-        }
-        coVerify(exactly = 2) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                SavePathSideEffect.NavigateToSelection(savePath = testUri),
-                SavePathSideEffect.NavigateToSelection(savePath = testUri)
-            )
+        ).test(
+            testScope = this,
+            initialState = SavePathState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns Uri.EMPTY
+                handleSelection(null)
+            }.join()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                handleSelection(testUri)
+            }.join()
+            invokeIntent {
+                handleSelection(Uri.EMPTY)
+            }.join()
+            coVerify(exactly = 2) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            }
+            expectSideEffect(SavePathSideEffect.NavigateToSelection(savePath = testUri))
+            expectSideEffect(SavePathSideEffect.NavigateToSelection(savePath = testUri))
         }
     }
 }

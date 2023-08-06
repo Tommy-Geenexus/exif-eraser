@@ -34,7 +34,6 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -42,7 +41,6 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-@ExperimentalContracts
 @HiltViewModel
 class SelectionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -207,8 +205,6 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    fun hasSavedImages() = container.stateFlow.value.imagesSaved > 0
-
     fun prepareReport() = intent {
         val result = state.imageSummaries.filterNotNull()
         if (result.isNotEmpty()) {
@@ -216,7 +212,7 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    private fun readSelection(dropFirstN: Int) = intent {
+    fun readSelection(dropFirstN: Int) = intent {
         val selection = selectionRepository.getSelection(dropFirstN).firstOrNull()
         if (selection != null) {
             postSideEffect(SelectionSideEffect.ReadComplete(selection))

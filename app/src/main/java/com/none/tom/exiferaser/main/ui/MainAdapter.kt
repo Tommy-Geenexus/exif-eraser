@@ -31,9 +31,6 @@ import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.squareup.wire.AnyMessage
-import kotlin.contracts.ExperimentalContracts
-
-@ExperimentalContracts
 class MainAdapter(
     private val listener: Listener,
     private val windowSizeClass: WindowSizeClass

@@ -53,36 +53,34 @@ class MainItemTouchHelperCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        with(viewHolder.itemView) {
-            val topY = top + dY
-            val bottomY = topY + height
-            val startX = left + dX
-            val endX = startX + width
-            var offsetX = dX
-            var offsetY = dY
-            if (startX < 0) {
-                offsetX = 0f
-            }
-            val width = recyclerView.width.toFloat()
-            if (endX > width) {
-                offsetX = 0f
-            }
-            if (topY < 0) {
-                offsetY = 0f
-            }
-            if (bottomY > recyclerView.height) {
-                offsetY = 0f
-            }
-            MainItemTouchUiUtil.onDraw(
-                c,
-                recyclerView,
-                viewHolder.itemView,
-                offsetX,
-                offsetY,
-                actionState,
-                isCurrentlyActive
-            )
+        val topY = viewHolder.itemView.top + dY
+        val bottomY = topY + viewHolder.itemView.height
+        val startX = viewHolder.itemView.left + dX
+        val endX = startX + viewHolder.itemView.width
+        var offsetX = dX
+        var offsetY = dY
+        if (startX < 0) {
+            offsetX = 0f
         }
+        val width = recyclerView.width.toFloat()
+        if (endX > width) {
+            offsetX = 0f
+        }
+        if (topY < 0) {
+            offsetY = 0f
+        }
+        if (bottomY > recyclerView.height) {
+            offsetY = 0f
+        }
+        MainItemTouchUiUtil.onDraw(
+            c,
+            recyclerView,
+            viewHolder.itemView,
+            offsetX,
+            offsetY,
+            actionState,
+            isCurrentlyActive
+        )
     }
 
     override fun onMove(

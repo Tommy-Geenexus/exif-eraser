@@ -31,18 +31,14 @@ import com.none.tom.exiferaser.selection.data.Summary
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlin.contracts.ExperimentalContracts
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@ExperimentalContracts
-@ExperimentalCoroutinesApi
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @RunWith(RobolectricTestRunner::class)
 class ReportViewModelTest {
 
@@ -63,56 +59,57 @@ class ReportViewModelTest {
         containsExtendedXmp = false
     )
 
-    @ExperimentalContracts
     @Test
     fun test_handleImageSummaries() = runTest {
-        val initialState = ReportState()
-        val viewModel = ReportViewModel(
+        ReportViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository
-        ).test(initialState)
-        val summaries = listOf(summary)
-        viewModel.testIntent {
-            handleImageSummaries(summaries)
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(imageSummaries = summaries)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = ReportState()
+        ) {
+            expectInitialState()
+            val summaries = listOf(summary)
+            invokeIntent {
+                handleImageSummaries(summaries)
+            }.join()
+            expectState {
+                copy(imageSummaries = summaries)
+            }
         }
     }
 
-    @ExperimentalContracts
     @Test
     fun test_handleViewImage() = runTest {
-        val initialState = ReportState(imageSummaries = listOf(summary))
-        val viewModel = ReportViewModel(
+        ReportViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleViewImage(position = 0)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(ReportSideEffect.ViewImage(imageUri = testUri))
+        ).test(
+            testScope = this,
+            initialState = ReportState(imageSummaries = listOf(summary))
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleViewImage(position = 0)
+            }.join()
+            expectSideEffect(ReportSideEffect.ViewImage(imageUri = testUri))
         }
     }
 
-    @ExperimentalContracts
     @Test
     fun test_handleImageModifiedDetails() = runTest {
-        val initialState = ReportState(imageSummaries = listOf(summary))
-        val viewModel = ReportViewModel(
+        ReportViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleImageModifiedDetails(position = 0)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
+        ).test(
+            testScope = this,
+            initialState = ReportState(imageSummaries = listOf(summary))
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleImageModifiedDetails(position = 0)
+            }.join()
+            expectSideEffect(
                 ReportSideEffect.NavigateToImageModifiedDetails(
                     displayName = summary.displayName,
                     extension = summary.extension,
@@ -127,28 +124,27 @@ class ReportViewModelTest {
         }
     }
 
-    @ExperimentalContracts
     @Test
     fun test_handleImageSavedDetails() = runTest {
-        val initialState = ReportState(imageSummaries = listOf(summary))
-        val viewModel = ReportViewModel(
+        ReportViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository
-        ).test(initialState)
-        val imagePath = ContentResolver.SCHEME_CONTENT
-        coEvery {
-            imageRepository.getDocumentPathOrNull(summary.imageUri)
-        } returns imagePath
-        viewModel.testIntent {
-            handleImageSavedDetails(position = 0)
-        }
-        coVerify(exactly = 1) {
-            imageRepository.getDocumentPathOrNull(summary.imageUri)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                ReportSideEffect.NavigateToImageSavedDetails(imagePath)
-            )
+        ).test(
+            testScope = this,
+            initialState = ReportState(imageSummaries = listOf(summary))
+        ) {
+            expectInitialState()
+            val imagePath = ContentResolver.SCHEME_CONTENT
+            invokeIntent {
+                coEvery {
+                    imageRepository.getDocumentPathOrNull(summary.imageUri)
+                } returns imagePath
+                handleImageSavedDetails(position = 0)
+            }.join()
+            coVerify(exactly = 1) {
+                imageRepository.getDocumentPathOrNull(summary.imageUri)
+            }
+            expectSideEffect(ReportSideEffect.NavigateToImageSavedDetails(imagePath))
         }
     }
 }

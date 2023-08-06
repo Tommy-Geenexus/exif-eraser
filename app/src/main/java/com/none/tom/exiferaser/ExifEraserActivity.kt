@@ -33,9 +33,7 @@ import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
 

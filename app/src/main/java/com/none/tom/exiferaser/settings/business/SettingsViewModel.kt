@@ -50,7 +50,7 @@ class SettingsViewModel @Inject constructor(
         }
     )
 
-    private fun readDefaultValues() = intent {
+    fun readDefaultValues() = intent {
         val randomizeFileNames =
             settingsRepository.shouldRandomizeFileNames().firstOrNull() == true
         val defaultPathOpenName = settingsRepository.getDefaultPathOpenName()

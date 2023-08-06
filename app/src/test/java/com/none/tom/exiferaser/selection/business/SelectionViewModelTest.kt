@@ -42,23 +42,17 @@ import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlin.contracts.ExperimentalContracts
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import strikt.api.expectThat
-import strikt.assertions.isTrue
 
-@ExperimentalCoroutinesApi
-@ExperimentalContracts
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @RunWith(RobolectricTestRunner::class)
 class SelectionViewModelTest {
 
@@ -100,322 +94,313 @@ class SelectionViewModelTest {
         coEvery {
             selectionRepository.getSelection(dropFirstN = 0)
         } returns flowOf(testImageSelection)
-        val initialState = SelectionState()
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.runOnCreate()
-        coVerify(exactly = 1) {
-            selectionRepository.getSelection(dropFirstN = 0)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(SelectionSideEffect.ReadComplete(testImageSelection))
+        ).test(
+            testScope = this,
+            initialState = SelectionState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                readSelection(dropFirstN = 0)
+            }.join()
+            coVerify(exactly = 1) {
+                selectionRepository.getSelection(dropFirstN = 0)
+            }
+            expectSideEffect(SelectionSideEffect.ReadComplete(testImageSelection))
         }
     }
 
     @Test
     fun test_prepareReport() = runTest {
-        val initialState = SelectionState(
-            imageSummaries = arrayOf(testSummary)
-        )
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            prepareReport()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(SelectionSideEffect.PrepareReport(listOf(testSummary)))
+        ).test(
+            testScope = this,
+            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
+        ) {
+            expectInitialState()
+            invokeIntent {
+                prepareReport()
+            }
+            expectSideEffect(SelectionSideEffect.PrepareReport(listOf(testSummary)))
         }
     }
 
     @Test
     fun test_shareImages() = runTest {
-        val initialState = SelectionState(
-            imageSummaries = arrayOf(testSummary)
-        )
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            shareImages()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(SelectionSideEffect.ShareImages(ArrayList(testUris)))
+        ).test(
+            testScope = this,
+            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
+        ) {
+            expectInitialState()
+            invokeIntent {
+                shareImages()
+            }
+            expectSideEffect(SelectionSideEffect.ShareImages(ArrayList(testUris)))
         }
     }
 
     @Test
     fun test_shareImagesByDefault() = runTest {
-        val initialState = SelectionState(
-            imageSummaries = arrayOf(testSummary)
-        )
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.shouldShareByDefault()
-        } returns flowOf(true)
-        viewModel.testIntent {
-            shareImagesByDefault()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.shouldShareByDefault()
-        }
-    }
-
-    @Test
-    fun test_hasSavedImages() = runTest {
-        val initialState = SelectionState(
-            imagesSaved = 1
-        )
-        val viewModel = SelectionViewModel(
-            savedStateHandle = SavedStateHandle(),
-            imageRepository = imageRepository,
-            selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            expectThat(hasSavedImages()).isTrue()
+        ).test(
+            testScope = this,
+            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.shouldShareByDefault()
+                } returns flowOf(true)
+                shareImagesByDefault()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.shouldShareByDefault()
+            }
+            expectSideEffect(
+                SelectionSideEffect.ShareImages(imageUris = arrayListOf(testSummary.imageUri))
+            )
         }
     }
 
     @Test
     fun test_handleUserImageSelection() = runTest {
-        val initialState = SelectionState()
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getDefaultDisplayNameSuffix()
-        } returns flowOf(String.Empty)
-        coEvery {
-            settingsRepository.shouldAutoDelete()
-        } returns flowOf(false)
-        coEvery {
-            settingsRepository.shouldPreserveOrientation()
-        } returns flowOf(false)
-        coEvery {
-            settingsRepository.shouldRandomizeFileNames()
-        } returns flowOf(false)
-        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
-        val autoDelete = settingsRepository.shouldAutoDelete().first()
-        val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
-        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
-        coEvery {
-            imageRepository.removeMetadataSingle(
-                selection = testImageSelection,
-                treeUri = Uri.EMPTY,
-                displayNameSuffix = displayNameSuffix,
-                autoDelete = autoDelete,
-                preserveOrientation = preserveOrientation,
-                randomizeFileNames = randomizeFileNames
-            )
-        } returns flow {
-            emit(Result.Report(summary = testSummary))
-            emit(Result.Handled(progress = PROGRESS_MAX))
-            emit(Result.HandledAll)
-        }
-        viewModel.testIntent {
-            handleUserImageSelection(
-                selection = testImageSelection,
-                treeUri = Uri.EMPTY
-            )
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldAutoDelete()
-            settingsRepository.shouldPreserveOrientation()
-            settingsRepository.shouldRandomizeFileNames()
-            settingsRepository.getDefaultDisplayNameSuffix()
-            imageRepository.removeMetadataSingle(
-                selection = testImageSelection,
-                treeUri = Uri.EMPTY,
-                displayNameSuffix = displayNameSuffix,
-                autoDelete = autoDelete,
-                preserveOrientation = preserveOrientation,
-                randomizeFileNames = randomizeFileNames
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(
-                        imageResult = Result.Report(summary = testSummary),
-                        imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary)
-                        },
-                        imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary.imageUri)
-                        },
-                        imagesModified = 1,
-                        imagesSaved = 1
+        ).test(
+            testScope = this,
+            initialState = SelectionState()
+        ) {
+            expectInitialState()
+            coEvery {
+                settingsRepository.getDefaultDisplayNameSuffix()
+            } returns flowOf(String.Empty)
+            coEvery {
+                settingsRepository.shouldAutoDelete()
+            } returns flowOf(false)
+            coEvery {
+                settingsRepository.shouldPreserveOrientation()
+            } returns flowOf(false)
+            coEvery {
+                settingsRepository.shouldRandomizeFileNames()
+            } returns flowOf(false)
+            val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+            val autoDelete = settingsRepository.shouldAutoDelete().first()
+            val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
+            val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
+            invokeIntent {
+                coEvery {
+                    imageRepository.removeMetadataSingle(
+                        selection = testImageSelection,
+                        treeUri = Uri.EMPTY,
+                        displayNameSuffix = displayNameSuffix,
+                        autoDelete = autoDelete,
+                        preserveOrientation = preserveOrientation,
+                        randomizeFileNames = randomizeFileNames
                     )
-                },
-                {
-                    copy(
-                        imageResult = Result.Handled(progress = PROGRESS_MAX),
-                        imagesTotal = 1,
-                        progress = PROGRESS_MAX
-                    )
-                },
-                {
-                    copy(handledAll = true)
+                } returns flow {
+                    emit(Result.Report(summary = testSummary))
+                    emit(Result.Handled(progress = PROGRESS_MAX))
+                    emit(Result.HandledAll)
                 }
-            )
-            postedSideEffects(SelectionSideEffect.SelectionHandled)
+                handleUserImageSelection(
+                    selection = testImageSelection,
+                    treeUri = Uri.EMPTY
+                )
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.shouldAutoDelete()
+                settingsRepository.shouldPreserveOrientation()
+                settingsRepository.shouldRandomizeFileNames()
+                settingsRepository.getDefaultDisplayNameSuffix()
+                imageRepository.removeMetadataSingle(
+                    selection = testImageSelection,
+                    treeUri = Uri.EMPTY,
+                    displayNameSuffix = displayNameSuffix,
+                    autoDelete = autoDelete,
+                    preserveOrientation = preserveOrientation,
+                    randomizeFileNames = randomizeFileNames
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Report(summary = testSummary),
+                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary)
+                    },
+                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary.imageUri)
+                    },
+                    imagesModified = 1,
+                    imagesSaved = 1
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Handled(progress = PROGRESS_MAX),
+                    imagesTotal = 1,
+                    progress = PROGRESS_MAX
+                )
+            }
+            expectState {
+                copy(handledAll = true)
+            }
+            expectSideEffect(SelectionSideEffect.SelectionHandled)
         }
     }
 
     @Test
     fun test_handleUserImagesSelection() = runTest {
-        val initialState = SelectionState()
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getDefaultDisplayNameSuffix()
-        } returns flowOf(String.Empty)
-        coEvery {
-            settingsRepository.shouldAutoDelete()
-        } returns flowOf(false)
-        coEvery {
-            settingsRepository.shouldPreserveOrientation()
-        } returns flowOf(false)
-        coEvery {
-            settingsRepository.shouldRandomizeFileNames()
-        } returns flowOf(false)
-        val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
-        val autoDelete = settingsRepository.shouldAutoDelete().first()
-        val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
-        val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
-        coEvery {
-            imageRepository.removeMetadataBulk(
-                selection = testImagesSelection,
-                treeUri = Uri.EMPTY,
-                displayNameSuffix = displayNameSuffix,
-                autoDelete = autoDelete,
-                preserveOrientation = preserveOrientation,
-                randomizeFileNames = randomizeFileNames
-            )
-        } returns flow {
-            emit(Result.Report(summary = testSummary))
-            emit(Result.Handled(progress = PROGRESS_MAX / 2))
-            emit(Result.Report(summary = testSummary))
-            emit(Result.Handled(progress = PROGRESS_MAX))
-            emit(Result.HandledAll)
-        }
-        viewModel.testIntent {
-            handleUserImagesSelection(
-                selection = testImagesSelection,
-                treeUri = Uri.EMPTY
-            )
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldAutoDelete()
-            settingsRepository.shouldPreserveOrientation()
-            settingsRepository.shouldRandomizeFileNames()
-            settingsRepository.getDefaultDisplayNameSuffix()
-            imageRepository.removeMetadataBulk(
-                selection = testImagesSelection,
-                treeUri = Uri.EMPTY,
-                displayNameSuffix = displayNameSuffix,
-                autoDelete = autoDelete,
-                preserveOrientation = preserveOrientation,
-                randomizeFileNames = randomizeFileNames
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(
-                        imageResult = Result.Report(summary = testSummary),
-                        imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary)
-                            set(1, testSummary)
-                        },
-                        imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary.imageUri)
-                            set(1, testSummary.imageUri)
-                        },
-                        imagesModified = 1,
-                        imagesSaved = 1
+        ).test(
+            testScope = this,
+            initialState = SelectionState()
+        ) {
+            expectInitialState()
+            coEvery {
+                settingsRepository.getDefaultDisplayNameSuffix()
+            } returns flowOf(String.Empty)
+            coEvery {
+                settingsRepository.shouldAutoDelete()
+            } returns flowOf(false)
+            coEvery {
+                settingsRepository.shouldPreserveOrientation()
+            } returns flowOf(false)
+            coEvery {
+                settingsRepository.shouldRandomizeFileNames()
+            } returns flowOf(false)
+            val displayNameSuffix = settingsRepository.getDefaultDisplayNameSuffix().first()
+            val autoDelete = settingsRepository.shouldAutoDelete().first()
+            val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
+            val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
+            invokeIntent {
+                coEvery {
+                    imageRepository.removeMetadataBulk(
+                        selection = testImagesSelection,
+                        treeUri = Uri.EMPTY,
+                        displayNameSuffix = displayNameSuffix,
+                        autoDelete = autoDelete,
+                        preserveOrientation = preserveOrientation,
+                        randomizeFileNames = randomizeFileNames
                     )
-                },
-                {
-                    copy(
-                        imageResult = Result.Handled(progress = PROGRESS_MAX / 2),
-                        imagesTotal = 1,
-                        progress = PROGRESS_MAX / 2
-                    )
-                },
-                {
-                    copy(
-                        imageResult = Result.Report(summary = testSummary),
-                        imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary)
-                            set(1, testSummary)
-                        },
-                        imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                            set(0, testSummary.imageUri)
-                            set(1, testSummary.imageUri)
-                        },
-                        imagesModified = 2,
-                        imagesSaved = 2
-                    )
-                },
-                {
-                    copy(
-                        imageResult = Result.Handled(progress = PROGRESS_MAX),
-                        imagesTotal = 2,
-                        progress = PROGRESS_MAX
-                    )
-                },
-                {
-                    copy(handledAll = true)
+                } returns flow {
+                    emit(Result.Report(summary = testSummary))
+                    emit(Result.Handled(progress = PROGRESS_MAX / 2))
+                    emit(Result.Report(summary = testSummary))
+                    emit(Result.Handled(progress = PROGRESS_MAX))
+                    emit(Result.HandledAll)
                 }
-            )
-            postedSideEffects(SelectionSideEffect.SelectionHandled)
+                handleUserImagesSelection(
+                    selection = testImagesSelection,
+                    treeUri = Uri.EMPTY
+                )
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.shouldAutoDelete()
+                settingsRepository.shouldPreserveOrientation()
+                settingsRepository.shouldRandomizeFileNames()
+                settingsRepository.getDefaultDisplayNameSuffix()
+                imageRepository.removeMetadataBulk(
+                    selection = testImagesSelection,
+                    treeUri = Uri.EMPTY,
+                    displayNameSuffix = displayNameSuffix,
+                    autoDelete = autoDelete,
+                    preserveOrientation = preserveOrientation,
+                    randomizeFileNames = randomizeFileNames
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Report(summary = testSummary),
+                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary)
+                        set(1, testSummary)
+                    },
+                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary.imageUri)
+                        set(1, testSummary.imageUri)
+                    },
+                    imagesModified = 1,
+                    imagesSaved = 1
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Handled(progress = PROGRESS_MAX / 2),
+                    imagesTotal = 1,
+                    progress = PROGRESS_MAX / 2
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Report(summary = testSummary),
+                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary)
+                        set(1, testSummary)
+                    },
+                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
+                        set(0, testSummary.imageUri)
+                        set(1, testSummary.imageUri)
+                    },
+                    imagesModified = 2,
+                    imagesSaved = 2
+                )
+            }
+            expectState {
+                copy(
+                    imageResult = Result.Handled(progress = PROGRESS_MAX),
+                    imagesTotal = 2,
+                    progress = PROGRESS_MAX
+                )
+            }
+            expectState {
+                copy(handledAll = true)
+            }
+            expectSideEffect(SelectionSideEffect.SelectionHandled)
         }
     }
 
     @Test
     fun test_handleUnsupportedSelection() = runTest {
-        val initialState = SelectionState()
-        val viewModel = SelectionViewModel(
+        SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleUnsupportedSelection()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(handledAll = true)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = SelectionState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleUnsupportedSelection()
+            }.join()
+            expectState {
+                copy(handledAll = true)
+            }
         }
     }
 }

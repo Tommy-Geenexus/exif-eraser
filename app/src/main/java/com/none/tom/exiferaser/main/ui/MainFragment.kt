@@ -81,10 +81,8 @@ import com.none.tom.exiferaser.main.getClipImages
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding>(R.layout.fragment_main),
@@ -587,6 +585,7 @@ class MainFragment :
         )
     }
 
+    @Suppress("SameParameterValue")
     private fun addIconAnimation(
         fab: FloatingActionButton,
         @DrawableRes animatedVectorDrawable: Int,

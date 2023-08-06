@@ -33,7 +33,6 @@ import com.none.tom.exiferaser.suspendRunCatching
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -42,7 +41,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@ExperimentalContracts
 @Singleton
 class SelectionRepository @Inject constructor(
     private val dataStore: DataStore<SelectionProto>,

@@ -63,10 +63,8 @@ import com.none.tom.exiferaser.selection.MaterialColor
 import com.none.tom.exiferaser.selection.data.Summary
 import com.none.tom.exiferaser.selection.ui.SelectionFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class ReportFragment :
     BaseFragment<FragmentReportBinding>(R.layout.fragment_report),
@@ -338,6 +336,7 @@ class ReportFragment :
         backCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
     }
 
+    @Suppress("SameParameterValue")
     private fun resolveThemeAttribute(
         @AttrRes attr: Int,
         typedValue: TypedValue = TypedValue(),

@@ -36,12 +36,12 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @RunWith(RobolectricTestRunner::class)
 class SettingsViewModelTest {
 
@@ -54,368 +54,374 @@ class SettingsViewModelTest {
 
     @Test
     fun test_readDefaultValues() = runTest {
-        coEvery {
-            settingsRepository.shouldRandomizeFileNames()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.getDefaultPathOpenName()
-        } returns testDefaultPathOpenName
-        coEvery {
-            settingsRepository.getDefaultPathSaveName()
-        } returns testDefaultPathSaveName
-        coEvery {
-            settingsRepository.shouldAutoDelete()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.shouldPreserveOrientation()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.shouldShareByDefault()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.getDefaultDisplayNameSuffix()
-        } returns flowOf(testDefaultDisplayNameSuffix)
-        coEvery {
-            settingsRepository.shouldSelectImagesLegacy()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.getDefaultNightModeName()
-        } returns testDefaultNightModeName
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.runOnCreate()
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldRandomizeFileNames()
-            settingsRepository.getDefaultPathOpenName()
-            settingsRepository.getDefaultPathSaveName()
-            settingsRepository.shouldAutoDelete()
-            settingsRepository.shouldPreserveOrientation()
-            settingsRepository.shouldShareByDefault()
-            settingsRepository.getDefaultDisplayNameSuffix()
-            settingsRepository.shouldSelectImagesLegacy()
-            settingsRepository.shouldSkipSavePathSelection()
-            settingsRepository.getDefaultNightModeName()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(
-                        randomizeFileNames = true,
-                        defaultPathOpenName = testDefaultPathOpenName,
-                        defaultPathSaveName = testDefaultPathSaveName,
-                        autoDelete = true,
-                        preserveOrientation = true,
-                        shareByDefault = true,
-                        defaultDisplayNameSuffix = testDefaultDisplayNameSuffix,
-                        legacyImageSelection = true,
-                        skipSavePathSelection = true,
-                        defaultNightModeName = testDefaultNightModeName
-                    )
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.shouldRandomizeFileNames()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.getDefaultPathOpenName()
+                } returns testDefaultPathOpenName
+                coEvery {
+                    settingsRepository.getDefaultPathSaveName()
+                } returns testDefaultPathSaveName
+                coEvery {
+                    settingsRepository.shouldAutoDelete()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.shouldPreserveOrientation()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.shouldShareByDefault()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.getDefaultDisplayNameSuffix()
+                } returns flowOf(testDefaultDisplayNameSuffix)
+                coEvery {
+                    settingsRepository.shouldSelectImagesLegacy()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.getDefaultNightModeName()
+                } returns testDefaultNightModeName
+                readDefaultValues()
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.shouldRandomizeFileNames()
+                settingsRepository.getDefaultPathOpenName()
+                settingsRepository.getDefaultPathSaveName()
+                settingsRepository.shouldAutoDelete()
+                settingsRepository.shouldPreserveOrientation()
+                settingsRepository.shouldShareByDefault()
+                settingsRepository.getDefaultDisplayNameSuffix()
+                settingsRepository.shouldSelectImagesLegacy()
+                settingsRepository.shouldSkipSavePathSelection()
+                settingsRepository.getDefaultNightModeName()
+            }
+            expectState {
+                copy(
+                    randomizeFileNames = true,
+                    defaultPathOpenName = testDefaultPathOpenName,
+                    defaultPathSaveName = testDefaultPathSaveName,
+                    autoDelete = true,
+                    preserveOrientation = true,
+                    shareByDefault = true,
+                    defaultDisplayNameSuffix = testDefaultDisplayNameSuffix,
+                    legacyImageSelection = true,
+                    skipSavePathSelection = true,
+                    defaultNightModeName = testDefaultNightModeName
+                )
+            }
         }
     }
 
     @Test
     fun test_storeRandomizeFileNames() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putRandomizeFileNames(any())
-        } returns true
-        viewModel.testIntent {
-            storeRandomizeFileNames(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putRandomizeFileNames(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(randomizeFileNames = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.RandomizeFileNames(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            coEvery {
+                settingsRepository.putRandomizeFileNames(any())
+            } returns true
+            invokeIntent {
+                storeRandomizeFileNames(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putRandomizeFileNames(any())
+            }
+            expectState {
+                copy(randomizeFileNames = true)
+            }
+            expectSideEffect(SettingsSideEffect.RandomizeFileNames(success = true))
         }
     }
 
     @Test
     fun test_handleDefaultPathOpen() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            handleDefaultPathOpen()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(SettingsSideEffect.DefaultPathOpenSelect(testUri))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                handleDefaultPathOpen()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathOpenSelect(testUri))
         }
     }
 
     @Test
     fun test_clearDefaultPathOpen() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        coEvery {
-            settingsRepository.putDefaultPathOpen(any(), any())
-        } returns true
-        viewModel.testIntent {
-            clearDefaultPathOpen()
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-            settingsRepository.putDefaultPathOpen(any(), any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultPathOpenName = String.Empty)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.DefaultPathOpenClear(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState(defaultPathOpenName = testDefaultPathOpenName)
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                coEvery {
+                    settingsRepository.putDefaultPathOpen(any(), any())
+                } returns true
+                clearDefaultPathOpen()
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                settingsRepository.putDefaultPathOpen(any(), any())
+            }
+            expectState {
+                copy(defaultPathOpenName = String.Empty)
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathOpenClear(success = true))
         }
     }
 
     @Test
     fun test_storeDefaultPathOpen() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        coEvery {
-            settingsRepository.putDefaultPathOpen(any(), any())
-        } returns true
-        coEvery {
-            settingsRepository.getDefaultPathOpenName()
-        } returns testDefaultPathOpenName
-        viewModel.testIntent {
-            storeDefaultPathOpen(testUri)
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-            settingsRepository.putDefaultPathOpen(any(), any())
-            settingsRepository.getDefaultPathOpenName()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultPathOpenName = testDefaultPathOpenName)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.DefaultPathOpenStore(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                coEvery {
+                    settingsRepository.putDefaultPathOpen(any(), any())
+                } returns true
+                coEvery {
+                    settingsRepository.getDefaultPathOpenName()
+                } returns testDefaultPathOpenName
+                storeDefaultPathOpen(testUri)
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                settingsRepository.putDefaultPathOpen(any(), any())
+                settingsRepository.getDefaultPathOpenName()
+            }
+            expectState {
+                copy(defaultPathOpenName = testDefaultPathOpenName)
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathOpenStore(success = true))
         }
     }
 
     @Test
     fun test_handleDefaultPathSave() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            handleDefaultPathSave()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(SettingsSideEffect.DefaultPathSaveSelect(testUri))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                handleDefaultPathSave()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathSaveSelect(testUri))
         }
     }
 
     @Test
     fun test_clearDefaultPathSave() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        coEvery {
-            settingsRepository.putDefaultPathSave(any(), any())
-        } returns true
-        viewModel.testIntent {
-            clearDefaultPathSave()
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-            settingsRepository.putDefaultPathSave(any(), any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultPathSaveName = String.Empty)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.DefaultPathSaveClear(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState(defaultPathSaveName = testDefaultPathSaveName)
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                coEvery {
+                    settingsRepository.putDefaultPathSave(any(), any())
+                } returns true
+                clearDefaultPathSave()
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                settingsRepository.putDefaultPathSave(any(), any())
+            }
+            expectState {
+                copy(defaultPathSaveName = String.Empty)
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathSaveClear(success = true))
         }
     }
 
     @Test
     fun test_storeDefaultPathSave() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        coEvery {
-            settingsRepository.putDefaultPathSave(any(), any())
-        } returns true
-        coEvery {
-            settingsRepository.getDefaultPathSaveName()
-        } returns testDefaultPathSaveName
-        viewModel.testIntent {
-            storeDefaultPathSave(testUri)
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-            settingsRepository.putDefaultPathSave(any(), any())
-            settingsRepository.getDefaultPathSaveName()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultPathSaveName = testDefaultPathSaveName)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.DefaultPathSaveStore(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                coEvery {
+                    settingsRepository.putDefaultPathSave(any(), any())
+                } returns true
+                coEvery {
+                    settingsRepository.getDefaultPathSaveName()
+                } returns testDefaultPathSaveName
+                storeDefaultPathSave(testUri)
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                settingsRepository.putDefaultPathSave(any(), any())
+                settingsRepository.getDefaultPathSaveName()
+            }
+            expectState {
+                copy(defaultPathSaveName = testDefaultPathSaveName)
+            }
+            expectSideEffect(SettingsSideEffect.DefaultPathSaveStore(success = true))
         }
     }
 
     @Test
     fun test_storeAutoDelete() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putAutoDelete(any())
-        } returns true
-        viewModel.testIntent {
-            storeAutoDelete(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putAutoDelete(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(autoDelete = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.AutoDelete(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putAutoDelete(any())
+                } returns true
+                storeAutoDelete(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putAutoDelete(any())
+            }
+            expectState {
+                copy(autoDelete = true)
+            }
+            expectSideEffect(SettingsSideEffect.AutoDelete(success = true))
         }
     }
 
     @Test
     fun test_storePreserveOrientation() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putPreserveOrientation(any())
-        } returns true
-        viewModel.testIntent {
-            storePreserveOrientation(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putPreserveOrientation(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(preserveOrientation = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.PreserveOrientation(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putPreserveOrientation(any())
+                } returns true
+                storePreserveOrientation(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putPreserveOrientation(any())
+            }
+            expectState {
+                copy(preserveOrientation = true)
+            }
+            expectSideEffect(SettingsSideEffect.PreserveOrientation(success = true))
         }
     }
 
     @Test
     fun test_storeShareByDefault() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putShareByDefault(any())
-        } returns true
-        viewModel.testIntent {
-            storeShareByDefault(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putShareByDefault(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(shareByDefault = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.ShareByDefault(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putShareByDefault(any())
+                } returns true
+                storeShareByDefault(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putShareByDefault(any())
+            }
+            expectState {
+                copy(shareByDefault = true)
+            }
+            expectSideEffect(SettingsSideEffect.ShareByDefault(success = true))
         }
     }
 
     @Test
     fun test_handleDefaultDisplayNameSuffix() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getDefaultDisplayNameSuffix()
-        } returns flowOf(testDefaultDisplayNameSuffix)
-        viewModel.testIntent {
-            handleDefaultDisplayNameSuffix()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getDefaultDisplayNameSuffix()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getDefaultDisplayNameSuffix()
+                } returns flowOf(testDefaultDisplayNameSuffix)
+                handleDefaultDisplayNameSuffix()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getDefaultDisplayNameSuffix()
+            }
+            expectSideEffect(
                 SettingsSideEffect.NavigateToDefaultDisplayNameSuffix(
                     defaultDisplayNameSuffix = testDefaultDisplayNameSuffix
                 )
@@ -425,99 +431,101 @@ class SettingsViewModelTest {
 
     @Test
     fun test_storeDefaultDisplayNameSuffix() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putDefaultDisplayNameSuffix(any())
-        } returns true
-        viewModel.testIntent {
-            storeDefaultDisplayNameSuffix(testDefaultDisplayNameSuffix)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putDefaultDisplayNameSuffix(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultDisplayNameSuffix = testDefaultDisplayNameSuffix)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putDefaultDisplayNameSuffix(any())
+                } returns true
+                storeDefaultDisplayNameSuffix(testDefaultDisplayNameSuffix)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putDefaultDisplayNameSuffix(any())
+            }
+            expectState {
+                copy(defaultDisplayNameSuffix = testDefaultDisplayNameSuffix)
+            }
         }
     }
 
     @Test
     fun test_storeLegacyImageSelection() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putSelectImagesLegacy(any())
-        } returns true
-        viewModel.testIntent {
-            storeLegacyImageSelection(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putSelectImagesLegacy(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(legacyImageSelection = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.LegacyImageSelection(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putSelectImagesLegacy(any())
+                } returns true
+                storeLegacyImageSelection(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putSelectImagesLegacy(any())
+            }
+            expectState {
+                copy(legacyImageSelection = true)
+            }
+            expectSideEffect(SettingsSideEffect.LegacyImageSelection(success = true))
         }
     }
 
     @Test
     fun test_storeSavePathSelectionSkip() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.putSavePathSelectionSkip(any())
-        } returns true
-        viewModel.testIntent {
-            storeSavePathSelectionSkip(true)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.putSavePathSelectionSkip(any())
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(skipSavePathSelection = true)
-                }
-            )
-            postedSideEffects(SettingsSideEffect.SavePathSelectionSkip(success = true))
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.putSavePathSelectionSkip(any())
+                } returns true
+                storeSavePathSelectionSkip(true)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.putSavePathSelectionSkip(any())
+            }
+            expectState {
+                copy(skipSavePathSelection = true)
+            }
+            expectSideEffect(SettingsSideEffect.SavePathSelectionSkip(success = true))
         }
     }
 
     @Test
     fun test_handleDefaultNightMode() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getDefaultNightMode()
-        } returns flowOf(defaultNightModeValue)
-        viewModel.testIntent {
-            handleDefaultNightMode()
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getDefaultNightMode()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getDefaultNightMode()
+                } returns flowOf(defaultNightModeValue)
+                handleDefaultNightMode()
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getDefaultNightMode()
+            }
+            expectSideEffect(
                 SettingsSideEffect.NavigateToDefaultNightMode(
                     defaultNightMode = defaultNightModeValue
                 )
@@ -527,31 +535,31 @@ class SettingsViewModelTest {
 
     @Test
     fun test_storeDefaultNightMode() = runTest {
-        val initialState = SettingsState()
-        val viewModel = SettingsViewModel(
+        SettingsViewModel(
             savedStateHandle = SavedStateHandle(),
             settingsRepository = settingsRepository
-        ).test(initialState)
-        val testDefaultNightModeName = "Always"
-        coEvery {
-            settingsRepository.putDefaultNightMode(any())
-        } returns true
-        coEvery {
-            settingsRepository.getDefaultNightModeName()
-        } returns testDefaultNightModeName
-        viewModel.testIntent {
-            storeDefaultNightMode(defaultNightModeValue)
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.putDefaultNightMode(any())
-            settingsRepository.getDefaultNightModeName()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(defaultNightModeName = testDefaultNightModeName)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = SettingsState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                val testDefaultNightModeName = "Always"
+                coEvery {
+                    settingsRepository.putDefaultNightMode(any())
+                } returns true
+                coEvery {
+                    settingsRepository.getDefaultNightModeName()
+                } returns testDefaultNightModeName
+                storeDefaultNightMode(defaultNightModeValue)
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.putDefaultNightMode(any())
+                settingsRepository.getDefaultNightModeName()
+            }
+            expectState {
+                copy(defaultNightModeName = testDefaultNightModeName)
+            }
         }
     }
 }

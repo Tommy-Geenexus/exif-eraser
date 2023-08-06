@@ -26,7 +26,6 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import dev.chrisbanes.insetter.applyInsetter
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -49,7 +48,6 @@ fun View.applyInsetsToMargins() {
     }
 }
 
-@ExperimentalContracts
 fun Intent.getClipDataUris(): Array<Uri> {
     val resultSet = linkedSetOf<Uri>()
     val d = data
@@ -65,7 +63,6 @@ fun Intent.getClipDataUris(): Array<Uri> {
     return resultSet.toTypedArray()
 }
 
-@ExperimentalContracts
 fun ClipData.addUrisToSet(resultSet: LinkedHashSet<Uri>) {
     for (i in 0 until itemCount) {
         val uri = getItemAt(i)?.uri
@@ -88,7 +85,6 @@ fun ClipDescription.areMimeTypesSupported(): Boolean {
 
 fun Uri?.isNullOrEmpty() = this == null || this == Uri.EMPTY
 
-@ExperimentalContracts
 fun Uri?.isNotNullOrEmpty(): Boolean {
     contract {
         returns(true) implies (this@isNotNullOrEmpty != null)
