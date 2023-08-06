@@ -42,10 +42,8 @@ import com.none.tom.exiferaser.update.StartIntentSenderForResult
 import com.none.tom.exiferaser.update.business.UpdateSideEffect
 import com.none.tom.exiferaser.update.business.UpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
 

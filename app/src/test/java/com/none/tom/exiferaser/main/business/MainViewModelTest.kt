@@ -42,19 +42,15 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import java.util.Collections
-import kotlin.contracts.ExperimentalContracts
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.orbitmvi.orbit.test
+import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-@ExperimentalCoroutinesApi
-@ExperimentalContracts
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 @RunWith(RobolectricTestRunner::class)
 class MainViewModelTest {
 
@@ -76,587 +72,571 @@ class MainViewModelTest {
 
     @Test
     fun test_readDefaultValues() = runTest {
-        coEvery {
-            settingsRepository.getDefaultNightMode()
-        } returns flowOf(0)
-        coEvery {
-            imageSourceRepository.getImageSources()
-        } returns flowOf(testImageSources)
-        coEvery {
-            settingsRepository.shouldSelectImagesLegacy()
-        } returns flowOf(true)
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.testIntent {
-            readDefaultValues()
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getDefaultNightMode()
+                } returns flowOf(0)
+                coEvery {
+                    imageSourceRepository.getImageSources()
+                } returns flowOf(testImageSources)
+                coEvery {
+                    settingsRepository.shouldSelectImagesLegacy()
+                } returns flowOf(true)
+                readDefaultValues()
+            }.join()
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(
+                    imageSources = testImageSources,
+                    legacyImageSelection = true,
+                    loading = false
+                )
+            }
+            expectSideEffect(MainSideEffect.ImageSourcesReadComplete)
+            expectSideEffect(MainSideEffect.DefaultNightMode(0))
         }
         coVerify(exactly = 1) {
             settingsRepository.getDefaultNightMode()
             imageSourceRepository.getImageSources()
             settingsRepository.shouldSelectImagesLegacy()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(
-                        imageSources = testImageSources,
-                        legacyImageSelection = true,
-                        loading = false
-                    )
-                }
-            )
-            postedSideEffects(
-                MainSideEffect.ImageSourcesReadComplete,
-                MainSideEffect.DefaultNightMode(0)
-            )
         }
     }
 
     @Test
     fun test_reorderImageSources() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        val reorderedImageSources = testImageSources.toMutableList()
+        Collections.swap(reorderedImageSources, 1, 0)
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        val reorderedImageSources = testImageSources.toMutableList()
-        Collections.swap(reorderedImageSources, 1, 0)
-        viewModel.testIntent {
-            reorderImageSources(
-                imageSources = testImageSources,
-                oldIndex = 0,
-                newIndex = 1
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(imageSources = reorderedImageSources)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                reorderImageSources(
+                    imageSources = testImageSources,
+                    oldIndex = 0,
+                    newIndex = 1
+                )
+            }.join()
+            expectState {
+                copy(imageSources = reorderedImageSources)
+            }
         }
     }
 
     @Test
     fun test_putImageSources() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            imageSourceRepository.putImageSources(testImageSources)
-        } returns true
-        viewModel.testIntent {
-            putImageSources(testImageSources)
-        }
-        coVerify(exactly = 1) {
-            imageSourceRepository.putImageSources(testImageSources)
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    imageSourceRepository.putImageSources(testImageSources)
+                } returns true
+                putImageSources(testImageSources)
+            }.join()
+            coVerify(exactly = 1) {
+                imageSourceRepository.putImageSources(testImageSources)
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
         }
     }
 
     @Test
     fun test_putImageSelection() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            selectionRepository.putSelection(
-                uri = testUri,
-                fromCamera = false
-            )
-        } returns true
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(false)
-        viewModel.testIntent {
-            putImageSelection(
-                uri = testUri,
-                fromCamera = false
-            )
-        }
-        coVerify(exactly = 1) {
-            selectionRepository.putSelection(
-                uri = testUri,
-                fromCamera = false
-            )
-        }
-        coEvery {
-            selectionRepository.putSelection(
-                uri = testUri,
-                fromCamera = true
-            )
-        } returns true
-        viewModel.testIntent {
-            putImageSelection(
-                uri = testUri,
-                fromCamera = true
-            )
-        }
-        coVerify(exactly = 1) {
-            selectionRepository.putSelection(
-                uri = testUri,
-                fromCamera = true
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                },
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(
-                MainSideEffect.NavigateToSelectionSavePath,
-                MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY)
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    selectionRepository.putSelection(
+                        uri = testUri,
+                        fromCamera = false
+                    )
+                } returns true
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(false)
+                putImageSelection(
+                    uri = testUri,
+                    fromCamera = false
+                )
+            }.join()
+            coVerify(exactly = 1) {
+                selectionRepository.putSelection(
+                    uri = testUri,
+                    fromCamera = false
+                )
+            }
+            invokeIntent {
+                coEvery {
+                    selectionRepository.putSelection(
+                        uri = testUri,
+                        fromCamera = true
+                    )
+                } returns true
+                putImageSelection(
+                    uri = testUri,
+                    fromCamera = true
+                )
+            }.join()
+            coVerify(exactly = 1) {
+                selectionRepository.putSelection(
+                    uri = testUri,
+                    fromCamera = true
+                )
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY))
         }
     }
 
     @Test
     fun test_putImagesSelection() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            selectionRepository.putSelection(
-                uris = testUris,
-                urisFromIntent = testUris.toTypedArray()
-            )
-        } returns true
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(false)
-        viewModel.testIntent {
-            putImagesSelection(
-                uris = testUris,
-                urisFromIntent = testUris.toTypedArray()
-            )
-        }
-        coVerify(exactly = 1) {
-            selectionRepository.putSelection(
-                uris = testUris,
-                urisFromIntent = testUris.toTypedArray()
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.NavigateToSelectionSavePath)
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    selectionRepository.putSelection(
+                        uris = testUris,
+                        urisFromIntent = testUris.toTypedArray()
+                    )
+                } returns true
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(false)
+                putImagesSelection(
+                    uris = testUris,
+                    urisFromIntent = testUris.toTypedArray()
+                )
+            }.join()
+            coVerify(exactly = 1) {
+                selectionRepository.putSelection(
+                    uris = testUris,
+                    urisFromIntent = testUris.toTypedArray()
+                )
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
     @Test
     fun test_putImageDirectorySelection() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
-        coEvery {
-            imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
-        } returns result
-        coEvery {
-            selectionRepository.putSelection(result)
-        } returns true
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(false)
-        viewModel.testIntent {
-            putImageDirectorySelection(uri = testUri)
-        }
-        coVerify(ordering = Ordering.SEQUENCE) {
-            imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
-            selectionRepository.putSelection(result)
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.NavigateToSelectionSavePath)
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
+            invokeIntent {
+                coEvery {
+                    imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
+                } returns result
+                coEvery {
+                    selectionRepository.putSelection(result)
+                } returns true
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(false)
+                putImageDirectorySelection(uri = testUri)
+            }.join()
+            coVerify(ordering = Ordering.SEQUENCE) {
+                imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
+                selectionRepository.putSelection(result)
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
     @Test
     fun test_handleSettings() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleSettings()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(MainSideEffect.NavigateToSettings)
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleSettings()
+            }.join()
+            expectSideEffect(MainSideEffect.NavigateToSettings)
         }
     }
 
     @Test
     fun test_chooseImage() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseImage(canReorderImageSources = false)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.ChooseImage(openPath = testUri))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                chooseImage(canReorderImageSources = false)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.ChooseImage(openPath = testUri))
         }
     }
 
     @Test
     fun test_chooseImages() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseImages(canReorderImageSources = false)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.ChooseImages(openPath = testUri))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                chooseImages(canReorderImageSources = false)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.ChooseImages(openPath = testUri))
         }
     }
 
     @Test
     fun test_chooseImageDirectory() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseImageDirectory(canReorderImageSources = false)
-        }
-        coVerify(exactly = 1) {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.ChooseImageDirectory(openPath = testUri))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                chooseImageDirectory(canReorderImageSources = false)
+            }.join()
+            coVerify(exactly = 1) {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.ChooseImageDirectory(openPath = testUri))
         }
     }
 
     @Test
     fun test_chooseSelectionNavigationRoute() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseSelectionNavigationRoute(fromCamera = true)
-        }
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(true)
-        coEvery {
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        } returns testUri
-        viewModel.testIntent {
-            chooseSelectionNavigationRoute()
-        }
-        coVerify(ordering = Ordering.ALL) {
-            settingsRepository.shouldSkipSavePathSelection()
-            settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-        }
-        coEvery {
-            settingsRepository.shouldSkipSavePathSelection()
-        } returns flowOf(false)
-        viewModel.testIntent {
-            chooseSelectionNavigationRoute()
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY),
-                MainSideEffect.NavigateToSelection(savePath = testUri),
-                MainSideEffect.NavigateToSelectionSavePath
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+                } returns testUri
+                chooseSelectionNavigationRoute(fromCamera = true)
+            }.join()
+            invokeIntent {
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(true)
+                coEvery {
+                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+                } returns testUri
+                chooseSelectionNavigationRoute()
+            }.join()
+            coVerify(ordering = Ordering.ALL) {
+                settingsRepository.shouldSkipSavePathSelection()
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            }
+            invokeIntent {
+                coEvery {
+                    settingsRepository.shouldSkipSavePathSelection()
+                } returns flowOf(false)
+                chooseSelectionNavigationRoute()
+            }.join()
+            expectSideEffect(MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY))
+            expectSideEffect(MainSideEffect.NavigateToSelection(savePath = testUri))
+            expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
     }
 
     @Test
     fun test_launchCamera() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        coEvery {
-            imageRepository.getExternalPicturesFileProviderUriOrNull(
-                fileProviderPackage = String.Empty,
-                displayName = String.Empty
-            )
-        } returns testUri
-        viewModel.testIntent {
-            launchCamera(
-                fileProviderPackage = String.Empty,
-                displayName = String.Empty,
-                canReorderImageSources = false
-            )
-        }
-        coVerify(exactly = 1) {
-            imageRepository.getExternalPicturesFileProviderUriOrNull(
-                fileProviderPackage = String.Empty,
-                displayName = String.Empty
-            )
-        }
-        viewModel.assert(initialState) {
-            states(
-                {
-                    copy(loading = true)
-                },
-                {
-                    copy(loading = false)
-                }
-            )
-            postedSideEffects(MainSideEffect.LaunchCamera(fileProviderImagePath = testUri))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                coEvery {
+                    imageRepository.getExternalPicturesFileProviderUriOrNull(
+                        fileProviderPackage = String.Empty,
+                        displayName = String.Empty
+                    )
+                } returns testUri
+                launchCamera(
+                    fileProviderPackage = String.Empty,
+                    displayName = String.Empty,
+                    canReorderImageSources = false
+                )
+            }.join()
+            coVerify(exactly = 1) {
+                imageRepository.getExternalPicturesFileProviderUriOrNull(
+                    fileProviderPackage = String.Empty,
+                    displayName = String.Empty
+                )
+            }
+            expectState {
+                copy(loading = true)
+            }
+            expectState {
+                copy(loading = false)
+            }
+            expectSideEffect(MainSideEffect.LaunchCamera(fileProviderImagePath = testUri))
         }
     }
 
     @Test
     fun test_handleShortcut() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            handleShortcut(String.Empty)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(MainSideEffect.Shortcut.Handle(String.Empty))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleShortcut(String.Empty)
+            }.join()
+            expectSideEffect(MainSideEffect.Shortcut.Handle(String.Empty))
         }
     }
 
     @Test
     fun test_reportShortcutUsed() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState)
-        viewModel.testIntent {
-            reportShortcutUsed(String.Empty)
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(MainSideEffect.Shortcut.ReportUsage(String.Empty))
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                reportShortcutUsed(String.Empty)
+            }.join()
+            expectSideEffect(MainSideEffect.Shortcut.ReportUsage(String.Empty))
         }
     }
 
     @Test
     fun test_handleReceivedImages() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.testIntent {
-            handleReceivedImages(emptyList())
-        }
-        viewModel.testIntent {
-            handleReceivedImages(listOf(testUri))
-        }
-        viewModel.testIntent {
-            handleReceivedImages(listOf(testUri, testUri))
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                MainSideEffect.ReceivedImage(uri = testUri),
-                MainSideEffect.ReceivedImages(uris = listOf(testUri, testUri))
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handleReceivedImages(emptyList())
+            }.join()
+            invokeIntent {
+                handleReceivedImages(listOf(testUri))
+            }.join()
+            invokeIntent {
+                handleReceivedImages(listOf(testUri, testUri))
+            }.join()
+            expectSideEffect(MainSideEffect.ReceivedImage(uri = testUri))
+            expectSideEffect(MainSideEffect.ReceivedImages(uris = listOf(testUri, testUri)))
         }
     }
 
     @Test
     fun test_handlePasteImages() = runTest {
-        val initialState = MainState()
-        val viewModel = MainViewModel(
+        MainViewModel(
             savedStateHandle = SavedStateHandle(),
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
             settingsRepository = settingsRepository,
             updateRepository = updateRepository
-        ).test(initialState) {
-            isolateFlow = false
-        }
-        viewModel.testIntent {
-            handlePasteImages(emptyList())
-        }
-        viewModel.testIntent {
-            handlePasteImages(listOf(testUri))
-        }
-        viewModel.testIntent {
-            handlePasteImages(listOf(testUri, testUri))
-        }
-        viewModel.assert(initialState) {
-            postedSideEffects(
-                MainSideEffect.PasteImagesNone,
-                MainSideEffect.PasteImages(uris = listOf(testUri)),
-                MainSideEffect.PasteImages(uris = listOf(testUri, testUri))
-            )
+        ).test(
+            testScope = this,
+            initialState = MainState()
+        ) {
+            expectInitialState()
+            invokeIntent {
+                handlePasteImages(emptyList())
+            }.join()
+            invokeIntent {
+                handlePasteImages(listOf(testUri))
+            }.join()
+            invokeIntent {
+                handlePasteImages(listOf(testUri, testUri))
+            }.join()
+            expectSideEffect(MainSideEffect.PasteImagesNone)
+            expectSideEffect(MainSideEffect.PasteImages(uris = listOf(testUri)))
+            expectSideEffect(MainSideEffect.PasteImages(uris = listOf(testUri, testUri)))
         }
     }
 }

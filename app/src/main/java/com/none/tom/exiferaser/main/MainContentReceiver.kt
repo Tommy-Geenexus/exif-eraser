@@ -26,9 +26,7 @@ import androidx.core.view.ContentInfoCompat
 import androidx.core.view.OnReceiveContentListener
 import com.none.tom.exiferaser.addUrisToSet
 import com.none.tom.exiferaser.isNotNullOrEmpty
-import kotlin.contracts.ExperimentalContracts
 
-@ExperimentalContracts
 class MainContentReceiver(
     private val onUrisReceived: (List<Uri>) -> Unit
 ) : OnReceiveContentListener {

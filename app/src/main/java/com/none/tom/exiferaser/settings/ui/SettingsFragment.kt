@@ -42,10 +42,8 @@ import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class SettingsFragment :
     BaseFragment<FragmentSettingsBinding>(R.layout.fragment_settings),

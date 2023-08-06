@@ -38,7 +38,6 @@ import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Collections
 import javax.inject.Inject
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.flow.firstOrNull
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
@@ -46,7 +45,6 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-@ExperimentalContracts
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,

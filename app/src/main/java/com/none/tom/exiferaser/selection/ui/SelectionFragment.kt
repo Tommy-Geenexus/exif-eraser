@@ -53,10 +53,8 @@ import com.none.tom.exiferaser.selection.crossfade
 import com.none.tom.exiferaser.selection.fadeIn
 import com.none.tom.exiferaser.selection.toPercent
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.launch
 
-@ExperimentalContracts
 @AndroidEntryPoint
 class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragment_selection) {
 
@@ -98,7 +96,8 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
 
             override fun onPrepareMenu(menu: Menu) {
                 menu.findItem(R.id.action_share).apply {
-                    isVisible = binding.done.isVisible && viewModel.hasSavedImages()
+                    isVisible = binding.done.isVisible &&
+                        viewModel.container.stateFlow.value.imagesSaved > 0
                 }
             }
 

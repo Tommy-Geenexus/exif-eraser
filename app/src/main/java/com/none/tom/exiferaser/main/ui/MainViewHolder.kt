@@ -25,9 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
-import kotlin.contracts.ExperimentalContracts
 
-@ExperimentalContracts
 class MainViewHolder(
     private val binding: ItemImageSourceBinding,
     private val listener: MainAdapter.Listener,

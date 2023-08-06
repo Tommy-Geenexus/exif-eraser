@@ -43,7 +43,6 @@ import com.none.tom.exiferaser.suspendRunCatching
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.contracts.ExperimentalContracts
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -53,7 +52,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-@OptIn(ExperimentalContracts::class)
 @Singleton
 class SettingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -499,6 +497,7 @@ class SettingsRepository @Inject constructor(
         }
     }
 
+    @Suppress("SameParameterValue")
     private suspend fun hasPersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
