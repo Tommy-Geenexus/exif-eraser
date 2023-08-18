@@ -18,7 +18,7 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/spacing_large"
+        android:layout_marginTop="@dimen/spacing_normal"
         android:paddingStart="@dimen/spacing_large"
         android:paddingEnd="@dimen/spacing_large"
         android:scrollbars="none">
@@ -30,7 +30,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/extension"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -38,7 +38,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/iccp"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -47,7 +47,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/exif"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -56,7 +56,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/photoshop"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -65,7 +65,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/xmp"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -74,7 +74,7 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/extended_xmp"
-                style="?attr/chipStyle"
+                style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"

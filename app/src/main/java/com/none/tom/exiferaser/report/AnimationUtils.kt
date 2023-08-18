@@ -34,7 +34,6 @@ fun lerp(
 /**
  * Linearly interpolate between two values when the fraction is in a given range.
  */
-@Suppress("ReturnCount")
 fun lerp(
     startValue: Float,
     endValue: Float,
@@ -72,7 +71,6 @@ fun lerpArgb(
 /**
  * Linearly interpolate between two colors when the fraction is in a given range.
  */
-@Suppress("ReturnCount")
 @ColorInt
 fun lerpArgb(
     @ColorInt startColor: Int,

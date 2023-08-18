@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets
 /**
  * @see FileUtils
  */
-@Suppress("MagicNumber")
 object FileUtilsKt {
 
     fun isValidExtFilename(name: String?): Boolean {

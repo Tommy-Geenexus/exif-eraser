@@ -21,13 +21,12 @@
 package com.none.tom.exiferaser.details.business
 
 import android.os.Parcelable
-import com.none.tom.exiferaser.Empty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ImageModifiedDetailsState(
-    val extension: String = String.Empty,
-    val mimeType: String = String.Empty,
+    val extension: String = "",
+    val mimeType: String = "",
     val containsIccProfile: Boolean = false,
     val containsExif: Boolean = false,
     val containsPhotoshopImageResources: Boolean = false,

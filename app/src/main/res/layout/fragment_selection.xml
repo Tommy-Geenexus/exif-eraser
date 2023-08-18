@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/toolbar_include"
@@ -36,8 +37,7 @@
             android:id="@+id/progress_indicator"
             android:layout_width="@dimen/progress_width"
             android:layout_height="@dimen/progress_width"
-            android:layout_gravity="center"
-            app:indicatorColor="?attr/colorAccent" />
+            android:layout_gravity="center" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

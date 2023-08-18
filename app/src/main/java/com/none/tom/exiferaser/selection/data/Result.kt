@@ -22,8 +22,8 @@ package com.none.tom.exiferaser.selection.data
 
 import android.os.Parcelable
 import androidx.annotation.IntRange
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import kotlinx.parcelize.Parcelize
 
 sealed class Result : Parcelable {

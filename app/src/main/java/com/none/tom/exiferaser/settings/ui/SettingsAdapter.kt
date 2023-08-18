@@ -40,6 +40,7 @@ class SettingsAdapter(
             newItem: Pair<Int, String>
         ) = oldItem.first == newItem.first
 
+        @Suppress("SameReturnValue")
         override fun areContentsTheSame(
             oldItem: Pair<Int, String>,
             newItem: Pair<Int, String>

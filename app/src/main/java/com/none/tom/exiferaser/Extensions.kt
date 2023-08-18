@@ -22,13 +22,19 @@ package com.none.tom.exiferaser
 
 import android.content.ClipData
 import android.content.ClipDescription
+import android.content.ClipboardManager
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
-import android.view.View
-import dev.chrisbanes.insetter.applyInsetter
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import kotlin.contracts.contract
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 
 suspend fun <T> CoroutineContext.suspendRunCatching(block: suspend () -> T): Result<T> = try {
     Result.success(block())
@@ -37,15 +43,13 @@ suspend fun <T> CoroutineContext.suspendRunCatching(block: suspend () -> T): Res
     Result.failure(exception)
 }
 
-fun View.applyInsetsToMargins() {
-    applyInsetter {
-        type(
-            navigationBars = true,
-            statusBars = true
-        ) {
-            margin()
-        }
+fun Context.getClipImages(): List<Uri> {
+    val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val resultSet = linkedSetOf<Uri>()
+    if (cm.hasPrimaryClip() && cm.primaryClipDescription?.areMimeTypesSupported() == true) {
+        cm.primaryClip?.addUrisToSet(resultSet)
     }
+    return resultSet.toList()
 }
 
 fun Intent.getClipDataUris(): Array<Uri> {
@@ -72,7 +76,6 @@ fun ClipData.addUrisToSet(resultSet: LinkedHashSet<Uri>) {
     }
 }
 
-@Suppress("BooleanMethodIsAlwaysInverted")
 fun ClipDescription.areMimeTypesSupported(): Boolean {
     for (i in 0 until mimeTypeCount) {
         val mimeType = getMimeType(i)
@@ -83,6 +86,8 @@ fun ClipDescription.areMimeTypesSupported(): Boolean {
     return true
 }
 
+fun Uri.isFileProviderUri() = pathSegments.any { path -> path == "my_images" }
+
 fun Uri?.isNullOrEmpty() = this == null || this == Uri.EMPTY
 
 fun Uri?.isNotNullOrEmpty(): Boolean {
@@ -92,5 +97,60 @@ fun Uri?.isNotNullOrEmpty(): Boolean {
     return this != null && isNotEmpty()
 }
 
-@Suppress("BooleanMethodIsAlwaysInverted")
 fun Uri.isNotEmpty() = this != Uri.EMPTY
+
+@Throws(IOException::class)
+suspend fun ContentResolver.openInputStreamOrThrow(
+    coroutineContext: CoroutineContext,
+    uri: Uri
+): InputStream {
+    return withContext(coroutineContext) {
+        openInputStream(uri) ?: throw IOException()
+    }
+}
+
+@Throws(IOException::class)
+suspend fun ContentResolver.openOutputStreamOrThrow(
+    coroutineContext: CoroutineContext,
+    uri: Uri
+): OutputStream {
+    return withContext(coroutineContext) {
+        openOutputStream(uri) ?: throw IOException()
+    }
+}
+
+@Throws(IOException::class)
+suspend fun ContentResolver.queryOrThrow(
+    coroutineContext: CoroutineContext,
+    uri: Uri
+): Cursor {
+    return withContext(coroutineContext) {
+        query(uri, null, null, null, null) ?: throw IOException()
+    }
+}
+
+fun Boolean.toInt() = if (this) 1 else 0
+
+fun Int.toPercent() = toString().plus('%')
+
+fun Int.toProgress(max: Int) = (this * PROGRESS_MAX) / max
+
+fun <E> MutableList<E>.addOrShift(
+    element: E,
+    shiftAtSize: Int = REPORT_SUMMARIES_MAX
+): List<E> {
+    if (size >= shiftAtSize) {
+        removeFirstOrNull() ?: return this
+    }
+    add(element)
+    return this
+}
+
+fun String.getExtensionFromMimeTypeOrEmpty(): String {
+    return when (this) {
+        MIME_TYPE_JPEG -> EXTENSION_JPEG
+        MIME_TYPE_PNG -> EXTENSION_PNG
+        MIME_TYPE_WEBP -> EXTENSION_WEBP
+        else -> ""
+    }
+}

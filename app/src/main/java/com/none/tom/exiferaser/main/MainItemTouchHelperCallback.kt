@@ -43,7 +43,6 @@ class MainItemTouchHelperCallback(
         )
     }
 
-    @Suppress("ComplexCondition")
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -99,7 +98,6 @@ class MainItemTouchHelperCallback(
         }
     }
 
-    @Suppress("EmptyFunctionBlock")
     override fun onSwiped(
         viewHolder: ViewHolder,
         direction: Int

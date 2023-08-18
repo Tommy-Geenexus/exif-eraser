@@ -37,19 +37,16 @@ import com.none.tom.exiferaser.EXTENSION_WEBP
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
 import com.none.tom.exiferaser.MIME_TYPE_PNG
 import com.none.tom.exiferaser.MIME_TYPE_WEBP
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
-import com.none.tom.exiferaser.selection.toProgress
+import com.none.tom.exiferaser.toProgress
 import com.squareup.wire.AnyMessage
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.contracts.ExperimentalContracts
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -62,9 +59,6 @@ import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 import strikt.assertions.isNotNull
 
-@ExperimentalCoroutinesApi
-@ExperimentalTime
-@ExperimentalContracts
 @RunWith(AndroidJUnit4::class)
 class ImageRepositoryInstrumentedTest {
 
@@ -282,7 +276,10 @@ class ImageRepositoryInstrumentedTest {
 
     private suspend fun ReceiveTurbine<Result>.expectImageHandled(
         summary: Summary,
-        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) progress: Int
+        @IntRange(
+            from = PROGRESS_MIN.toLong(),
+            to = PROGRESS_MAX.toLong()
+        ) progress: Int
     ) {
         with(awaitItem()) {
             expectThat(this).isA<Result.Report>()

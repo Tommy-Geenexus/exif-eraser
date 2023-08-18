@@ -44,4 +44,8 @@ const val EXTENSION_JPEG = ".jpg"
 const val EXTENSION_PNG = ".png"
 const val EXTENSION_WEBP = ".webp"
 
-val String.Companion.Empty: String get() = ""
+const val ALPHA_TRANSPARENT = 0f
+
+const val PROGRESS_MIN = 0
+const val PROGRESS_MAX = 100
+const val REPORT_SUMMARIES_MAX = 100

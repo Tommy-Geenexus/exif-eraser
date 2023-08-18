@@ -26,13 +26,11 @@ import android.os.Build
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.EXTENSION_JPEG
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.MIME_TYPE_JPEG
+import com.none.tom.exiferaser.PROGRESS_MAX
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.main.data.SelectionRepository
-import com.none.tom.exiferaser.selection.HISTORY_SIZE
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Result
 import com.none.tom.exiferaser.selection.data.Summary
@@ -64,13 +62,13 @@ class SelectionViewModelTest {
     private val testUris = listOf(testUri)
 
     private val testImageSelection =
-        AnyMessage.pack(UserImageSelectionProto(image_path = String.Empty))
+        AnyMessage.pack(UserImageSelectionProto(image_path = ""))
     private val testImagesSelection =
         AnyMessage.pack(
             UserImagesSelectionProto(
                 user_images_selection = listOf(
-                    UserImageSelectionProto(image_path = String.Empty),
-                    UserImageSelectionProto(image_path = String.Empty)
+                    UserImageSelectionProto(image_path = ""),
+                    UserImageSelectionProto(image_path = "")
                 )
             )
         )
@@ -115,25 +113,6 @@ class SelectionViewModelTest {
     }
 
     @Test
-    fun test_prepareReport() = runTest {
-        SelectionViewModel(
-            savedStateHandle = SavedStateHandle(),
-            imageRepository = imageRepository,
-            selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository
-        ).test(
-            testScope = this,
-            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
-        ) {
-            expectInitialState()
-            invokeIntent {
-                prepareReport()
-            }
-            expectSideEffect(SelectionSideEffect.PrepareReport(listOf(testSummary)))
-        }
-    }
-
-    @Test
     fun test_shareImages() = runTest {
         SelectionViewModel(
             savedStateHandle = SavedStateHandle(),
@@ -142,7 +121,7 @@ class SelectionViewModelTest {
             settingsRepository = settingsRepository
         ).test(
             testScope = this,
-            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
+            initialState = SelectionState(imageSummaries = listOf(testSummary))
         ) {
             expectInitialState()
             invokeIntent {
@@ -161,7 +140,7 @@ class SelectionViewModelTest {
             settingsRepository = settingsRepository
         ).test(
             testScope = this,
-            initialState = SelectionState(imageSummaries = arrayOf(testSummary))
+            initialState = SelectionState(imageSummaries = listOf(testSummary))
         ) {
             expectInitialState()
             invokeIntent {
@@ -193,7 +172,7 @@ class SelectionViewModelTest {
             expectInitialState()
             coEvery {
                 settingsRepository.getDefaultDisplayNameSuffix()
-            } returns flowOf(String.Empty)
+            } returns flowOf("")
             coEvery {
                 settingsRepository.shouldAutoDelete()
             } returns flowOf(false)
@@ -244,12 +223,8 @@ class SelectionViewModelTest {
             expectState {
                 copy(
                     imageResult = Result.Report(summary = testSummary),
-                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary)
-                    },
-                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary.imageUri)
-                    },
+                    imageSummaries = listOf(testSummary),
+                    imageUris = listOf(testSummary.imageUri),
                     imagesModified = 1,
                     imagesSaved = 1
                 )
@@ -282,7 +257,7 @@ class SelectionViewModelTest {
             expectInitialState()
             coEvery {
                 settingsRepository.getDefaultDisplayNameSuffix()
-            } returns flowOf(String.Empty)
+            } returns flowOf("")
             coEvery {
                 settingsRepository.shouldAutoDelete()
             } returns flowOf(false)
@@ -335,14 +310,8 @@ class SelectionViewModelTest {
             expectState {
                 copy(
                     imageResult = Result.Report(summary = testSummary),
-                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary)
-                        set(1, testSummary)
-                    },
-                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary.imageUri)
-                        set(1, testSummary.imageUri)
-                    },
+                    imageSummaries = listOf(testSummary),
+                    imageUris = listOf(testSummary.imageUri),
                     imagesModified = 1,
                     imagesSaved = 1
                 )
@@ -357,14 +326,8 @@ class SelectionViewModelTest {
             expectState {
                 copy(
                     imageResult = Result.Report(summary = testSummary),
-                    imageSummaries = arrayOfNulls<Summary>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary)
-                        set(1, testSummary)
-                    },
-                    imageUris = arrayOfNulls<Uri>(size = HISTORY_SIZE).apply {
-                        set(0, testSummary.imageUri)
-                        set(1, testSummary.imageUri)
-                    },
+                    imageSummaries = listOf(testSummary, testSummary),
+                    imageUris = listOf(testSummary.imageUri, testSummary.imageUri),
                     imagesModified = 2,
                     imagesSaved = 2
                 )

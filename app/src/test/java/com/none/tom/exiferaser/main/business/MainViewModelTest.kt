@@ -26,7 +26,6 @@ import android.os.Build
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.CameraProto
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
@@ -501,20 +500,20 @@ class MainViewModelTest {
             invokeIntent {
                 coEvery {
                     imageRepository.getExternalPicturesFileProviderUriOrNull(
-                        fileProviderPackage = String.Empty,
-                        displayName = String.Empty
+                        fileProviderPackage = "",
+                        displayName = ""
                     )
                 } returns testUri
                 launchCamera(
-                    fileProviderPackage = String.Empty,
-                    displayName = String.Empty,
+                    fileProviderPackage = "",
+                    displayName = "",
                     canReorderImageSources = false
                 )
             }.join()
             coVerify(exactly = 1) {
                 imageRepository.getExternalPicturesFileProviderUriOrNull(
-                    fileProviderPackage = String.Empty,
-                    displayName = String.Empty
+                    fileProviderPackage = "",
+                    displayName = ""
                 )
             }
             expectState {
@@ -541,9 +540,9 @@ class MainViewModelTest {
         ) {
             expectInitialState()
             invokeIntent {
-                handleShortcut(String.Empty)
+                handleShortcut("")
             }.join()
-            expectSideEffect(MainSideEffect.Shortcut.Handle(String.Empty))
+            expectSideEffect(MainSideEffect.Shortcut.Handle(""))
         }
     }
 
@@ -561,9 +560,9 @@ class MainViewModelTest {
         ) {
             expectInitialState()
             invokeIntent {
-                reportShortcutUsed(String.Empty)
+                reportShortcutUsed("")
             }.join()
-            expectSideEffect(MainSideEffect.Shortcut.ReportUsage(String.Empty))
+            expectSideEffect(MainSideEffect.Shortcut.ReportUsage(""))
         }
     }
 

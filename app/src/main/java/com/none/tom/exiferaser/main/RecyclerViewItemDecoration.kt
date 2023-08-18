@@ -25,8 +25,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.State
 
-class MarginItemDecoration(
-    private val margin: Float
+class RecyclerViewItemDecoration(
+    private val margin: Int
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
@@ -35,7 +35,6 @@ class MarginItemDecoration(
         parent: RecyclerView,
         state: State
     ) {
-        super.getItemOffsets(outRect, view, parent, state)
-        margin.toInt().let { margin -> outRect.set(margin, margin, margin, margin) }
+        outRect.set(margin, margin, margin, margin)
     }
 }

@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.main.ui
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.PreferenceBinding
@@ -102,7 +101,7 @@ class HelpViewHolder(
             }
         } catch (e: Exception) {
             Timber.e(e)
-            String.Empty
+            ""
         }
     }
 }

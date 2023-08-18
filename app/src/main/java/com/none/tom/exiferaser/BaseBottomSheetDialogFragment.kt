@@ -27,6 +27,7 @@ import android.view.ViewGroup
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.elevation.SurfaceColors
 import curtains.phoneWindow
@@ -51,6 +52,14 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
     ) {
         super.onViewCreated(view, savedInstanceState)
         view.phoneWindow?.navigationBarColor = SurfaceColors.SURFACE_1.getColor(requireActivity())
+        with(requireDialog()) {
+            setOnShowListener {
+                val v = findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                if (v != null) {
+                    BottomSheetBehavior.from(v).state = BottomSheetBehavior.STATE_EXPANDED
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
