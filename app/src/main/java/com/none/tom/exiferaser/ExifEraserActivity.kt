@@ -91,21 +91,21 @@ class ExifEraserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        window.statusBarColor = SurfaceColors.SURFACE_2.getColor(this)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        computeWindowSizeClasses()
+        val colorSurface0 = SurfaceColors.SURFACE_0.getColor(this)
+        val colorSurface2 = SurfaceColors.SURFACE_2.getColor(this)
+        window.statusBarColor = colorSurface0
         (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
             ?.navController
-            ?.addOnDestinationChangedListener { navController, destination, _ ->
-                val prevDestinationId = navController.previousBackStackEntry?.destination?.id
-                val colorSurface0 = SurfaceColors.SURFACE_0.getColor(this@ExifEraserActivity)
-                val colorSurface2 = SurfaceColors.SURFACE_2.getColor(this@ExifEraserActivity)
-                if (destination.id == R.id.fragment_main) {
-                    window.statusBarColor = colorSurface0
-                    window.navigationBarColor = colorSurface2
-                } else if (prevDestinationId == R.id.fragment_main) {
-                    window.statusBarColor = colorSurface2
-                    window.navigationBarColor = colorSurface0
+            ?.addOnDestinationChangedListener { _, destination, _ ->
+                if (windowSizeClassWidth != WindowSizeClass.Expanded) {
+                    if (destination.id == R.id.fragment_main) {
+                        window.navigationBarColor = colorSurface2
+                    } else {
+                        window.navigationBarColor = colorSurface0
+                    }
                 }
             }
         binding.layout.addView(object : View(this) {
@@ -114,7 +114,6 @@ class ExifEraserActivity : AppCompatActivity() {
                 computeWindowSizeClasses()
             }
         })
-        computeWindowSizeClasses()
         handleSendIntent()
         handleShortcutIntent()
         lifecycleScope.launch {

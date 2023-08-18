@@ -22,14 +22,12 @@ package com.none.tom.exiferaser.report.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.AttrRes
-import androidx.core.os.bundleOf
+import androidx.core.os.BundleCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
@@ -41,11 +39,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.elevation.SurfaceColors
+import com.none.tom.exiferaser.ALPHA_TRANSPARENT
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 import com.none.tom.exiferaser.R
@@ -59,7 +57,6 @@ import com.none.tom.exiferaser.report.business.ReportState
 import com.none.tom.exiferaser.report.business.ReportViewModel
 import com.none.tom.exiferaser.report.lerp
 import com.none.tom.exiferaser.report.lerpArgb
-import com.none.tom.exiferaser.selection.MaterialColor
 import com.none.tom.exiferaser.selection.data.Summary
 import com.none.tom.exiferaser.selection.ui.SelectionFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,15 +67,12 @@ class ReportFragment :
     BaseFragment<FragmentReportBinding>(R.layout.fragment_report),
     ReportAdapter.Listener {
 
-    companion object {
-        private const val KEY_STATE_BEHAVIOUR = TOP_LEVEL_PACKAGE_NAME + "STATE_BEHAVIOUR"
-        private const val KEY_STATE_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
-        const val KEY_REPORT_SLIDE = TOP_LEVEL_PACKAGE_NAME + "REPORT_SLIDE"
-        const val KEY_OFFSET_SLIDE = TOP_LEVEL_PACKAGE_NAME + "OFFSET_SLIDE"
-        const val KEY_FRACTION_END = TOP_LEVEL_PACKAGE_NAME + "FRACTION_END"
-        private const val FRACTION_IN_START = 0.2f
+    private companion object {
+        const val KEY_STATE_BEHAVIOUR = TOP_LEVEL_PACKAGE_NAME + "STATE_BEHAVIOUR"
+        const val KEY_STATE_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
+        const val FRACTION_IN_START = 0.2f
         const val FRACTION_OUT_START = 0f
-        private const val FRACTION_OUT_END = 0.19f
+        const val FRACTION_OUT_END = 0.19f
     }
 
     private val viewModel: ReportViewModel by viewModels()
@@ -92,7 +86,11 @@ class ReportFragment :
         MaterialColors.getColor(requireView(), R.attr.colorSurface)
     }
     private val endFraction by lazy(LazyThreadSafetyMode.NONE) {
-        val actionBarSize = resolveThemeAttribute(android.R.attr.actionBarSize).toFloat()
+        val value = TypedValue()
+        requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, value, true)
+        val actionBarSize = TypedValue
+            .complexToDimensionPixelSize(value.data, resources.displayMetrics)
+            .toFloat()
         val layoutHeight = binding.layout.height.toFloat()
         1 - (actionBarSize / layoutHeight)
     }
@@ -109,26 +107,21 @@ class ReportFragment :
     private var _behaviour: ReportFragmentBehaviour<ReportConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
-    @Suppress("DEPRECATION")
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
-        setFragmentResultListener(SelectionFragment.KEY_REPORT_PREPARE) { _, args: Bundle ->
+        setFragmentResultListener(SelectionFragment.KEY_REPORT) { _, args: Bundle ->
             viewModel.handleImageSummaries(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    args.getParcelableArrayList(
-                        SelectionFragment.KEY_REPORT_PREPARE,
-                        Summary::class.java
-                    ).orEmpty()
-                } else {
-                    args.getParcelableArrayList<Summary>(
-                        SelectionFragment.KEY_REPORT_PREPARE
-                    ).orEmpty()
-                }
+                BundleCompat.getParcelableArrayList(
+                    args,
+                    SelectionFragment.KEY_REPORT,
+                    Summary::class.java
+                ).orEmpty()
             )
         }
+        binding.toolbar.setBackgroundColor(SurfaceColors.SURFACE_0.getColor(requireActivity()))
         _behaviour = BottomSheetBehavior.from(binding.layout) as
             ReportFragmentBehaviour<ReportConstraintLayout>
         var translationMax = 0f
@@ -172,7 +165,6 @@ class ReportFragment :
             behaviour.state = BottomSheetBehavior.STATE_EXPANDED
         }
         binding.report.apply {
-            addItemDecoration(DividerItemDecoration(requireContext(), RecyclerView.VERTICAL))
             layoutManager = LinearLayoutManager(requireContext())
             adapter = ReportAdapter(listener = this@ReportFragment)
         }
@@ -277,7 +269,7 @@ class ReportFragment :
         binding.details.apply {
             alpha = lerp(
                 startValue = MaterialColors.ALPHA_FULL,
-                endValue = MaterialColor.ALPHA_TRANSPARENT,
+                endValue = ALPHA_TRANSPARENT,
                 startFraction = FRACTION_OUT_START,
                 endFraction = FRACTION_OUT_END,
                 fraction = slideOffset
@@ -287,7 +279,7 @@ class ReportFragment :
         binding.expand.apply {
             alpha = lerp(
                 startValue = MaterialColors.ALPHA_FULL,
-                endValue = MaterialColor.ALPHA_TRANSPARENT,
+                endValue = ALPHA_TRANSPARENT,
                 startFraction = FRACTION_OUT_START,
                 endFraction = FRACTION_OUT_END,
                 fraction = slideOffset
@@ -296,7 +288,7 @@ class ReportFragment :
         }
         binding.toolbar.apply {
             alpha = lerp(
-                startValue = MaterialColor.ALPHA_TRANSPARENT,
+                startValue = ALPHA_TRANSPARENT,
                 endValue = MaterialColors.ALPHA_FULL,
                 startFraction = FRACTION_IN_START,
                 endFraction = endFraction,
@@ -306,7 +298,7 @@ class ReportFragment :
         }
         binding.report.apply {
             alpha = lerp(
-                startValue = MaterialColor.ALPHA_TRANSPARENT,
+                startValue = ALPHA_TRANSPARENT,
                 endValue = MaterialColors.ALPHA_FULL,
                 startFraction = FRACTION_OUT_START,
                 endFraction = endFraction,
@@ -323,26 +315,9 @@ class ReportFragment :
                 fraction = slideOffset
             )
         )
-        requireParentFragment().parentFragmentManager.setFragmentResult(
-            KEY_REPORT_SLIDE,
-            bundleOf(
-                KEY_FRACTION_END to endFraction,
-                KEY_OFFSET_SLIDE to slideOffset
-            )
-        )
     }
 
     private fun handleReportStateChanged(newState: Int) {
         backCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    @Suppress("SameParameterValue")
-    private fun resolveThemeAttribute(
-        @AttrRes attr: Int,
-        typedValue: TypedValue = TypedValue(),
-        resolveRefs: Boolean = true
-    ): Int {
-        requireActivity().theme.resolveAttribute(attr, typedValue, resolveRefs)
-        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
     }
 }

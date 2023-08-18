@@ -14,8 +14,8 @@ datastore = "1.0.0"
 drag-and-drop = "1.0.0"
 detekt = "1.23.1"
 exif-interface = "1.0.3"
+flexbox-layout = "3.0.0"
 fragment = "1.6.1"
-insetter = "0.6.1"
 junit = "4.13.2"
 junit-ext = "1.1.5"
 kotlin = "1.9.0"
@@ -56,8 +56,8 @@ datastore-prefs = { module = "androidx.datastore:datastore-preferences", version
 datastore-proto = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
 drag-and-drop = { module = "androidx.draganddrop:draganddrop", version.ref = "drag-and-drop" }
 exif-interface = { module = "io.github.tommy-geenexus:exif-interface-extended", version.ref = "exif-interface" }
+flexbox-layout = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox-layout" }
 fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
-insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insetter" }
 junit = { module = "junit:junit", version.ref = "junit" }
 junit-ext = { module = "androidx.test.ext:junit", version.ref = "junit-ext" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
@@ -95,8 +95,8 @@ implementation = [
     "datastore-proto",
     "drag-and-drop",
     "exif-interface",
+    "flexbox-layout",
     "fragment",
-    "insetter",
     "kotlin",
     "lifecycle",
     "material",

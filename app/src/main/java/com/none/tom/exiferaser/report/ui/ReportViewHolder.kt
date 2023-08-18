@@ -20,13 +20,14 @@
 
 package com.none.tom.exiferaser.report.ui
 
-import android.content.res.ColorStateList
 import android.net.Uri
+import android.os.Build
+import android.util.TypedValue
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.dispose
 import coil.load
-import com.google.android.material.color.MaterialColors
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.ItemReportBinding
 
@@ -39,6 +40,18 @@ class ReportViewHolder(
         binding.imageCropped.setOnClickListener {
             listener.onImageThumbnailSelected(absoluteAdapterPosition)
         }
+        binding.modified.setOnClickListener {
+            listener.onImageModifiedSelected(absoluteAdapterPosition)
+        }
+        binding.saved.setOnClickListener {
+            listener.onImageSavedSelected(absoluteAdapterPosition)
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val value = TypedValue()
+            itemView.context.theme.resolveAttribute(R.attr.colorSecondary, value, true)
+            binding.modified.setChipIconTintResource(value.resourceId)
+            binding.saved.setChipIconTintResource(value.resourceId)
+        }
     }
 
     fun bindItem(
@@ -46,61 +59,18 @@ class ReportViewHolder(
         imageModified: Boolean,
         imageSaved: Boolean
     ) {
-        binding.imageCropped.run {
-            load(imageUri) {
-                allowHardware(binding.imageCropped.isHardwareAccelerated)
-                listener(
-                    onError = { _, _ ->
-                        scaleType = ImageView.ScaleType.CENTER
-                    }
-                )
-                error(R.drawable.ic_image_not_supported)
-            }
-            val colorOk = ColorStateList.valueOf(
-                MaterialColors.getColor(binding.root, R.attr.colorOk)
+        binding.imageCropped.load(imageUri) {
+            allowHardware(binding.imageCropped.isHardwareAccelerated)
+            listener(
+                onError = { _, _ -> binding.imageCropped.scaleType = ImageView.ScaleType.CENTER }
             )
-            val colorError = ColorStateList.valueOf(
-                MaterialColors.getColor(binding.root, R.attr.colorError)
-            )
-            binding.modified.apply {
-                if (imageModified) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
-                    setTextColor(colorOk)
-                    setText(R.string.modified)
-                    setOnClickListener {
-                        listener.onImageModifiedSelected(absoluteAdapterPosition)
-                    }
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_error)
-                    setTextColor(colorError)
-                    setText(R.string.unmodified)
-                }
-                isEnabled = imageModified
-            }
-            binding.saved.apply {
-                if (imageSaved) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_task_alt)
-                    setTextColor(colorOk)
-                    setText(R.string.saved)
-                    setOnClickListener {
-                        listener.onImageSavedSelected(absoluteAdapterPosition)
-                    }
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_error)
-                    setTextColor(colorError)
-                    setText(R.string.unsaved)
-                }
-                isEnabled = imageSaved
-            }
+            error(R.drawable.ic_image_not_supported)
         }
+        binding.imageCropped.isClickable = imageSaved
+        binding.modified.isVisible = imageModified
+        binding.unmodified.isVisible = !imageModified
+        binding.saved.isVisible = imageSaved
+        binding.unsaved.isVisible = !imageSaved
     }
 
     fun releaseResources() {

@@ -12,8 +12,8 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
         android:gravity="center_vertical"
         android:text="@string/delete_camera_images"
         android:textAppearance="?attr/textAppearanceTitleLarge" />
@@ -21,9 +21,9 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
         android:layout_marginTop="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginEnd="@dimen/spacing_large"
         android:gravity="center_vertical"
         android:text="@string/delete_camera_images_all"
         android:textAppearance="?attr/textAppearanceSubtitle1" />
@@ -33,9 +33,9 @@
         style="?attr/materialButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
         android:layout_marginTop="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginEnd="@dimen/spacing_large"
         android:text="@string/delete"
         android:textColor="?attr/colorOnErrorContainer"
         app:backgroundTint="?attr/colorErrorContainer" />
@@ -45,8 +45,8 @@
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
         android:layout_marginBottom="@dimen/spacing_normal"
         android:text="@android:string/cancel"
         android:textColor="?attr/colorOnSurface" />

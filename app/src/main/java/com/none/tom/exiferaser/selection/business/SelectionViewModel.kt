@@ -25,12 +25,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
+import com.none.tom.exiferaser.addOrShift
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.selection.data.Result
-import com.none.tom.exiferaser.selection.setOrSkip
-import com.none.tom.exiferaser.selection.toInt
 import com.none.tom.exiferaser.settings.data.SettingsRepository
+import com.none.tom.exiferaser.toInt
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -105,14 +105,11 @@ class SelectionViewModel @Inject constructor(
                         state.copy(imageResult = result)
                     }
                     is Result.Report -> {
-                        val imageSummaries = state.imageSummaries.apply {
-                            setOrSkip(state.imagesTotal, result.summary)
-                        }
-                        val imageUris = state.imageUris.apply {
-                            setOrSkip(state.imagesTotal, result.summary.imageUri)
-                        }
-                        val modified =
-                            state.imagesModified + result.summary.imageModified.toInt()
+                        val imageSummaries =
+                            state.imageSummaries.toMutableList().addOrShift(result.summary)
+                        val imageUris =
+                            state.imageUris.toMutableList().addOrShift(result.summary.imageUri)
+                        val modified = state.imagesModified + result.summary.imageModified.toInt()
                         val saved = state.imagesSaved + result.summary.imageSaved.toInt()
                         state.copy(
                             imageResult = result,
@@ -125,7 +122,7 @@ class SelectionViewModel @Inject constructor(
                     is Result.Handled -> {
                         state.copy(
                             imageResult = result,
-                            imagesTotal = state.imagesTotal + 1,
+                            imagesTotal = state.imagesTotal.inc(),
                             progress = result.progress
                         )
                     }
@@ -164,14 +161,11 @@ class SelectionViewModel @Inject constructor(
                         state.copy(imageResult = result)
                     }
                     is Result.Report -> {
-                        val imageSummaries = state.imageSummaries.apply {
-                            setOrSkip(state.imagesTotal, result.summary)
-                        }
-                        val imageUris = state.imageUris.apply {
-                            setOrSkip(state.imagesTotal, result.summary.imageUri)
-                        }
-                        val modified =
-                            state.imagesModified + result.summary.imageModified.toInt()
+                        val imageSummaries =
+                            state.imageSummaries.toMutableList().addOrShift(result.summary)
+                        val imageUris =
+                            state.imageUris.toMutableList().addOrShift(result.summary.imageUri)
+                        val modified = state.imagesModified + result.summary.imageModified.toInt()
                         val saved = state.imagesSaved + result.summary.imageSaved.toInt()
                         state.copy(
                             imageResult = result,
@@ -184,7 +178,7 @@ class SelectionViewModel @Inject constructor(
                     is Result.Handled -> {
                         state.copy(
                             imageResult = result,
-                            imagesTotal = state.imagesTotal + 1,
+                            imagesTotal = state.imagesTotal.inc(),
                             progress = result.progress
                         )
                     }
@@ -205,13 +199,6 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    fun prepareReport() = intent {
-        val result = state.imageSummaries.filterNotNull()
-        if (result.isNotEmpty()) {
-            postSideEffect(SelectionSideEffect.PrepareReport(result))
-        }
-    }
-
     fun readSelection(dropFirstN: Int) = intent {
         val selection = selectionRepository.getSelection(dropFirstN).firstOrNull()
         if (selection != null) {
@@ -222,13 +209,8 @@ class SelectionViewModel @Inject constructor(
     fun shareImages() = intent {
         val result = state
             .imageSummaries
-            .filterNotNull()
-            .filter { summary ->
-                summary.imageModified && summary.imageSaved
-            }
-            .map { summary ->
-                summary.imageUri
-            }
+            .filter { summary -> summary.imageModified && summary.imageSaved }
+            .map { summary -> summary.imageUri }
         if (result.isNotEmpty()) {
             postSideEffect(SelectionSideEffect.ShareImages(ArrayList(result)))
         }

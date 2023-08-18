@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,13 +20,11 @@
 
 package com.none.tom.exiferaser.update.data
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.os.Build
 import androidx.annotation.IntRange
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -39,11 +37,11 @@ import com.google.android.play.core.ktx.AppUpdateResult
 import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.google.android.play.core.ktx.requestCompleteUpdate
 import com.google.android.play.core.ktx.requestUpdateFlow
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.di.DispatcherIo
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import com.none.tom.exiferaser.suspendRunCatching
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -62,7 +60,7 @@ class UpdateRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val appUpdateManager: AppUpdateManager,
     private val notificationManager: NotificationManagerCompat,
-    @DispatcherIo private val dispatcher: CoroutineDispatcher
+    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     private companion object {
@@ -77,7 +75,7 @@ class UpdateRepository @Inject constructor(
     }
 
     suspend fun getAppUpdateInfo(): AppUpdateInfo? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 appUpdateManager.requestAppUpdateInfo()
             }.getOrElse { exception ->
@@ -89,7 +87,7 @@ class UpdateRepository @Inject constructor(
 
     suspend fun completeFlexibleAppUpdate(): Boolean {
         notificationManager.cancel(NOTIFICATION_ID)
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 appUpdateManager.requestCompleteUpdate()
                 true
@@ -146,7 +144,7 @@ class UpdateRepository @Inject constructor(
                         Timber.e(exception)
                         emit(UpdateResult.FailedToInstall)
                     }
-                    .flowOn(dispatcher)
+                    .flowOn(dispatcherIo)
             } else {
                 null
             }
@@ -193,7 +191,6 @@ class UpdateRepository @Inject constructor(
             availability == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
     }
 
-    @SuppressLint("MissingPermission")
     fun showAppUpdateProgressNotification(
         @IntRange(
             from = PROGRESS_MIN.toLong(),
@@ -202,23 +199,25 @@ class UpdateRepository @Inject constructor(
         failed: Boolean = false
     ) {
         registerNotificationChannel()
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
-            notificationManager.areNotificationsEnabled()
-        ) {
-            notificationManager.notify(
-                NOTIFICATION_ID,
-                when {
-                    failed -> {
-                        createAppUpdateFailedNotification()
+        if (notificationManager.areNotificationsEnabled()) {
+            try {
+                notificationManager.notify(
+                    NOTIFICATION_ID,
+                    when {
+                        failed -> {
+                            createAppUpdateFailedNotification()
+                        }
+                        progress >= PROGRESS_MAX -> {
+                            createAppUpdateReadyToInstallNotification()
+                        }
+                        else -> {
+                            createAppUpdateInProgressNotification(progress)
+                        }
                     }
-                    progress >= PROGRESS_MAX -> {
-                        createAppUpdateReadyToInstallNotification()
-                    }
-                    else -> {
-                        createAppUpdateInProgressNotification(progress)
-                    }
-                }
-            )
+                )
+            } catch (e: SecurityException) {
+                Timber.e(e)
+            }
         }
     }
 

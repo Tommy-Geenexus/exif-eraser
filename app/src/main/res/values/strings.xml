@@ -24,8 +24,7 @@
     <string name="choose_image_directory">Choose image directory</string>
     <string name="choose_images">Choose images</string>
     <string name="choose_your">Choose your</string>
-    <string name="choose_your_preferred_image_source_placeholder_landscape" translatable="false">%s %s</string>
-    <string name="choose_your_preferred_image_source_placeholder_portrait" translatable="false">%s\n%s</string>
+    <string name="choose_your_preferred_image_source_placeholder" translatable="false">%s %s</string>
 
     <string name="clipboard_content_paste">Paste clipboard image</string>
     <string name="clipboard_content_unsupported">Unsupported clipboard content</string>

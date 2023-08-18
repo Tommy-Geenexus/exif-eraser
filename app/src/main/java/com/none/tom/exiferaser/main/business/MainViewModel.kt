@@ -24,13 +24,13 @@ import android.net.Uri
 import androidx.annotation.IntRange
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.update.data.UpdateRepository
@@ -194,7 +194,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun handleFlexibleUpdateInProgress(
-        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) progress: Int,
+        @IntRange(
+            from = PROGRESS_MIN.toLong(),
+            to = PROGRESS_MAX.toLong()
+        ) progress: Int,
         notify: Boolean
     ) = intent {
         updateRepository.showAppUpdateProgressNotification(progress)

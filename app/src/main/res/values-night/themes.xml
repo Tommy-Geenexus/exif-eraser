@@ -11,6 +11,5 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimaryContainer">@color/color_teal_500_dark</item>
         <item name="colorSecondary">@color/color_teal_200</item>
-        <item name="colorOk">@color/color_green_200</item>
     </style>
 </resources>

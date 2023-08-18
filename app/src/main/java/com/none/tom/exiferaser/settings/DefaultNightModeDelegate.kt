@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.settings
 import android.content.Context
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -63,7 +62,7 @@ fun Map<String, Int>.name(): String {
             entry.value == defaultNightModeValue
         }
         ?.key
-        ?: String.Empty
+        .orEmpty()
 }
 
 fun Context.defaultNightMode(): DefaultNightModeDelegate {

@@ -42,7 +42,7 @@ import timber.log.Timber
 @Singleton
 class ImageSourceRepository @Inject constructor(
     private val dataStore: DataStore<ImageSourcesProto>,
-    @DispatcherIo private val dispatcher: CoroutineDispatcher
+    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     private companion object {
@@ -106,11 +106,11 @@ class ImageSourceRepository @Inject constructor(
                     }
                     .toMutableList()
             }
-            .flowOn(dispatcher)
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putImageSources(imageSources: List<AnyMessage>): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     var imageFileProto: ImageFileProto? = null

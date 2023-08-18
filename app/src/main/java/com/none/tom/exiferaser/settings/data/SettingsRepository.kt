@@ -32,7 +32,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.documentfile.provider.DocumentFile
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.di.DispatcherIo
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
@@ -56,7 +55,7 @@ import timber.log.Timber
 class SettingsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val dataStore: DataStore<Preferences>,
-    @DispatcherIo private val dispatcher: CoroutineDispatcher
+    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     companion object {
@@ -98,7 +97,7 @@ class SettingsRepository @Inject constructor(
         if (defaultPathOpenCurrent.isNotEmpty()) {
             releasePersistablePermissions(context.contentResolver, defaultPathOpenCurrent)
         }
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultOpenPath] = defaultPathOpenNew.toString()
@@ -117,34 +116,29 @@ class SettingsRepository @Inject constructor(
     private fun getDefaultPathOpen(): Flow<Uri> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-                Uri.EMPTY
-            }
-            .map { preferences ->
-                preferences[keyDefaultOpenPath]?.toUri() ?: Uri.EMPTY
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyDefaultOpenPath]?.toUri() ?: Uri.EMPTY }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun getDefaultPathOpenName(): String {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             val defaultPathOpen = getDefaultPathOpen().firstOrNull()
             coroutineContext.suspendRunCatching {
                 if (defaultPathOpen.isNotNullOrEmpty()) {
                     DocumentFile.fromTreeUri(context, defaultPathOpen)?.name.orEmpty()
                 } else {
-                    String.Empty
+                    ""
                 }
             }.getOrElse { exception ->
                 Timber.e(exception)
-                String.Empty
+                ""
             }
         }
     }
 
     suspend fun getPrivilegedDefaultPathOpenOrEmpty(): Uri {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 val defaultPathOpen = getDefaultPathOpen().firstOrNull()
                 if (defaultPathOpen == null || defaultPathOpen == Uri.EMPTY) {
@@ -195,7 +189,7 @@ class SettingsRepository @Inject constructor(
                 write = true
             )
         }
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.edit { preferences ->
                     preferences[keyDefaultSavePath] = defaultPathSaveNew.toString()
@@ -218,28 +212,23 @@ class SettingsRepository @Inject constructor(
     private fun getDefaultPathSave(): Flow<Uri> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-                Uri.EMPTY
-            }
-            .map { preferences ->
-                preferences[keyDefaultSavePath]?.toUri() ?: Uri.EMPTY
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyDefaultSavePath]?.toUri() ?: Uri.EMPTY }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun getDefaultPathSaveName(): String {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             val defaultPathSave = getDefaultPathSave().firstOrNull()
             coroutineContext.suspendRunCatching {
                 if (defaultPathSave.isNotNullOrEmpty()) {
                     DocumentFile.fromTreeUri(context, defaultPathSave)?.name.orEmpty()
                 } else {
-                    String.Empty
+                    ""
                 }
             }.getOrElse { exception ->
                 Timber.e(exception)
-                String.Empty
+                ""
             }
         }
     }
@@ -247,21 +236,15 @@ class SettingsRepository @Inject constructor(
     fun shouldRandomizeFileNames(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keyRandomizeFileNames] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyRandomizeFileNames] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putRandomizeFileNames(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyRandomizeFileNames] = value
-                }
+                dataStore.edit { preferences -> preferences[keyRandomizeFileNames] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -273,21 +256,15 @@ class SettingsRepository @Inject constructor(
     fun shouldSelectImagesLegacy(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keyLegacyImageSelection] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyLegacyImageSelection] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putSelectImagesLegacy(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyLegacyImageSelection] = value
-                }
+                dataStore.edit { preferences -> preferences[keyLegacyImageSelection] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -297,7 +274,7 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun getPrivilegedDefaultPathSaveOrEmpty(): Uri {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 val defaultPathSave = getDefaultPathSave().firstOrNull()
                 if (defaultPathSave == null || defaultPathSave == Uri.EMPTY) {
@@ -330,11 +307,9 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun putAutoDelete(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyAutoDelete] = value
-                }
+                dataStore.edit { preferences -> preferences[keyAutoDelete] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -346,21 +321,15 @@ class SettingsRepository @Inject constructor(
     fun shouldAutoDelete(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keyAutoDelete] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyAutoDelete] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putPreserveOrientation(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyPreserveOrientation] = value
-                }
+                dataStore.edit { preferences -> preferences[keyPreserveOrientation] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -372,21 +341,15 @@ class SettingsRepository @Inject constructor(
     fun shouldPreserveOrientation(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keyPreserveOrientation] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyPreserveOrientation] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putShareByDefault(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyShareByDefault] = value
-                }
+                dataStore.edit { preferences -> preferences[keyShareByDefault] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -398,21 +361,15 @@ class SettingsRepository @Inject constructor(
     fun shouldShareByDefault(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keyShareByDefault] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyShareByDefault] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putDefaultDisplayNameSuffix(value: String): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyDefaultDisplayNameSuffix] = value
-                }
+                dataStore.edit { preferences -> preferences[keyDefaultDisplayNameSuffix] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -424,22 +381,15 @@ class SettingsRepository @Inject constructor(
     fun getDefaultDisplayNameSuffix(): Flow<String> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-                String.Empty
-            }
-            .map { preferences ->
-                preferences[keyDefaultDisplayNameSuffix] ?: String.Empty
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyDefaultDisplayNameSuffix] ?: "" }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putSavePathSelectionSkip(value: Boolean): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keySavePathSelectionSkip] = value
-                }
+                dataStore.edit { preferences -> preferences[keySavePathSelectionSkip] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -451,26 +401,17 @@ class SettingsRepository @Inject constructor(
     fun shouldSkipSavePathSelection(): Flow<Boolean> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-            }
-            .map { preferences ->
-                preferences[keySavePathSelectionSkip] ?: false
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keySavePathSelectionSkip] ?: false }
+            .flowOn(dispatcherIo)
     }
 
     fun getDefaultNightMode(): Flow<Int> {
         return dataStore
             .data
-            .catch { exception ->
-                Timber.e(exception)
-                defaultNightModeValue
-            }
-            .map { preferences ->
-                preferences[keyDefaultNightMode] ?: defaultNightModeValue
-            }
-            .flowOn(dispatcher)
+            .catch { exception -> Timber.e(exception) }
+            .map { preferences -> preferences[keyDefaultNightMode] ?: defaultNightModeValue }
+            .flowOn(dispatcherIo)
     }
 
     suspend fun getDefaultNightModeName(): String {
@@ -484,11 +425,9 @@ class SettingsRepository @Inject constructor(
     }
 
     suspend fun putDefaultNightMode(value: Int): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                dataStore.edit { preferences ->
-                    preferences[keyDefaultNightMode] = value
-                }
+                dataStore.edit { preferences -> preferences[keyDefaultNightMode] = value }
                 true
             }.getOrElse { exception ->
                 Timber.e(exception)
@@ -497,14 +436,13 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    @Suppress("SameParameterValue")
     private suspend fun hasPersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
         read: Boolean = true,
         write: Boolean = false
     ): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 resolver.persistedUriPermissions.any { permission ->
                     if (permission.uri != uri) {
@@ -526,14 +464,13 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    @Suppress("SameParameterValue")
     private suspend fun takePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
         read: Boolean = true,
         write: Boolean = false
     ): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             var flags = 0
             if (read) {
                 flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -551,14 +488,13 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    @Suppress("SameParameterValue")
     private suspend fun releasePersistablePermissions(
         resolver: ContentResolver,
         uri: Uri,
         read: Boolean = true,
         write: Boolean = false
     ) {
-        withContext(dispatcher) {
+        withContext(dispatcherIo) {
             var flags = 0
             if (read) {
                 flags = flags or Intent.FLAG_GRANT_READ_URI_PERMISSION

@@ -21,19 +21,18 @@
 package com.none.tom.exiferaser.settings.business
 
 import android.os.Parcelable
-import com.none.tom.exiferaser.Empty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SettingsState(
     val randomizeFileNames: Boolean = false,
-    val defaultPathOpenName: String = String.Empty,
-    val defaultPathSaveName: String = String.Empty,
+    val defaultPathOpenName: String = "",
+    val defaultPathSaveName: String = "",
     val autoDelete: Boolean = false,
     val preserveOrientation: Boolean = false,
     val shareByDefault: Boolean = false,
-    val defaultDisplayNameSuffix: String = String.Empty,
+    val defaultDisplayNameSuffix: String = "",
     val legacyImageSelection: Boolean = false,
     val skipSavePathSelection: Boolean = false,
-    val defaultNightModeName: String = String.Empty
+    val defaultNightModeName: String = ""
 ) : Parcelable

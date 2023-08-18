@@ -2,29 +2,33 @@
 <SmellBaseline>
   <ManuallySuppressedIssues></ManuallySuppressedIssues>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
+    <ID>CyclomaticComplexMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = "", autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
     <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
+    <ID>EmptyFunctionBlock:MainItemTouchHelperCallback.kt$MainItemTouchHelperCallback${ }</ID>
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
-    <ID>LongMethod:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment$private fun renderState(state: ImageModifiedDetailsState)</ID>
-    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
+    <ID>LongMethod:ImageRepository.kt$ImageRepository$private suspend fun removeMetaData( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = "", autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false ): Result.Report</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
-    <ID>LongMethod:ReportFragment.kt$ReportFragment$@Suppress("DEPRECATION") override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
+    <ID>LongMethod:ReportFragment.kt$ReportFragment$override fun onViewCreated( view: View, savedInstanceState: Bundle? )</ID>
     <ID>LongMethod:ReportFragment.kt$ReportFragment$private fun handleReportSlide( slideOffset: Float, translationMax: Float )</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImageSelection()</ID>
     <ID>LongMethod:SelectionViewModelTest.kt$SelectionViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
     <ID>LongMethod:SettingsViewModelTest.kt$SettingsViewModelTest$@Test fun test_readDefaultValues()</ID>
     <ID>LongParameterList:ImageModifiedDetailsFragment.kt$ImageModifiedDetailsFragment.Companion$( displayName: String, extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
     <ID>LongParameterList:ImageModifiedDetailsViewModel.kt$ImageModifiedDetailsViewModel$( extension: String, mimeType: String, containsIccProfile: Boolean, containsExif: Boolean, containsPhotoshopImageResources: Boolean, containsXmp: Boolean, containsExtendedXmp: Boolean )</ID>
-    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: AnyMessage, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
-    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = String.Empty, autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
+    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: AnyMessage, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = "", autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
+    <ID>LongParameterList:ImageRepository.kt$ImageRepository$( selection: UserImageSelectionProto, treeUri: Uri = Uri.EMPTY, displayNameSuffix: String = "", autoDelete: Boolean = false, preserveOrientation: Boolean = false, randomizeFileNames: Boolean = false )</ID>
+    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
+    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
     <ID>MagicNumber:UpdateRepository.kt$UpdateRepository$3</ID>
+    <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
+    <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
     <ID>TooGenericExceptionCaught:Extensions.kt$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
     <ID>TooGenericExceptionCaught:UpdateRepository.kt$UpdateRepository$e: Exception</ID>
-    <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.selection.Extensions.kt</ID>
+    <ID>TooManyFunctions:Extensions.kt$com.none.tom.exiferaser.Extensions.kt</ID>
     <ID>TooManyFunctions:ImageRepository.kt$ImageRepository</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>

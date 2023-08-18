@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
-        <item name="colorOk">@color/color_green_200</item>
-    </style>
-
     <style name="Theme.ExifEraser.Launcher" parent="Theme.ExifEraser" />
 </resources>

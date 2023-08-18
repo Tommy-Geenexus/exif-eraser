@@ -21,7 +21,6 @@
 package com.none.tom.exiferaser.details.ui
 
 import android.app.Dialog
-import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -30,11 +29,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.none.tom.exiferaser.Empty
-import com.none.tom.exiferaser.MIME_TYPE_JPEG
-import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentImageModifiedDetailsBinding
 import com.none.tom.exiferaser.details.business.ImageModifiedDetailsState
@@ -87,8 +82,8 @@ class ImageModifiedDetailsFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentImageModifiedDetailsBinding.inflate(layoutInflater)
-        val displayName = arguments?.getString(KEY_DISPLAY_NAME, String.Empty)
-        if (displayName.isNullOrEmpty()) {
+        val displayName = arguments?.getString(KEY_DISPLAY_NAME).orEmpty()
+        if (displayName.isEmpty()) {
             binding.title.isVisible = false
         } else {
             binding.title.text = displayName
@@ -108,8 +103,8 @@ class ImageModifiedDetailsFragment : DialogFragment() {
                 setOnShowListener {
                     arguments?.let { args ->
                         viewModelImageModified.handleImageDetails(
-                            extension = args.getString(KEY_EXTENSION, String.Empty),
-                            mimeType = args.getString(KEY_MIME_TYPE, String.Empty),
+                            extension = args.getString(KEY_EXTENSION).orEmpty(),
+                            mimeType = args.getString(KEY_MIME_TYPE).orEmpty(),
                             containsIccProfile = args.getBoolean(KEY_ICCP),
                             containsExif = args.getBoolean(KEY_EXIF),
                             containsPhotoshopImageResources = args.getBoolean(KEY_PHOTOSHOP),
@@ -127,91 +122,12 @@ class ImageModifiedDetailsFragment : DialogFragment() {
     }
 
     private fun renderState(state: ImageModifiedDetailsState) {
-        binding.apply {
-            val colorOk = ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorOk))
-            val colorError =
-                ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorError))
-            val colorOnSurfaceVariant =
-                ColorStateList.valueOf(MaterialColors.getColor(root, R.attr.colorOnSurfaceVariant))
-            extension.apply {
-                if (state.extension.isNotEmpty()) {
-                    text = state.extension
-                    chipStrokeColor = colorOnSurfaceVariant
-                    chipIconTint = colorOnSurfaceVariant
-                    setChipIconResource(R.drawable.ic_extension)
-                    setTextColor(colorOnSurfaceVariant)
-                    isVisible = true
-                } else {
-                    isVisible = false
-                }
-            }
-            iccp.apply {
-                if (state.containsIccProfile) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_data_check)
-                    setTextColor(colorOk)
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_search_off)
-                    setTextColor(colorError)
-                }
-            }
-            exif.apply {
-                if (state.containsExif) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_data_check)
-                    setTextColor(colorOk)
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_search_off)
-                    setTextColor(colorError)
-                }
-            }
-            xmp.apply {
-                if (state.containsXmp) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_data_check)
-                    setTextColor(colorOk)
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_search_off)
-                    setTextColor(colorError)
-                }
-            }
-            photoshop.apply {
-                if (state.containsPhotoshopImageResources) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_data_check)
-                    setTextColor(colorOk)
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_search_off)
-                    setTextColor(colorError)
-                }
-                isVisible = state.mimeType == MIME_TYPE_JPEG
-            }
-            extendedXmp.apply {
-                if (state.containsExtendedXmp) {
-                    chipStrokeColor = colorOk
-                    chipIconTint = colorOk
-                    setChipIconResource(R.drawable.ic_data_check)
-                    setTextColor(colorOk)
-                } else {
-                    chipStrokeColor = colorError
-                    chipIconTint = colorError
-                    setChipIconResource(R.drawable.ic_search_off)
-                    setTextColor(colorError)
-                }
-                isVisible = state.mimeType == MIME_TYPE_JPEG
-            }
-        }
+        binding.extension.text = state.extension
+        binding.extension.isVisible = state.extension.isNotEmpty()
+        binding.iccp.isVisible = state.containsIccProfile
+        binding.exif.isVisible = state.containsExif
+        binding.xmp.isVisible = state.containsXmp
+        binding.extendedXmp.isVisible = state.containsExtendedXmp
+        binding.photoshop.isVisible = state.containsPhotoshopImageResources
     }
 }

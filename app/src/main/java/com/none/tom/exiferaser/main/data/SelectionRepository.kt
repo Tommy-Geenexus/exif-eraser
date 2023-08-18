@@ -44,7 +44,7 @@ import timber.log.Timber
 @Singleton
 class SelectionRepository @Inject constructor(
     private val dataStore: DataStore<SelectionProto>,
-    @DispatcherIo private val dispatcher: CoroutineDispatcher
+    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     suspend fun getSelection(@IntRange(from = 0) dropFirstN: Int): Flow<AnyMessage?> {
@@ -86,7 +86,7 @@ class SelectionRepository @Inject constructor(
                     }
                 }
             }
-            .flowOn(dispatcher)
+            .flowOn(dispatcherIo)
     }
 
     suspend fun putSelection(
@@ -96,7 +96,7 @@ class SelectionRepository @Inject constructor(
         if (uri.isNullOrEmpty()) {
             return false
         }
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     proto.copy(
@@ -123,7 +123,7 @@ class SelectionRepository @Inject constructor(
         if (selection.isNullOrEmpty()) {
             return false
         }
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     proto.copy(
@@ -149,7 +149,7 @@ class SelectionRepository @Inject constructor(
         if (message == null) {
             return false
         }
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 dataStore.updateData { proto ->
                     var imageProto: UserImageSelectionProto? = null

@@ -22,16 +22,10 @@ package com.none.tom.exiferaser.selection.business
 
 import android.net.Uri
 import android.os.Parcelable
-import com.none.tom.exiferaser.selection.data.Summary
 import com.squareup.wire.AnyMessage
 import kotlinx.parcelize.Parcelize
 
 sealed class SelectionSideEffect : Parcelable {
-
-    @Parcelize
-    data class PrepareReport(
-        val imageSummaries: List<Summary>
-    ) : SelectionSideEffect()
 
     @Parcelize
     data class ReadComplete(

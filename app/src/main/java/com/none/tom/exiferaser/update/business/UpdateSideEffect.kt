@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -23,8 +23,8 @@ package com.none.tom.exiferaser.update.business
 import android.os.Parcelable
 import androidx.annotation.IntRange
 import com.google.android.play.core.appupdate.AppUpdateInfo
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import kotlinx.parcelize.Parcelize
 
 sealed class UpdateSideEffect {
@@ -36,7 +36,10 @@ sealed class UpdateSideEffect {
 
     @Parcelize
     data class UpdateInProgress(
-        @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong()) val progress: Int
+        @IntRange(
+            from = PROGRESS_MIN.toLong(),
+            to = PROGRESS_MAX.toLong()
+        ) val progress: Int
     ) : UpdateSideEffect(), Parcelable
 
     @Parcelize

@@ -24,7 +24,6 @@ import android.content.ContentResolver
 import android.os.Build
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import io.mockk.Ordering
@@ -197,7 +196,7 @@ class SettingsViewModelTest {
                 settingsRepository.putDefaultPathOpen(any(), any())
             }
             expectState {
-                copy(defaultPathOpenName = String.Empty)
+                copy(defaultPathOpenName = "")
             }
             expectSideEffect(SettingsSideEffect.DefaultPathOpenClear(success = true))
         }
@@ -284,7 +283,7 @@ class SettingsViewModelTest {
                 settingsRepository.putDefaultPathSave(any(), any())
             }
             expectState {
-                copy(defaultPathSaveName = String.Empty)
+                copy(defaultPathSaveName = "")
             }
             expectSideEffect(SettingsSideEffect.DefaultPathSaveClear(success = true))
         }

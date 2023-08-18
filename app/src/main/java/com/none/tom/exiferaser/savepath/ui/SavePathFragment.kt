@@ -21,7 +21,9 @@
 package com.none.tom.exiferaser.savepath.ui
 
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +34,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.none.tom.exiferaser.BaseBottomSheetDialogFragment
+import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.FragmentSavePathBinding
 import com.none.tom.exiferaser.savepath.business.SavePathSideEffect
 import com.none.tom.exiferaser.savepath.business.SavePathState
@@ -54,6 +57,11 @@ class SavePathFragment : BaseBottomSheetDialogFragment<FragmentSavePathBinding>(
         savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val value = TypedValue()
+            requireActivity().theme.resolveAttribute(R.attr.colorSecondary, value, true)
+            binding.pathSaveDefault.setBackgroundColor(value.data)
+        }
         binding.pathSaveDefault.setOnClickListener {
             viewModel.handleSelection(savePath = Uri.EMPTY)
         }

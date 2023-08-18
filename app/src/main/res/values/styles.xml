@@ -10,13 +10,6 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.ExifEraser.CheckBox</item>
     </style>
 
-    <style name="Widget.ExifEraser.Chip.Action.Outlined" parent="Widget.Material3.Chip.Assist">
-        <item name="android:textColor">?android:textColorPrimary</item>
-        <item name="chipBackgroundColor">?android:colorBackground</item>
-        <item name="chipIconTint">?attr/colorControlNormal</item>
-        <item name="chipStrokeWidth">@dimen/stroke_width_nano</item>
-    </style>
-
     <style name="Widget.ExifEraser.LinearProgressIndicator" parent="Widget.Material3.LinearProgressIndicator">
         <item name="indicatorColor">?attr/colorSecondary</item>
     </style>

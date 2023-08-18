@@ -29,7 +29,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -37,21 +36,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.WindowSizeClass
-import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
-import com.none.tom.exiferaser.report.lerp
-import com.none.tom.exiferaser.report.ui.ReportFragment
 import com.none.tom.exiferaser.selection.ShareImages
 import com.none.tom.exiferaser.selection.business.SelectionSideEffect
 import com.none.tom.exiferaser.selection.business.SelectionState
 import com.none.tom.exiferaser.selection.business.SelectionViewModel
-import com.none.tom.exiferaser.selection.crossfade
-import com.none.tom.exiferaser.selection.fadeIn
-import com.none.tom.exiferaser.selection.toPercent
+import com.none.tom.exiferaser.toPercent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -59,25 +52,17 @@ import kotlinx.coroutines.launch
 class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragment_selection) {
 
     companion object {
-        const val KEY_REPORT_PREPARE = TOP_LEVEL_PACKAGE_NAME + "REPORT_PREPARE"
+        const val KEY_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
     }
 
     private val args: SelectionFragmentArgs by navArgs()
     private val viewModel: SelectionViewModel by viewModels()
     private val shareImages = registerForActivityResult(ShareImages()) {}
-    private val elevationNone by lazy(LazyThreadSafetyMode.NONE) {
-        resources.getDimension(R.dimen.elevation_none)
-    }
-    private val elevationToolbar by lazy(LazyThreadSafetyMode.NONE) {
-        binding.toolbarInclude.toolbar.elevation
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTransitions(
-            transitionEnter = MaterialSharedAxis(MaterialSharedAxis.X, true),
-            transitionReturn = MaterialSharedAxis(MaterialSharedAxis.X, false)
-        )
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
     }
 
     override fun onViewCreated(
@@ -115,14 +100,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.summary
         )
-        setupCenterViews()
-        setFragmentResultListener(ReportFragment.KEY_REPORT_SLIDE) { _, bundle: Bundle ->
-            adjustToolbarElevation(
-                endFraction = bundle.getFloat(ReportFragment.KEY_FRACTION_END),
-                slideOffset = bundle.getFloat(ReportFragment.KEY_OFFSET_SLIDE)
-            )
-        }
-        binding.layout.applyInsetsToMargins()
+        setupResponsiveLayout()
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
@@ -142,21 +120,33 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
     override fun bindLayout(view: View) = FragmentSelectionBinding.bind(view)
 
     private fun renderState(state: SelectionState) {
-        showProgress(state.progress)
+        if (binding.progressLayout.isVisible) {
+            binding.progress.text = state.progress.toPercent()
+            binding.progressIndicator.setProgressCompat(state.progress, true)
+        }
         if (state.handledAll) {
-            showReport(state.imagesModified, state.imagesTotal)
+            binding.subheading.text = getString(
+                R.string.images_modified_placeholder,
+                state.imagesModified,
+                getString(R.string.of),
+                state.imagesTotal,
+                getString(R.string.images_modified)
+            )
+            binding.progressLayout.isVisible = false
+            binding.fragmentReport.isVisible = state.imageSummaries.isNotEmpty()
+            binding.done.isVisible = true
+            if (state.imagesTotal > 0) {
+                childFragmentManager.setFragmentResult(
+                    KEY_REPORT,
+                    bundleOf(KEY_REPORT to ArrayList(state.imageSummaries))
+                )
+                requireActivity().invalidateOptionsMenu()
+            }
         }
     }
 
     private fun handleSideEffect(sideEffect: SelectionSideEffect) {
         when (sideEffect) {
-            is SelectionSideEffect.PrepareReport -> {
-                childFragmentManager.setFragmentResult(
-                    KEY_REPORT_PREPARE,
-                    bundleOf(KEY_REPORT_PREPARE to sideEffect.imageSummaries)
-                )
-                binding.fragmentReport.fadeIn()
-            }
             is SelectionSideEffect.ReadComplete -> {
                 viewModel.handleSelection(
                     selection = sideEffect.selection,
@@ -172,50 +162,9 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
         }
     }
 
-    private fun showProgress(currentProgress: Int) {
-        binding.apply {
-            progress.text = currentProgress.toPercent()
-            progressIndicator.setProgressCompat(currentProgress, true)
-        }
-    }
-
-    private fun showReport(
-        modified: Int,
-        total: Int
-    ) {
-        binding.run {
-            subheading.text = getString(
-                R.string.images_modified_placeholder,
-                modified,
-                getString(R.string.of),
-                total,
-                getString(R.string.images_modified)
-            )
-            done.crossfade(progressLayout)
-            if (total > 0) {
-                viewModel.prepareReport()
-                requireActivity().invalidateOptionsMenu()
-            }
-        }
-    }
-
-    private fun adjustToolbarElevation(
-        endFraction: Float,
-        slideOffset: Float
-    ) {
-        binding.toolbarInclude.toolbar.elevation = lerp(
-            startValue = elevationToolbar,
-            endValue = elevationNone,
-            startFraction = ReportFragment.FRACTION_OUT_START,
-            endFraction = endFraction,
-            fraction = slideOffset
-        )
-    }
-
-    private fun setupCenterViews() {
-        val windowSizeClass = (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+    private fun setupResponsiveLayout() {
         binding.image.updateLayoutParams {
-            val dimen = when (windowSizeClass) {
+            val dimen = when (getWindowSizeClassHeight()) {
                 WindowSizeClass.Compact -> {
                     resources.getDimension(R.dimen.icon_compact)
                 }
@@ -230,7 +179,8 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
             height = dimen
             width = dimen
         }
-        when (windowSizeClass) {
+        when (getWindowSizeClassHeight()) {
+            WindowSizeClass.Unspecified,
             WindowSizeClass.Compact -> {
                 binding.heading.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
@@ -239,7 +189,6 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                     com.google.android.material.R.style.TextAppearance_Material3_BodySmall
                 )
             }
-            WindowSizeClass.Unspecified,
             WindowSizeClass.Medium -> {
                 binding.heading.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium

@@ -22,8 +22,8 @@ package com.none.tom.exiferaser.update.business
 
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.update.data.UpdatePriority
 import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.none.tom.exiferaser.update.data.UpdateResult

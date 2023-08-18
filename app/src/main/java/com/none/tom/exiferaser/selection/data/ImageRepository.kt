@@ -31,22 +31,21 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.none.tom.exiferaser.EXTENSION_JPEG
-import com.none.tom.exiferaser.Empty
+import com.none.tom.exiferaser.PROGRESS_MAX
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.UserImagesSelectionProto
 import com.none.tom.exiferaser.di.DispatcherIo
+import com.none.tom.exiferaser.getExtensionFromMimeTypeOrEmpty
+import com.none.tom.exiferaser.isFileProviderUri
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.isNullOrEmpty
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.getExtensionFromMimeTypeOrEmpty
-import com.none.tom.exiferaser.selection.isFileProviderUri
-import com.none.tom.exiferaser.selection.openInputStreamOrThrow
-import com.none.tom.exiferaser.selection.openOutputStreamOrThrow
-import com.none.tom.exiferaser.selection.queryOrThrow
-import com.none.tom.exiferaser.selection.toProgress
+import com.none.tom.exiferaser.openInputStreamOrThrow
+import com.none.tom.exiferaser.openOutputStreamOrThrow
+import com.none.tom.exiferaser.queryOrThrow
 import com.none.tom.exiferaser.supportedMimeTypes
 import com.none.tom.exiferaser.suspendRunCatching
+import com.none.tom.exiferaser.toProgress
 import com.squareup.wire.AnyMessage
 import com.tomg.exifinterfaceextended.ExifInterfaceExtended
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -65,13 +64,13 @@ import timber.log.Timber
 @Singleton
 class ImageRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    @DispatcherIo private val dispatcher: CoroutineDispatcher
+    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     suspend fun removeMetadataBulk(
         selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
-        displayNameSuffix: String = String.Empty,
+        displayNameSuffix: String = "",
         autoDelete: Boolean = false,
         preserveOrientation: Boolean = false,
         randomizeFileNames: Boolean = false
@@ -96,13 +95,13 @@ class ImageRepository @Inject constructor(
             emit(Result.HandledAll)
         }
             .buffer()
-            .flowOn(dispatcher)
+            .flowOn(dispatcherIo)
     }
 
     suspend fun removeMetadataSingle(
         selection: AnyMessage,
         treeUri: Uri = Uri.EMPTY,
-        displayNameSuffix: String = String.Empty,
+        displayNameSuffix: String = "",
         autoDelete: Boolean = false,
         preserveOrientation: Boolean = false,
         randomizeFileNames: Boolean = false
@@ -122,23 +121,26 @@ class ImageRepository @Inject constructor(
             emit(Result.HandledAll)
         }
             .buffer()
-            .flowOn(dispatcher)
+            .flowOn(dispatcherIo)
     }
 
     suspend fun packDocumentTreeToAnyMessageOrNull(treeUri: Uri): AnyMessage? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
                     treeUri,
                     DocumentsContract.getTreeDocumentId(treeUri)
                 )
-                context.contentResolver.queryOrThrow(childDocumentsUri).use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        packChildDocumentsToAnyMessageOrNull(cursor, treeUri)
-                    } else {
-                        error("Empty cursor")
+                context
+                    .contentResolver
+                    .queryOrThrow(dispatcherIo, childDocumentsUri)
+                    .use { cursor ->
+                        if (cursor.moveToFirst()) {
+                            packChildDocumentsToAnyMessageOrNull(cursor, treeUri)
+                        } else {
+                            error("Empty cursor")
+                        }
                     }
-                }
             }.getOrElse { exception ->
                 Timber.e(exception)
                 null
@@ -150,7 +152,7 @@ class ImageRepository @Inject constructor(
         cursor: Cursor,
         treeUri: Uri
     ): AnyMessage? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 val selection = mutableListOf<UserImageSelectionProto>()
                 while (!cursor.isAfterLast) {
@@ -186,16 +188,16 @@ class ImageRepository @Inject constructor(
     private suspend fun removeMetaData(
         selection: UserImageSelectionProto,
         treeUri: Uri = Uri.EMPTY,
-        displayNameSuffix: String = String.Empty,
+        displayNameSuffix: String = "",
         autoDelete: Boolean = false,
         preserveOrientation: Boolean = false,
         randomizeFileNames: Boolean = false
     ): Result.Report {
         var uri = Uri.EMPTY
         var modifiedUri = Uri.EMPTY
-        var displayName = String.Empty
-        var mimeType = String.Empty
-        var extension = String.Empty
+        var displayName = ""
+        var mimeType = ""
+        var extension = ""
         var containsMetadata = false
         var imageSaved = false
         var containsIccProfile = false
@@ -203,26 +205,29 @@ class ImageRepository @Inject constructor(
         var containsPhotoshopImageResources = false
         var containsXmp = false
         var containsExtendedXmp = false
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 uri = selection.image_path.toUri()
                 mimeType = getMimeTypeOrNull(uri).orEmpty()
                 extension = mimeType.getExtensionFromMimeTypeOrEmpty()
                 val exifInterfaceExtended: ExifInterfaceExtended
-                context.contentResolver.openInputStreamOrThrow(uri).use { source ->
-                    exifInterfaceExtended = ExifInterfaceExtended(source)
-                    containsIccProfile = exifInterfaceExtended.hasIccProfile()
-                    containsExif = exifInterfaceExtended.hasAttributes(true)
-                    containsPhotoshopImageResources =
-                        exifInterfaceExtended.hasPhotoshopImageResources()
-                    containsXmp = exifInterfaceExtended.hasXmp()
-                    containsExtendedXmp = exifInterfaceExtended.hasExtendedXmp()
-                    containsMetadata = containsIccProfile ||
-                        containsExif ||
-                        containsPhotoshopImageResources ||
-                        containsXmp ||
-                        containsExtendedXmp
-                }
+                context
+                    .contentResolver
+                    .openInputStreamOrThrow(dispatcherIo, uri)
+                    .use { source ->
+                        exifInterfaceExtended = ExifInterfaceExtended(source)
+                        containsIccProfile = exifInterfaceExtended.hasIccProfile()
+                        containsExif = exifInterfaceExtended.hasAttributes(true)
+                        containsPhotoshopImageResources =
+                            exifInterfaceExtended.hasPhotoshopImageResources()
+                        containsXmp = exifInterfaceExtended.hasXmp()
+                        containsExtendedXmp = exifInterfaceExtended.hasExtendedXmp()
+                        containsMetadata = containsIccProfile ||
+                            containsExif ||
+                            containsPhotoshopImageResources ||
+                            containsXmp ||
+                            containsExtendedXmp
+                    }
                 displayName = if (randomizeFileNames) {
                     UUID.randomUUID().toString()
                 } else {
@@ -248,12 +253,22 @@ class ImageRepository @Inject constructor(
                     extension = extension
                 )
                 if (modifiedUri.isNotNullOrEmpty()) {
-                    context.contentResolver.openInputStreamOrThrow(uri).use { source ->
-                        context.contentResolver.openOutputStreamOrThrow(modifiedUri).use { sink ->
-                            exifInterfaceExtended.saveExclusive(source, sink, preserveOrientation)
-                            imageSaved = true
+                    context
+                        .contentResolver
+                        .openInputStreamOrThrow(dispatcherIo, uri)
+                        .use { source ->
+                            context
+                                .contentResolver
+                                .openOutputStreamOrThrow(dispatcherIo, modifiedUri)
+                                .use { sink ->
+                                    exifInterfaceExtended.saveExclusive(
+                                        source,
+                                        sink,
+                                        preserveOrientation
+                                    )
+                                    imageSaved = true
+                                }
                         }
-                    }
                     if (autoDelete && imageSaved && DocumentsContract.isDocumentUri(context, uri)) {
                         if (DocumentFile.fromSingleUri(context, uri)?.delete() != true) {
                             Timber.e("Failed to delete %s", uri)
@@ -290,11 +305,11 @@ class ImageRepository @Inject constructor(
     private suspend fun createDocument(
         uri: Uri,
         defaultTreeUri: Uri = Uri.EMPTY,
-        displayName: String = String.Empty,
-        mimeType: String = String.Empty,
-        extension: String = String.Empty
+        displayName: String = "",
+        mimeType: String = "",
+        extension: String = ""
     ): Uri? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 require(uri.scheme == ContentResolver.SCHEME_CONTENT)
                 if (DocumentFile.isDocumentUri(context, uri) || !uri.isFileProviderUri()) {
@@ -341,7 +356,7 @@ class ImageRepository @Inject constructor(
         displayName: String,
         extension: String = EXTENSION_JPEG
     ): Uri? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 FileProvider.getUriForFile(
                     context,
@@ -359,7 +374,7 @@ class ImageRepository @Inject constructor(
     }
 
     suspend fun deleteExternalPictures(): Boolean {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 val pictures = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
                 if (pictures != null) {
@@ -383,16 +398,19 @@ class ImageRepository @Inject constructor(
     }
 
     private suspend fun getDisplayNameOrNull(uri: Uri): String? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
-                context.contentResolver.queryOrThrow(uri).use { cursor ->
-                    if (cursor.moveToFirst()) {
-                        val columnName = MediaStore.Images.ImageColumns.DISPLAY_NAME
-                        cursor.getString(cursor.getColumnIndexOrThrow(columnName))
-                    } else {
-                        error("Empty cursor")
+                context
+                    .contentResolver
+                    .queryOrThrow(dispatcherIo, uri)
+                    .use { cursor ->
+                        if (cursor.moveToFirst()) {
+                            val columnName = MediaStore.Images.ImageColumns.DISPLAY_NAME
+                            cursor.getString(cursor.getColumnIndexOrThrow(columnName))
+                        } else {
+                            error("Empty cursor")
+                        }
                     }
-                }
             }.getOrElse { exception ->
                 Timber.e(exception)
                 null
@@ -401,7 +419,7 @@ class ImageRepository @Inject constructor(
     }
 
     private suspend fun getMimeTypeOrNull(uri: Uri): String? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 context.contentResolver.getType(uri)
             }.getOrElse { exception ->
@@ -412,7 +430,7 @@ class ImageRepository @Inject constructor(
     }
 
     suspend fun getDocumentPathOrNull(uri: Uri): String? {
-        return withContext(dispatcher) {
+        return withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 DocumentsContract
                     .findDocumentPath(context.contentResolver, uri)

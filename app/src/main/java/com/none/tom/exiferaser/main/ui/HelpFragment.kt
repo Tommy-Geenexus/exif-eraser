@@ -30,7 +30,6 @@ import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.URL_ISSUES
 import com.none.tom.exiferaser.URL_LOCALISATION
-import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentHelpBinding
 import com.none.tom.exiferaser.settings.ViewUrl
 
@@ -42,10 +41,8 @@ class HelpFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTransitions(
-            transitionEnter = MaterialSharedAxis(MaterialSharedAxis.Z, true),
-            transitionReturn = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        )
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
     }
 
     override fun onViewCreated(
@@ -57,7 +54,6 @@ class HelpFragment :
             toolbar = binding.includeToolbar.toolbar,
             titleRes = R.string.help
         )
-        binding.layout.applyInsetsToMargins()
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

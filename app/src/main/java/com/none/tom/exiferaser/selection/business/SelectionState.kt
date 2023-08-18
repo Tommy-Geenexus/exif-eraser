@@ -23,9 +23,8 @@ package com.none.tom.exiferaser.selection.business
 import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.IntRange
-import com.none.tom.exiferaser.selection.HISTORY_SIZE
-import com.none.tom.exiferaser.selection.PROGRESS_MAX
-import com.none.tom.exiferaser.selection.PROGRESS_MIN
+import com.none.tom.exiferaser.PROGRESS_MAX
+import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.selection.data.Result
 import com.none.tom.exiferaser.selection.data.Summary
 import kotlinx.parcelize.Parcelize
@@ -33,43 +32,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class SelectionState(
     val imageResult: Result = Result.Empty,
-    val imageSummaries: Array<Summary?> = arrayOfNulls(HISTORY_SIZE),
-    val imageUris: Array<Uri?> = arrayOfNulls(HISTORY_SIZE),
+    val imageSummaries: List<Summary> = emptyList(),
+    val imageUris: List<Uri> = emptyList(),
     val imagesModified: Int = 0,
     val imagesSaved: Int = 0,
     val imagesTotal: Int = 0,
     @IntRange(from = PROGRESS_MIN.toLong(), to = PROGRESS_MAX.toLong())
     val progress: Int = PROGRESS_MIN,
     val handledAll: Boolean = false
-) : Parcelable {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as SelectionState
-
-        if (imageResult != other.imageResult) return false
-        if (!imageSummaries.contentEquals(other.imageSummaries)) return false
-        if (!imageUris.contentEquals(other.imageUris)) return false
-        if (imagesModified != other.imagesModified) return false
-        if (imagesSaved != other.imagesSaved) return false
-        if (imagesTotal != other.imagesTotal) return false
-        if (progress != other.progress) return false
-        if (handledAll != other.handledAll) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = imageResult.hashCode()
-        result = 31 * result + imageSummaries.contentHashCode()
-        result = 31 * result + imageUris.contentHashCode()
-        result = 31 * result + imagesModified
-        result = 31 * result + imagesSaved
-        result = 31 * result + imagesTotal
-        result = 31 * result + progress
-        result = 31 * result + handledAll.hashCode()
-        return result
-    }
-}
+) : Parcelable

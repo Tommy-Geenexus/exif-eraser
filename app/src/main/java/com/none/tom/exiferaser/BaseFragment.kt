@@ -30,7 +30,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.transition.MaterialSharedAxis
 
 abstract class BaseFragment<B : ViewBinding>(
     @LayoutRes layoutRes: Int
@@ -53,6 +52,12 @@ abstract class BaseFragment<B : ViewBinding>(
 
     abstract fun bindLayout(view: View): B
 
+    internal fun getWindowSizeClassHeight() =
+        (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+
+    internal fun getWindowSizeClassWidth() =
+        (requireActivity() as ExifEraserActivity).windowSizeClassWidth
+
     internal fun setupToolbar(
         toolbar: Toolbar,
         @StringRes titleRes: Int = 0
@@ -66,41 +71,9 @@ abstract class BaseFragment<B : ViewBinding>(
             .backStackEntryCount
             .takeIf { count -> count > 0 }
             ?.let {
-                toolbar.apply {
-                    setNavigationIcon(R.drawable.ic_arrow_back)
-                    setNavigationOnClickListener {
-                        findNavController().navigateUp()
-                    }
-                }
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+                toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             }
-    }
-
-    internal fun setTransitions(
-        transitionEnter: MaterialSharedAxis? = null,
-        transitionExit: MaterialSharedAxis? = null,
-        transitionReturn: MaterialSharedAxis? = null,
-        transitionReenter: MaterialSharedAxis? = null
-    ) {
-        enterTransition = transitionEnter?.apply {
-            duration = resources.getInteger(
-                com.google.android.material.R.integer.material_motion_duration_long_1
-            ).toLong()
-        }
-        exitTransition = transitionExit?.apply {
-            duration = resources.getInteger(
-                com.google.android.material.R.integer.material_motion_duration_long_1
-            ).toLong()
-        }
-        returnTransition = transitionReturn?.apply {
-            duration = resources.getInteger(
-                com.google.android.material.R.integer.material_motion_duration_long_1
-            ).toLong()
-        }
-        reenterTransition = transitionReenter?.apply {
-            duration = resources.getInteger(
-                com.google.android.material.R.integer.material_motion_duration_long_1
-            ).toLong()
-        }
     }
 
     internal fun navigate(navDirections: NavDirections) {

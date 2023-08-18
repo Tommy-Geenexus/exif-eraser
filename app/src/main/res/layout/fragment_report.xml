@@ -17,12 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_normal"
-            android:drawablePadding="@dimen/spacing_small"
+            android:drawablePadding="@dimen/spacing_normal"
             android:drawableTint="?attr/colorOnPrimaryContainer"
             android:gravity="center_vertical"
             android:text="@string/details"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
             android:textColor="?attr/colorOnPrimaryContainer"
-            app:drawableStartCompat="@drawable/ic_expand_less"
+            app:drawableStartCompat="@drawable/ic_unfold_more"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,7 +37,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_expand_more"
-            app:navigationIconTint="?attr/colorControlNormal"
             app:title="@string/details" />
 
         <View

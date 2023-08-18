@@ -19,8 +19,8 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginStart="@dimen/spacing_large"
+        android:layout_marginEnd="@dimen/spacing_large"
         app:layout_constraintBottom_toTopOf="@id/image_sources"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:paddingHorizontal="12dp"
+        android:paddingHorizontal="20dp"
         android:transitionGroup="true"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar_layout"
         app:layout_constraintEnd_toEndOf="parent"

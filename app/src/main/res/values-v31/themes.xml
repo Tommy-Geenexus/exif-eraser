@@ -2,7 +2,6 @@
 <resources>
 
     <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
-        <item name="colorOk">@color/color_green_500</item>
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>

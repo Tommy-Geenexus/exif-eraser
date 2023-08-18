@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2021, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,14 +22,13 @@ package com.none.tom.exiferaser.selection.data
 
 import android.net.Uri
 import android.os.Parcelable
-import com.none.tom.exiferaser.Empty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Summary(
-    val displayName: String = String.Empty,
-    val extension: String = String.Empty,
-    val mimeType: String = String.Empty,
+    val displayName: String = "",
+    val extension: String = "",
+    val mimeType: String = "",
     val imageUri: Uri = Uri.EMPTY,
     val imageModified: Boolean = false,
     val imageSaved: Boolean = false,

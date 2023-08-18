@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.settings.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.settings.defaultNightModeValue
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -105,7 +104,7 @@ class SettingsViewModel @Inject constructor(
         )
         if (success) {
             reduce {
-                state.copy(defaultPathOpenName = String.Empty)
+                state.copy(defaultPathOpenName = "")
             }
         }
         postSideEffect(SettingsSideEffect.DefaultPathOpenClear(success))
@@ -139,7 +138,7 @@ class SettingsViewModel @Inject constructor(
         )
         if (success) {
             reduce {
-                state.copy(defaultPathSaveName = String.Empty)
+                state.copy(defaultPathSaveName = "")
             }
         }
         postSideEffect(SettingsSideEffect.DefaultPathSaveClear(success))

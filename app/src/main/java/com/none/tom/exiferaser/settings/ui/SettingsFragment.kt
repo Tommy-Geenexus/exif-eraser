@@ -32,9 +32,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.Empty
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.applyInsetsToMargins
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
 import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.business.SettingsSideEffect
@@ -63,10 +61,8 @@ class SettingsFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTransitions(
-            transitionEnter = MaterialSharedAxis(MaterialSharedAxis.Z, true),
-            transitionReturn = MaterialSharedAxis(MaterialSharedAxis.Z, false)
-        )
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
     }
 
     override fun onViewCreated(
@@ -78,7 +74,6 @@ class SettingsFragment :
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
         )
-        binding.layout.applyInsetsToMargins()
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)
@@ -88,10 +83,9 @@ class SettingsFragment :
         setFragmentResultListener(
             DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
         ) { _, bundle: Bundle ->
-            val value = bundle.getString(
-                DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX,
-                String.Empty
-            )
+            val value = bundle
+                .getString(DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+                .orEmpty()
             viewModel.storeDefaultDisplayNameSuffix(value)
         }
         setFragmentResultListener(

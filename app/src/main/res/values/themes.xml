@@ -3,7 +3,6 @@
 
     <style name="Base.Theme.ExifEraser" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="checkboxStyle">@style/Widget.ExifEraser.CheckBox</item>
-        <item name="chipStyle">@style/Widget.ExifEraser.Chip.Action.Outlined</item>
     </style>
 
     <style name="Theme.ExifEraser" parent="Base.Theme.ExifEraser">
@@ -16,7 +15,6 @@
         <item name="colorPrimary">@android:color/transparent</item>
         <item name="colorPrimaryContainer">@color/color_teal_500_light</item>
         <item name="colorSecondary">@color/color_teal_500</item>
-        <item name="colorOk">@color/color_green_500</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>
