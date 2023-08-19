@@ -52,15 +52,15 @@ class DefaultNightModeFragment : DialogFragment() {
             ) { _, _: Int ->
             }
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                (dialog as? AlertDialog)?.listView?.run {
-                    if (checkedItemCount > 0) {
-                        parentFragmentManager.setFragmentResult(
-                            KEY_DEFAULT_NIGHT_MODE,
-                            bundleOf(
-                                KEY_DEFAULT_NIGHT_MODE to values[checkedItemPosition]
-                            )
+                val list = (dialog as? AlertDialog)?.listView
+                if (list != null && list.checkedItemCount > 0) {
+                    dismiss()
+                    parentFragmentManager.setFragmentResult(
+                        KEY_DEFAULT_NIGHT_MODE,
+                        bundleOf(
+                            KEY_DEFAULT_NIGHT_MODE to values[list.checkedItemPosition]
                         )
-                    }
+                    )
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)

@@ -25,6 +25,8 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -63,6 +65,17 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
+            .apply {
+                setOnShowListener {
+                    binding.defaultDisplayNameSuffix.requestFocus()
+                    val w = window
+                    if (w != null) {
+                        WindowCompat
+                            .getInsetsController(w, binding.defaultDisplayNameSuffix)
+                            .show(WindowInsetsCompat.Type.ime())
+                    }
+                }
+            }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
