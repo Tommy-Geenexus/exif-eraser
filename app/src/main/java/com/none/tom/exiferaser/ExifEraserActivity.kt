@@ -25,12 +25,12 @@ import android.content.IntentSender
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -88,23 +88,20 @@ class ExifEraserActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         installSplashScreen()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
+        super.onCreate(savedInstanceState)
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         computeWindowSizeClasses()
-        val colorSurface0 = SurfaceColors.SURFACE_0.getColor(this)
-        val colorSurface2 = SurfaceColors.SURFACE_2.getColor(this)
-        window.statusBarColor = colorSurface0
         (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
             ?.navController
             ?.addOnDestinationChangedListener { _, destination, _ ->
                 if (windowSizeClassWidth != WindowSizeClass.Expanded) {
                     if (destination.id == R.id.fragment_main) {
-                        window.navigationBarColor = colorSurface2
+                        window.navigationBarColor = SurfaceColors.SURFACE_2.getColor(this)
                     } else {
-                        window.navigationBarColor = colorSurface0
+                        window.navigationBarColor = SurfaceColors.SURFACE_0.getColor(this)
                     }
                 }
             }
