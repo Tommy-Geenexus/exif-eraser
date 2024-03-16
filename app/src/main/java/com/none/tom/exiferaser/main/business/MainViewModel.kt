@@ -66,43 +66,53 @@ class MainViewModel @Inject constructor(
         set(value) = savedStateHandle.set(KEY_NAV_DESTINATION_ID, value)
 
     fun chooseImage(canReorderImageSources: Boolean) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
-        postSideEffect(MainSideEffect.ChooseImage(pathOpen))
+        postSideEffect(
+            MainSideEffect.ChooseImage(
+                openPath = pathOpen,
+                isLegacyImageSelectionEnabled = state.isLegacyImageSelectionEnabled
+            )
+        )
     }
 
     fun chooseImages(canReorderImageSources: Boolean) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
-        postSideEffect(MainSideEffect.ChooseImages(pathOpen))
+        postSideEffect(
+            MainSideEffect.ChooseImages(
+                openPath = pathOpen,
+                isLegacyImageSelectionEnabled = state.isLegacyImageSelectionEnabled
+            )
+        )
     }
 
     fun chooseImageDirectory(canReorderImageSources: Boolean) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val pathOpen = settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         postSideEffect(MainSideEffect.ChooseImageDirectory(pathOpen))
     }
@@ -125,11 +135,11 @@ class MainViewModel @Inject constructor(
 
     fun deleteCameraImages() = intent {
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val result = imageRepository.deleteExternalPictures()
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         postSideEffect(MainSideEffect.ExternalPicturesDeleted(success = result))
     }
@@ -181,18 +191,18 @@ class MainViewModel @Inject constructor(
         displayName: String,
         canReorderImageSources: Boolean
     ) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val uri = imageRepository.getExternalPicturesFileProviderUriOrNull(
             fileProviderPackage = fileProviderPackage,
             displayName = displayName
         )
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         if (uri.isNotNullOrEmpty()) {
             postSideEffect(MainSideEffect.LaunchCamera(uri))
@@ -201,11 +211,11 @@ class MainViewModel @Inject constructor(
 
     fun putImageSources(imageSources: MutableList<AnyMessage>) = intent {
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         imageSourceRepository.putImageSources(imageSources)
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
     }
 
@@ -214,15 +224,15 @@ class MainViewModel @Inject constructor(
         fromCamera: Boolean = false,
         canReorderImageSources: Boolean = false
     ) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val success = selectionRepository.putSelection(uri, fromCamera)
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         if (success) {
             chooseSelectionNavigationRoute(fromCamera)
@@ -234,15 +244,15 @@ class MainViewModel @Inject constructor(
         urisFromIntent: Array<Uri>? = null,
         canReorderImageSources: Boolean = false
     ) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val success = selectionRepository.putSelection(uris, urisFromIntent)
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         if (success) {
             chooseSelectionNavigationRoute()
@@ -250,12 +260,12 @@ class MainViewModel @Inject constructor(
     }
 
     fun putImageDirectorySelection(uri: Uri?, canReorderImageSources: Boolean = false) = intent {
-        if (canReorderImageSources || state.loading) {
+        if (canReorderImageSources || state.isLoading) {
             return@intent
         }
         val success = if (uri.isNotNullOrEmpty()) {
             reduce {
-                state.copy(loading = true)
+                state.copy(isLoading = true)
             }
             val message = imageRepository.packDocumentTreeToAnyMessageOrNull(uri)
             selectionRepository.putSelection(message)
@@ -263,7 +273,7 @@ class MainViewModel @Inject constructor(
             false
         }
         reduce {
-            state.copy(loading = false)
+            state.copy(isLoading = false)
         }
         if (success) {
             chooseSelectionNavigationRoute()
@@ -272,7 +282,7 @@ class MainViewModel @Inject constructor(
 
     fun readDefaultValues() = intent {
         reduce {
-            state.copy(loading = true)
+            state.copy(isLoading = true)
         }
         val defaultNightMode = settingsRepository.getDefaultNightMode().firstOrNull()
         val imageSources = imageSourceRepository.getImageSources().firstOrNull() ?: mutableListOf()
@@ -281,8 +291,8 @@ class MainViewModel @Inject constructor(
         reduce {
             state.copy(
                 imageSources = imageSources,
-                legacyImageSelection = legacyImageSelection,
-                loading = false
+                isLegacyImageSelectionEnabled = legacyImageSelection,
+                isLoading = false
             )
         }
         if (imageSources.isNotEmpty()) {

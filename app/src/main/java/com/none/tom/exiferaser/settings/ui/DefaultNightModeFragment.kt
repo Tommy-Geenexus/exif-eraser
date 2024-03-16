@@ -33,7 +33,7 @@ import com.none.tom.exiferaser.settings.defaultNightMode
 
 class DefaultNightModeFragment : DialogFragment() {
 
-    internal companion object {
+    companion object {
 
         const val KEY_DEFAULT_NIGHT_MODE = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_NIGHT_MODE"
     }

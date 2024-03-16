@@ -36,7 +36,7 @@ abstract class BaseFragment<B : ViewBinding>(
 ) : Fragment(layoutRes) {
 
     private var _binding: B? = null
-    internal val binding: B get() = _binding!!
+    protected val binding: B get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = bindLayout(view)

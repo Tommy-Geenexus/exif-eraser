@@ -28,12 +28,14 @@ sealed class MainSideEffect : Parcelable {
 
     @Parcelize
     data class ChooseImage(
-        val openPath: Uri
+        val openPath: Uri,
+        val isLegacyImageSelectionEnabled: Boolean
     ) : MainSideEffect()
 
     @Parcelize
     data class ChooseImages(
-        val openPath: Uri
+        val openPath: Uri,
+        val isLegacyImageSelectionEnabled: Boolean
     ) : MainSideEffect()
 
     @Parcelize

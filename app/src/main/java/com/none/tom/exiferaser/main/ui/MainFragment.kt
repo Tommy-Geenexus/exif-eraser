@@ -71,8 +71,6 @@ import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.getClipImages
 import com.none.tom.exiferaser.main.MainContentReceiver
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
-import com.none.tom.exiferaser.main.PickMultipleVisualMedia2
-import com.none.tom.exiferaser.main.PickVisualMedia2
 import com.none.tom.exiferaser.main.RecyclerViewItemDecoration
 import com.none.tom.exiferaser.main.TakePicture
 import com.none.tom.exiferaser.main.business.MainSideEffect
@@ -91,9 +89,15 @@ class MainFragment :
     private val args: MainFragmentArgs by navArgs()
     private val viewModel: MainViewModel by viewModels()
     private val chooseImage = registerForActivityResult(
-        PickVisualMedia2(
-            usePhotoPicker = { !viewModel.container.stateFlow.value.legacyImageSelection }
+        ActivityResultContracts.PickVisualMedia()
+    ) { result ->
+        viewModel.putImageSelection(
+            uri = result,
+            canReorderImageSources = canReorderImageSources()
         )
+    }
+    private val chooseImageLegacy = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
     ) { result ->
         viewModel.putImageSelection(
             uri = result,
@@ -101,9 +105,15 @@ class MainFragment :
         )
     }
     private val chooseImages = registerForActivityResult(
-        PickMultipleVisualMedia2(
-            usePhotoPicker = { !viewModel.container.stateFlow.value.legacyImageSelection }
+        ActivityResultContracts.PickMultipleVisualMedia()
+    ) { result ->
+        viewModel.putImagesSelection(
+            uris = result,
+            canReorderImageSources = canReorderImageSources()
         )
+    }
+    private val chooseImagesLegacy = registerForActivityResult(
+        ActivityResultContracts.OpenMultipleDocuments()
     ) { result ->
         viewModel.putImagesSelection(
             uris = result,
@@ -217,21 +227,29 @@ class MainFragment :
     }
 
     private fun renderState(state: MainState) {
-        binding.progress.isVisible = state.loading
+        binding.progress.isVisible = state.isLoading
         (binding.imageSources.adapter as? MainAdapter)?.submitList(state.imageSources)
     }
 
     private fun handleSideEffect(sideEffect: MainSideEffect) {
         when (sideEffect) {
             is MainSideEffect.ChooseImage -> {
-                chooseImage.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                )
+                if (sideEffect.isLegacyImageSelectionEnabled) {
+                    chooseImageLegacy.launch(supportedMimeTypes)
+                } else {
+                    chooseImage.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
             }
             is MainSideEffect.ChooseImages -> {
-                chooseImages.launch(
-                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                )
+                if (sideEffect.isLegacyImageSelectionEnabled) {
+                    chooseImagesLegacy.launch(supportedMimeTypes)
+                } else {
+                    chooseImages.launch(
+                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
+                }
             }
             is MainSideEffect.ChooseImageDirectory -> {
                 chooseImageDirectory.launch(sideEffect.openPath)

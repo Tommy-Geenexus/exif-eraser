@@ -35,7 +35,7 @@ import com.none.tom.exiferaser.databinding.FragmentDefaultDisplayNameSuffixBindi
 
 class DefaultDisplayNameSuffixFragment : DialogFragment() {
 
-    internal companion object {
+    companion object {
 
         const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX =
             TOP_LEVEL_PACKAGE_NAME + "DEFAULT_DISPLAY_NAME_SUFFIX"
@@ -44,7 +44,7 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
     private val args: DefaultDisplayNameSuffixFragmentArgs by navArgs()
 
     private var _binding: FragmentDefaultDisplayNameSuffixBinding? = null
-    internal val binding: FragmentDefaultDisplayNameSuffixBinding get() = _binding!!
+    private val binding: FragmentDefaultDisplayNameSuffixBinding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentDefaultDisplayNameSuffixBinding.inflate(layoutInflater)

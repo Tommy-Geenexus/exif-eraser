@@ -91,13 +91,13 @@ class MainViewModelTest {
             } returns flowOf(true)
             containerHost.readDefaultValues().join()
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
                 copy(
                     imageSources = testImageSources,
-                    legacyImageSelection = true,
-                    loading = false
+                    isLegacyImageSelectionEnabled = true,
+                    isLoading = false
                 )
             }
             expectSideEffect(MainSideEffect.ImageSourcesReadComplete)
@@ -159,10 +159,10 @@ class MainViewModelTest {
                 imageSourceRepository.putImageSources(testImageSources)
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
         }
     }
@@ -220,17 +220,17 @@ class MainViewModelTest {
                 )
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY))
         }
@@ -271,10 +271,10 @@ class MainViewModelTest {
                 )
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
@@ -309,10 +309,10 @@ class MainViewModelTest {
                 selectionRepository.putSelection(result)
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
         }
@@ -357,12 +357,17 @@ class MainViewModelTest {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
-            expectSideEffect(MainSideEffect.ChooseImage(openPath = testUri))
+            expectSideEffect(
+                MainSideEffect.ChooseImage(
+                    openPath = testUri,
+                    isLegacyImageSelectionEnabled = false
+                )
+            )
         }
     }
 
@@ -387,12 +392,17 @@ class MainViewModelTest {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
-            expectSideEffect(MainSideEffect.ChooseImages(openPath = testUri))
+            expectSideEffect(
+                MainSideEffect.ChooseImages(
+                    openPath = testUri,
+                    isLegacyImageSelectionEnabled = false
+                )
+            )
         }
     }
 
@@ -417,10 +427,10 @@ class MainViewModelTest {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.ChooseImageDirectory(openPath = testUri))
         }
@@ -497,10 +507,10 @@ class MainViewModelTest {
                 )
             }
             expectState {
-                copy(loading = true)
+                copy(isLoading = true)
             }
             expectState {
-                copy(loading = false)
+                copy(isLoading = false)
             }
             expectSideEffect(MainSideEffect.LaunchCamera(fileProviderImagePath = testUri))
         }

@@ -35,7 +35,7 @@ import curtains.phoneWindow
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialogFragment() {
 
     private var _binding: B? = null
-    internal val binding: B get() = _binding!!
+    protected val binding: B get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
