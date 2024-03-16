@@ -19,6 +19,7 @@ fragment = "1.6.2"
 junit = "4.13.2"
 junit-ext = "1.1.5"
 kotlin = "1.9.23"
+ksp = "1.9.23-1.0.19"
 ktlint = "12.1.0"
 leakcanary = "2.13"
 lifecycle = "2.7.0"
@@ -124,7 +125,7 @@ implementation-test-android = [
     "strikt",
     "turbine"
 ]
-kapt = [
+ksp = [
     "dagger-hilt-compiler",
     "dagger-hilt-vm-compiler"
 ]
@@ -134,8 +135,8 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

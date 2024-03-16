@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -12,5 +14,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-include ':app'
 rootProject.name = "ExifEraser"
+include(":app")
