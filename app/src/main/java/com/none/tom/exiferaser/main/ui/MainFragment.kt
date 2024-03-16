@@ -54,6 +54,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -65,7 +67,6 @@ import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.getClipImages
 import com.none.tom.exiferaser.main.MainContentReceiver
@@ -404,7 +405,7 @@ class MainFragment :
                 }
             }
         }
-        if (getWindowSizeClassWidth() == WindowSizeClass.Expanded) {
+        if (getWindowSizeClass().windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
             requireActivity().addMenuProvider(
                 menuProvider,
                 viewLifecycleOwner,
@@ -441,7 +442,8 @@ class MainFragment :
                 }
             }
         }
-        binding.bottomBarLayout.isVisible = getWindowSizeClassWidth() != WindowSizeClass.Expanded
+        binding.bottomBarLayout.isVisible =
+            getWindowSizeClass().windowWidthSizeClass != WindowWidthSizeClass.EXPANDED
     }
 
     private fun setupResponsiveImageSourceLayout() {
@@ -451,7 +453,7 @@ class MainFragment :
             }
             adapter = MainAdapter(
                 listener = this@MainFragment,
-                windowSizeClass = getWindowSizeClassHeight()
+                windowHeightSizeClass = getWindowSizeClass().windowHeightSizeClass
             )
             addItemDecoration(
                 RecyclerViewItemDecoration(
@@ -468,32 +470,29 @@ class MainFragment :
     }
 
     private fun setupResponsiveToolbarTitleLayout() {
-        binding.title.gravity = when (getWindowSizeClassWidth()) {
-            WindowSizeClass.Unspecified,
-            WindowSizeClass.Compact -> Gravity.END
-            WindowSizeClass.Medium,
-            WindowSizeClass.Expanded -> Gravity.CENTER
+        binding.title.gravity = when (getWindowSizeClass().windowWidthSizeClass) {
+            WindowWidthSizeClass.COMPACT -> Gravity.END
+            else -> Gravity.CENTER
         }
         binding.title.text = getString(
             R.string.choose_your_preferred_image_source_placeholder,
             getString(R.string.choose_your),
             getString(R.string.preferred_image_source)
         )
-        binding.title.typeface = when (getWindowSizeClassHeight()) {
-            WindowSizeClass.Compact -> {
+        binding.title.typeface = when (getWindowSizeClass().windowHeightSizeClass) {
+            WindowHeightSizeClass.COMPACT -> {
                 binding.title.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
                 )
                 Typeface.DEFAULT_BOLD
             }
-            WindowSizeClass.Unspecified,
-            WindowSizeClass.Medium -> {
+            WindowHeightSizeClass.MEDIUM -> {
                 binding.title.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
                 )
                 Typeface.DEFAULT_BOLD
             }
-            WindowSizeClass.Expanded -> {
+            else -> {
                 binding.title.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
                 )

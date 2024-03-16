@@ -24,16 +24,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.window.core.layout.WindowHeightSizeClass
 import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
-import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 import com.none.tom.exiferaser.main.MainItemTouchHelperCallback
 import com.squareup.wire.AnyMessage
+
 class MainAdapter(
     private val listener: Listener,
-    private val windowSizeClass: WindowSizeClass
+    private val windowHeightSizeClass: WindowHeightSizeClass
 ) : ListAdapter<AnyMessage, MainViewHolder>(
     object : DiffUtil.ItemCallback<AnyMessage>() {
 
@@ -73,7 +74,7 @@ class MainAdapter(
                 false
             ),
             listener = listener,
-            windowSizeClass = windowSizeClass
+            windowHeightSizeClass = windowHeightSizeClass
         )
     }
 

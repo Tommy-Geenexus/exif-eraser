@@ -22,28 +22,27 @@ package com.none.tom.exiferaser.main.ui
 
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import androidx.window.core.layout.WindowHeightSizeClass
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 
 class MainViewHolder(
     private val binding: ItemImageSourceBinding,
     private val listener: MainAdapter.Listener,
-    private val windowSizeClass: WindowSizeClass
+    private val windowHeightSizeClass: WindowHeightSizeClass
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.image.updateLayoutParams {
             binding.image.layoutParams.apply {
-                val dimen = when (windowSizeClass) {
-                    WindowSizeClass.Compact -> {
+                val dimen = when (windowHeightSizeClass) {
+                    WindowHeightSizeClass.COMPACT -> {
                         itemView.context.resources.getDimension(R.dimen.icon_compact)
                     }
-                    WindowSizeClass.Unspecified,
-                    WindowSizeClass.Medium -> {
+                    WindowHeightSizeClass.MEDIUM -> {
                         itemView.context.resources.getDimension(R.dimen.icon_medium)
                     }
-                    WindowSizeClass.Expanded -> {
+                    else -> {
                         itemView.context.resources.getDimension(R.dimen.icon_expanded)
                     }
                 }.toInt()
@@ -52,15 +51,14 @@ class MainViewHolder(
             }
         }
         binding.method.setTextAppearance(
-            when (windowSizeClass) {
-                WindowSizeClass.Compact -> {
+            when (windowHeightSizeClass) {
+                WindowHeightSizeClass.COMPACT -> {
                     com.google.android.material.R.style.TextAppearance_Material3_BodySmall
                 }
-                WindowSizeClass.Unspecified,
-                WindowSizeClass.Medium -> {
+                WindowHeightSizeClass.MEDIUM -> {
                     com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
                 }
-                WindowSizeClass.Expanded -> {
+                else -> {
                     com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
                 }
             }

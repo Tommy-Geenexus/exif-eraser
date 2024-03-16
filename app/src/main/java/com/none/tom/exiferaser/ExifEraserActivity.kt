@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
@@ -49,8 +51,7 @@ class ExifEraserActivity : AppCompatActivity() {
         private const val KEY_SHORTCUT = "shortcut"
     }
 
-    internal var windowSizeClassHeight: WindowSizeClass = WindowSizeClass.Unspecified
-    internal var windowSizeClassWidth: WindowSizeClass = WindowSizeClass.Unspecified
+    lateinit var windowSizeClass: WindowSizeClass
 
     init {
         addOnNewIntentListener { intent ->
@@ -70,7 +71,7 @@ class ExifEraserActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
             ?.navController
             ?.addOnDestinationChangedListener { _, destination, _ ->
-                if (windowSizeClassWidth != WindowSizeClass.Expanded) {
+                if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
                     if (destination.id == R.id.fragment_main) {
                         window.navigationBarColor = SurfaceColors.SURFACE_2.getColor(this)
                     } else {
@@ -144,7 +145,6 @@ class ExifEraserActivity : AppCompatActivity() {
         val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
         val widthDp = metrics.bounds.width() / resources.displayMetrics.density
         val heightDp = metrics.bounds.height() / resources.displayMetrics.density
-        windowSizeClassWidth = WindowSizeClass.calculate(widthDp, height = false)
-        windowSizeClassHeight = WindowSizeClass.calculate(heightDp, height = true)
+        windowSizeClass = WindowSizeClass.compute(widthDp, heightDp)
     }
 }

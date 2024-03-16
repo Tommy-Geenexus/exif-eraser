@@ -34,11 +34,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.window.core.layout.WindowHeightSizeClass
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
-import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.FragmentSelectionBinding
 import com.none.tom.exiferaser.selection.ShareImages
 import com.none.tom.exiferaser.selection.business.SelectionSideEffect
@@ -164,24 +164,22 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
 
     private fun setupResponsiveLayout() {
         binding.image.updateLayoutParams {
-            val dimen = when (getWindowSizeClassHeight()) {
-                WindowSizeClass.Compact -> {
+            val dimen = when (getWindowSizeClass().windowHeightSizeClass) {
+                WindowHeightSizeClass.COMPACT -> {
                     resources.getDimension(R.dimen.icon_compact)
                 }
-                WindowSizeClass.Unspecified,
-                WindowSizeClass.Medium -> {
+                WindowHeightSizeClass.MEDIUM -> {
                     resources.getDimension(R.dimen.icon_medium)
                 }
-                WindowSizeClass.Expanded -> {
+                else -> {
                     resources.getDimension(R.dimen.icon_expanded)
                 }
             }.toInt()
             height = dimen
             width = dimen
         }
-        when (getWindowSizeClassHeight()) {
-            WindowSizeClass.Unspecified,
-            WindowSizeClass.Compact -> {
+        when (getWindowSizeClass().windowHeightSizeClass) {
+            WindowHeightSizeClass.COMPACT -> {
                 binding.heading.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
                 )
@@ -189,7 +187,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                     com.google.android.material.R.style.TextAppearance_Material3_BodySmall
                 )
             }
-            WindowSizeClass.Medium -> {
+            WindowHeightSizeClass.MEDIUM -> {
                 binding.heading.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
                 )
@@ -197,7 +195,7 @@ class SelectionFragment : BaseFragment<FragmentSelectionBinding>(R.layout.fragme
                     com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
                 )
             }
-            WindowSizeClass.Expanded -> {
+            else -> {
                 binding.heading.setTextAppearance(
                     com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
                 )

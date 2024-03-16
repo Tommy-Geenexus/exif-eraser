@@ -75,6 +75,7 @@ strikt = { module = "io.strikt:strikt-core", version.ref = "strikt" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 window = { module = "androidx.window:window", version.ref = "window" }
+window-core = { module = "androidx.window:window-core", version.ref = "window" }
 wire = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
 
 [bundles]
@@ -103,6 +104,7 @@ implementation = [
     "recyclerview",
     "timber",
     "window",
+    "window-core",
     "wire"
 ]
 implementation-test = [

@@ -52,13 +52,9 @@ abstract class BaseFragment<B : ViewBinding>(
 
     abstract fun bindLayout(view: View): B
 
-    internal fun getWindowSizeClassHeight() =
-        (requireActivity() as ExifEraserActivity).windowSizeClassHeight
+    protected fun getWindowSizeClass() = (requireActivity() as ExifEraserActivity).windowSizeClass
 
-    internal fun getWindowSizeClassWidth() =
-        (requireActivity() as ExifEraserActivity).windowSizeClassWidth
-
-    internal fun setupToolbar(
+    protected fun setupToolbar(
         toolbar: Toolbar,
         @StringRes titleRes: Int = 0
     ) {
@@ -76,7 +72,7 @@ abstract class BaseFragment<B : ViewBinding>(
             }
     }
 
-    internal fun navigate(navDirections: NavDirections) {
+    protected fun navigate(navDirections: NavDirections) {
         val navController = findNavController()
         val action = navController.currentDestination?.getAction(navDirections.actionId)
         if (action != null && action.destinationId != 0) {
