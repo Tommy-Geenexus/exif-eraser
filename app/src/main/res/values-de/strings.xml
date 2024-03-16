@@ -4,12 +4,6 @@
 
     <string name="always">Immer</string>
 
-    <string name="app_update_download">Update wird heruntergeladen</string>
-    <string name="app_update_downloaded">Update erfolgreich heruntergeladen</string>
-    <string name="app_update_failed">Update fehlgeschlagen</string>
-    <string name="app_update_install">Hier klicken zum Installieren</string>
-    <string name="app_update_ready">Update bereit zur Installation</string>
-
     <string name="auto_delete_image_off">Behalte Bilder nach Bearbeitung falls die veraltete Bildauswahl aktiviert ist</string>
     <string name="auto_delete_image_on">Lösche Bilder nach Bearbeitung falls die veraltete Bildauswahl aktiviert ist</string>
 
@@ -58,11 +52,7 @@
 
     <string name="images_modified">Bilder modifiziert</string>
 
-    <string name="install">Installieren</string>
-
     <string name="low_batt_only">Bei niedrigem Akkustand</string>
-
-    <string name="modified">Modifiziert</string>
 
     <string name="never">Niemals</string>
 

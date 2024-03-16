@@ -23,12 +23,6 @@
             app:nullable="true" />
 
         <argument
-            android:name="image_selection"
-            android:defaultValue="@null"
-            app:argType="android.net.Uri"
-            app:nullable="true" />
-
-        <argument
             android:name="images_selection"
             android:defaultValue="@null"
             app:argType="android.net.Uri[]"
@@ -47,12 +41,12 @@
             app:destination="@id/fragment_help" />
 
         <action
-            android:id="@+id/main_to_selection_save_path"
-            app:destination="@id/fragment_save_path" />
+            android:id="@+id/main_to_image_save_path_selection"
+            app:destination="@id/fragment_image_save_path_selection" />
 
         <action
-            android:id="@+id/main_to_selection"
-            app:destination="@id/fragment_selection" />
+            android:id="@+id/main_to_image_processing"
+            app:destination="@id/fragment_image_processing" />
     </fragment>
 
     <dialog
@@ -61,13 +55,13 @@
         tools:layout="@layout/fragment_delete_camera_images" />
 
     <dialog
-        android:id="@+id/fragment_save_path"
-        android:name="com.none.tom.exiferaser.savepath.ui.SavePathFragment"
-        tools:layout="@layout/fragment_save_path">
+        android:id="@+id/fragment_image_save_path_selection"
+        android:name="com.none.tom.exiferaser.imageSavePathSelection.ui.ImageSavePathSelectionFragment"
+        tools:layout="@layout/fragment_image_save_path_selection">
 
         <action
-            android:id="@+id/selection_save_path_to_selection"
-            app:destination="@id/fragment_selection" />
+            android:id="@+id/selection_save_path_to_image_processing"
+            app:destination="@id/fragment_image_processing" />
     </dialog>
 
     <fragment
@@ -109,9 +103,9 @@
         tools:layout="@layout/fragment_help" />
 
     <fragment
-        android:id="@+id/fragment_selection"
-        android:name="com.none.tom.exiferaser.selection.ui.SelectionFragment"
-        tools:layout="@layout/fragment_selection">
+        android:id="@+id/fragment_image_processing"
+        android:name="com.none.tom.exiferaser.imageProcessing.ui.ImageProcessingFragment"
+        tools:layout="@layout/fragment_image_processing">
 
         <argument
             android:name="save_path"

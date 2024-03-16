@@ -4,12 +4,6 @@
 
     <string name="always">Всегда</string>
 
-    <string name="app_update_download">"Загрузка объявлений "</string>
-    <string name="app_update_downloaded">"Обновление успешно загружено "</string>
-    <string name="app_update_failed">Сбой обновления</string>
-    <string name="app_update_install">Нажмите сюда, чтобы установить</string>
-    <string name="app_update_ready">Обновление готово к установке</string>
-
     <string name="automatically">Автоматический</string>
 
     <string name="become_translator">"Помощь в переводе "</string>
@@ -51,11 +45,7 @@
 
     <string name="images_modified">"Изображения модифицированы "</string>
 
-    <string name="install">"Установка "</string>
-
     <string name="low_batt_only">Только низкий заряд батареи</string>
-
-    <string name="modified">Модификация</string>
 
     <string name="never">"Никогда "</string>
 

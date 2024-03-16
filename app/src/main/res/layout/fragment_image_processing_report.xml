@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.none.tom.exiferaser.imageProcessingReport.ui.ImageProcessingReportConstraintLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?attr/colorPrimaryContainer"
+        app:layout_behavior=".imageProcessingReport.ui.ImageProcessingReportFragmentBehaviour"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.ExifEraser.CornerShape.Round">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_normal"
+            android:drawablePadding="@dimen/spacing_normal"
+            android:drawableTint="?attr/colorOnPrimaryContainer"
+            android:gravity="center_vertical"
+            android:text="@string/details"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            app:drawableStartCompat="@drawable/ic_unfold_more"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="?attr/toolbarSurfaceStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:alpha="0"
+            android:elevation="@dimen/elevation_micro"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_expand_more"
+            app:title="@string/details" />
+
+        <View
+            android:id="@+id/expand"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/report"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:clipToPadding="false"
+            android:paddingTop="?android:actionBarSize"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+    </com.none.tom.exiferaser.imageProcessingReport.ui.ImageProcessingReportConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

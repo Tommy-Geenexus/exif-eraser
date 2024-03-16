@@ -4,12 +4,6 @@
 
     <string name="always">Πάντα</string>
 
-    <string name="app_update_download">Λήψη ενημέρωσης</string>
-    <string name="app_update_downloaded">Η ενημέρωση λήφθηκε με επιτυχία</string>
-    <string name="app_update_failed">Η ενημέρωση απέτυχε</string>
-    <string name="app_update_install">Πατήστε εδώ για εγκατάσταση</string>
-    <string name="app_update_ready">Ενημέρωση έτοιμη για εγκατάσταση</string>
-
     <string name="auto_delete_image_off">Μη διαγραφή εικόνων μετά την τροποποίηση, εάν είναι ενεργοποιημένη η επιλογή παλαιού τύπου εικόνας</string>
     <string name="auto_delete_image_on">Διαγραφή εικόνων μετά την τροποποίηση εάν είναι ενεργοποιημένη η επιλογή παλαιού τύπου εικόνας</string>
 
@@ -58,11 +52,7 @@
 
     <string name="images_modified">τροποποιημένες εικόνες</string>
 
-    <string name="install">Εγκατάσταση</string>
-
     <string name="low_batt_only">Μόνο χαμηλή μπαταρία</string>
-
-    <string name="modified">Τροποποιήθηκε</string>
 
     <string name="never">Ποτέ</string>
 

@@ -4,12 +4,6 @@
 
     <string name="always">Sempre</string>
 
-    <string name="app_update_download">Aggiornamento in scaricamento</string>
-    <string name="app_update_downloaded">Aggiornamento scaricato con successo</string>
-    <string name="app_update_failed">Aggiornamento non riuscito</string>
-    <string name="app_update_install">Premi qui per installare</string>
-    <string name="app_update_ready">Aggiornamento pronto per l\'installazione</string>
-
     <string name="automatically">Automaticamente</string>
 
     <string name="become_translator">Aiuta a tradurre</string>
@@ -51,11 +45,7 @@
 
     <string name="images_modified">immagine modificata</string>
 
-    <string name="install">Installa</string>
-
     <string name="low_batt_only">Solo batteria scarica</string>
-
-    <string name="modified">Modificata</string>
 
     <string name="never">Mai</string>
 
