@@ -80,18 +80,16 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getDefaultNightMode()
-                } returns flowOf(0)
-                coEvery {
-                    imageSourceRepository.getImageSources()
-                } returns flowOf(testImageSources)
-                coEvery {
-                    settingsRepository.shouldSelectImagesLegacy()
-                } returns flowOf(true)
-                readDefaultValues()
-            }.join()
+            coEvery {
+                settingsRepository.getDefaultNightMode()
+            } returns flowOf(0)
+            coEvery {
+                imageSourceRepository.getImageSources()
+            } returns flowOf(testImageSources)
+            coEvery {
+                settingsRepository.shouldSelectImagesLegacy()
+            } returns flowOf(true)
+            containerHost.readDefaultValues().join()
             expectState {
                 copy(loading = true)
             }
@@ -127,13 +125,13 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                reorderImageSources(
+            containerHost
+                .reorderImageSources(
                     imageSources = testImageSources,
                     oldIndex = 0,
                     newIndex = 1
                 )
-            }.join()
+                .join()
             expectState {
                 copy(imageSources = reorderedImageSources)
             }
@@ -153,12 +151,10 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    imageSourceRepository.putImageSources(testImageSources)
-                } returns true
-                putImageSources(testImageSources)
-            }.join()
+            coEvery {
+                imageSourceRepository.putImageSources(testImageSources)
+            } returns true
+            containerHost.putImageSources(testImageSources).join()
             coVerify(exactly = 1) {
                 imageSourceRepository.putImageSources(testImageSources)
             }
@@ -184,39 +180,39 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    selectionRepository.putSelection(
-                        uri = testUri,
-                        fromCamera = false
-                    )
-                } returns true
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(false)
-                putImageSelection(
+            coEvery {
+                selectionRepository.putSelection(
                     uri = testUri,
                     fromCamera = false
                 )
-            }.join()
+            } returns true
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(false)
+            containerHost
+                .putImageSelection(
+                    uri = testUri,
+                    fromCamera = false
+                )
+                .join()
             coVerify(exactly = 1) {
                 selectionRepository.putSelection(
                     uri = testUri,
                     fromCamera = false
                 )
             }
-            invokeIntent {
-                coEvery {
-                    selectionRepository.putSelection(
-                        uri = testUri,
-                        fromCamera = true
-                    )
-                } returns true
-                putImageSelection(
+            coEvery {
+                selectionRepository.putSelection(
                     uri = testUri,
                     fromCamera = true
                 )
-            }.join()
+            } returns true
+            containerHost
+                .putImageSelection(
+                    uri = testUri,
+                    fromCamera = true
+                )
+                .join()
             coVerify(exactly = 1) {
                 selectionRepository.putSelection(
                     uri = testUri,
@@ -253,21 +249,21 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    selectionRepository.putSelection(
-                        uris = testUris,
-                        urisFromIntent = testUris.toTypedArray()
-                    )
-                } returns true
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(false)
-                putImagesSelection(
+            coEvery {
+                selectionRepository.putSelection(
                     uris = testUris,
                     urisFromIntent = testUris.toTypedArray()
                 )
-            }.join()
+            } returns true
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(false)
+            containerHost
+                .putImagesSelection(
+                    uris = testUris,
+                    urisFromIntent = testUris.toTypedArray()
+                )
+                .join()
             coVerify(exactly = 1) {
                 selectionRepository.putSelection(
                     uris = testUris,
@@ -298,18 +294,16 @@ class MainViewModelTest {
         ) {
             expectInitialState()
             val result = AnyMessage.pack(UserImageSelectionProto(image_path = testUri.toString()))
-            invokeIntent {
-                coEvery {
-                    imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
-                } returns result
-                coEvery {
-                    selectionRepository.putSelection(result)
-                } returns true
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(false)
-                putImageDirectorySelection(uri = testUri)
-            }.join()
+            coEvery {
+                imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
+            } returns result
+            coEvery {
+                selectionRepository.putSelection(result)
+            } returns true
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(false)
+            containerHost.putImageDirectorySelection(uri = testUri).join()
             coVerify(ordering = Ordering.SEQUENCE) {
                 imageRepository.packDocumentTreeToAnyMessageOrNull(testUri)
                 selectionRepository.putSelection(result)
@@ -337,9 +331,7 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handleSettings()
-            }.join()
+            containerHost.handleSettings().join()
             expectSideEffect(MainSideEffect.NavigateToSettings)
         }
     }
@@ -357,12 +349,10 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                chooseImage(canReorderImageSources = false)
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.chooseImage(canReorderImageSources = false).join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
@@ -389,12 +379,10 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                chooseImages(canReorderImageSources = false)
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.chooseImages(canReorderImageSources = false).join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
@@ -421,12 +409,10 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                chooseImageDirectory(canReorderImageSources = false)
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.chooseImageDirectory(canReorderImageSources = false).join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
@@ -453,31 +439,25 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                chooseSelectionNavigationRoute(fromCamera = true)
-            }.join()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                chooseSelectionNavigationRoute()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.chooseSelectionNavigationRoute(fromCamera = true).join()
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            containerHost.chooseSelectionNavigationRoute().join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.shouldSkipSavePathSelection()
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
             }
-            invokeIntent {
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(false)
-                chooseSelectionNavigationRoute()
-            }.join()
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(false)
+            containerHost.chooseSelectionNavigationRoute().join()
             expectSideEffect(MainSideEffect.NavigateToSelection(savePath = Uri.EMPTY))
             expectSideEffect(MainSideEffect.NavigateToSelection(savePath = testUri))
             expectSideEffect(MainSideEffect.NavigateToSelectionSavePath)
@@ -497,19 +477,19 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    imageRepository.getExternalPicturesFileProviderUriOrNull(
-                        fileProviderPackage = "",
-                        displayName = ""
-                    )
-                } returns testUri
-                launchCamera(
+            coEvery {
+                imageRepository.getExternalPicturesFileProviderUriOrNull(
+                    fileProviderPackage = "",
+                    displayName = ""
+                )
+            } returns testUri
+            containerHost
+                .launchCamera(
                     fileProviderPackage = "",
                     displayName = "",
                     canReorderImageSources = false
                 )
-            }.join()
+                .join()
             coVerify(exactly = 1) {
                 imageRepository.getExternalPicturesFileProviderUriOrNull(
                     fileProviderPackage = "",
@@ -539,9 +519,7 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handleShortcut("")
-            }.join()
+            containerHost.handleShortcut("").join()
             expectSideEffect(MainSideEffect.Shortcut.Handle(""))
         }
     }
@@ -559,9 +537,7 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                reportShortcutUsed("")
-            }.join()
+            containerHost.reportShortcutUsed("").join()
             expectSideEffect(MainSideEffect.Shortcut.ReportUsage(""))
         }
     }
@@ -579,15 +555,9 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handleReceivedImages(emptyList())
-            }.join()
-            invokeIntent {
-                handleReceivedImages(listOf(testUri))
-            }.join()
-            invokeIntent {
-                handleReceivedImages(listOf(testUri, testUri))
-            }.join()
+            containerHost.handleReceivedImages(emptyList()).join()
+            containerHost.handleReceivedImages(listOf(testUri)).join()
+            containerHost.handleReceivedImages(listOf(testUri, testUri)).join()
             expectSideEffect(MainSideEffect.ReceivedImage(uri = testUri))
             expectSideEffect(MainSideEffect.ReceivedImages(uris = listOf(testUri, testUri)))
         }
@@ -606,15 +576,9 @@ class MainViewModelTest {
             initialState = MainState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handlePasteImages(emptyList())
-            }.join()
-            invokeIntent {
-                handlePasteImages(listOf(testUri))
-            }.join()
-            invokeIntent {
-                handlePasteImages(listOf(testUri, testUri))
-            }.join()
+            containerHost.handlePasteImages(emptyList()).join()
+            containerHost.handlePasteImages(listOf(testUri)).join()
+            containerHost.handlePasteImages(listOf(testUri, testUri)).join()
             expectSideEffect(MainSideEffect.PasteImagesNone)
             expectSideEffect(MainSideEffect.PasteImages(uris = listOf(testUri)))
             expectSideEffect(MainSideEffect.PasteImages(uris = listOf(testUri, testUri)))

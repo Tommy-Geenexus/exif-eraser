@@ -70,9 +70,7 @@ class ReportViewModelTest {
         ) {
             expectInitialState()
             val summaries = listOf(summary)
-            invokeIntent {
-                handleImageSummaries(summaries)
-            }.join()
+            containerHost.handleImageSummaries(summaries).join()
             expectState {
                 copy(imageSummaries = summaries)
             }
@@ -89,9 +87,7 @@ class ReportViewModelTest {
             initialState = ReportState(imageSummaries = listOf(summary))
         ) {
             expectInitialState()
-            invokeIntent {
-                handleViewImage(position = 0)
-            }.join()
+            containerHost.handleViewImage(position = 0).join()
             expectSideEffect(ReportSideEffect.ViewImage(imageUri = testUri))
         }
     }
@@ -106,9 +102,7 @@ class ReportViewModelTest {
             initialState = ReportState(imageSummaries = listOf(summary))
         ) {
             expectInitialState()
-            invokeIntent {
-                handleImageModifiedDetails(position = 0)
-            }.join()
+            containerHost.handleImageModifiedDetails(position = 0).join()
             expectSideEffect(
                 ReportSideEffect.NavigateToImageModifiedDetails(
                     displayName = summary.displayName,
@@ -135,12 +129,10 @@ class ReportViewModelTest {
         ) {
             expectInitialState()
             val imagePath = ContentResolver.SCHEME_CONTENT
-            invokeIntent {
-                coEvery {
-                    imageRepository.getDocumentPathOrNull(summary.imageUri)
-                } returns imagePath
-                handleImageSavedDetails(position = 0)
-            }.join()
+            coEvery {
+                imageRepository.getDocumentPathOrNull(summary.imageUri)
+            } returns imagePath
+            containerHost.handleImageSavedDetails(position = 0).join()
             coVerify(exactly = 1) {
                 imageRepository.getDocumentPathOrNull(summary.imageUri)
             }

@@ -53,21 +53,17 @@ class SavePathViewModelTest {
             initialState = SavePathState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                verifyHasPrivilegedDefaultSavePath()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            containerHost.verifyHasPrivilegedDefaultSavePath().join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
             }
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns Uri.EMPTY
-                verifyHasPrivilegedDefaultSavePath()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns Uri.EMPTY
+            containerHost.verifyHasPrivilegedDefaultSavePath().join()
             coVerify(exactly = 2) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
             }
@@ -90,15 +86,11 @@ class SavePathViewModelTest {
             initialState = SavePathState()
         ) {
             expectInitialState()
-            invokeIntent {
-                chooseSelectionSavePath(testUri)
-            }.join()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                chooseSelectionSavePath(Uri.EMPTY)
-            }.join()
+            containerHost.chooseSelectionSavePath(testUri).join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.chooseSelectionSavePath(Uri.EMPTY).join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
@@ -117,21 +109,15 @@ class SavePathViewModelTest {
             initialState = SavePathState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns Uri.EMPTY
-                handleSelection(null)
-            }.join()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                handleSelection(testUri)
-            }.join()
-            invokeIntent {
-                handleSelection(Uri.EMPTY)
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns Uri.EMPTY
+            containerHost.handleSelection(null).join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            containerHost.handleSelection(testUri).join()
+            containerHost.handleSelection(Uri.EMPTY).join()
             coVerify(exactly = 2) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
             }

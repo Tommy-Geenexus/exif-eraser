@@ -36,17 +36,15 @@ class ImageModifiedDetailsViewModelTest {
             initialState = ImageModifiedDetailsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handleImageDetails(
-                    extension = EXTENSION_JPEG,
-                    mimeType = MIME_TYPE_JPEG,
-                    containsIccProfile = true,
-                    containsExif = true,
-                    containsPhotoshopImageResources = true,
-                    containsXmp = true,
-                    containsExtendedXmp = true
-                )
-            }.join()
+            containerHost.handleImageDetails(
+                extension = EXTENSION_JPEG,
+                mimeType = MIME_TYPE_JPEG,
+                containsIccProfile = true,
+                containsExif = true,
+                containsPhotoshopImageResources = true,
+                containsXmp = true,
+                containsExtendedXmp = true
+            ).join()
             expectState {
                 copy(
                     extension = EXTENSION_JPEG,

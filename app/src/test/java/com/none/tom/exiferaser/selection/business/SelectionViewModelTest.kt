@@ -102,9 +102,7 @@ class SelectionViewModelTest {
             initialState = SelectionState()
         ) {
             expectInitialState()
-            invokeIntent {
-                readSelection(dropFirstN = 0)
-            }.join()
+            containerHost.readSelection(dropFirstN = 0).join()
             coVerify(exactly = 1) {
                 selectionRepository.getSelection(dropFirstN = 0)
             }
@@ -124,9 +122,7 @@ class SelectionViewModelTest {
             initialState = SelectionState(imageSummaries = listOf(testSummary))
         ) {
             expectInitialState()
-            invokeIntent {
-                shareImages()
-            }
+            containerHost.shareImages()
             expectSideEffect(SelectionSideEffect.ShareImages(ArrayList(testUris)))
         }
     }
@@ -143,12 +139,10 @@ class SelectionViewModelTest {
             initialState = SelectionState(imageSummaries = listOf(testSummary))
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.shouldShareByDefault()
-                } returns flowOf(true)
-                shareImagesByDefault()
-            }.join()
+            coEvery {
+                settingsRepository.shouldShareByDefault()
+            } returns flowOf(true)
+            containerHost.shareImagesByDefault().join()
             coVerify(exactly = 1) {
                 settingsRepository.shouldShareByDefault()
             }
@@ -186,26 +180,26 @@ class SelectionViewModelTest {
             val autoDelete = settingsRepository.shouldAutoDelete().first()
             val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
             val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
-            invokeIntent {
-                coEvery {
-                    imageRepository.removeMetadataSingle(
-                        selection = testImageSelection,
-                        treeUri = Uri.EMPTY,
-                        displayNameSuffix = displayNameSuffix,
-                        autoDelete = autoDelete,
-                        preserveOrientation = preserveOrientation,
-                        randomizeFileNames = randomizeFileNames
-                    )
-                } returns flow {
-                    emit(Result.Report(summary = testSummary))
-                    emit(Result.Handled(progress = PROGRESS_MAX))
-                    emit(Result.HandledAll)
-                }
-                handleUserImageSelection(
+            coEvery {
+                imageRepository.removeMetadataSingle(
+                    selection = testImageSelection,
+                    treeUri = Uri.EMPTY,
+                    displayNameSuffix = displayNameSuffix,
+                    autoDelete = autoDelete,
+                    preserveOrientation = preserveOrientation,
+                    randomizeFileNames = randomizeFileNames
+                )
+            } returns flow {
+                emit(Result.Report(summary = testSummary))
+                emit(Result.Handled(progress = PROGRESS_MAX))
+                emit(Result.HandledAll)
+            }
+            containerHost
+                .handleUserImageSelection(
                     selection = testImageSelection,
                     treeUri = Uri.EMPTY
                 )
-            }.join()
+                .join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.shouldAutoDelete()
                 settingsRepository.shouldPreserveOrientation()
@@ -271,28 +265,28 @@ class SelectionViewModelTest {
             val autoDelete = settingsRepository.shouldAutoDelete().first()
             val preserveOrientation = settingsRepository.shouldPreserveOrientation().first()
             val randomizeFileNames = settingsRepository.shouldRandomizeFileNames().first()
-            invokeIntent {
-                coEvery {
-                    imageRepository.removeMetadataBulk(
-                        selection = testImagesSelection,
-                        treeUri = Uri.EMPTY,
-                        displayNameSuffix = displayNameSuffix,
-                        autoDelete = autoDelete,
-                        preserveOrientation = preserveOrientation,
-                        randomizeFileNames = randomizeFileNames
-                    )
-                } returns flow {
-                    emit(Result.Report(summary = testSummary))
-                    emit(Result.Handled(progress = PROGRESS_MAX / 2))
-                    emit(Result.Report(summary = testSummary))
-                    emit(Result.Handled(progress = PROGRESS_MAX))
-                    emit(Result.HandledAll)
-                }
-                handleUserImagesSelection(
+            coEvery {
+                imageRepository.removeMetadataBulk(
+                    selection = testImagesSelection,
+                    treeUri = Uri.EMPTY,
+                    displayNameSuffix = displayNameSuffix,
+                    autoDelete = autoDelete,
+                    preserveOrientation = preserveOrientation,
+                    randomizeFileNames = randomizeFileNames
+                )
+            } returns flow {
+                emit(Result.Report(summary = testSummary))
+                emit(Result.Handled(progress = PROGRESS_MAX / 2))
+                emit(Result.Report(summary = testSummary))
+                emit(Result.Handled(progress = PROGRESS_MAX))
+                emit(Result.HandledAll)
+            }
+            containerHost
+                .handleUserImagesSelection(
                     selection = testImagesSelection,
                     treeUri = Uri.EMPTY
                 )
-            }.join()
+                .join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.shouldAutoDelete()
                 settingsRepository.shouldPreserveOrientation()
@@ -358,9 +352,7 @@ class SelectionViewModelTest {
             initialState = SelectionState()
         ) {
             expectInitialState()
-            invokeIntent {
-                handleUnsupportedSelection()
-            }.join()
+            containerHost.handleUnsupportedSelection().join()
             expectState {
                 copy(handledAll = true)
             }

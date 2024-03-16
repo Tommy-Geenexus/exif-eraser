@@ -61,39 +61,37 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.shouldRandomizeFileNames()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.getDefaultPathOpenName()
-                } returns testDefaultPathOpenName
-                coEvery {
-                    settingsRepository.getDefaultPathSaveName()
-                } returns testDefaultPathSaveName
-                coEvery {
-                    settingsRepository.shouldAutoDelete()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.shouldPreserveOrientation()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.shouldShareByDefault()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.getDefaultDisplayNameSuffix()
-                } returns flowOf(testDefaultDisplayNameSuffix)
-                coEvery {
-                    settingsRepository.shouldSelectImagesLegacy()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.shouldSkipSavePathSelection()
-                } returns flowOf(true)
-                coEvery {
-                    settingsRepository.getDefaultNightModeName()
-                } returns testDefaultNightModeName
-                readDefaultValues()
-            }.join()
+            coEvery {
+                settingsRepository.shouldRandomizeFileNames()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.getDefaultPathOpenName()
+            } returns testDefaultPathOpenName
+            coEvery {
+                settingsRepository.getDefaultPathSaveName()
+            } returns testDefaultPathSaveName
+            coEvery {
+                settingsRepository.shouldAutoDelete()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.shouldPreserveOrientation()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.shouldShareByDefault()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.getDefaultDisplayNameSuffix()
+            } returns flowOf(testDefaultDisplayNameSuffix)
+            coEvery {
+                settingsRepository.shouldSelectImagesLegacy()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.shouldSkipSavePathSelection()
+            } returns flowOf(true)
+            coEvery {
+                settingsRepository.getDefaultNightModeName()
+            } returns testDefaultNightModeName
+            containerHost.readDefaultValues().join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.shouldRandomizeFileNames()
                 settingsRepository.getDefaultPathOpenName()
@@ -136,9 +134,7 @@ class SettingsViewModelTest {
             coEvery {
                 settingsRepository.putRandomizeFileNames(any())
             } returns true
-            invokeIntent {
-                storeRandomizeFileNames(true)
-            }.join()
+            containerHost.storeRandomizeFileNames(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putRandomizeFileNames(any())
             }
@@ -159,12 +155,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                handleDefaultPathOpen()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            containerHost.handleDefaultPathOpen().join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
             }
@@ -182,15 +176,13 @@ class SettingsViewModelTest {
             initialState = SettingsState(defaultPathOpenName = testDefaultPathOpenName)
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                coEvery {
-                    settingsRepository.putDefaultPathOpen(any(), any())
-                } returns true
-                clearDefaultPathOpen()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            coEvery {
+                settingsRepository.putDefaultPathOpen(any(), any())
+            } returns true
+            containerHost.clearDefaultPathOpen().join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
                 settingsRepository.putDefaultPathOpen(any(), any())
@@ -212,18 +204,17 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
-                } returns testUri
-                coEvery {
-                    settingsRepository.putDefaultPathOpen(any(), any())
-                } returns true
-                coEvery {
-                    settingsRepository.getDefaultPathOpenName()
-                } returns testDefaultPathOpenName
-                storeDefaultPathOpen(testUri)
-            }.join()
+
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
+            } returns testUri
+            coEvery {
+                settingsRepository.putDefaultPathOpen(any(), any())
+            } returns true
+            coEvery {
+                settingsRepository.getDefaultPathOpenName()
+            } returns testDefaultPathOpenName
+            containerHost.storeDefaultPathOpen(testUri).join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.getPrivilegedDefaultPathOpenOrEmpty()
                 settingsRepository.putDefaultPathOpen(any(), any())
@@ -246,12 +237,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                handleDefaultPathSave()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            containerHost.handleDefaultPathSave().join()
             coVerify(exactly = 1) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
             }
@@ -269,15 +258,13 @@ class SettingsViewModelTest {
             initialState = SettingsState(defaultPathSaveName = testDefaultPathSaveName)
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                coEvery {
-                    settingsRepository.putDefaultPathSave(any(), any())
-                } returns true
-                clearDefaultPathSave()
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            coEvery {
+                settingsRepository.putDefaultPathSave(any(), any())
+            } returns true
+            containerHost.clearDefaultPathSave().join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
                 settingsRepository.putDefaultPathSave(any(), any())
@@ -299,18 +286,16 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
-                } returns testUri
-                coEvery {
-                    settingsRepository.putDefaultPathSave(any(), any())
-                } returns true
-                coEvery {
-                    settingsRepository.getDefaultPathSaveName()
-                } returns testDefaultPathSaveName
-                storeDefaultPathSave(testUri)
-            }.join()
+            coEvery {
+                settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
+            } returns testUri
+            coEvery {
+                settingsRepository.putDefaultPathSave(any(), any())
+            } returns true
+            coEvery {
+                settingsRepository.getDefaultPathSaveName()
+            } returns testDefaultPathSaveName
+            containerHost.storeDefaultPathSave(testUri).join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.getPrivilegedDefaultPathSaveOrEmpty()
                 settingsRepository.putDefaultPathSave(any(), any())
@@ -333,12 +318,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putAutoDelete(any())
-                } returns true
-                storeAutoDelete(true)
-            }.join()
+            coEvery {
+                settingsRepository.putAutoDelete(any())
+            } returns true
+            containerHost.storeAutoDelete(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putAutoDelete(any())
             }
@@ -359,12 +342,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putPreserveOrientation(any())
-                } returns true
-                storePreserveOrientation(true)
-            }.join()
+            coEvery {
+                settingsRepository.putPreserveOrientation(any())
+            } returns true
+            containerHost.storePreserveOrientation(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putPreserveOrientation(any())
             }
@@ -385,12 +366,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putShareByDefault(any())
-                } returns true
-                storeShareByDefault(true)
-            }.join()
+            coEvery {
+                settingsRepository.putShareByDefault(any())
+            } returns true
+            containerHost.storeShareByDefault(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putShareByDefault(any())
             }
@@ -411,12 +390,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getDefaultDisplayNameSuffix()
-                } returns flowOf(testDefaultDisplayNameSuffix)
-                handleDefaultDisplayNameSuffix()
-            }.join()
+            coEvery {
+                settingsRepository.getDefaultDisplayNameSuffix()
+            } returns flowOf(testDefaultDisplayNameSuffix)
+            containerHost.handleDefaultDisplayNameSuffix().join()
             coVerify(exactly = 1) {
                 settingsRepository.getDefaultDisplayNameSuffix()
             }
@@ -438,12 +415,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putDefaultDisplayNameSuffix(any())
-                } returns true
-                storeDefaultDisplayNameSuffix(testDefaultDisplayNameSuffix)
-            }.join()
+            coEvery {
+                settingsRepository.putDefaultDisplayNameSuffix(any())
+            } returns true
+            containerHost.storeDefaultDisplayNameSuffix(testDefaultDisplayNameSuffix).join()
             coVerify(exactly = 1) {
                 settingsRepository.putDefaultDisplayNameSuffix(any())
             }
@@ -463,12 +438,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putSelectImagesLegacy(any())
-                } returns true
-                storeLegacyImageSelection(true)
-            }.join()
+            coEvery {
+                settingsRepository.putSelectImagesLegacy(any())
+            } returns true
+            containerHost.storeLegacyImageSelection(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putSelectImagesLegacy(any())
             }
@@ -489,12 +462,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.putSavePathSelectionSkip(any())
-                } returns true
-                storeSavePathSelectionSkip(true)
-            }.join()
+            coEvery {
+                settingsRepository.putSavePathSelectionSkip(any())
+            } returns true
+            containerHost.storeSavePathSelectionSkip(true).join()
             coVerify(exactly = 1) {
                 settingsRepository.putSavePathSelectionSkip(any())
             }
@@ -515,12 +486,10 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                coEvery {
-                    settingsRepository.getDefaultNightMode()
-                } returns flowOf(defaultNightModeValue)
-                handleDefaultNightMode()
-            }.join()
+            coEvery {
+                settingsRepository.getDefaultNightMode()
+            } returns flowOf(defaultNightModeValue)
+            containerHost.handleDefaultNightMode().join()
             coVerify(exactly = 1) {
                 settingsRepository.getDefaultNightMode()
             }
@@ -542,16 +511,14 @@ class SettingsViewModelTest {
             initialState = SettingsState()
         ) {
             expectInitialState()
-            invokeIntent {
-                val testDefaultNightModeName = "Always"
-                coEvery {
-                    settingsRepository.putDefaultNightMode(any())
-                } returns true
-                coEvery {
-                    settingsRepository.getDefaultNightModeName()
-                } returns testDefaultNightModeName
-                storeDefaultNightMode(defaultNightModeValue)
-            }.join()
+            val testDefaultNightModeName = "Always"
+            coEvery {
+                settingsRepository.putDefaultNightMode(any())
+            } returns true
+            coEvery {
+                settingsRepository.getDefaultNightModeName()
+            } returns testDefaultNightModeName
+            containerHost.storeDefaultNightMode(defaultNightModeValue).join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.putDefaultNightMode(any())
                 settingsRepository.getDefaultNightModeName()
