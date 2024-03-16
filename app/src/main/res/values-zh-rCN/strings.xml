@@ -4,12 +4,6 @@
 
     <string name="always">总是</string>
 
-    <string name="app_update_download">更新下载</string>
-    <string name="app_update_downloaded">更新下载成功</string>
-    <string name="app_update_failed">更新失败</string>
-    <string name="app_update_install">点击此处安装</string>
-    <string name="app_update_ready">已准备好安装更新</string>
-
     <string name="auto_delete_image_off">如果启用传统图片选择，不在修改后删除图片</string>
     <string name="auto_delete_image_on">如果启用传统图片选择，在修改后删除图片</string>
 
@@ -58,11 +52,7 @@
 
     <string name="images_modified">更改后的图片</string>
 
-    <string name="install">安装</string>
-
     <string name="low_batt_only">仅在低电量时</string>
-
-    <string name="modified">已更改</string>
 
     <string name="never">从不</string>
 

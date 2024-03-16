@@ -13,6 +13,7 @@
         android:textColor="?attr/colorOnSurface" />
 
     <com.google.android.material.textfield.TextInputLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/default_display_name_suffix_layout"
         style="?attr/textInputOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

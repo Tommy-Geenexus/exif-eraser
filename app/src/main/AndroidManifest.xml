@@ -50,7 +50,7 @@
         </activity>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
+            android:name=".main.data.CameraFileProvider"
             android:authorities="com.none.tom.exiferaser.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

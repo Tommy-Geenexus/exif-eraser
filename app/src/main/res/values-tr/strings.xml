@@ -4,12 +4,6 @@
 
     <string name="always">Daima</string>
 
-    <string name="app_update_download">Güncelleme indiriliyor</string>
-    <string name="app_update_downloaded">Güncelleme başarıyla indirildi</string>
-    <string name="app_update_failed">Güncelleme başarısız oldu</string>
-    <string name="app_update_install">Yüklemek için buraya tıklayın</string>
-    <string name="app_update_ready">Güncelleme yüklenmeye hazır</string>
-
     <string name="automatically">Otomatik olarak</string>
 
     <string name="camera">Kamera</string>
@@ -42,8 +36,6 @@
     <string name="image_files">Görsel dosyaları</string>
     <string name="image_orientation">Rotasyonu koru</string>
     <string name="image_supported_formats">Desteklenen dosya biçimleri</string>
-
-    <string name="modified">Değiştirilmiş</string>
 
     <string name="never">Asla</string>
 

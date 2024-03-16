@@ -1,46 +1,47 @@
 [versions]
-activity = "1.8.0"
-agp = "8.1.3"
-app-compat = "1.6.1"
-coil = "2.5.0"
+activity = "1.9.0"
+agp = "8.5.1"
+apache-commons-io = "2.16.1"
+app-compat = "1.7.0"
+coil = "2.7.0"
 constraint-layout = "2.1.4"
-core = "1.12.0"
+core = "1.13.1"
 core-splashscreen = "1.0.1"
-coroutines = "1.7.3"
-curtains = "1.2.4"
-dagger-hilt = "2.48.1"
-dagger-hilt-vm-compiler = "1.1.0"
-datastore = "1.0.0"
+coroutines = "1.8.1"
+curtains = "1.2.5"
+dagger-hilt = "2.51.1"
+dagger-hilt-vm-compiler = "1.2.0"
+datastore = "1.1.1"
 drag-and-drop = "1.0.0"
-detekt = "1.23.3"
-exif-interface = "1.0.3"
+detekt = "1.23.6"
+exif-interface = "1.0.4"
 flexbox-layout = "3.0.0"
-fragment = "1.6.2"
+fragment = "1.8.1"
 junit = "4.13.2"
-junit-ext = "1.1.5"
-kotlin = "1.9.20"
-ktlint = "11.6.1"
-leakcanary = "2.12"
-lifecycle = "2.6.2"
-material = "1.10.0"
-mockK = "1.13.8"
-navigation = "2.7.5"
-orbit = "6.1.0"
-play-core = "1.10.3"
-play-core-ktx = "1.8.1"
+junit-ext = "1.2.1"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.23"
+ktlint = "12.1.1"
+leakcanary = "2.14"
+lifecycle = "2.8.3"
+material = "1.12.0"
+mockK = "1.13.12"
+navigation = "2.7.7"
+orbit = "9.0.0"
 recyclerview = "1.3.2"
-roboelectric = "4.11.1"
-rules = "1.5.0"
-spotless = "6.22.0"
-strikt = "0.34.1"
+roboelectric = "4.13"
+rules = "1.6.1"
+spotless = "6.25.0"
+strikt = "0.35.1"
 timber = "5.0.1"
-turbine = "1.0.0"
-versions = "0.49.0"
-window = "1.1.0"
-wire = "4.9.1"
+turbine = "1.1.0"
+versions = "0.51.0"
+window = "1.3.0"
+wire = "5.0.0"
 
 [libraries]
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+apache-commons-io = { module = "commons-io:commons-io", version.ref = "apache-commons-io" }
 app-compat = { module = "androidx.appcompat:appcompat", version.ref = "app-compat" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 constraint-layout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraint-layout" }
@@ -69,8 +70,6 @@ navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", 
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation" }
 orbit-vm = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit" }
 orbit-test = { module = "org.orbit-mvi:orbit-test", version.ref = "orbit" }
-play-core = { module = "com.google.android.play:core", version.ref = "play-core" }
-play-core-ktx = { module = "com.google.android.play:core-ktx", version.ref = "play-core-ktx" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 roboelectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
 rules = { module = "androidx.test:rules", version.ref = "rules" }
@@ -78,11 +77,13 @@ strikt = { module = "io.strikt:strikt-core", version.ref = "strikt" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 window = { module = "androidx.window:window", version.ref = "window" }
+window-core = { module = "androidx.window:window-core", version.ref = "window" }
 wire = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
 
 [bundles]
 implementation = [
     "activity",
+    "apache-commons-io",
     "app-compat",
     "coil",
     "constraint-layout",
@@ -103,11 +104,10 @@ implementation = [
     "navigation-fragment",
     "navigation-ui",
     "orbit-vm",
-    "play-core",
-    "play-core-ktx",
     "recyclerview",
     "timber",
     "window",
+    "window-core",
     "wire"
 ]
 implementation-test = [
@@ -124,7 +124,7 @@ implementation-test-android = [
     "strikt",
     "turbine"
 ]
-kapt = [
+ksp = [
     "dagger-hilt-compiler",
     "dagger-hilt-vm-compiler"
 ]
@@ -134,8 +134,8 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
