@@ -60,12 +60,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.ExifEraserActivity
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
-import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.WindowSizeClass
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
@@ -147,20 +145,6 @@ class MainFragment :
             if (bundle.getBoolean(DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE)) {
                 viewModel.deleteCameraImages()
             }
-        }
-        setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_FAILED) { _, _ ->
-            viewModel.handleFlexibleUpdateFailure()
-        }
-        setFragmentResultListener(
-            ExifEraserActivity.KEY_UPDATE_IN_PROGRESS
-        ) { key: String, args: Bundle ->
-            viewModel.handleFlexibleUpdateInProgress(
-                progress = args.getInt(key, PROGRESS_MIN),
-                notify = true
-            )
-        }
-        setFragmentResultListener(ExifEraserActivity.KEY_UPDATE_READY_TO_INSTALL) { _, _ ->
-            viewModel.handleFlexibleUpdateReadyToInstall()
         }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -274,42 +258,6 @@ class MainFragment :
                             R.string.delete_camera_images_failed
                         }
                     )
-                )
-            }
-            MainSideEffect.FlexibleUpdateReadyToInstall -> {
-                showSnackBar(
-                    anchor = if (binding.bottomBarLayout.isVisible) {
-                        binding.bottomBarLayout
-                    } else {
-                        null
-                    },
-                    msg = getString(R.string.app_update_ready),
-                    actionMsg = R.string.install,
-                    onActionClick = {
-                        viewModel.completeFlexibleUpdate()
-                    },
-                    length = Snackbar.LENGTH_INDEFINITE
-                )
-            }
-            MainSideEffect.FlexibleUpdateFailed -> {
-                showSnackBar(
-                    anchor = if (binding.bottomBarLayout.isVisible) {
-                        binding.bottomBarLayout
-                    } else {
-                        null
-                    },
-                    msg = getString(R.string.app_update_failed)
-                )
-            }
-            is MainSideEffect.FlexibleUpdateInProgress -> {
-                showSnackBar(
-                    anchor = if (binding.bottomBarLayout.isVisible) {
-                        binding.bottomBarLayout
-                    } else {
-                        null
-                    },
-                    msg = getString(R.string.app_update_download),
-                    length = Snackbar.LENGTH_INDEFINITE
                 )
             }
             MainSideEffect.ImageSourcesReadComplete -> {

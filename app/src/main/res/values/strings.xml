@@ -5,11 +5,6 @@
     <string name="always">Always</string>
 
     <string name="app_name" translatable="false">ExifEraser</string>
-    <string name="app_update_download">Update downloading </string>
-    <string name="app_update_downloaded">Update successfully downloaded</string>
-    <string name="app_update_failed">Update failed</string>
-    <string name="app_update_install">Tap here to install</string>
-    <string name="app_update_ready">Update ready to install</string>
 
     <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
     <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
@@ -69,8 +64,6 @@
 
     <string name="images_modified">images modified</string>
     <string name="images_modified_placeholder" translatable="false">%d %s %d %s</string>
-
-    <string name="install">Install</string>
 
     <string name="low_batt_only">Low battery only</string>
 

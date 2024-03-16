@@ -21,28 +21,18 @@
 package com.none.tom.exiferaser
 
 import android.content.Intent
-import android.content.IntentSender
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.IntentSenderRequest
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.window.layout.WindowMetricsCalculator
 import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
-import com.none.tom.exiferaser.update.StartIntentSenderForResult
-import com.none.tom.exiferaser.update.business.UpdateSideEffect
-import com.none.tom.exiferaser.update.business.UpdateViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
@@ -57,23 +47,6 @@ class ExifEraserActivity : AppCompatActivity() {
 
         // See MainFragmentArgs
         private const val KEY_SHORTCUT = "shortcut"
-
-        const val KEY_UPDATE_FAILED = TOP_LEVEL_PACKAGE_NAME + "UPDATE_FAILED"
-
-        const val KEY_UPDATE_IN_PROGRESS = TOP_LEVEL_PACKAGE_NAME + "UPDATE_IN_PROGRESS"
-
-        const val KEY_UPDATE_READY_TO_INSTALL = TOP_LEVEL_PACKAGE_NAME + "UPDATE_READY_TO_INSTALL"
-    }
-
-    private val viewModel: UpdateViewModel by viewModels()
-    private val contract = StartIntentSenderForResult()
-    private val updateResult = registerForActivityResult(contract) { result ->
-        if (result != null) {
-            viewModel.handleAppUpdateResult(
-                result = result.resultCode,
-                immediateUpdate = contract.immediateUpdate
-            )
-        }
     }
 
     internal var windowSizeClassHeight: WindowSizeClass = WindowSizeClass.Unspecified
@@ -113,56 +86,6 @@ class ExifEraserActivity : AppCompatActivity() {
         })
         handleSendIntent()
         handleShortcutIntent()
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.container.sideEffectFlow.collect { sideEffect ->
-                    handleSideEffect(sideEffect)
-                }
-            }
-        }
-        viewModel.checkAppUpdateAvailability()
-    }
-
-    private fun handleSideEffect(sideEffect: UpdateSideEffect) {
-        when (sideEffect) {
-            is UpdateSideEffect.UpdateAvailable -> {
-                viewModel.beginOrResumeAppUpdate(sideEffect.info) { um, info, type, requestCode ->
-                    um.startUpdateFlowForResult(
-                        info,
-                        type,
-                        { intentSender: IntentSender, _, _, _, _, _, _ ->
-                            contract.immediateUpdate = sideEffect.immediateUpdate
-                            updateResult.launch(IntentSenderRequest.Builder(intentSender).build())
-                        },
-                        requestCode
-                    )
-                }
-            }
-            UpdateSideEffect.UpdateCancelled -> {
-                finish()
-            }
-            UpdateSideEffect.UpdateFailed -> {
-                supportFragmentManager
-                    .primaryNavigationFragment
-                    ?.childFragmentManager
-                    ?.setFragmentResult(KEY_UPDATE_FAILED, bundleOf())
-            }
-            is UpdateSideEffect.UpdateInProgress -> {
-                supportFragmentManager
-                    .primaryNavigationFragment
-                    ?.childFragmentManager
-                    ?.setFragmentResult(
-                        KEY_UPDATE_IN_PROGRESS,
-                        bundleOf(KEY_UPDATE_IN_PROGRESS to sideEffect.progress)
-                    )
-            }
-            UpdateSideEffect.UpdateReadyToInstall -> {
-                supportFragmentManager
-                    .primaryNavigationFragment
-                    ?.childFragmentManager
-                    ?.setFragmentResult(KEY_UPDATE_READY_TO_INSTALL, bundleOf())
-            }
-        }
     }
 
     private fun handleSendIntent() {

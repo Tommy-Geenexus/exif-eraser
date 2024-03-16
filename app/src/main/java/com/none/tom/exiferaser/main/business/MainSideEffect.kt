@@ -22,9 +22,6 @@ package com.none.tom.exiferaser.main.business
 
 import android.net.Uri
 import android.os.Parcelable
-import androidx.annotation.IntRange
-import com.none.tom.exiferaser.PROGRESS_MAX
-import com.none.tom.exiferaser.PROGRESS_MIN
 import kotlinx.parcelize.Parcelize
 
 sealed class MainSideEffect : Parcelable {
@@ -56,20 +53,6 @@ sealed class MainSideEffect : Parcelable {
     data class ExternalPicturesDeleted(
         val success: Boolean
     ) : MainSideEffect()
-
-    @Parcelize
-    data class FlexibleUpdateInProgress(
-        @IntRange(
-            from = PROGRESS_MIN.toLong(),
-            to = PROGRESS_MAX.toLong()
-        ) val progress: Int
-    ) : MainSideEffect()
-
-    @Parcelize
-    data object FlexibleUpdateReadyToInstall : MainSideEffect()
-
-    @Parcelize
-    data object FlexibleUpdateFailed : MainSideEffect()
 
     @Parcelize
     data object ImageSourcesReadComplete : MainSideEffect()

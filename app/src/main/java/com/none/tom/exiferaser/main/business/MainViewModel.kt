@@ -21,11 +21,8 @@
 package com.none.tom.exiferaser.main.business
 
 import android.net.Uri
-import androidx.annotation.IntRange
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.PROGRESS_MAX
-import com.none.tom.exiferaser.PROGRESS_MIN
 import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.isNotEmpty
 import com.none.tom.exiferaser.isNotNullOrEmpty
@@ -33,7 +30,6 @@ import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Collections
@@ -51,8 +47,7 @@ class MainViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
     private val imageSourceRepository: ImageSourceRepository,
     private val selectionRepository: SelectionRepository,
-    private val settingsRepository: SettingsRepository,
-    private val updateRepository: UpdateRepository
+    private val settingsRepository: SettingsRepository
 ) : ContainerHost<MainState, MainSideEffect>,
     ViewModel() {
 
@@ -69,13 +64,6 @@ class MainViewModel @Inject constructor(
     var navDestinationId: Int?
         get() = savedStateHandle[KEY_NAV_DESTINATION_ID]
         set(value) = savedStateHandle.set(KEY_NAV_DESTINATION_ID, value)
-
-    fun completeFlexibleUpdate() = intent {
-        val success = updateRepository.completeFlexibleAppUpdate()
-        if (!success) {
-            postSideEffect(MainSideEffect.FlexibleUpdateFailed)
-        }
-    }
 
     fun chooseImage(canReorderImageSources: Boolean) = intent {
         if (canReorderImageSources || state.loading) {
@@ -186,29 +174,6 @@ class MainViewModel @Inject constructor(
 
     fun reportShortcutUsed(shortcutAction: String) = intent {
         postSideEffect(MainSideEffect.Shortcut.ReportUsage(shortcutAction))
-    }
-
-    fun handleFlexibleUpdateFailure() = intent {
-        updateRepository.showAppUpdateProgressNotification(failed = true)
-        postSideEffect(MainSideEffect.FlexibleUpdateFailed)
-    }
-
-    fun handleFlexibleUpdateInProgress(
-        @IntRange(
-            from = PROGRESS_MIN.toLong(),
-            to = PROGRESS_MAX.toLong()
-        ) progress: Int,
-        notify: Boolean
-    ) = intent {
-        updateRepository.showAppUpdateProgressNotification(progress)
-        if (notify) {
-            postSideEffect(MainSideEffect.FlexibleUpdateInProgress(progress))
-        }
-    }
-
-    fun handleFlexibleUpdateReadyToInstall() = intent {
-        updateRepository.showAppUpdateProgressNotification(PROGRESS_MAX)
-        postSideEffect(MainSideEffect.FlexibleUpdateReadyToInstall)
     }
 
     fun launchCamera(

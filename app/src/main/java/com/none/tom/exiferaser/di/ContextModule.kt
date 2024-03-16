@@ -23,8 +23,6 @@ package com.none.tom.exiferaser.di
 import android.content.ContentResolver
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,11 +36,6 @@ object ContextModule {
     @Provides
     fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
         return context.contentResolver
-    }
-
-    @Provides
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
     }
 
     @Provides

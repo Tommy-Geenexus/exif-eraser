@@ -34,7 +34,6 @@ import com.none.tom.exiferaser.main.data.ImageSourceRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.selection.data.ImageRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.update.data.UpdateRepository
 import com.squareup.wire.AnyMessage
 import io.mockk.Ordering
 import io.mockk.coEvery
@@ -57,7 +56,6 @@ class MainViewModelTest {
     private val imageSourceRepository = mockk<ImageSourceRepository>()
     private val selectionRepository = mockk<SelectionRepository>()
     private val settingsRepository = mockk<SettingsRepository>()
-    private val updateRepository = mockk<UpdateRepository>()
 
     private val testUri = ContentResolver.SCHEME_CONTENT.toUri()
     private val testUris = listOf(testUri)
@@ -76,8 +74,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -124,8 +121,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -151,8 +147,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -183,8 +178,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -253,8 +247,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -298,8 +291,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -339,8 +331,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -360,8 +351,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -393,8 +383,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -426,8 +415,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -459,8 +447,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -504,8 +491,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -547,8 +533,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -568,8 +553,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -589,8 +573,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
@@ -617,8 +600,7 @@ class MainViewModelTest {
             imageRepository = imageRepository,
             imageSourceRepository = imageSourceRepository,
             selectionRepository = selectionRepository,
-            settingsRepository = settingsRepository,
-            updateRepository = updateRepository
+            settingsRepository = settingsRepository
         ).test(
             testScope = this,
             initialState = MainState()
