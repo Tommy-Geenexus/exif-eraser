@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -249,10 +249,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun putImageDirectorySelection(
-        uri: Uri?,
-        canReorderImageSources: Boolean = false
-    ) = intent {
+    fun putImageDirectorySelection(uri: Uri?, canReorderImageSources: Boolean = false) = intent {
         if (canReorderImageSources || state.loading) {
             return@intent
         }
@@ -296,14 +293,11 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun reorderImageSources(
-        imageSources: MutableList<AnyMessage>,
-        oldIndex: Int,
-        newIndex: Int
-    ) = intent {
-        Collections.swap(imageSources, newIndex, oldIndex)
-        reduce {
-            state.copy(imageSources = imageSources)
+    fun reorderImageSources(imageSources: MutableList<AnyMessage>, oldIndex: Int, newIndex: Int) =
+        intent {
+            Collections.swap(imageSources, newIndex, oldIndex)
+            reduce {
+                state.copy(imageSources = imageSources)
+            }
         }
-    }
 }

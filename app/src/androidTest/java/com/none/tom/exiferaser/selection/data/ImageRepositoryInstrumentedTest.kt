@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -299,11 +299,7 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    private fun copyResourceToPictures(
-        @RawRes id: Int,
-        displayName: String,
-        extension: String
-    ) {
+    private fun copyResourceToPictures(@RawRes id: Int, displayName: String, extension: String) {
         context.resources.openRawResource(id).use { inputStream ->
             FileOutputStream(getFileFromExternalDir(displayName, extension)).use { outputStream ->
                 inputStream.copyTo(outputStream)
@@ -311,18 +307,13 @@ class ImageRepositoryInstrumentedTest {
         }
     }
 
-    private suspend fun getExternalPicturesFileProviderUri(
-        displayName: String,
-        extension: String
-    ) = testRepository.getExternalPicturesFileProviderUriOrNull(
-        displayName = displayName,
-        extension = extension
-    )
+    private suspend fun getExternalPicturesFileProviderUri(displayName: String, extension: String) =
+        testRepository.getExternalPicturesFileProviderUriOrNull(
+            displayName = displayName,
+            extension = extension
+        )
 
-    private fun getFileFromExternalDir(
-        displayName: String,
-        extension: String
-    ) = File(
+    private fun getFileFromExternalDir(displayName: String, extension: String) = File(
         context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         displayName.plus(extension)
     )

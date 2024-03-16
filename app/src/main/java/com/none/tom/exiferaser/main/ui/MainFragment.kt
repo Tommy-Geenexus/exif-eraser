@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -126,10 +126,7 @@ class MainFragment :
         )
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupResponsiveAppBarLayout()
         setupResponsiveToolbarTitleLayout()
@@ -376,10 +373,7 @@ class MainFragment :
         setupToolbar(toolbar = binding.toolbar)
         val menuProvider = object : MenuProvider {
 
-            override fun onCreateMenu(
-                menu: Menu,
-                menuInflater: MenuInflater
-            ) {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_main, menu)
             }
 
@@ -529,10 +523,7 @@ class MainFragment :
             lifecycle.addObserver(
                 object : LifecycleEventObserver {
 
-                    override fun onStateChanged(
-                        source: LifecycleOwner,
-                        event: Lifecycle.Event
-                    ) {
+                    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                         when (event) {
                             Lifecycle.Event.ON_STOP -> {
                                 lifecycle.removeObserver(this)
@@ -556,10 +547,7 @@ class MainFragment :
         lifecycle?.addObserver(
             object : LifecycleEventObserver {
 
-                override fun onStateChanged(
-                    source: LifecycleOwner,
-                    event: Lifecycle.Event
-                ) {
+                override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                     when (event) {
                         Lifecycle.Event.ON_START -> {
                             attachToRecyclerView(recyclerView)
@@ -602,10 +590,7 @@ class MainFragment :
         lifecycle?.addObserver(
             object : LifecycleEventObserver {
 
-                override fun onStateChanged(
-                    source: LifecycleOwner,
-                    event: Lifecycle.Event
-                ) {
+                override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                     when (event) {
                         Lifecycle.Event.ON_START -> {
                             AnimatedVectorDrawableCompat.registerAnimationCallback(

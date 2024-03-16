@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -120,10 +120,7 @@ suspend fun ContentResolver.openOutputStreamOrThrow(
 }
 
 @Throws(IOException::class)
-suspend fun ContentResolver.queryOrThrow(
-    coroutineContext: CoroutineContext,
-    uri: Uri
-): Cursor {
+suspend fun ContentResolver.queryOrThrow(coroutineContext: CoroutineContext, uri: Uri): Cursor {
     return withContext(coroutineContext) {
         query(uri, null, null, null, null) ?: throw IOException()
     }
@@ -135,10 +132,7 @@ fun Int.toPercent() = toString().plus('%')
 
 fun Int.toProgress(max: Int) = (this * PROGRESS_MAX) / max
 
-fun <E> MutableList<E>.addOrShift(
-    element: E,
-    shiftAtSize: Int = REPORT_SUMMARIES_MAX
-): List<E> {
+fun <E> MutableList<E>.addOrShift(element: E, shiftAtSize: Int = REPORT_SUMMARIES_MAX): List<E> {
     if (size >= shiftAtSize) {
         removeFirstOrNull() ?: return this
     }

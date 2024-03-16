@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -32,15 +32,9 @@ class ReportAdapter(
 ) : ListAdapter<Summary, ReportViewHolder>(
     object : DiffUtil.ItemCallback<Summary>() {
 
-        override fun areItemsTheSame(
-            oldItem: Summary,
-            newItem: Summary
-        ) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: Summary, newItem: Summary) = oldItem == newItem
 
-        override fun areContentsTheSame(
-            oldItem: Summary,
-            newItem: Summary
-        ) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Summary, newItem: Summary) = oldItem == newItem
     }
 ) {
 
@@ -50,10 +44,7 @@ class ReportAdapter(
         fun onImageSavedSelected(position: Int)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ReportViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
         return ReportViewHolder(
             ItemReportBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -64,10 +55,7 @@ class ReportAdapter(
         )
     }
 
-    override fun onBindViewHolder(
-        holder: ReportViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
         currentList.getOrNull(position)?.let { summary ->
             holder.bindItem(
                 imageUri = summary.imageUri,

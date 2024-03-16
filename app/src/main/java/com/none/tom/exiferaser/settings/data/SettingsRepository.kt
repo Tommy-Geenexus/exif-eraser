@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -85,10 +85,7 @@ class SettingsRepository @Inject constructor(
     private val keySavePathSelectionSkip = booleanPreferencesKey(KEY_SAVE_PATH_SELECTION_SKIP)
     private val keyDefaultNightMode = intPreferencesKey(KEY_DEFAULT_NIGHT_MODE)
 
-    suspend fun putDefaultPathOpen(
-        defaultPathOpenNew: Uri,
-        defaultPathOpenCurrent: Uri
-    ): Boolean {
+    suspend fun putDefaultPathOpen(defaultPathOpenNew: Uri, defaultPathOpenCurrent: Uri): Boolean {
         if (defaultPathOpenNew.isNotEmpty()) {
             if (!takePersistablePermissions(context.contentResolver, defaultPathOpenNew)) {
                 return false
@@ -168,10 +165,7 @@ class SettingsRepository @Inject constructor(
         }
     }
 
-    suspend fun putDefaultPathSave(
-        defaultPathSaveNew: Uri,
-        defaultPathSaveCurrent: Uri
-    ): Boolean {
+    suspend fun putDefaultPathSave(defaultPathSaveNew: Uri, defaultPathSaveCurrent: Uri): Boolean {
         if (defaultPathSaveNew.isNotEmpty()) {
             val success = takePersistablePermissions(
                 resolver = context.contentResolver,

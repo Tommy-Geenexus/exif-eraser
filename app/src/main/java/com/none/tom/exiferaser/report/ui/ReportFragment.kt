@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -107,10 +107,7 @@ class ReportFragment :
     private var _behaviour: ReportFragmentBehaviour<ReportConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener(SelectionFragment.KEY_REPORT) { _, args: Bundle ->
             viewModel.handleImageSummaries(
@@ -147,17 +144,11 @@ class ReportFragment :
             }
         }
         _reportCallback = object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(
-                bottomSheet: View,
-                newState: Int
-            ) {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
                 handleReportStateChanged(newState)
             }
 
-            override fun onSlide(
-                bottomSheet: View,
-                slideOffset: Float
-            ) {
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 handleReportSlide(slideOffset, translationMax)
             }
         }
@@ -253,10 +244,7 @@ class ReportFragment :
         }
     }
 
-    private fun handleReportSlide(
-        slideOffset: Float,
-        translationMax: Float
-    ) {
+    private fun handleReportSlide(slideOffset: Float, translationMax: Float) {
         binding.layout.apply {
             translationX = lerp(
                 startValue = translationMax,

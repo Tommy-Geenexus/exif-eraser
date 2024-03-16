@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -89,10 +89,7 @@ class SelectionRepository @Inject constructor(
             .flowOn(dispatcherIo)
     }
 
-    suspend fun putSelection(
-        uri: Uri?,
-        fromCamera: Boolean = false
-    ): Boolean {
+    suspend fun putSelection(uri: Uri?, fromCamera: Boolean = false): Boolean {
         if (uri.isNullOrEmpty()) {
             return false
         }
@@ -115,10 +112,7 @@ class SelectionRepository @Inject constructor(
         }
     }
 
-    suspend fun putSelection(
-        uris: List<Uri>? = null,
-        urisFromIntent: Array<Uri>? = null
-    ): Boolean {
+    suspend fun putSelection(uris: List<Uri>? = null, urisFromIntent: Array<Uri>? = null): Boolean {
         val selection = uris ?: urisFromIntent?.toList()
         if (selection.isNullOrEmpty()) {
             return false

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -37,10 +37,7 @@ class MainItemTouchHelperCallback(
 ) {
 
     interface OnRecyclerViewItemMoveListener {
-        fun onRecyclerViewItemMove(
-            oldIndex: Int,
-            newIndex: Int
-        )
+        fun onRecyclerViewItemMove(oldIndex: Int, newIndex: Int)
     }
 
     override fun onChildDraw(
@@ -98,9 +95,6 @@ class MainItemTouchHelperCallback(
         }
     }
 
-    override fun onSwiped(
-        viewHolder: ViewHolder,
-        direction: Int
-    ) {
+    override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
     }
 }

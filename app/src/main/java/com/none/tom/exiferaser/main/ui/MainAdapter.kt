@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -38,15 +38,10 @@ class MainAdapter(
 ) : ListAdapter<AnyMessage, MainViewHolder>(
     object : DiffUtil.ItemCallback<AnyMessage>() {
 
-        override fun areItemsTheSame(
-            oldItem: AnyMessage,
-            newItem: AnyMessage
-        ) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: AnyMessage, newItem: AnyMessage) = oldItem == newItem
 
-        override fun areContentsTheSame(
-            oldItem: AnyMessage,
-            newItem: AnyMessage
-        ) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: AnyMessage, newItem: AnyMessage) =
+            oldItem == newItem
     }
 ),
     MainItemTouchHelperCallback.OnRecyclerViewItemMoveListener {
@@ -56,17 +51,10 @@ class MainAdapter(
         fun onImagesItemSelected()
         fun onImageDirectoryItemSelected()
         fun onCameraItemSelected()
-        fun onImageSourceMoved(
-            imageSources: MutableList<AnyMessage>,
-            oldIndex: Int,
-            newIndex: Int
-        )
+        fun onImageSourceMoved(imageSources: MutableList<AnyMessage>, oldIndex: Int, newIndex: Int)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): MainViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             binding = ItemImageSourceBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -78,10 +66,7 @@ class MainAdapter(
         )
     }
 
-    override fun onBindViewHolder(
-        holder: MainViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         when (currentList.getOrNull(position)?.typeUrl) {
             ImageFileProto.ADAPTER.typeUrl -> {
                 holder.bindSelectImageItem()
@@ -98,10 +83,7 @@ class MainAdapter(
         }
     }
 
-    override fun onRecyclerViewItemMove(
-        oldIndex: Int,
-        newIndex: Int
-    ) {
+    override fun onRecyclerViewItemMove(oldIndex: Int, newIndex: Int) {
         listener.onImageSourceMoved(currentList.toMutableList(), oldIndex, newIndex)
     }
 }

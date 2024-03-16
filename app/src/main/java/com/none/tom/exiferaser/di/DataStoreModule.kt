@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -38,19 +38,15 @@ import dagger.hilt.components.SingletonComponent
 object DataStoreModule {
 
     @Provides
-    fun provideDataStoreSelection(
-        @ApplicationContext context: Context
-    ) = context.imageSourcesDataStore
+    fun provideDataStoreSelection(@ApplicationContext context: Context) =
+        context.imageSourcesDataStore
 
     @Provides
-    fun provideDataStoreImageSources(
-        @ApplicationContext context: Context
-    ) = context.selectionDataStore
+    fun provideDataStoreImageSources(@ApplicationContext context: Context) =
+        context.selectionDataStore
 
     @Provides
-    fun provideDataStoreSettings(
-        @ApplicationContext context: Context
-    ) = context.settingsDataStore
+    fun provideDataStoreSettings(@ApplicationContext context: Context) = context.settingsDataStore
 }
 
 private val Context.imageSourcesDataStore by dataStore(

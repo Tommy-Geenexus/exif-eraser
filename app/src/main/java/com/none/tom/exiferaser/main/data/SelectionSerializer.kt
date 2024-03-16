@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -31,10 +31,7 @@ class SelectionSerializer(
 
     override suspend fun readFrom(input: InputStream) = SelectionProto.ADAPTER.decode(input)
 
-    override suspend fun writeTo(
-        t: SelectionProto,
-        output: OutputStream
-    ) {
+    override suspend fun writeTo(t: SelectionProto, output: OutputStream) {
         t.adapter.encode(output, t)
     }
 }

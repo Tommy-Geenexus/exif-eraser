@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -46,10 +46,7 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.phoneWindow?.navigationBarColor = SurfaceColors.SURFACE_1.getColor(requireActivity())
         with(requireDialog()) {
@@ -67,10 +64,7 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
         _binding = null
     }
 
-    abstract fun inflateLayout(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): B
+    abstract fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?): B
 
     internal fun navigate(navDirections: NavDirections) {
         val navController = findNavController()

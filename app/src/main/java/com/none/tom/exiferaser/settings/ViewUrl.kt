@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -28,13 +28,7 @@ import androidx.activity.result.contract.ActivityResultContract
 
 class ViewUrl : ActivityResultContract<Uri, Boolean>() {
 
-    override fun createIntent(
-        context: Context,
-        input: Uri
-    ) = Intent(Intent.ACTION_VIEW, input)
+    override fun createIntent(context: Context, input: Uri) = Intent(Intent.ACTION_VIEW, input)
 
-    override fun parseResult(
-        resultCode: Int,
-        intent: Intent?
-    ) = resultCode == Activity.RESULT_OK
+    override fun parseResult(resultCode: Int, intent: Intent?) = resultCode == Activity.RESULT_OK
 }

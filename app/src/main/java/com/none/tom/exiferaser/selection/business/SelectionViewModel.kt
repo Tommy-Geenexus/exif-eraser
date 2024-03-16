@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -60,10 +60,7 @@ class SelectionViewModel @Inject constructor(
         }
     )
 
-    fun handleSelection(
-        selection: AnyMessage?,
-        treeUri: Uri
-    ) = intent {
+    fun handleSelection(selection: AnyMessage?, treeUri: Uri) = intent {
         if (selection == null) {
             handleUnsupportedSelection()
             return@intent
@@ -81,10 +78,7 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    fun handleUserImageSelection(
-        selection: AnyMessage,
-        treeUri: Uri
-    ) = intent {
+    fun handleUserImageSelection(selection: AnyMessage, treeUri: Uri) = intent {
         val displayNameSuffix =
             settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
         val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true
@@ -137,10 +131,7 @@ class SelectionViewModel @Inject constructor(
         }
     }
 
-    fun handleUserImagesSelection(
-        selection: AnyMessage,
-        treeUri: Uri
-    ) = intent {
+    fun handleUserImagesSelection(selection: AnyMessage, treeUri: Uri) = intent {
         val displayNameSuffix =
             settingsRepository.getDefaultDisplayNameSuffix().firstOrNull().orEmpty()
         val autoDelete = settingsRepository.shouldAutoDelete().firstOrNull() == true

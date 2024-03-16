@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -37,10 +37,7 @@ class DeleteCameraImagesFragment :
         const val KEY_CAM_IMG_DELETE = TOP_LEVEL_PACKAGE_NAME + "CAM_IMG_DELETE"
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.delete.setOnClickListener {
             parentFragmentManager.setFragmentResult(
@@ -56,8 +53,6 @@ class DeleteCameraImagesFragment :
         }
     }
 
-    override fun inflateLayout(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ) = FragmentDeleteCameraImagesBinding.inflate(inflater, container, false)
+    override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentDeleteCameraImagesBinding.inflate(inflater, container, false)
 }

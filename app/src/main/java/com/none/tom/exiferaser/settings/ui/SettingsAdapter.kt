@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -35,16 +35,12 @@ class SettingsAdapter(
 ) : ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
     object : DiffUtil.ItemCallback<Pair<Int, String>>() {
 
-        override fun areItemsTheSame(
-            oldItem: Pair<Int, String>,
-            newItem: Pair<Int, String>
-        ) = oldItem.first == newItem.first
+        override fun areItemsTheSame(oldItem: Pair<Int, String>, newItem: Pair<Int, String>) =
+            oldItem.first == newItem.first
 
         @Suppress("SameReturnValue")
-        override fun areContentsTheSame(
-            oldItem: Pair<Int, String>,
-            newItem: Pair<Int, String>
-        ) = false
+        override fun areContentsTheSame(oldItem: Pair<Int, String>, newItem: Pair<Int, String>) =
+            false
     }
 ) {
 
@@ -78,10 +74,7 @@ class SettingsAdapter(
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_TYPE_FS -> {
                 ItemFsViewHolder(
@@ -116,10 +109,7 @@ class SettingsAdapter(
         }
     }
 
-    override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             ITEM_TYPE_FS -> {
                 val index = AtomicInteger()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2023, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -38,10 +38,7 @@ abstract class BaseFragment<B : ViewBinding>(
     private var _binding: B? = null
     internal val binding: B get() = _binding!!
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _binding = bindLayout(view)
     }
 
@@ -54,10 +51,7 @@ abstract class BaseFragment<B : ViewBinding>(
 
     protected fun getWindowSizeClass() = (requireActivity() as ExifEraserActivity).windowSizeClass
 
-    protected fun setupToolbar(
-        toolbar: Toolbar,
-        @StringRes titleRes: Int = 0
-    ) {
+    protected fun setupToolbar(toolbar: Toolbar, @StringRes titleRes: Int = 0) {
         if (titleRes != 0) {
             toolbar.setTitle(titleRes)
         }
