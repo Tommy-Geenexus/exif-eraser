@@ -23,17 +23,21 @@ package com.none.tom.exiferaser
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.WindowMetricsCalculator
-import com.google.android.material.elevation.SurfaceColors
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,6 +62,7 @@ class ExifEraserActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         enableEdgeToEdge()
@@ -65,23 +70,34 @@ class ExifEraserActivity : AppCompatActivity() {
         val binding = ActivityExifEraserBinding.inflate(layoutInflater)
         setContentView(binding.root)
         computeWindowSizeClasses()
-        (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment?)
-            ?.navController
-            ?.addOnDestinationChangedListener { _, destination, _ ->
-                if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
-                    if (destination.id == R.id.fragment_main) {
-                        window.navigationBarColor = SurfaceColors.SURFACE_2.getColor(this)
-                    } else {
-                        window.navigationBarColor = SurfaceColors.SURFACE_0.getColor(this)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment)
+                .navController
+                .addOnDestinationChangedListener { _, destination, _ ->
+                    if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
+                        val tv = TypedValue()
+                        if (destination.id == R.id.fragment_main) {
+                            theme.resolveAttribute(R.attr.colorSurfaceContainer, tv, true)
+                        } else {
+                            theme.resolveAttribute(R.attr.colorSurface, tv, true)
+                        }
+                        window.navigationBarColor = tv.data
                     }
                 }
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
+            (view.layoutParams as FrameLayout.LayoutParams).topMargin = insets.top
+            windowInsetsCompat
+        }
+        binding.layout.addView(
+            object : View(this) {
+                override fun onConfigurationChanged(newConfig: Configuration?) {
+                    super.onConfigurationChanged(newConfig)
+                    computeWindowSizeClasses()
+                }
             }
-        binding.layout.addView(object : View(this) {
-            override fun onConfigurationChanged(newConfig: Configuration?) {
-                super.onConfigurationChanged(newConfig)
-                computeWindowSizeClasses()
-            }
-        })
+        )
         handleSupportedIntent()
     }
 

@@ -72,6 +72,7 @@ class SettingsFragment :
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.settings
         )
+        setupLayoutMarginForNavigationWindowInsets()
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)

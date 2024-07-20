@@ -37,6 +37,9 @@ import com.none.tom.exiferaser.main.data.supportedImageFormats
 import com.none.tom.exiferaser.suspendRunCatching
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.tommygeenexus.exifinterfaceextended.ExifInterfaceExtended
+import java.util.UUID
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
@@ -45,9 +48,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.apache.commons.io.FilenameUtils
 import timber.log.Timber
-import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class ImageProcessingRepository @Inject constructor(

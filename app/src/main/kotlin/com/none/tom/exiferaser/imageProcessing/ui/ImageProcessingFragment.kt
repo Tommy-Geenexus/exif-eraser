@@ -95,6 +95,7 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             toolbar = binding.toolbarInclude.toolbar,
             titleRes = R.string.summary
         )
+        setupLayoutMarginForNavigationWindowInsets()
         setupResponsiveLayout()
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

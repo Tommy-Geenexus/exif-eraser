@@ -20,7 +20,9 @@
 
 package com.none.tom.exiferaser
 
+import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +31,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.elevation.SurfaceColors
 import curtains.phoneWindow
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialogFragment() {
@@ -46,9 +47,14 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
         return binding.root
     }
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.phoneWindow?.navigationBarColor = SurfaceColors.SURFACE_1.getColor(requireActivity())
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            val tv = TypedValue()
+            requireActivity().theme.resolveAttribute(R.attr.colorSurfaceContainerLow, tv, true)
+            view.phoneWindow?.navigationBarColor = tv.data
+        }
         with(requireDialog()) {
             setOnShowListener {
                 val v = findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)

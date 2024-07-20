@@ -4,7 +4,6 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:transitionGroup="true">
 
@@ -59,8 +58,7 @@
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:paddingBottomSystemWindowInsets="false" />
+            android:layout_height="wrap_content" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/image_sources_reorder"

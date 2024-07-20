@@ -22,10 +22,13 @@ package com.none.tom.exiferaser
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -64,6 +67,14 @@ abstract class BaseFragment<B : ViewBinding>(
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             }
+    }
+
+    protected fun setupLayoutMarginForNavigationWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
+            (root.layoutParams as FrameLayout.LayoutParams).bottomMargin = insets.bottom
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     protected fun navigate(navDirections: NavDirections) {

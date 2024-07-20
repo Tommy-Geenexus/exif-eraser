@@ -91,14 +91,19 @@ class HelpViewHolder(
     private fun getBuildVersion(): String {
         val context = itemView.context
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.packageManager.getPackageInfo(
-                    context.packageName,
-                    PackageManager.PackageInfoFlags.of(0)
-                ).versionName
-            } else {
-                context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            }
+            checkNotNull(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context
+                        .packageManager
+                        .getPackageInfo(
+                            context.packageName,
+                            PackageManager.PackageInfoFlags.of(0)
+                        )
+                        .versionName
+                } else {
+                    context.packageManager.getPackageInfo(context.packageName, 0).versionName
+                }
+            )
         } catch (e: Exception) {
             Timber.e(e)
             ""
