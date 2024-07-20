@@ -1,7 +1,6 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -20,12 +19,12 @@ plugins {
 
 android {
     namespace = "com.none.tom.exiferaser"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.none.tom.exiferaser"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 37
         versionName = "6.1.0"
 
@@ -69,7 +68,7 @@ android {
 androidComponents {
     onVariants(selector().all()) { variant ->
         afterEvaluate {
-            val capName = variant.name.capitalized()
+            val capName = variant.name.replaceFirstChar(Char::uppercase)
             tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
                 setSource(tasks.getByName("generate${capName}Protos").outputs)
             }
