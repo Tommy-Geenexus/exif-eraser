@@ -1,10 +1,56 @@
+
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.bouncycastle.util.encoders.Base64
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.FileInputStream
+import java.util.Properties
+
+val keyStoreFile = "keystore.jks"
+val properties = "keystore.properties"
+val keyStoreBase64 = "KS_BASE_64"
+val envKsPassword = "KS_PASSWORD"
+val envKsKeyAlias = "KS_KEY_ALIAS"
+val envKsKeyPassword = "KS_KEY_PASSWORD"
+
+fun loadKeyStoreProperties(): Triple<String, String, String> {
+    val properties = Properties().apply {
+        val file = File(projectDir.parent, properties)
+        if (file.exists()) {
+            load(FileInputStream(file))
+        }
+    }
+    return Triple(
+        first = properties
+            .getOrDefault(envKsPassword, null)
+            ?.toString()
+            ?: System.getenv(envKsPassword),
+        second = properties
+            .getOrDefault(envKsKeyAlias, null)
+            ?.toString()
+            ?: System.getenv(envKsKeyAlias),
+        third = properties
+            .getOrDefault(envKsKeyPassword, null)
+            ?.toString()
+            ?: System.getenv(envKsKeyPassword)
+    )
+}
+
+fun getOrCreateKeyStoreFile(): File {
+    val keyStore = projectDir.parentFile.listFiles()?.find { file -> file.extension == "jks" }
+    return if (keyStore?.exists() == true) {
+        keyStore
+    } else {
+        File(projectDir.parentFile, keyStoreFile).apply {
+            writeBytes(Base64.decode(System.getenv(keyStoreBase64).toByteArray()))
+        }
+    }
+}
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.accrescent.bundletool)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin)
@@ -31,6 +77,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            val properties = loadKeyStoreProperties()
+            storeFile = getOrCreateKeyStoreFile()
+            storePassword = properties.first
+            keyAlias = properties.second
+            keyPassword = properties.third
+            enableV1Signing = false
+            enableV2Signing = false
+            enableV3Signing = true
+            enableV4Signing = true
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -39,6 +99,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -53,7 +114,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     @Suppress("UnstableApiUsage")
@@ -73,6 +134,16 @@ androidComponents {
                 setSource(tasks.getByName("generate${capName}Protos").outputs)
             }
         }
+    }
+}
+
+bundletool {
+    signingConfig {
+        val properties = loadKeyStoreProperties()
+        storeFile = getOrCreateKeyStoreFile()
+        storePassword = properties.first
+        keyAlias = properties.second
+        keyPassword = properties.third
     }
 }
 
@@ -120,7 +191,6 @@ spotless {
     kotlin {
         ratchetFrom("origin/main")
         target("**/*.kt")
-        targetExclude("**/AnimationUtils.kt")
         licenseHeaderFile(rootProject.file("spotless/copyright.txt"))
     }
 }

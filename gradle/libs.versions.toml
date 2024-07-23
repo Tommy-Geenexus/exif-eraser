@@ -1,4 +1,5 @@
 [versions]
+accrescent-bundletool = "0.2.4"
 activity = "1.9.0"
 agp = "8.5.1"
 apache-commons-io = "2.16.1"
@@ -130,6 +131,7 @@ ksp = [
 ]
 
 [plugins]
+accrescent-bundletool = { id = "app.accrescent.tools.bundletool", version.ref = "accrescent-bundletool" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

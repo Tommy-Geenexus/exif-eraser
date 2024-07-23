@@ -15,6 +15,5 @@
 .cxx
 local.properties
 /app/release
-exiferaser.properties
-exiferaser.jks
-/accrescent
+keystore.properties
+keystore.jks
