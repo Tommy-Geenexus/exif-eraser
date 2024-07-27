@@ -24,8 +24,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import com.none.tom.exiferaser.databinding.ItemImageProcessingReportBinding
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingSummary
 
 class ImageProcessingReportAdapter(
     private val listener: Listener

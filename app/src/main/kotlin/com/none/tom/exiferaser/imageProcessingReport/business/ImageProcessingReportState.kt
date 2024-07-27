@@ -21,7 +21,7 @@
 package com.none.tom.exiferaser.imageProcessingReport.business
 
 import android.os.Parcelable
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingSummary
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

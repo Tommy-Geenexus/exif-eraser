@@ -21,7 +21,7 @@
 package com.none.tom.exiferaser.imageDetails.business
 
 import android.os.Parcelable
-import com.none.tom.exiferaser.imageProcessing.data.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

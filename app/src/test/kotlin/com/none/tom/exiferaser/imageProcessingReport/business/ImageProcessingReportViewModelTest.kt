@@ -22,11 +22,11 @@ package com.none.tom.exiferaser.imageProcessingReport.business
 
 import android.content.ContentResolver
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.testImageMetadataSnapshot
+import com.none.tom.exiferaser.core.util.testImageProcessingSummary
+import com.none.tom.exiferaser.core.util.testUri
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
-import com.none.tom.exiferaser.testImageMetadataSnapshot
-import com.none.tom.exiferaser.testImageProcessingSummary
-import com.none.tom.exiferaser.testUri
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

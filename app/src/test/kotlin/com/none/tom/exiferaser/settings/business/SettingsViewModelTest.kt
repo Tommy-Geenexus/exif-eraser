@@ -21,14 +21,14 @@
 package com.none.tom.exiferaser.settings.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.ROBOELECTRIC_BUILD_VERSION_CODE
-import com.none.tom.exiferaser.TEST_DEFAULT_DISPLAY_NAME_SUFFIX
-import com.none.tom.exiferaser.TEST_DEFAULT_NIGHT_MODE_NAME
-import com.none.tom.exiferaser.TEST_DEFAULT_PATH_OPEN_NAME
-import com.none.tom.exiferaser.TEST_DEFAULT_PATH_SAVE_NAME
+import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.TEST_DEFAULT_DISPLAY_NAME_SUFFIX
+import com.none.tom.exiferaser.core.util.TEST_DEFAULT_NIGHT_MODE_NAME
+import com.none.tom.exiferaser.core.util.TEST_DEFAULT_PATH_OPEN_NAME
+import com.none.tom.exiferaser.core.util.TEST_DEFAULT_PATH_SAVE_NAME
+import com.none.tom.exiferaser.core.util.testUri
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import com.none.tom.exiferaser.settings.ui.defaultNightMode
-import com.none.tom.exiferaser.testUri
 import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify

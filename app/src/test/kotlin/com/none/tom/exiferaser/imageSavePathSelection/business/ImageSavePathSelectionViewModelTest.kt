@@ -23,9 +23,9 @@ package com.none.tom.exiferaser.imageSavePathSelection.business
 import android.net.Uri
 import androidx.datastore.core.CorruptionException
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.testUri
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.testUri
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

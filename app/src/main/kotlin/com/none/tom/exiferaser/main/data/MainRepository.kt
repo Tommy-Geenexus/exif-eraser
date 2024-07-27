@@ -25,9 +25,11 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.webkit.MimeTypeMap
-import com.none.tom.exiferaser.di.DispatcherIo
-import com.none.tom.exiferaser.supportedImageUrisToList
-import com.none.tom.exiferaser.suspendRunCatching
+import com.none.tom.exiferaser.core.di.DispatcherIo
+import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
+import com.none.tom.exiferaser.core.extension.suspendRunCatching
+import com.none.tom.exiferaser.core.image.supportedImageFormats
+import com.none.tom.exiferaser.core.provider.CameraFileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
 import javax.inject.Inject

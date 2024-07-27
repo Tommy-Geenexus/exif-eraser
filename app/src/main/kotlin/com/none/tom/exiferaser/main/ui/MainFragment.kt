@@ -61,17 +61,20 @@ import com.google.android.flexbox.JustifyContent
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
-import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE
-import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGES
-import com.none.tom.exiferaser.INTENT_ACTION_CHOOSE_IMAGE_DIR
-import com.none.tom.exiferaser.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.core.contract.ActivityResultContractTakePicture
+import com.none.tom.exiferaser.core.image.supportedImageFormats
+import com.none.tom.exiferaser.core.receiver.DragAndDropContentReceiver
+import com.none.tom.exiferaser.core.ui.BaseFragment
+import com.none.tom.exiferaser.core.ui.RecyclerViewMarginItemDecoration
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE_DIR
+import com.none.tom.exiferaser.core.util.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
 import com.none.tom.exiferaser.main.business.MainViewModel
-import com.none.tom.exiferaser.main.data.supportedImageFormats
 import com.squareup.wire.AnyMessage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -123,7 +126,7 @@ class MainFragment :
             requireActivity(),
             binding.layout,
             supportedImageFormats.map { f -> f.mimeType }.toTypedArray(),
-            MainContentReceiver(onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) })
+            DragAndDropContentReceiver(onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) })
         )
         setFragmentResultListener(
             DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
@@ -517,7 +520,7 @@ class MainFragment :
                 windowHeightSizeClass = getWindowSizeClass().windowHeightSizeClass
             )
             addItemDecoration(
-                RecyclerViewItemDecoration(
+                RecyclerViewMarginItemDecoration(
                     margin = resources.getDimension(R.dimen.spacing_micro).toInt()
                 )
             )

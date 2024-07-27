@@ -33,9 +33,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.FileUtilsKt
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentDefaultDisplayNameSuffixBinding
-import com.none.tom.exiferaser.imageProcessing.FileUtilsKt
 
 class DefaultDisplayNameSuffixFragment : DialogFragment() {
 

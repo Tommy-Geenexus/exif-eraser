@@ -22,9 +22,9 @@ package com.none.tom.exiferaser.imageProcessing.business
 
 import android.net.Uri
 import android.os.Parcelable
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingProgress
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingStep
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingSummary
+import com.none.tom.exiferaser.core.image.ImageProcessingProgress
+import com.none.tom.exiferaser.core.image.ImageProcessingStep
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

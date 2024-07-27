@@ -24,9 +24,9 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.UserImageSelectionProto
-import com.none.tom.exiferaser.addOrShift
+import com.none.tom.exiferaser.core.extension.addOrShift
+import com.none.tom.exiferaser.core.image.ImageProcessingStep
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingStep
 import com.none.tom.exiferaser.imageProcessing.ui.ImageProcessingFragmentArgs
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository

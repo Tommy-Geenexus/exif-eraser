@@ -99,7 +99,7 @@
 
     <fragment
         android:id="@+id/fragment_help"
-        android:name="com.none.tom.exiferaser.main.ui.HelpFragment"
+        android:name="com.none.tom.exiferaser.help.ui.HelpFragment"
         tools:layout="@layout/fragment_help" />
 
     <fragment

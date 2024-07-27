@@ -38,6 +38,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.WindowMetricsCalculator
+import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE_DIR
+import com.none.tom.exiferaser.core.util.INTENT_ACTION_LAUNCH_CAM
+import com.none.tom.exiferaser.core.util.INTENT_EXTRA_CONSUMED
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
 

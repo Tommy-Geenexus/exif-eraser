@@ -22,16 +22,16 @@ package com.none.tom.exiferaser.imageProcessing.business
 
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.ROBOELECTRIC_BUILD_VERSION_CODE
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingProgress
+import com.none.tom.exiferaser.core.image.ImageProcessingProgress
+import com.none.tom.exiferaser.core.image.ImageProcessingStep
+import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.testImageProcessingSummary
+import com.none.tom.exiferaser.core.util.testImagesSelection
+import com.none.tom.exiferaser.core.util.testUri
+import com.none.tom.exiferaser.core.util.testUris
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingStep
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.testImageProcessingSummary
-import com.none.tom.exiferaser.testImagesSelection
-import com.none.tom.exiferaser.testUri
-import com.none.tom.exiferaser.testUris
 import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify

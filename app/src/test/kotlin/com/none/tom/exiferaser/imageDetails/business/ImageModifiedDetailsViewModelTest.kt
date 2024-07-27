@@ -21,9 +21,9 @@
 package com.none.tom.exiferaser.imageDetails.business
 
 import androidx.lifecycle.SavedStateHandle
-import com.none.tom.exiferaser.EXTENSION_JPEG
-import com.none.tom.exiferaser.MIME_TYPE_JPEG
-import com.none.tom.exiferaser.imageProcessing.data.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.util.EXTENSION_JPEG
+import com.none.tom.exiferaser.core.util.MIME_TYPE_JPEG
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.orbitmvi.orbit.test.test

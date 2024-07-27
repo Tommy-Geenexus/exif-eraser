@@ -25,8 +25,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import com.none.tom.exiferaser.BaseBottomSheetDialogFragment
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentDeleteCameraImagesBinding
 
 class DeleteCameraImagesFragment :

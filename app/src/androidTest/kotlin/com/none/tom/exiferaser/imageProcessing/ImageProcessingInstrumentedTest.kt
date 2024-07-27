@@ -29,12 +29,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.UserImageSelectionProto
-import com.none.tom.exiferaser.imageProcessing.data.ImageMetadataSnapshot
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingProgress
+import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.image.ImageProcessingProgress
+import com.none.tom.exiferaser.core.image.ImageProcessingStep
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
+import com.none.tom.exiferaser.core.provider.CameraFileProvider
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingStep
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingSummary
-import com.none.tom.exiferaser.main.data.CameraFileProvider
 import java.io.File
 import java.io.FileOutputStream
 import kotlinx.coroutines.CoroutineDispatcher

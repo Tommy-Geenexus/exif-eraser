@@ -33,8 +33,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.none.tom.exiferaser.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.databinding.FragmentImageSavePathSelectionBinding
 import com.none.tom.exiferaser.imageSavePathSelection.business.ImageSavePathSelectionSideEffect
 import com.none.tom.exiferaser.imageSavePathSelection.business.ImageSavePathSelectionState

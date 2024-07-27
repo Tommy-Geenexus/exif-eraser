@@ -26,7 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

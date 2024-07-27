@@ -26,8 +26,8 @@ import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
-import com.none.tom.exiferaser.di.DispatcherIo
-import com.none.tom.exiferaser.suspendRunCatching
+import com.none.tom.exiferaser.core.di.DispatcherIo
+import com.none.tom.exiferaser.core.extension.suspendRunCatching
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton

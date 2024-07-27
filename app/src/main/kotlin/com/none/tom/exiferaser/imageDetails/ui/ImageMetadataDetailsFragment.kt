@@ -31,11 +31,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentImageMetadataDetailsBinding
 import com.none.tom.exiferaser.imageDetails.business.ImageMetadataDetailsState
 import com.none.tom.exiferaser.imageDetails.business.ImageMetadataDetailsViewModel
-import com.none.tom.exiferaser.imageProcessing.data.ImageMetadataSnapshot
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

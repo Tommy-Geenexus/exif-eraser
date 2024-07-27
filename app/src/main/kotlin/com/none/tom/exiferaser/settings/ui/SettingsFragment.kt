@@ -32,10 +32,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
-import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
+import com.none.tom.exiferaser.core.ui.BaseFragment
+import com.none.tom.exiferaser.core.ui.RecyclerViewVerticalDividerItemDecoration
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
-import com.none.tom.exiferaser.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsState
 import com.none.tom.exiferaser.settings.business.SettingsViewModel
@@ -77,7 +78,7 @@ class SettingsFragment :
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)
             itemAnimator = null
-            addItemDecoration(VerticalDividerItemDecoration(context))
+            addItemDecoration(RecyclerViewVerticalDividerItemDecoration(context))
         }
         setFragmentResultListener(
             DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX

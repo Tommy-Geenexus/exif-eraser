@@ -35,14 +35,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.window.core.layout.WindowHeightSizeClass
 import com.google.android.material.transition.MaterialSharedAxis
-import com.none.tom.exiferaser.BaseFragment
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.contract.ActivityResultContractShareImages
+import com.none.tom.exiferaser.core.image.ImageProcessingStep
+import com.none.tom.exiferaser.core.ui.BaseFragment
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
 import com.none.tom.exiferaser.databinding.FragmentImageProcessingBinding
 import com.none.tom.exiferaser.imageProcessing.business.ImageProcessingSideEffect
 import com.none.tom.exiferaser.imageProcessing.business.ImageProcessingState
 import com.none.tom.exiferaser.imageProcessing.business.ImageProcessingViewModel
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingStep
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

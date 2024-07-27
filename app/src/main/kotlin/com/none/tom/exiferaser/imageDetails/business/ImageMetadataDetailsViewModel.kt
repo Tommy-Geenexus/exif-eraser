@@ -22,7 +22,7 @@ package com.none.tom.exiferaser.imageDetails.business
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.imageProcessing.data.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.orbitmvi.orbit.ContainerHost

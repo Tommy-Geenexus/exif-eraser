@@ -23,8 +23,8 @@ package com.none.tom.exiferaser.imageSavePathSelection.business
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.none.tom.exiferaser.isNotEmpty
-import com.none.tom.exiferaser.isNotNullOrEmpty
+import com.none.tom.exiferaser.core.extension.isNotEmpty
+import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
 import com.none.tom.exiferaser.settings.data.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -45,20 +45,21 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.elevation.SurfaceColors
 import com.google.android.material.snackbar.Snackbar
-import com.none.tom.exiferaser.BaseFragment
-import com.none.tom.exiferaser.MIME_TYPE_IMAGE
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
+import com.none.tom.exiferaser.core.ui.BaseFragment
+import com.none.tom.exiferaser.core.ui.ChildDispatchConstraintLayout
+import com.none.tom.exiferaser.core.util.MIME_TYPE_IMAGE
+import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.lerp
+import com.none.tom.exiferaser.core.util.lerpArgb
 import com.none.tom.exiferaser.databinding.FragmentImageProcessingReportBinding
 import com.none.tom.exiferaser.imageDetails.ui.ImageMetadataDetailsFragment
 import com.none.tom.exiferaser.imageDetails.ui.ImageSavePathDetailsFragment
-import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingSummary
 import com.none.tom.exiferaser.imageProcessing.ui.ImageProcessingFragment
 import com.none.tom.exiferaser.imageProcessingReport.business.ImageProcessingReportSideEffect
 import com.none.tom.exiferaser.imageProcessingReport.business.ImageProcessingReportState
 import com.none.tom.exiferaser.imageProcessingReport.business.ImageProcessingReportViewModel
-import com.none.tom.exiferaser.imageProcessingReport.lerp
-import com.none.tom.exiferaser.imageProcessingReport.lerpArgb
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -107,7 +108,7 @@ class ImageProcessingReportFragment :
     private var _reportCallback: BottomSheetBehavior.BottomSheetCallback? = null
     private val reportCallback get() = _reportCallback!!
     private var _behaviour:
-        ImageProcessingReportFragmentBehaviour<ImageProcessingReportConstraintLayout>? = null
+        ImageProcessingReportFragmentBehaviour<ChildDispatchConstraintLayout>? = null
     private val behaviour get() = _behaviour!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -123,7 +124,7 @@ class ImageProcessingReportFragment :
         }
         binding.toolbar.setBackgroundColor(SurfaceColors.SURFACE_0.getColor(requireActivity()))
         _behaviour = BottomSheetBehavior.from(binding.layout) as
-            ImageProcessingReportFragmentBehaviour<ImageProcessingReportConstraintLayout>
+            ImageProcessingReportFragmentBehaviour<ChildDispatchConstraintLayout>
         var translationMax = 0f
         binding.layout.apply {
             doOnLayout {
