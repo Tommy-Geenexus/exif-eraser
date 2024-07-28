@@ -1,0 +1,78 @@
+# Required PAT repository permissions:
+# - Actions: RO
+# - Contents: RW
+# - Secrets: RO
+name: Deploy
+on:
+  workflow_run:
+    workflows:
+      - Assemble
+    types:
+     - completed
+
+jobs:
+  setup_env:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    outputs:
+      commit_subject: ${{ steps.output1.outputs.commit_subject }}
+      release_tag: ${{ steps.output2.outputs.release_tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - id: output1
+        run: echo "commit_subject=$(git log -1 --format=%s)" >> $GITHUB_OUTPUT
+
+      - id: output2
+        run: echo "release_tag=$(git log -1 --format=%s | sed 's/.*Release //')" >> $GITHUB_OUTPUT
+  deploy:
+    needs: setup_env
+    env:
+      APK_NAME: 'app-release.apk'
+      APK_CONTENT_TYPE: 'application/vnd.android.package-archive'
+      COMMIT_SUBJECT: ${{ needs.setup_env.outputs.commit_subject }}
+      RELEASE_TAG: ${{ needs.setup_env.outputs.release_tag }}
+    if: ${{ startsWith(needs.setup_env.outputs.commit_subject, 'Release v') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download apk
+        id: download_apk
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.APK_NAME }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ github.repository }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Create tag
+        uses: rickstaa/action-create-tag@v1
+        id: tag_create
+        with:
+          message: ${{ env.COMMIT_SUBJECT }}
+          tag: ${{ env.RELEASE_TAG }}
+
+      - name: Build changelog
+        id: build_changelog
+        uses: requarks/changelog-action@v1
+        with:
+          includeInvalidCommits: true
+          tag: ${{ env.RELEASE_TAG }}
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifactContentType: ${{ env.APK_CONTENT_TYPE }}
+          artifacts: ${{ format('{0}/{1}', steps.download_apk.outputs.download-path, env.APK_NAME) }}
+          body: ${{ steps.build_changelog.outputs.changes }}
+          draft: false
+          makeLatest: true
+          tag: ${{ env.RELEASE_TAG }}
+          token: ${{ secrets.GH_TOKEN }}

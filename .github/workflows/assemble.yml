@@ -3,17 +3,41 @@ on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      KS_BASE_64: ${{ secrets.KS_BASE_64 }}
+      KS_PASSWORD: ${{ secrets.KS_PASSWORD }}
+      KS_KEY_ALIAS: ${{ secrets.KS_KEY_ALIAS }}
+      KS_KEY_PASSWORD: ${{ secrets.KS_KEY_PASSWORD }}
+      APK_NAME: 'app-release.apk'
+      APK_PATH: 'app/build/outputs/apk/release/app-release.apk'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup JDK 17
         id: setup-java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 17
-      - name: Assemble app
-        run: ./gradlew assemble
+
+      - name: Assemble release
+        run: |
+          ./gradlew assembleRelease \
+            -DKS_BASE_64=${{ env.KS_BASE_64 }} \
+            -DKS_PASSWORD=${{ env.KS_PASSWORD }} \
+            -DKS_KEY_ALIAS=${{ env.KS_KEY_ALIAS }} \
+            -DKS_KEY_PASSWORD=${{ env.KS_KEY_PASSWORD }}
+
+      - name: Upload apk
+        id: upload_apk
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APK_NAME }}
+          path: ${{ env.APK_PATH }}
+          overwrite: true
+          retention-days: 1

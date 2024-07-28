@@ -9,11 +9,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup JDK 17
         id: setup-java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: 17
+
       - name: Run spotless
         run: ./gradlew spotlessKotlinCheck
