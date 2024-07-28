@@ -26,7 +26,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.KEY_IMAGE_PATH
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,8 +35,6 @@ class ImageSavePathDetailsFragment : DialogFragment() {
     companion object {
 
         const val TAG = "SaveDetailsFragment"
-
-        private const val KEY_IMAGE_PATH = TOP_LEVEL_PACKAGE_NAME + "IMAGE_PATH"
 
         fun newInstance(imagePath: String) = ImageSavePathDetailsFragment().apply {
             arguments = bundleOf(KEY_IMAGE_PATH to imagePath)

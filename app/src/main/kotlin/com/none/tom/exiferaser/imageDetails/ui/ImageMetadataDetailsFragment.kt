@@ -32,7 +32,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.KEY_DISPLAY_NAME
+import com.none.tom.exiferaser.core.util.KEY_EXTENSION
+import com.none.tom.exiferaser.core.util.KEY_IMAGE_METADATA_SNAPSHOT
+import com.none.tom.exiferaser.core.util.KEY_MIME_TYPE
 import com.none.tom.exiferaser.databinding.FragmentImageMetadataDetailsBinding
 import com.none.tom.exiferaser.imageDetails.business.ImageMetadataDetailsState
 import com.none.tom.exiferaser.imageDetails.business.ImageMetadataDetailsViewModel
@@ -45,11 +48,6 @@ class ImageMetadataDetailsFragment : DialogFragment() {
     companion object {
 
         const val TAG = "DetailsFragment"
-
-        const val KEY_DISPLAY_NAME = TOP_LEVEL_PACKAGE_NAME + "DISPLAY_NAME"
-        const val KEY_EXTENSION = TOP_LEVEL_PACKAGE_NAME + "EXTENSION"
-        const val KEY_MIME_TYPE = TOP_LEVEL_PACKAGE_NAME + "MIME_TYPE"
-        const val KEY_IMAGE_METADATA_SNAPSHOT = TOP_LEVEL_PACKAGE_NAME + "IMAGE_META_SNAPSHOT"
 
         fun newInstance(
             displayName: String,

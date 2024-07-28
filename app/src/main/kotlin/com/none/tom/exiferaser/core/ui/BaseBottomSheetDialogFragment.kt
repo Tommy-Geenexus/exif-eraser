@@ -22,16 +22,14 @@ package com.none.tom.exiferaser.core.ui
 
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
 import curtains.phoneWindow
 
 abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialogFragment() {
@@ -52,9 +50,8 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            val tv = TypedValue()
-            requireActivity().theme.resolveAttribute(R.attr.colorSurfaceContainerLow, tv, true)
-            view.phoneWindow?.navigationBarColor = tv.data
+            view.phoneWindow?.navigationBarColor =
+                requireActivity().resolveThemeAttribute(R.attr.colorSurfaceContainerLow)
         }
         with(requireDialog()) {
             setOnShowListener {
@@ -72,12 +69,4 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
     }
 
     abstract fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?): B
-
-    internal fun navigate(navDirections: NavDirections) {
-        val navController = findNavController()
-        val action = navController.currentDestination?.getAction(navDirections.actionId)
-        if (action != null && action.destinationId != 0) {
-            navController.navigate(navDirections)
-        }
-    }
 }

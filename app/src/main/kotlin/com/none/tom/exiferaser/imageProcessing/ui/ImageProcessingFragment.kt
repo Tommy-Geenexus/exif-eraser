@@ -25,21 +25,27 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.window.core.layout.WindowHeightSizeClass
+import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractShareImages
 import com.none.tom.exiferaser.core.image.ImageProcessingStep
 import com.none.tom.exiferaser.core.ui.BaseFragment
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.NAV_ARG_IMAGE_PROCESSING_SUMMARIES
 import com.none.tom.exiferaser.databinding.FragmentImageProcessingBinding
 import com.none.tom.exiferaser.imageProcessing.business.ImageProcessingSideEffect
 import com.none.tom.exiferaser.imageProcessing.business.ImageProcessingState
@@ -51,11 +57,6 @@ import kotlinx.coroutines.launch
 class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
     R.layout.fragment_image_processing
 ) {
-
-    companion object {
-        const val KEY_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
-    }
-
     private val viewModel: ImageProcessingViewModel by viewModels()
     private val activityResultContractShareImages = registerForActivityResult(
         ActivityResultContractShareImages()
@@ -64,11 +65,25 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        exitTransition = MaterialElevationScale(false)
         returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        reenterTransition = MaterialElevationScale(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
+            )
+            view.setLayoutParams(
+                (view.layoutParams as FrameLayout.LayoutParams).apply {
+                    topMargin = insets.top
+                    bottomMargin = insets.bottom
+                }
+            )
+            WindowInsetsCompat.CONSUMED
+        }
         val menuProvider = object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -92,12 +107,9 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             }
         }
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupToolbar(
-            toolbar = binding.toolbarInclude.toolbar,
-            titleRes = R.string.summary
-        )
-        setupLayoutMarginForNavigationWindowInsets()
+        setupToolbar(binding.toolbarInclude.toolbar, R.string.summary)
         setupResponsiveLayout()
+        binding.details.setOnClickListener { viewModel.handleImageProcessingDetails() }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
@@ -133,13 +145,9 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
                 getString(R.string.images_modified)
             )
             binding.progressLayout.isVisible = false
-            binding.fragmentReport.isVisible = state.imageProcessingSummaries.isNotEmpty()
+            binding.detailsLayout.isVisible = state.imageProcessingSummaries.isNotEmpty()
             binding.done.isVisible = true
             if (state.imagesProcessedCount > 0) {
-                childFragmentManager.setFragmentResult(
-                    KEY_REPORT,
-                    bundleOf(KEY_REPORT to ArrayList(state.imageProcessingSummaries))
-                )
                 requireActivity().invalidateOptionsMenu()
             }
         }
@@ -152,6 +160,18 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             }
             ImageProcessingSideEffect.Handle.UnsupportedSelection -> {
                 viewModel.handleUnsupportedSelection()
+            }
+            is ImageProcessingSideEffect.Navigate.ToImageProcessingDetails -> {
+                findNavController().navigate(
+                    R.id.image_processing_to_image_processing_details,
+                    bundleOf(
+                        NAV_ARG_IMAGE_PROCESSING_SUMMARIES to sideEffect.imageProcessingSummaries
+                    ),
+                    null,
+                    FragmentNavigatorExtras(
+                        binding.details to getString(R.string.shared_element_details)
+                    )
+                )
             }
             is ImageProcessingSideEffect.ShareImages -> {
                 activityResultContractShareImages.launch(

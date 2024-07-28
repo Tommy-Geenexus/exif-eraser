@@ -18,7 +18,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.ui
+package com.none.tom.exiferaser.imageProcessingDetails.ui
 
 import android.net.Uri
 import android.widget.ImageView
@@ -26,11 +26,11 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.dispose
 import coil.load
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.databinding.ItemImageProcessingReportBinding
+import com.none.tom.exiferaser.databinding.ItemImageProcessingDetailsBinding
 
-class ImageProcessingReportViewHolder(
-    private val binding: ItemImageProcessingReportBinding,
-    private val listener: ImageProcessingReportAdapter.Listener
+class ImageProcessingDetailsViewHolder(
+    private val binding: ItemImageProcessingDetailsBinding,
+    private val listener: ImageProcessingDetailsAdapter.Listener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -49,7 +49,11 @@ class ImageProcessingReportViewHolder(
         binding.imageCropped.load(uri) {
             allowHardware(binding.imageCropped.isHardwareAccelerated)
             listener(
-                onError = { _, _ -> binding.imageCropped.scaleType = ImageView.ScaleType.CENTER }
+                onError = { _, _ ->
+                    binding.imageCropped.scaleType = ImageView.ScaleType.CENTER
+                    listener.onImageThumbnailLoaded(absoluteAdapterPosition)
+                },
+                onSuccess = { _, _ -> listener.onImageThumbnailLoaded(absoluteAdapterPosition) }
             )
             error(R.drawable.ic_image_not_supported)
         }

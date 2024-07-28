@@ -72,8 +72,6 @@
     <string name="save_path_custom_skip_off">Non saltare la selezione del percorso di salvataggio se è impostato il percorso di salvataggio predefinito</string>
     <string name="save_path_custom_skip_on">Salta la selezione del percorso di salvataggio se è impostato il percorso di salvataggio predefinito</string>
 
-    <string name="saved">Salvata</string>
-
     <string name="settings">Impostazioni</string>
 
     <string name="share">Condividi</string>
@@ -88,10 +86,6 @@
     <string name="take_picture">Scatta foto</string>
 
     <string name="ui">UI</string>
-
-    <string name="unmodified">Non modificata</string>
-
-    <string name="unsaved">Non salvata</string>
 
     <string name="version">Versione</string>
 </resources>

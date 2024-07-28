@@ -26,7 +26,11 @@ import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import com.none.tom.exiferaser.core.serializer.ImageSourcesSerializer
 import com.none.tom.exiferaser.core.serializer.SelectionSerializer
-import com.none.tom.exiferaser.settings.data.SettingsRepository
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_DISPLAY_NAME_SUFFIX
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_OPEN_PATH
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_SAVE_PATH
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_PRESERVE_ORIENTATION
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_SHARE_BY_DEFAULT
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -67,11 +71,11 @@ private val Context.settingsDataStore by preferencesDataStore(
                 context = context,
                 sharedPreferencesName = context.packageName + "_preferences",
                 keysToMigrate = setOf(
-                    SettingsRepository.KEY_DEFAULT_OPEN_PATH,
-                    SettingsRepository.KEY_DEFAULT_SAVE_PATH,
-                    SettingsRepository.KEY_PRESERVE_ORIENTATION,
-                    SettingsRepository.KEY_SHARE_BY_DEFAULT,
-                    SettingsRepository.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
+                    SETTINGS_KEY_DEFAULT_OPEN_PATH,
+                    SETTINGS_KEY_DEFAULT_SAVE_PATH,
+                    SETTINGS_KEY_PRESERVE_ORIENTATION,
+                    SETTINGS_KEY_SHARE_BY_DEFAULT,
+                    SETTINGS_KEY_DEFAULT_DISPLAY_NAME_SUFFIX
                 )
             )
         )

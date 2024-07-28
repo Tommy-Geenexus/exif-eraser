@@ -20,12 +20,33 @@
 
 package com.none.tom.exiferaser.core.extension
 
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.ensureActive
+import android.app.Activity
+import android.content.Context
+import android.os.Build
+import android.util.TypedValue
+import androidx.annotation.AttrRes
+import androidx.appcompat.app.AppCompatDelegate
+import com.none.tom.exiferaser.R
 
-suspend fun <T> CoroutineContext.suspendRunCatching(block: suspend () -> T): Result<T> = try {
-    Result.success(block())
-} catch (exception: Exception) {
-    ensureActive()
-    Result.failure(exception)
+fun Activity.resolveThemeAttribute(@AttrRes attrRes: Int): Int {
+    val tv = TypedValue()
+    theme.resolveAttribute(attrRes, tv, true)
+    return tv.data
+}
+
+fun Context.defaultNightModes() = mutableMapOf(
+    AppCompatDelegate.MODE_NIGHT_YES to getString(R.string.always),
+    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM to getString(R.string.automatically),
+    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY to getString(R.string.low_batt_only),
+    AppCompatDelegate.MODE_NIGHT_NO to getString(R.string.never)
+).apply {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+        remove(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    }
+}.toMap()
+
+fun Context.defaultNightModeDisplayValue() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    getString(R.string.automatically)
+} else {
+    getString(R.string.never)
 }

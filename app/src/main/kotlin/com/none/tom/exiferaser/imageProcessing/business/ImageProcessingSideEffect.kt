@@ -23,6 +23,7 @@ package com.none.tom.exiferaser.imageProcessing.business
 import android.net.Uri
 import android.os.Parcelable
 import com.none.tom.exiferaser.UserImageSelectionProto
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import kotlinx.parcelize.Parcelize
 
 sealed class ImageProcessingSideEffect : Parcelable {
@@ -37,6 +38,27 @@ sealed class ImageProcessingSideEffect : Parcelable {
 
         @Parcelize
         data object UnsupportedSelection : Handle()
+    }
+
+    sealed class Navigate : ImageProcessingSideEffect() {
+
+        @Parcelize
+        data class ToImageProcessingDetails(
+            val imageProcessingSummaries: Array<ImageProcessingSummary>
+        ) : Navigate() {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (javaClass != other?.javaClass) return false
+
+                other as ToImageProcessingDetails
+
+                return imageProcessingSummaries.contentEquals(other.imageProcessingSummaries)
+            }
+
+            override fun hashCode(): Int {
+                return imageProcessingSummaries.contentHashCode()
+            }
+        }
     }
 
     @Parcelize

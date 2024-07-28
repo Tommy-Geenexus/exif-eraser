@@ -20,13 +20,11 @@
 
 package com.none.tom.exiferaser.core.util
 
-const val TOP_LEVEL_PACKAGE_NAME = "com.none.tom.exiferaser."
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 
-const val INTENT_ACTION_CHOOSE_IMAGE = TOP_LEVEL_PACKAGE_NAME + "ACTION_CHOOSE_IMAGE"
-const val INTENT_ACTION_CHOOSE_IMAGES = TOP_LEVEL_PACKAGE_NAME + "ACTION_CHOOSE_IMAGES"
-const val INTENT_ACTION_CHOOSE_IMAGE_DIR = TOP_LEVEL_PACKAGE_NAME + "ACTION_CHOOSE_IMAGE_DIRECTORY"
-const val INTENT_ACTION_LAUNCH_CAM = TOP_LEVEL_PACKAGE_NAME + "ACTION_LAUNCH_CAMERA"
-
-const val INTENT_EXTRA_CONSUMED = TOP_LEVEL_PACKAGE_NAME + "EXTRA_CONSUMED"
-
-const val MIME_TYPE_IMAGE = "image/*"
+val defaultNightMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+} else {
+    AppCompatDelegate.MODE_NIGHT_NO
+}

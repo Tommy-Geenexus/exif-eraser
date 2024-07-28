@@ -33,12 +33,22 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.documentfile.provider.DocumentFile
 import com.none.tom.exiferaser.core.di.DispatcherIo
+import com.none.tom.exiferaser.core.extension.defaultNightModeDisplayValue
+import com.none.tom.exiferaser.core.extension.defaultNightModes
 import com.none.tom.exiferaser.core.extension.isNotEmpty
 import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
 import com.none.tom.exiferaser.core.extension.suspendRunCatching
-import com.none.tom.exiferaser.settings.ui.defaultNightMode
-import com.none.tom.exiferaser.settings.ui.defaultNightModeDisplayValue
-import com.none.tom.exiferaser.settings.ui.defaultNightModes
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_AUTO_DELETE
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_DISPLAY_NAME_SUFFIX
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_NIGHT_MODE
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_OPEN_PATH
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_DEFAULT_SAVE_PATH
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_LEGACY_IMAGE_SELECTION
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_PRESERVE_ORIENTATION
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_RANDOMIZE_FILE_NAMES
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_SAVE_PATH_SELECTION_SKIP
+import com.none.tom.exiferaser.core.util.SETTINGS_KEY_SHARE_BY_DEFAULT
+import com.none.tom.exiferaser.core.util.defaultNightMode
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -56,32 +66,18 @@ class SettingsRepository @Inject constructor(
     @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
-    companion object {
-
-        // Keys copied from settings SharedPreferences for DataStore migration
-        const val KEY_DEFAULT_OPEN_PATH = "default_path_open"
-        const val KEY_DEFAULT_SAVE_PATH = "default_path_save"
-        const val KEY_PRESERVE_ORIENTATION = "image_orientation"
-        const val KEY_SHARE_BY_DEFAULT = "image_share_by_default"
-        const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX = "default_display_name_suffix"
-        const val KEY_DEFAULT_NIGHT_MODE = "night_mode"
-
-        const val KEY_RANDOMIZE_FILE_NAMES = "randomize_file_names"
-        const val KEY_AUTO_DELETE = "auto_delete"
-        const val KEY_LEGACY_IMAGE_SELECTION = "legacy_image_selection"
-        const val KEY_SAVE_PATH_SELECTION_SKIP = "save_path_selection_skip"
-    }
-
-    private val keyRandomizeFileNames = booleanPreferencesKey(KEY_RANDOMIZE_FILE_NAMES)
-    private val keyDefaultOpenPath = stringPreferencesKey(KEY_DEFAULT_OPEN_PATH)
-    private val keyDefaultSavePath = stringPreferencesKey(KEY_DEFAULT_SAVE_PATH)
-    private val keyAutoDelete = booleanPreferencesKey(KEY_AUTO_DELETE)
-    private val keyPreserveOrientation = booleanPreferencesKey(KEY_PRESERVE_ORIENTATION)
-    private val keyShareByDefault = booleanPreferencesKey(KEY_SHARE_BY_DEFAULT)
-    private val keyDefaultDisplayNameSuffix = stringPreferencesKey(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
-    private val keyLegacyImageSelection = booleanPreferencesKey(KEY_LEGACY_IMAGE_SELECTION)
-    private val keySavePathSelectionSkip = booleanPreferencesKey(KEY_SAVE_PATH_SELECTION_SKIP)
-    private val keyDefaultNightMode = intPreferencesKey(KEY_DEFAULT_NIGHT_MODE)
+    private val keyRandomizeFileNames = booleanPreferencesKey(SETTINGS_KEY_RANDOMIZE_FILE_NAMES)
+    private val keyDefaultOpenPath = stringPreferencesKey(SETTINGS_KEY_DEFAULT_OPEN_PATH)
+    private val keyDefaultSavePath = stringPreferencesKey(SETTINGS_KEY_DEFAULT_SAVE_PATH)
+    private val keyAutoDelete = booleanPreferencesKey(SETTINGS_KEY_AUTO_DELETE)
+    private val keyPreserveOrientation = booleanPreferencesKey(SETTINGS_KEY_PRESERVE_ORIENTATION)
+    private val keyShareByDefault = booleanPreferencesKey(SETTINGS_KEY_SHARE_BY_DEFAULT)
+    private val keyDefaultDisplayNameSuffix =
+        stringPreferencesKey(SETTINGS_KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+    private val keyLegacyImageSelection = booleanPreferencesKey(SETTINGS_KEY_LEGACY_IMAGE_SELECTION)
+    private val keySavePathSelectionSkip =
+        booleanPreferencesKey(SETTINGS_KEY_SAVE_PATH_SELECTION_SKIP)
+    private val keyDefaultNightMode = intPreferencesKey(SETTINGS_KEY_DEFAULT_NIGHT_MODE)
 
     suspend fun putDefaultOpenPath(
         newDefaultOpenPath: Uri,

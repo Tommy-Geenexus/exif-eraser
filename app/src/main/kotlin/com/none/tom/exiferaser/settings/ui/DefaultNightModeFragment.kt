@@ -21,24 +21,18 @@
 package com.none.tom.exiferaser.settings.ui
 
 import android.app.Dialog
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.R
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.extension.defaultNightModes
+import com.none.tom.exiferaser.core.util.KEY_DEFAULT_NIGHT_MODE
+import com.none.tom.exiferaser.core.util.defaultNightMode
 
 class DefaultNightModeFragment : DialogFragment() {
-
-    companion object {
-
-        const val KEY_DEFAULT_NIGHT_MODE = TOP_LEVEL_PACKAGE_NAME + "DEFAULT_NIGHT_MODE"
-    }
 
     private val args: DefaultNightModeFragmentArgs by navArgs()
 
@@ -48,7 +42,7 @@ class DefaultNightModeFragment : DialogFragment() {
             .setTitle(R.string.night_mode)
             .setSingleChoiceItems(
                 defaultNightModes.values.toTypedArray(),
-                defaultNightModes.keys.indexOf(args.defaultNightMode).coerceAtLeast(0)
+                defaultNightModes.keys.indexOf(args.navArgDefaultNightMode).coerceAtLeast(0)
             ) { _, _: Int -> }
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val list = (dialog as? AlertDialog)?.listView
@@ -67,27 +61,4 @@ class DefaultNightModeFragment : DialogFragment() {
             .setNegativeButton(android.R.string.cancel, null)
             .create()
     }
-}
-
-val defaultNightMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-} else {
-    AppCompatDelegate.MODE_NIGHT_NO
-}
-
-fun Context.defaultNightModes() = mutableMapOf(
-    AppCompatDelegate.MODE_NIGHT_YES to getString(R.string.always),
-    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM to getString(R.string.automatically),
-    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY to getString(R.string.low_batt_only),
-    AppCompatDelegate.MODE_NIGHT_NO to getString(R.string.never)
-).apply {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        remove(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-    }
-}.toMap()
-
-fun Context.defaultNightModeDisplayValue() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-    getString(R.string.automatically)
-} else {
-    getString(R.string.never)
 }

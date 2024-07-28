@@ -95,7 +95,7 @@
                 android:id="@+id/details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_normal"
+                android:layout_margin="@dimen/spacing_large"
                 android:text="@string/details"
                 android:transitionName="@string/shared_element_details"
                 app:icon="@drawable/ic_details" />

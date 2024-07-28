@@ -31,13 +31,6 @@ import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
 import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import com.squareup.wire.AnyMessage
 
-const val EXTENSION_JPEG = "jpg"
-const val MIME_TYPE_JPEG = "image/jpeg"
-const val TEST_DEFAULT_PATH_OPEN_NAME = "path_open"
-const val TEST_DEFAULT_PATH_SAVE_NAME = "path_save"
-const val TEST_DEFAULT_DISPLAY_NAME_SUFFIX = "suffix"
-const val TEST_DEFAULT_NIGHT_MODE_NAME = "Always"
-
 val testUri = ContentResolver.SCHEME_CONTENT.toUri()
 val testUris = listOf(testUri)
 val testUris2 = listOf(testUri, testUri)

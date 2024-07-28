@@ -34,16 +34,10 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.util.FileUtilsKt
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
 import com.none.tom.exiferaser.databinding.FragmentDefaultDisplayNameSuffixBinding
 
 class DefaultDisplayNameSuffixFragment : DialogFragment() {
-
-    companion object {
-
-        const val KEY_DEFAULT_DISPLAY_NAME_SUFFIX =
-            TOP_LEVEL_PACKAGE_NAME + "DEFAULT_DISPLAY_NAME_SUFFIX"
-    }
 
     private val args: DefaultDisplayNameSuffixFragmentArgs by navArgs()
 
@@ -53,7 +47,7 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = FragmentDefaultDisplayNameSuffixBinding.inflate(layoutInflater)
         binding.defaultDisplayNameSuffix.setText(
-            args.defaultDisplayNameSuffix,
+            args.navArgDefaultDisplayNameSuffix,
             TextView.BufferType.EDITABLE
         )
         binding.defaultDisplayNameSuffix.doOnTextChanged { text, _, _, _ ->

@@ -28,6 +28,11 @@ import com.none.tom.exiferaser.ImageFilesProto
 import com.none.tom.exiferaser.ImageSourcesProto
 import com.none.tom.exiferaser.core.di.DispatcherIo
 import com.none.tom.exiferaser.core.extension.suspendRunCatching
+import com.none.tom.exiferaser.core.util.IMAGE_SOURCES_COUNT
+import com.none.tom.exiferaser.core.util.INDEX_DEFAULT_CAMERA
+import com.none.tom.exiferaser.core.util.INDEX_DEFAULT_IMAGE_DIRECTORY
+import com.none.tom.exiferaser.core.util.INDEX_DEFAULT_IMAGE_FILE
+import com.none.tom.exiferaser.core.util.INDEX_DEFAULT_IMAGE_FILES
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,14 +50,6 @@ class ImageSourcesRepository @Inject constructor(
     private val dataStore: DataStore<ImageSourcesProto>,
     @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
-
-    private companion object {
-        const val INDEX_DEFAULT_IMAGE_FILE = 0
-        const val INDEX_DEFAULT_IMAGE_FILES = 1
-        const val INDEX_DEFAULT_IMAGE_DIRECTORY = 2
-        const val INDEX_DEFAULT_CAMERA = 3
-        const val IMAGE_SOURCES_COUNT = 4
-    }
 
     suspend fun getImageSources(): List<AnyMessage> {
         return dataStore

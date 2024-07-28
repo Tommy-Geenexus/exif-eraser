@@ -9,10 +9,6 @@
     <dimen name="spacing_preference_end_compact">72dp</dimen>
     <dimen name="spacing_preference_end_medium_expanded">80dp</dimen>
 
-    <dimen name="elevation_micro">3dp</dimen>
-
-    <dimen name="corner_size_large">24dp</dimen>
-
     <dimen name="progress_width">240dp</dimen>
 
     <dimen name="icon_compact">24dp</dimen>

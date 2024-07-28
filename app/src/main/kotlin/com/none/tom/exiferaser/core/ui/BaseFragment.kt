@@ -22,15 +22,11 @@ package com.none.tom.exiferaser.core.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.none.tom.exiferaser.ExifEraserActivity
@@ -56,11 +52,9 @@ abstract class BaseFragment<B : ViewBinding>(
 
     protected fun getWindowSizeClass() = (requireActivity() as ExifEraserActivity).windowSizeClass
 
-    protected fun setupToolbar(toolbar: Toolbar, @StringRes titleRes: Int = 0) {
-        if (titleRes != 0) {
-            toolbar.setTitle(titleRes)
-        }
+    protected fun setupToolbar(toolbar: Toolbar, @StringRes titleRes: Int) {
         (requireActivity() as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        toolbar.setTitle(titleRes)
         requireParentFragment()
             .childFragmentManager
             .backStackEntryCount
@@ -69,21 +63,5 @@ abstract class BaseFragment<B : ViewBinding>(
                 toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
                 toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
             }
-    }
-
-    protected fun setupLayoutMarginForNavigationWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            (root.layoutParams as FrameLayout.LayoutParams).bottomMargin = insets.bottom
-            WindowInsetsCompat.CONSUMED
-        }
-    }
-
-    protected fun navigate(navDirections: NavDirections) {
-        val navController = findNavController()
-        val action = navController.currentDestination?.getAction(navDirections.actionId)
-        if (action != null && action.destinationId != 0) {
-            navController.navigate(navDirections)
-        }
     }
 }

@@ -18,31 +18,41 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.business
+package com.none.tom.exiferaser.imageProcessingDetails.business
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
 import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
+import com.none.tom.exiferaser.imageProcessingDetails.ui.ImageProcessingDetailsFragmentArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 @HiltViewModel
-class ImageProcessingReportViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class ImageProcessingDetailsViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val imageProcessingRepository: ImageProcessingRepository
-) : ContainerHost<ImageProcessingReportState, ImageProcessingReportSideEffect>,
+) : ContainerHost<ImageProcessingDetailsState, ImageProcessingDetailsSideEffect>,
     ViewModel() {
 
-    override val container = container<ImageProcessingReportState, ImageProcessingReportSideEffect>(
-        savedStateHandle = savedStateHandle,
-        initialState = ImageProcessingReportState()
-    )
+    override val container =
+        container<ImageProcessingDetailsState, ImageProcessingDetailsSideEffect>(
+            savedStateHandle = savedStateHandle,
+            initialState = ImageProcessingDetailsState(),
+            onCreate = {
+                handleImageProcessingSummaries()
+            }
+        )
 
-    fun handleImageProcessingSummaries(summaries: List<ImageProcessingSummary>) = intent {
+    fun handleImageProcessingSummaries(
+        summaries: List<ImageProcessingSummary> = ImageProcessingDetailsFragmentArgs
+            .fromSavedStateHandle(savedStateHandle)
+            .navArgImageProcessingSummaries
+            .toList()
+    ) = intent {
         reduce {
             state.copy(imageProcessingSummaries = summaries)
         }
@@ -52,7 +62,7 @@ class ImageProcessingReportViewModel @Inject constructor(
         val summary = state.imageProcessingSummaries.getOrNull(position)
         if (summary != null) {
             postSideEffect(
-                ImageProcessingReportSideEffect.Navigate.ToImageModifiedDetails(
+                ImageProcessingDetailsSideEffect.Navigate.ToImageModifiedDetails(
                     displayName = summary.displayName,
                     extension = summary.extension,
                     mimeType = summary.mimeType,
@@ -68,11 +78,11 @@ class ImageProcessingReportViewModel @Inject constructor(
             val result = imageProcessingRepository.getLastDocumentPathSegment(summary.uri)
             postSideEffect(
                 if (result.isSuccess) {
-                    ImageProcessingReportSideEffect.Navigate.ToImageSavedDetails(
+                    ImageProcessingDetailsSideEffect.Navigate.ToImageSavedDetails(
                         name = result.getOrThrow()
                     )
                 } else {
-                    ImageProcessingReportSideEffect.ImageSaved.Unsupported
+                    ImageProcessingDetailsSideEffect.ImageSaved.Unsupported
                 }
             )
         }
@@ -81,7 +91,7 @@ class ImageProcessingReportViewModel @Inject constructor(
     fun handleViewImage(position: Int) = intent {
         val uri = state.imageProcessingSummaries.getOrNull(position)?.uri
         if (uri.isNotNullOrEmpty()) {
-            postSideEffect(ImageProcessingReportSideEffect.ViewImage(uri))
+            postSideEffect(ImageProcessingDetailsSideEffect.ViewImage(uri))
         }
     }
 }

@@ -27,13 +27,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -44,20 +41,13 @@ import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_LAUNCH_CAM
 import com.none.tom.exiferaser.core.util.INTENT_EXTRA_CONSUMED
+import com.none.tom.exiferaser.core.util.NAV_ARG_IMAGE_SELECTION
+import com.none.tom.exiferaser.core.util.NAV_ARG_SHORTCUT
 import com.none.tom.exiferaser.databinding.ActivityExifEraserBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ExifEraserActivity : AppCompatActivity() {
-
-    companion object {
-
-        // See MainFragmentArgs
-        private const val KEY_IMAGES_SELECTION = "images_selection"
-
-        // See MainFragmentArgs
-        private const val KEY_SHORTCUT = "shortcut"
-    }
 
     lateinit var windowSizeClass: WindowSizeClass
 
@@ -90,11 +80,6 @@ class ExifEraserActivity : AppCompatActivity() {
                         window.navigationBarColor = tv.data
                     }
                 }
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
-            (view.layoutParams as FrameLayout.LayoutParams).topMargin = insets.top
-            windowInsetsCompat
         }
         binding.layout.addView(
             object : View(this) {
@@ -139,17 +124,16 @@ class ExifEraserActivity : AppCompatActivity() {
                     .navController
                     .navigate(
                         R.id.global_to_main,
-                        bundleOf(KEY_IMAGES_SELECTION to uris.toTypedArray())
+                        bundleOf(NAV_ARG_IMAGE_SELECTION to uris.toTypedArray())
                     )
             }
         } else if (shortcutIntentActions.contains(intent.action)) {
-            val args = bundleOf(KEY_SHORTCUT to intent.action)
             (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment)
                 .navController
                 .createDeepLink()
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragment_main)
-                .setArguments(args)
+                .setArguments(bundleOf(NAV_ARG_SHORTCUT to intent.action))
                 .createTaskStackBuilder()
                 .startActivities()
         }

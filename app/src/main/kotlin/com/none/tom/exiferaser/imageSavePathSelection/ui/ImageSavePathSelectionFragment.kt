@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.databinding.FragmentImageSavePathSelectionBinding
@@ -95,7 +96,7 @@ class ImageSavePathSelectionFragment :
                 chooseSavePath.launch(sideEffect.openPath)
             }
             is ImageSavePathSelectionSideEffect.NavigateToSelection -> {
-                navigate(
+                findNavController().navigate(
                     ImageSavePathSelectionFragmentDirections.selectionSavePathToImageProcessing(
                         sideEffect.savePath
                     )

@@ -64,8 +64,6 @@
 
     <string name="report_bug">Relatar as falhas</string>
 
-    <string name="saved">Salvo</string>
-
     <string name="settings">Configurações</string>
 
     <string name="share">Compartilhar</string>
@@ -80,10 +78,6 @@
     <string name="take_picture">Tirar uma foto</string>
 
     <string name="ui">IU</string>
-
-    <string name="unmodified">Não modificada</string>
-
-    <string name="unsaved">Não salva</string>
 
     <string name="version">Versão</string>
 </resources>

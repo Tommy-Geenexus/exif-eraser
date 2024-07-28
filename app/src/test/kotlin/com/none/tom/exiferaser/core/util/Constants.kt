@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -18,25 +18,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.ui
+package com.none.tom.exiferaser.core.util
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.View
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-
-class ImageProcessingReportFragmentBehaviour<T : View>(
-    context: Context,
-    attrs: AttributeSet?
-) : BottomSheetBehavior<T>(context, attrs) {
-
-    override fun onTouchEvent(parent: CoordinatorLayout, child: T, event: MotionEvent): Boolean {
-        return if (event.x < child.translationX) {
-            false
-        } else {
-            super.onTouchEvent(parent, child, event)
-        }
-    }
-}
+const val DEFAULT_NIGHT_MODE = -1
+const val EXTENSION_JPEG = "jpg"
+const val MIME_TYPE_JPEG = "image/jpeg"
+const val TEST_DEFAULT_PATH_OPEN_NAME = "path_open"
+const val TEST_DEFAULT_PATH_SAVE_NAME = "path_save"
+const val TEST_DEFAULT_DISPLAY_NAME_SUFFIX = "suffix"
+const val TEST_DEFAULT_NIGHT_MODE_NAME = "Always"

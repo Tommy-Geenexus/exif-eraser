@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.UserImageSelectionProto
 import com.none.tom.exiferaser.core.extension.addOrShift
 import com.none.tom.exiferaser.core.image.ImageProcessingStep
+import com.none.tom.exiferaser.core.util.IMAGE_PROCESSING_REPORT_IMAGES_MAX
 import com.none.tom.exiferaser.imageProcessing.data.ImageProcessingRepository
 import com.none.tom.exiferaser.imageProcessing.ui.ImageProcessingFragmentArgs
 import com.none.tom.exiferaser.main.data.SelectionRepository
@@ -44,10 +45,6 @@ class ImageProcessingViewModel @Inject constructor(
 ) : ContainerHost<ImageProcessingState, ImageProcessingSideEffect>,
     ViewModel() {
 
-    private companion object {
-        const val IMAGE_PROCESSING_REPORT_IMAGES_MAX = 100
-    }
-
     override val container = container<ImageProcessingState, ImageProcessingSideEffect>(
         savedStateHandle = savedStateHandle,
         initialState = ImageProcessingState(),
@@ -57,6 +54,14 @@ class ImageProcessingViewModel @Inject constructor(
             }
         }
     )
+
+    fun handleImageProcessingDetails() = intent {
+        postSideEffect(
+            ImageProcessingSideEffect.Navigate.ToImageProcessingDetails(
+                imageProcessingSummaries = state.imageProcessingSummaries.toTypedArray()
+            )
+        )
+    }
 
     fun handleUserImagesSelection(protos: List<UserImageSelectionProto>, treeUri: Uri) = intent {
         imageProcessingRepository.removeMetadata(
@@ -126,7 +131,9 @@ class ImageProcessingViewModel @Inject constructor(
 
     fun readSelection(
         fromIndex: Int,
-        treeUri: Uri = ImageProcessingFragmentArgs.fromSavedStateHandle(savedStateHandle).savePath
+        treeUri: Uri = ImageProcessingFragmentArgs
+            .fromSavedStateHandle(savedStateHandle)
+            .navArgImageSavePath
     ) = intent {
         val protos = selectionRepository.getSelection(fromIndex)
         postSideEffect(

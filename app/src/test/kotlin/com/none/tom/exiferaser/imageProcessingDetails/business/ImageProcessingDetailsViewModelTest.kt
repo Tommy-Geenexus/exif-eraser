@@ -18,7 +18,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.business
+package com.none.tom.exiferaser.imageProcessingDetails.business
 
 import android.content.ContentResolver
 import androidx.lifecycle.SavedStateHandle
@@ -39,18 +39,18 @@ import org.robolectric.annotation.Config
 
 @Config(sdk = [ROBOELECTRIC_BUILD_VERSION_CODE])
 @RunWith(RobolectricTestRunner::class)
-class ImageProcessingReportViewModelTest {
+class ImageProcessingDetailsViewModelTest {
 
     private val imageProcessingRepository = mockk<ImageProcessingRepository>()
 
     @Test
     fun test_handleImageSummaries() = runTest {
-        ImageProcessingReportViewModel(
+        ImageProcessingDetailsViewModel(
             savedStateHandle = SavedStateHandle(),
             imageProcessingRepository = imageProcessingRepository
         ).test(
             testScope = this,
-            initialState = ImageProcessingReportState()
+            initialState = ImageProcessingDetailsState()
         ) {
             expectInitialState()
             val summaries = listOf(testImageProcessingSummary)
@@ -63,36 +63,36 @@ class ImageProcessingReportViewModelTest {
 
     @Test
     fun test_handleViewImage() = runTest {
-        ImageProcessingReportViewModel(
+        ImageProcessingDetailsViewModel(
             savedStateHandle = SavedStateHandle(),
             imageProcessingRepository = imageProcessingRepository
         ).test(
             testScope = this,
-            initialState = ImageProcessingReportState(
+            initialState = ImageProcessingDetailsState(
                 imageProcessingSummaries = listOf(testImageProcessingSummary)
             )
         ) {
             expectInitialState()
             containerHost.handleViewImage(position = 0).join()
-            expectSideEffect(ImageProcessingReportSideEffect.ViewImage(imageUri = testUri))
+            expectSideEffect(ImageProcessingDetailsSideEffect.ViewImage(imageUri = testUri))
         }
     }
 
     @Test
     fun test_handleImageModifiedDetails() = runTest {
-        ImageProcessingReportViewModel(
+        ImageProcessingDetailsViewModel(
             savedStateHandle = SavedStateHandle(),
             imageProcessingRepository = imageProcessingRepository
         ).test(
             testScope = this,
-            initialState = ImageProcessingReportState(
+            initialState = ImageProcessingDetailsState(
                 imageProcessingSummaries = listOf(testImageProcessingSummary)
             )
         ) {
             expectInitialState()
             containerHost.handleImageModifiedDetails(position = 0).join()
             expectSideEffect(
-                ImageProcessingReportSideEffect.Navigate.ToImageModifiedDetails(
+                ImageProcessingDetailsSideEffect.Navigate.ToImageModifiedDetails(
                     displayName = testImageProcessingSummary.displayName,
                     extension = testImageProcessingSummary.extension,
                     mimeType = testImageProcessingSummary.mimeType,
@@ -104,12 +104,12 @@ class ImageProcessingReportViewModelTest {
 
     @Test
     fun test_handleImageSavedDetails() = runTest {
-        ImageProcessingReportViewModel(
+        ImageProcessingDetailsViewModel(
             savedStateHandle = SavedStateHandle(),
             imageProcessingRepository = imageProcessingRepository
         ).test(
             testScope = this,
-            initialState = ImageProcessingReportState(
+            initialState = ImageProcessingDetailsState(
                 imageProcessingSummaries = listOf(testImageProcessingSummary)
             )
         ) {
@@ -123,7 +123,7 @@ class ImageProcessingReportViewModelTest {
                 imageProcessingRepository.getLastDocumentPathSegment(testImageProcessingSummary.uri)
             }
             expectSideEffect(
-                ImageProcessingReportSideEffect.Navigate.ToImageSavedDetails(imagePath)
+                ImageProcessingDetailsSideEffect.Navigate.ToImageSavedDetails(imagePath)
             )
         }
     }

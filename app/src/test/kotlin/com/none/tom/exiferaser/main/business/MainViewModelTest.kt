@@ -24,6 +24,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.core.image.supportedImageFormats
 import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.DEFAULT_NIGHT_MODE
 import com.none.tom.exiferaser.core.util.testImageSources
 import com.none.tom.exiferaser.core.util.testUri
 import com.none.tom.exiferaser.core.util.testUris
@@ -32,7 +33,6 @@ import com.none.tom.exiferaser.main.data.ImageSourcesRepository
 import com.none.tom.exiferaser.main.data.MainRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.settings.ui.defaultNightMode
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -655,7 +655,7 @@ class MainViewModelTest {
             expectInitialState()
             coEvery {
                 settingsRepository.getDefaultNightMode()
-            } returns defaultNightMode
+            } returns DEFAULT_NIGHT_MODE
             coEvery {
                 imageSourcesRepository.getImageSources()
             } returns testImageSources
@@ -675,7 +675,7 @@ class MainViewModelTest {
                 )
             }
             expectSideEffect(MainSideEffect.ImageSources.Initialized)
-            expectSideEffect(MainSideEffect.DefaultNightMode(defaultNightMode))
+            expectSideEffect(MainSideEffect.DefaultNightMode(DEFAULT_NIGHT_MODE))
         }
     }
 

@@ -25,7 +25,8 @@ import android.os.Build
 import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.image.supportedImageFormats
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.TAG_ITEM_FEEDBACK
+import com.none.tom.exiferaser.core.util.TAG_ITEM_HELP_TRANSLATE
 import com.none.tom.exiferaser.databinding.PreferenceBinding
 import timber.log.Timber
 
@@ -33,12 +34,6 @@ class HelpViewHolder(
     private val binding: PreferenceBinding,
     private val listener: HelpAdapter.Listener
 ) : RecyclerView.ViewHolder(binding.root) {
-
-    private companion object {
-
-        const val TAG_ITEM_HELP_TRANSLATE = TOP_LEVEL_PACKAGE_NAME + "ITEM_HELP_TRANSLATE"
-        const val TAG_ITEM_FEEDBACK = TOP_LEVEL_PACKAGE_NAME + "ITEM_FEEDBACK"
-    }
 
     init {
         binding.layoutPreference.apply {

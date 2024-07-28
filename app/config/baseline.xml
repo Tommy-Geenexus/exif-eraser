@@ -7,8 +7,6 @@
     <ID>EmptyFunctionBlock:MainItemTouchHelperCallback.kt$MainItemTouchHelperCallback${ }</ID>
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
     <ID>LargeClass:MainViewModelTest.kt$MainViewModelTest</ID>
-    <ID>LongMethod:ImageProcessingReportFragment.kt$ImageProcessingReportFragment$override fun onViewCreated(view: View, savedInstanceState: Bundle?)</ID>
-    <ID>LongMethod:ImageProcessingReportFragment.kt$ImageProcessingReportFragment$private fun handleReportSlide(slideOffset: Float, translationMax: Float)</ID>
     <ID>LongMethod:ImageProcessingRepository.kt$ImageProcessingRepository$private suspend fun removeMetaData( proto: UserImageSelectionProto, treeUri: Uri, displayNameSuffix: String, isAutoDeleteEnabled: Boolean, isPreserveOrientationEnabled: Boolean, isRandomizeFileNamesEnabled: Boolean, progress: ImageProcessingProgress ): ImageProcessingStep.FinishedSingle</ID>
     <ID>LongMethod:ImageProcessingViewModelTest.kt$ImageProcessingViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
     <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated(view: View, savedInstanceState: Bundle?)</ID>
@@ -20,11 +18,8 @@
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
     <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
     <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
-    <ID>ReturnCount:AnimationUtils.kt$@ColorInt fun lerpArgb( @ColorInt startColor: Int, @ColorInt endColor: Int, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Int</ID>
-    <ID>ReturnCount:AnimationUtils.kt$fun lerp( startValue: Float, endValue: Float, @FloatRange( from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true ) startFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) endFraction: Float, @FloatRange(from = 0.0, fromInclusive = true, to = 1.0, toInclusive = true) fraction: Float ): Float</ID>
-    <ID>TooGenericExceptionCaught:Extensions.kt$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:CoroutineExtensions.kt$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
-    <ID>TooManyFunctions:ImageProcessingReportFragment.kt$ImageProcessingReportFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:SettingsAdapter.kt$SettingsAdapter$Listener</ID>

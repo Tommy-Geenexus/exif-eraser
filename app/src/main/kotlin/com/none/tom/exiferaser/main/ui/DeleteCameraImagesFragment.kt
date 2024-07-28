@@ -26,23 +26,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.KEY_CAMERA_IMAGE_DELETE
 import com.none.tom.exiferaser.databinding.FragmentDeleteCameraImagesBinding
 
 class DeleteCameraImagesFragment :
     BaseBottomSheetDialogFragment<FragmentDeleteCameraImagesBinding>() {
 
-    companion object {
-
-        const val KEY_CAM_IMG_DELETE = TOP_LEVEL_PACKAGE_NAME + "CAM_IMG_DELETE"
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.delete.setOnClickListener {
             parentFragmentManager.setFragmentResult(
-                KEY_CAM_IMG_DELETE,
-                bundleOf(KEY_CAM_IMG_DELETE to true)
+                KEY_CAMERA_IMAGE_DELETE,
+                bundleOf(KEY_CAMERA_IMAGE_DELETE to true)
             )
             dismiss()
         }

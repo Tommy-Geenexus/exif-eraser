@@ -23,23 +23,22 @@ package com.none.tom.exiferaser.help.ui
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractViewUrl
 import com.none.tom.exiferaser.core.ui.BaseFragment
+import com.none.tom.exiferaser.core.util.URL_ISSUES
+import com.none.tom.exiferaser.core.util.URL_LOCALISATION
 import com.none.tom.exiferaser.databinding.FragmentHelpBinding
 
 class HelpFragment :
     BaseFragment<FragmentHelpBinding>(R.layout.fragment_help),
     HelpAdapter.Listener {
-
-    private companion object {
-        const val URL_ISSUES = "https://github.com/Tommy-Geenexus/exif-eraser/issues"
-        const val URL_LOCALISATION =
-            "https://tomgappdev.oneskyapp.com/collaboration/project?id=375350"
-    }
 
     private val viewUrl = registerForActivityResult(ActivityResultContractViewUrl()) {}
 
@@ -51,10 +50,19 @@ class HelpFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(
-            toolbar = binding.includeToolbar.toolbar,
-            titleRes = R.string.help
-        )
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
+            )
+            view.setLayoutParams(
+                (view.layoutParams as FrameLayout.LayoutParams).apply {
+                    topMargin = insets.top
+                    bottomMargin = insets.bottom
+                }
+            )
+            WindowInsetsCompat.CONSUMED
+        }
+        setupToolbar(binding.includeToolbar.toolbar, R.string.help)
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

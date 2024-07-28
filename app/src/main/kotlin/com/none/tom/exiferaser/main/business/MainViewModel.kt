@@ -24,7 +24,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.none.tom.exiferaser.core.image.supportedImageFormats
-import com.none.tom.exiferaser.core.util.TOP_LEVEL_PACKAGE_NAME
+import com.none.tom.exiferaser.core.util.KEY_NAV_DESTINATION_ID
 import com.none.tom.exiferaser.main.data.ImageSourcesRepository
 import com.none.tom.exiferaser.main.data.MainRepository
 import com.none.tom.exiferaser.main.data.SelectionRepository
@@ -45,11 +45,6 @@ class MainViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ContainerHost<MainState, MainSideEffect>,
     ViewModel() {
-
-    private companion object {
-
-        const val KEY_NAV_DESTINATION_ID = TOP_LEVEL_PACKAGE_NAME + "NAV_DESTINATION_ID"
-    }
 
     override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),

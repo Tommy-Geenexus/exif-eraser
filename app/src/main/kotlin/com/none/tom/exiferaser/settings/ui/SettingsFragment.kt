@@ -23,19 +23,25 @@ package com.none.tom.exiferaser.settings.ui
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts.OpenDocumentTree
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.ui.RecyclerViewVerticalDividerItemDecoration
+import com.none.tom.exiferaser.core.util.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
+import com.none.tom.exiferaser.core.util.KEY_DEFAULT_NIGHT_MODE
 import com.none.tom.exiferaser.databinding.FragmentSettingsBinding
 import com.none.tom.exiferaser.settings.business.SettingsSideEffect
 import com.none.tom.exiferaser.settings.business.SettingsState
@@ -69,29 +75,33 @@ class SettingsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(
-            toolbar = binding.toolbarInclude.toolbar,
-            titleRes = R.string.settings
-        )
-        setupLayoutMarginForNavigationWindowInsets()
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
+            )
+            view.setLayoutParams(
+                (view.layoutParams as FrameLayout.LayoutParams).apply {
+                    topMargin = insets.top
+                    bottomMargin = insets.bottom
+                }
+            )
+            WindowInsetsCompat.CONSUMED
+        }
+        setupToolbar(binding.toolbarInclude.toolbar, R.string.settings)
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)
             itemAnimator = null
             addItemDecoration(RecyclerViewVerticalDividerItemDecoration(context))
         }
-        setFragmentResultListener(
-            DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
-        ) { _, bundle: Bundle ->
+        setFragmentResultListener(KEY_DEFAULT_DISPLAY_NAME_SUFFIX) { _, bundle: Bundle ->
             val value = bundle
-                .getString(DefaultDisplayNameSuffixFragment.KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
+                .getString(KEY_DEFAULT_DISPLAY_NAME_SUFFIX)
                 .orEmpty()
             viewModel.storeDefaultDisplayNameSuffix(value)
         }
-        setFragmentResultListener(
-            DefaultNightModeFragment.KEY_DEFAULT_NIGHT_MODE
-        ) { _, bundle: Bundle ->
-            val value = bundle.getInt(DefaultNightModeFragment.KEY_DEFAULT_NIGHT_MODE)
+        setFragmentResultListener(KEY_DEFAULT_NIGHT_MODE) { _, bundle: Bundle ->
+            val value = bundle.getInt(KEY_DEFAULT_NIGHT_MODE)
             AppCompatDelegate.setDefaultNightMode(value)
             viewModel.storeDefaultNightMode(value)
         }
@@ -213,15 +223,15 @@ class SettingsFragment :
             SettingsSideEffect.LegacyImageSelection.Failure -> {}
             SettingsSideEffect.LegacyImageSelection.Success -> {}
             is SettingsSideEffect.Navigate.ToDefaultDisplayNameSuffix -> {
-                navigate(
-                    navDirections = SettingsFragmentDirections.settingsToDefaultDisplayNameSuffix(
+                findNavController().navigate(
+                    SettingsFragmentDirections.settingsToDefaultDisplayNameSuffix(
                         sideEffect.defaultDisplayNameSuffix
                     )
                 )
             }
             is SettingsSideEffect.Navigate.ToDefaultNightMode -> {
-                navigate(
-                    navDirections = SettingsFragmentDirections.settingsToDefaultNightMode(
+                findNavController().navigate(
+                    SettingsFragmentDirections.settingsToDefaultNightMode(
                         sideEffect.defaultNightMode
                     )
                 )

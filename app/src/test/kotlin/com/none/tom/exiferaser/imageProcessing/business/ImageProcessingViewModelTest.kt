@@ -53,6 +53,31 @@ class ImageProcessingViewModelTest {
     private val settingsRepository = mockk<SettingsRepository>()
 
     @Test
+    fun test_handleImageProcessingDetails() = runTest {
+        ImageProcessingViewModel(
+            savedStateHandle = SavedStateHandle(),
+            imageProcessingRepository = imageProcessingRepository,
+            selectionRepository = selectionRepository,
+            settingsRepository = settingsRepository
+        ).test(
+            testScope = this,
+            initialState = ImageProcessingState(
+                imageProcessingSummaries = listOf(
+                    testImageProcessingSummary
+                )
+            )
+        ) {
+            expectInitialState()
+            containerHost.handleImageProcessingDetails()
+            expectSideEffect(
+                ImageProcessingSideEffect.Navigate.ToImageProcessingDetails(
+                    imageProcessingSummaries = listOf(testImageProcessingSummary).toTypedArray()
+                )
+            )
+        }
+    }
+
+    @Test
     fun test_handleUserImagesSelection() = runTest {
         ImageProcessingViewModel(
             savedStateHandle = SavedStateHandle(),

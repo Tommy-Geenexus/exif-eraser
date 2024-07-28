@@ -83,8 +83,6 @@
     <string name="save_path_custom_skip_off">Überspringe die Speicherpfad-Auswahl nicht falls der Standard-Speicherpfad ausgewählt ist</string>
     <string name="save_path_custom_skip_on">Überspringe die Speicherpfad-Auswahl falls der Standard-Speicherpfad ausgewählt ist</string>
 
-    <string name="saved">Gespeichert</string>
-
     <string name="settings">Einstellungen</string>
 
     <string name="share">Teilen</string>
@@ -99,10 +97,6 @@
     <string name="take_picture">Bild aufnehmen</string>
 
     <string name="ui">Benutzeroberfläche</string>
-
-    <string name="unmodified">Unmodifiziert</string>
-
-    <string name="unsaved">Ungespeichert</string>
 
     <string name="version">Version</string>
 </resources>

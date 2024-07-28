@@ -48,8 +48,6 @@
 
     <string name="report_bug">Sorun bildir</string>
 
-    <string name="saved">Kaydedildi</string>
-
     <string name="settings">Ayarlar</string>
 
     <string name="share">Paylaş</string>
@@ -61,10 +59,6 @@
     <string name="take_picture">Fotoğraf çek</string>
 
     <string name="ui">Kullanıcı arayüzü</string>
-
-    <string name="unmodified">Degiştirilmedi</string>
-
-    <string name="unsaved">Kaydedilmedi</string>
 
     <string name="version">Sürüm</string>
 </resources>

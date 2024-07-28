@@ -22,13 +22,13 @@ package com.none.tom.exiferaser.settings.business
 
 import androidx.lifecycle.SavedStateHandle
 import com.none.tom.exiferaser.core.roboelectric.ROBOELECTRIC_BUILD_VERSION_CODE
+import com.none.tom.exiferaser.core.util.DEFAULT_NIGHT_MODE
 import com.none.tom.exiferaser.core.util.TEST_DEFAULT_DISPLAY_NAME_SUFFIX
 import com.none.tom.exiferaser.core.util.TEST_DEFAULT_NIGHT_MODE_NAME
 import com.none.tom.exiferaser.core.util.TEST_DEFAULT_PATH_OPEN_NAME
 import com.none.tom.exiferaser.core.util.TEST_DEFAULT_PATH_SAVE_NAME
 import com.none.tom.exiferaser.core.util.testUri
 import com.none.tom.exiferaser.settings.data.SettingsRepository
-import com.none.tom.exiferaser.settings.ui.defaultNightMode
 import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -576,13 +576,15 @@ class SettingsViewModelTest {
             expectInitialState()
             coEvery {
                 settingsRepository.getDefaultNightMode()
-            } returns defaultNightMode
+            } returns DEFAULT_NIGHT_MODE
             containerHost.handleDefaultNightMode().join()
             coVerify(exactly = 1) {
                 settingsRepository.getDefaultNightMode()
             }
             expectSideEffect(
-                SettingsSideEffect.Navigate.ToDefaultNightMode(defaultNightMode = defaultNightMode)
+                SettingsSideEffect.Navigate.ToDefaultNightMode(
+                    defaultNightMode = DEFAULT_NIGHT_MODE
+                )
             )
         }
     }
@@ -603,14 +605,14 @@ class SettingsViewModelTest {
             coEvery {
                 settingsRepository.getDefaultNightModeName()
             } returns TEST_DEFAULT_NIGHT_MODE_NAME
-            containerHost.storeDefaultNightMode(defaultNightMode).join()
+            containerHost.storeDefaultNightMode(DEFAULT_NIGHT_MODE).join()
             coEvery {
                 settingsRepository.putDefaultNightMode(any())
             } returns Result.failure(Exception(""))
             coEvery {
                 settingsRepository.getDefaultNightModeName()
             } returns TEST_DEFAULT_NIGHT_MODE_NAME
-            containerHost.storeDefaultNightMode(defaultNightMode).join()
+            containerHost.storeDefaultNightMode(DEFAULT_NIGHT_MODE).join()
             coVerify(ordering = Ordering.ALL) {
                 settingsRepository.putDefaultNightMode(any())
                 settingsRepository.getDefaultNightModeName()

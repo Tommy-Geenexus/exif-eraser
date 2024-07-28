@@ -18,18 +18,18 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.ui
+package com.none.tom.exiferaser.imageProcessingDetails.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.none.tom.exiferaser.core.image.ImageProcessingSummary
-import com.none.tom.exiferaser.databinding.ItemImageProcessingReportBinding
+import com.none.tom.exiferaser.databinding.ItemImageProcessingDetailsBinding
 
-class ImageProcessingReportAdapter(
+class ImageProcessingDetailsAdapter(
     private val listener: Listener
-) : ListAdapter<ImageProcessingSummary, ImageProcessingReportViewHolder>(
+) : ListAdapter<ImageProcessingSummary, ImageProcessingDetailsViewHolder>(
     object : DiffUtil.ItemCallback<ImageProcessingSummary>() {
 
         override fun areItemsTheSame(
@@ -45,6 +45,7 @@ class ImageProcessingReportAdapter(
 ) {
 
     interface Listener {
+        fun onImageThumbnailLoaded(position: Int)
         fun onImageThumbnailSelected(position: Int)
         fun onViewImageMetadataSelected(position: Int)
         fun onViewImagePathSelected(position: Int)
@@ -53,9 +54,9 @@ class ImageProcessingReportAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ImageProcessingReportViewHolder {
-        return ImageProcessingReportViewHolder(
-            ItemImageProcessingReportBinding.inflate(
+    ): ImageProcessingDetailsViewHolder {
+        return ImageProcessingDetailsViewHolder(
+            ItemImageProcessingDetailsBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -64,7 +65,7 @@ class ImageProcessingReportAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: ImageProcessingReportViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageProcessingDetailsViewHolder, position: Int) {
         currentList.getOrNull(position)?.let { summary ->
             holder.bindItem(
                 uri = summary.uri,
@@ -74,7 +75,7 @@ class ImageProcessingReportAdapter(
         }
     }
 
-    override fun onViewRecycled(holder: ImageProcessingReportViewHolder) {
+    override fun onViewRecycled(holder: ImageProcessingDetailsViewHolder) {
         holder.releaseResources()
     }
 }

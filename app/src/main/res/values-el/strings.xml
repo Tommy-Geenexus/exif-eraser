@@ -83,8 +83,6 @@
     <string name="save_path_custom_skip_off">Να μην παραλείπεται η επιλογή διαδρομής αποθήκευσης εάν έχει οριστεί η προεπιλεγμένη διαδρομή αποθήκευσης</string>
     <string name="save_path_custom_skip_on">Παράληψη της επιλογής διαδρομής αποθήκευσης εάν έχει οριστεί η προεπιλεγμένη διαδρομή αποθήκευσης</string>
 
-    <string name="saved">Αποθηκεύτηκε</string>
-
     <string name="settings">Ρυθμίσεις</string>
 
     <string name="share">Κοινή χρήση</string>
@@ -99,10 +97,6 @@
     <string name="take_picture">Τραβήξετε φωτογραφία</string>
 
     <string name="ui">Διεπαφή Χρήστη</string>
-
-    <string name="unmodified">Μη τροποποιημένο</string>
-
-    <string name="unsaved">Μη αποθηκευμένο</string>
 
     <string name="version">Έκδοση</string>
 </resources>

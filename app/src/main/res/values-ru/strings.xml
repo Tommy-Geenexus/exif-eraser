@@ -72,8 +72,6 @@
     <string name="save_path_custom_skip_off">"Не пропускать путь сохранения (по умолчанию) "</string>
     <string name="save_path_custom_skip_on">"Пропустить выбор папки сохранения, выбрана папка по умолчанию "</string>
 
-    <string name="saved">Сохраненые</string>
-
     <string name="settings">"Настройки "</string>
 
     <string name="share">"Поделиться "</string>
@@ -88,10 +86,6 @@
     <string name="take_picture">"Сфотографировать "</string>
 
     <string name="ui">"Пользовательский интерфейс "</string>
-
-    <string name="unmodified">Неизменные</string>
-
-    <string name="unsaved">Несохраненные</string>
 
     <string name="version">Версия</string>
 </resources>

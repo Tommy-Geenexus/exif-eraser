@@ -14,16 +14,17 @@
     <fragment
         android:id="@+id/fragment_main"
         android:name="com.none.tom.exiferaser.main.ui.MainFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_main">
 
         <argument
-            android:name="shortcut"
+            android:name="nav_arg_shortcut"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
 
         <argument
-            android:name="images_selection"
+            android:name="nav_arg_image_selection"
             android:defaultValue="@null"
             app:argType="android.net.Uri[]"
             app:nullable="true" />
@@ -67,6 +68,7 @@
     <fragment
         android:id="@+id/fragment_settings"
         android:name="com.none.tom.exiferaser.settings.ui.SettingsFragment"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings">
 
         <action
@@ -84,7 +86,7 @@
         tools:layout="@layout/fragment_default_display_name_suffix">
 
         <argument
-            android:name="default_display_name_suffix"
+            android:name="nav_arg_default_display_name_suffix"
             app:argType="string" />
     </dialog>
 
@@ -93,23 +95,41 @@
         android:name="com.none.tom.exiferaser.settings.ui.DefaultNightModeFragment">
 
         <argument
-            android:name="default_night_mode"
+            android:name="nav_arg_default_night_mode"
             app:argType="integer" />
     </dialog>
 
     <fragment
         android:id="@+id/fragment_help"
         android:name="com.none.tom.exiferaser.help.ui.HelpFragment"
+        android:label="@string/help"
         tools:layout="@layout/fragment_help" />
 
     <fragment
         android:id="@+id/fragment_image_processing"
         android:name="com.none.tom.exiferaser.imageProcessing.ui.ImageProcessingFragment"
+        android:label="@string/summary"
         tools:layout="@layout/fragment_image_processing">
 
         <argument
-            android:name="save_path"
+            android:name="nav_arg_image_save_path"
             app:argType="android.net.Uri"
+            app:nullable="false" />
+
+        <action
+            android:id="@+id/image_processing_to_image_processing_details"
+            app:destination="@id/fragment_image_processing_details" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_image_processing_details"
+        android:name="com.none.tom.exiferaser.imageProcessingDetails.ui.ImageProcessingDetailsFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_image_processing_details">
+
+        <argument
+            android:name="nav_arg_image_processing_summaries"
+            app:argType="com.none.tom.exiferaser.core.image.ImageProcessingSummary[]"
             app:nullable="false" />
     </fragment>
 </navigation>

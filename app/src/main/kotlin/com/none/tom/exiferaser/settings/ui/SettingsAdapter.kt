@@ -25,6 +25,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.none.tom.exiferaser.core.util.INDEX_START_ITEM_TYPE_IMAGE
+import com.none.tom.exiferaser.core.util.INDEX_START_ITEM_TYPE_UI
+import com.none.tom.exiferaser.core.util.ITEM_TYPE_FS
+import com.none.tom.exiferaser.core.util.ITEM_TYPE_IMAGE
+import com.none.tom.exiferaser.core.util.ITEM_TYPE_UI
 import com.none.tom.exiferaser.databinding.ItemFsBinding
 import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
@@ -43,16 +48,6 @@ class SettingsAdapter(
             false
     }
 ) {
-
-    private companion object {
-
-        const val ITEM_TYPE_FS = 1
-        const val ITEM_TYPE_IMAGE = 2
-        const val ITEM_TYPE_UI = 3
-
-        const val INDEX_START_ITEM_TYPE_IMAGE = 3
-        const val INDEX_START_ITEM_TYPE_UI = 8
-    }
 
     interface Listener {
 

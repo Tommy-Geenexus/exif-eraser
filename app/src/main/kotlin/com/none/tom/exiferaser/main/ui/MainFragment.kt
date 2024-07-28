@@ -24,7 +24,6 @@ import android.content.Context
 import android.content.pm.ShortcutManager
 import android.graphics.Typeface
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
@@ -32,37 +31,34 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractTakePicture
+import com.none.tom.exiferaser.core.extension.addIconAnimation
+import com.none.tom.exiferaser.core.extension.attachTo
 import com.none.tom.exiferaser.core.image.supportedImageFormats
 import com.none.tom.exiferaser.core.receiver.DragAndDropContentReceiver
 import com.none.tom.exiferaser.core.ui.BaseFragment
@@ -71,6 +67,7 @@ import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE_DIR
 import com.none.tom.exiferaser.core.util.INTENT_EXTRA_CONSUMED
+import com.none.tom.exiferaser.core.util.KEY_CAMERA_IMAGE_DELETE
 import com.none.tom.exiferaser.databinding.FragmentMainBinding
 import com.none.tom.exiferaser.main.business.MainSideEffect
 import com.none.tom.exiferaser.main.business.MainState
@@ -119,19 +116,28 @@ class MainFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.setLayoutParams(
+                (view.layoutParams as FrameLayout.LayoutParams).apply {
+                    topMargin = insets.top
+                }
+            )
+            windowInsetsCompat
+        }
         setupResponsiveAppBarLayout()
-        setupResponsiveToolbarTitleLayout()
+        setupResponsiveTitleLayout()
         setupResponsiveImageSourceLayout()
         DropHelper.configureView(
             requireActivity(),
             binding.layout,
             supportedImageFormats.map { f -> f.mimeType }.toTypedArray(),
-            DragAndDropContentReceiver(onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) })
+            DragAndDropContentReceiver(
+                onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) }
+            )
         )
-        setFragmentResultListener(
-            DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE
-        ) { _, bundle: Bundle ->
-            if (bundle.getBoolean(DeleteCameraImagesFragment.KEY_CAM_IMG_DELETE)) {
+        setFragmentResultListener(KEY_CAMERA_IMAGE_DELETE) { _, bundle: Bundle ->
+            if (bundle.getBoolean(KEY_CAMERA_IMAGE_DELETE)) {
                 viewModel.deleteCameraImages()
             }
         }
@@ -330,19 +336,21 @@ class MainFragment :
                 consumeShortcutDeepLink()
             }
             MainSideEffect.Navigate.ToDeleteCameraImages -> {
-                navigate(MainFragmentDirections.mainToDeleteCameraImages())
+                findNavController().navigate(MainFragmentDirections.mainToDeleteCameraImages())
             }
             MainSideEffect.Navigate.ToHelp -> {
-                navigate(MainFragmentDirections.mainToHelp())
+                findNavController().navigate(MainFragmentDirections.mainToHelp())
             }
             is MainSideEffect.Navigate.ToSelection -> {
-                navigate(MainFragmentDirections.mainToImageProcessing(sideEffect.savePath))
+                findNavController().navigate(
+                    MainFragmentDirections.mainToImageProcessing(sideEffect.savePath)
+                )
             }
             MainSideEffect.Navigate.ToSelectionSavePath -> {
-                navigate(MainFragmentDirections.mainToImageSavePathSelection())
+                findNavController().navigate(MainFragmentDirections.mainToImageSavePathSelection())
             }
             MainSideEffect.Navigate.ToSettings -> {
-                navigate(MainFragmentDirections.mainToSettings())
+                findNavController().navigate(MainFragmentDirections.mainToSettings())
             }
             MainSideEffect.Selection.Image.Failure -> {
                 Snackbar
@@ -399,7 +407,7 @@ class MainFragment :
         if (requireActivity().intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
             return
         }
-        val uris = args.imagesSelection?.toList()
+        val uris = args.navArgImageSelection?.toList()
         if (uris != null) {
             requireActivity().intent.putExtra(INTENT_EXTRA_CONSUMED, true)
             viewModel.putImagesSelection(uris)
@@ -410,7 +418,7 @@ class MainFragment :
         if (requireActivity().intent.hasExtra(INTENT_EXTRA_CONSUMED)) {
             return
         }
-        val shortcut = args.shortcut
+        val shortcut = args.navArgShortcut
         if (!shortcut.isNullOrEmpty()) {
             requireActivity().intent.putExtra(INTENT_EXTRA_CONSUMED, true)
             viewModel.reportShortcutUsed(shortcut)
@@ -444,7 +452,7 @@ class MainFragment :
     }
 
     private fun setupResponsiveAppBarLayout() {
-        setupToolbar(toolbar = binding.toolbar)
+        setupToolbar(binding.toolbar, R.string.app_name)
         val menuProvider = object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -499,7 +507,10 @@ class MainFragment :
             binding.imageSourcesReorder.apply {
                 addIconAnimation(
                     animatedVectorDrawable = R.drawable.avd_drag_to_done_all,
-                    animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag
+                    animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag,
+                    showAnimatedVectorDrawableCondition = {
+                        !viewModel.container.stateFlow.value.isImageSourceReorderingEnabled
+                    }
                 )
                 setOnClickListener {
                     viewModel.toggleImageSourceReorderingEnabled()
@@ -535,7 +546,7 @@ class MainFragment :
         }
     }
 
-    private fun setupResponsiveToolbarTitleLayout() {
+    private fun setupResponsiveTitleLayout() {
         binding.title.gravity = when (getWindowSizeClass().windowWidthSizeClass) {
             WindowWidthSizeClass.COMPACT -> Gravity.END
             else -> Gravity.CENTER
@@ -575,80 +586,5 @@ class MainFragment :
                 binding.title.isVisible = false
             }
         }
-    }
-
-    private fun ItemTouchHelper.attachTo(recyclerView: RecyclerView) {
-        val lifecycle = recyclerView.findViewTreeLifecycleOwner()?.lifecycle
-        lifecycle?.addObserver(
-            object : LifecycleEventObserver {
-
-                override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                    when (event) {
-                        Lifecycle.Event.ON_START -> {
-                            attachToRecyclerView(recyclerView)
-                        }
-                        Lifecycle.Event.ON_STOP -> {
-                            attachToRecyclerView(null)
-                        }
-                        Lifecycle.Event.ON_DESTROY -> {
-                            lifecycle.removeObserver(this)
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            }
-        )
-    }
-
-    private fun FloatingActionButton.addIconAnimation(
-        @DrawableRes animatedVectorDrawable: Int,
-        @DrawableRes animatedVectorDrawableInverse: Int
-    ) {
-        setImageResource(animatedVectorDrawable)
-        val callback = object : Animatable2Compat.AnimationCallback() {
-
-            override fun onAnimationEnd(drawableEnd: Drawable?) {
-                AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
-                setImageResource(
-                    if (viewModel.container.stateFlow.value.isImageSourceReorderingEnabled) {
-                        animatedVectorDrawableInverse
-                    } else {
-                        animatedVectorDrawable
-                    }
-                )
-                AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this)
-            }
-        }
-        val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
-        lifecycle?.addObserver(
-            object : LifecycleEventObserver {
-
-                override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                    when (event) {
-                        Lifecycle.Event.ON_START -> {
-                            AnimatedVectorDrawableCompat.registerAnimationCallback(
-                                drawable,
-                                callback
-                            )
-                        }
-                        Lifecycle.Event.ON_STOP -> {
-                            if (drawable is Animatable) {
-                                (drawable as Animatable).stop()
-                            }
-                            AnimatedVectorDrawableCompat.unregisterAnimationCallback(
-                                drawable,
-                                callback
-                            )
-                        }
-                        Lifecycle.Event.ON_DESTROY -> {
-                            lifecycle.removeObserver(this)
-                        }
-                        else -> {
-                        }
-                    }
-                }
-            }
-        )
     }
 }

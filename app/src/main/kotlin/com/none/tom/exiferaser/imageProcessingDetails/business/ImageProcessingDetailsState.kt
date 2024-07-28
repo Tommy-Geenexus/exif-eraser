@@ -18,39 +18,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.none.tom.exiferaser.imageProcessingReport.business
+package com.none.tom.exiferaser.imageProcessingDetails.business
 
-import android.net.Uri
 import android.os.Parcelable
-import com.none.tom.exiferaser.core.image.ImageMetadataSnapshot
+import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import kotlinx.parcelize.Parcelize
 
-sealed class ImageProcessingReportSideEffect : Parcelable {
-
-    sealed class ImageSaved : ImageProcessingReportSideEffect() {
-
-        @Parcelize
-        data object Unsupported : ImageSaved()
-    }
-
-    sealed class Navigate : ImageProcessingReportSideEffect() {
-
-        @Parcelize
-        data class ToImageModifiedDetails(
-            val displayName: String,
-            val extension: String,
-            val mimeType: String,
-            val imageMetadataSnapshot: ImageMetadataSnapshot
-        ) : Navigate()
-
-        @Parcelize
-        data class ToImageSavedDetails(
-            val name: String
-        ) : Navigate()
-    }
-
-    @Parcelize
-    data class ViewImage(
-        val imageUri: Uri
-    ) : ImageProcessingReportSideEffect()
-}
+@Parcelize
+data class ImageProcessingDetailsState(
+    val imageProcessingSummaries: List<ImageProcessingSummary> = mutableListOf()
+) : Parcelable
