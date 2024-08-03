@@ -34,7 +34,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.databinding.FragmentImageSavePathSelectionBinding
 import com.none.tom.exiferaser.imageSavePathSelection.business.ImageSavePathSelectionSideEffect
@@ -58,7 +57,11 @@ class ImageSavePathSelectionFragment :
         super.onViewCreated(view, savedInstanceState)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             val value = TypedValue()
-            requireActivity().theme.resolveAttribute(R.attr.colorSecondary, value, true)
+            requireActivity().theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSecondary,
+                value,
+                true
+            )
             binding.pathSaveDefault.setBackgroundColor(value.data)
         }
         binding.pathSaveDefault.setOnClickListener {

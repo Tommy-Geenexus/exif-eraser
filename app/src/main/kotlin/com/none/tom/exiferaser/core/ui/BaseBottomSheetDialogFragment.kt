@@ -28,7 +28,6 @@ import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
 import curtains.phoneWindow
 
@@ -50,8 +49,9 @@ abstract class BaseBottomSheetDialogFragment<B : ViewBinding> : BottomSheetDialo
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            view.phoneWindow?.navigationBarColor =
-                requireActivity().resolveThemeAttribute(R.attr.colorSurfaceContainerLow)
+            view.phoneWindow?.navigationBarColor = requireActivity().resolveThemeAttribute(
+                com.google.android.material.R.attr.colorSurfaceContainerLow
+            )
         }
         with(requireDialog()) {
             setOnShowListener {

@@ -65,17 +65,23 @@ class ImageProcessingDetailsFragment :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform(requireActivity(), true).apply {
-            startContainerColor =
-                requireActivity().resolveThemeAttribute(R.attr.colorPrimaryContainer)
-            endContainerColor = requireActivity().resolveThemeAttribute(R.attr.colorSurface)
+            startContainerColor = requireActivity().resolveThemeAttribute(
+                com.google.android.material.R.attr.colorPrimaryContainer
+            )
+            endContainerColor = requireActivity().resolveThemeAttribute(
+                com.google.android.material.R.attr.colorSurface
+            )
             fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
             // Animating elevation shadow causes performance issues
             isElevationShadowEnabled = false
         }
         sharedElementReturnTransition = MaterialContainerTransform(requireActivity(), false).apply {
-            startContainerColor = requireActivity().resolveThemeAttribute(R.attr.colorSurface)
-            endContainerColor =
-                requireActivity().resolveThemeAttribute(R.attr.colorPrimaryContainer)
+            startContainerColor = requireActivity().resolveThemeAttribute(
+                com.google.android.material.R.attr.colorSurface
+            )
+            endContainerColor = requireActivity().resolveThemeAttribute(
+                com.google.android.material.R.attr.colorPrimaryContainer
+            )
             fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
             // Animating elevation shadow causes performance issues
             isElevationShadowEnabled = false

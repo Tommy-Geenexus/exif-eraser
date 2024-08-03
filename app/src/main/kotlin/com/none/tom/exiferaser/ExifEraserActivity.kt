@@ -73,9 +73,17 @@ class ExifEraserActivity : AppCompatActivity() {
                     if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
                         val tv = TypedValue()
                         if (destination.id == R.id.fragment_main) {
-                            theme.resolveAttribute(R.attr.colorSurfaceContainer, tv, true)
+                            theme.resolveAttribute(
+                                com.google.android.material.R.attr.colorSurfaceContainer,
+                                tv,
+                                true
+                            )
                         } else {
-                            theme.resolveAttribute(R.attr.colorSurface, tv, true)
+                            theme.resolveAttribute(
+                                com.google.android.material.R.attr.colorSurface,
+                                tv,
+                                true
+                            )
                         }
                         window.navigationBarColor = tv.data
                     }

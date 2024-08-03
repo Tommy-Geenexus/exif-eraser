@@ -2,10 +2,10 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import org.bouncycastle.util.encoders.Base64
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
 import java.util.Properties
+import org.bouncycastle.util.encoders.Base64
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val keyStoreFile = "keystore.jks"
 val properties = "keystore.properties"

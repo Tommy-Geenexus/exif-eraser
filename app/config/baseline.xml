@@ -20,6 +20,7 @@
     <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
     <ID>TooGenericExceptionCaught:CoroutineExtensions.kt$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
+    <ID>TooManyFunctions:ImageProcessingDetailsFragment.kt$ImageProcessingDetailsFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
     <ID>TooManyFunctions:SettingsAdapter.kt$SettingsAdapter$Listener</ID>
