@@ -18,4 +18,4 @@ jobs:
           java-version: 17
 
       - name: Run ktlint
-        run: ./gradlew lintKotlin
+        run: ./gradlew ktlintCheck
