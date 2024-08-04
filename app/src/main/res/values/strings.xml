@@ -46,7 +46,7 @@
 
     <string name="help">Help and feedback</string>
 
-    <string name="icc_profile" translatable="false">ICC Profile</string>
+    <string name="icc_profile">ICC Profile</string>
 
     <string name="image">Image</string>
     <string name="image_auto_delete">Auto-delete</string>
@@ -63,7 +63,7 @@
     <string name="image_sources_camera_failure">Failed to launch camera</string>
     <string name="image_sources_put_failure">Failed to save image source configuration</string>
     <string name="image_sources_put_success">Successfully saved image source configuration</string>
-    <string name="image_sources_save_failure">Failed to save image or images</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Supported image formats</string>
 
     <string name="images_modified">images modified</string>
