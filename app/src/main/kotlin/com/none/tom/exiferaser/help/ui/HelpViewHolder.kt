@@ -58,9 +58,13 @@ class HelpViewHolder(
 
     fun bindItemHelpTranslate() {
         binding.apply {
+            layoutPreference.isEnabled = false
             layoutPreference.tag = TAG_ITEM_HELP_TRANSLATE
+            iconPreference.isEnabled = false
             iconPreference.setImageResource(R.drawable.ic_translate)
+            titlePreference.isEnabled = false
             titlePreference.setText(R.string.become_translator)
+            summaryPreference.isEnabled = false
             summaryPreference.setText(R.string.onesky)
         }
     }
