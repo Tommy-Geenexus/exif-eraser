@@ -37,13 +37,18 @@ fun loadKeyStoreProperties(): Triple<String, String, String> {
     )
 }
 
-fun getOrCreateKeyStoreFile(): File {
+fun getOrCreateKeyStoreFile(): File? {
     val keyStore = projectDir.parentFile.listFiles()?.find { file -> file.extension == "jks" }
     return if (keyStore?.exists() == true) {
         keyStore
     } else {
-        File(projectDir.parentFile, keyStoreFile).apply {
-            writeBytes(Base64.decode(System.getenv(keyStoreBase64).toByteArray()))
+        val ks = System.getenv(keyStoreBase64)
+        if (ks == null) {
+            null
+        } else {
+            File(projectDir.parentFile, keyStoreFile).apply {
+                writeBytes(Base64.decode(ks.toByteArray()))
+            }
         }
     }
 }
