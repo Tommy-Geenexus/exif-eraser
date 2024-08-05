@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+  pull_request:
+
 jobs:
   static-check:
     runs-on: ubuntu-latest
@@ -16,6 +18,11 @@ jobs:
         with:
           distribution: zulu
           java-version: 17
+
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Run spotless
         run: ./gradlew spotlessKotlinCheck

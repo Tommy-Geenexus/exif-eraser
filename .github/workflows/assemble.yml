@@ -25,6 +25,11 @@ jobs:
           distribution: zulu
           java-version: 17
 
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
       - name: Assemble release
         run: |
           ./gradlew assembleRelease \
