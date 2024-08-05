@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   instrumentation-tests:
@@ -29,26 +30,30 @@ jobs:
           sudo udevadm trigger --name-match=kvm
 
       - name: Gradle cache
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: AVD cache
-        uses: actions/cache@v4
-        id: avd-cache
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "Generated AVD snapshot for caching."
+      # TODO: Uncomment once https://github.com/ReactiveCircus/android-emulator-runner/issues/385
+      # is fixed
+      #- name: AVD cache
+      #  uses: actions/cache@v4
+      #  id: avd-cache
+      #  with:
+      #    path: |
+      #      ~/.android/avd/*
+      #      ~/.android/adb*
+      #    key: avd-${{ matrix.api-level }}
+
+      #- name: Create AVD and generate snapshot for caching
+      #  if: steps.avd-cache.outputs.cache-hit != 'true'
+      #  uses: reactivecircus/android-emulator-runner@v2
+      #  with:
+      #   api-level: ${{ matrix.api-level }}
+      #    force-avd-creation: false
+      #    emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+      #    disable-animations: false
+      #    script: echo "Generated AVD snapshot for caching."
 
       - name: Instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
