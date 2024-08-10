@@ -19,7 +19,14 @@ It relies on [exif-interface-extended](https://github.com/Tommy-Geenexus/exif-in
 ## Translations
 - Currently suspended, see https://github.com/Tommy-Geenexus/exif-eraser/issues/80
 
-## Download
+## Latest release on GitHub
+- [Download here](https://github.com/Tommy-Geenexus/exif-eraser/releases/latest)
+  
+You can [verify](https://developer.android.com/tools/apksigner#usage-verify) the signing certificate on the APK matches this SHA256 fingerprint:
+
+```D9:10:86:7C:E2:CF:3D:CD:37:DB:51:85:3E:BE:F8:63:3F:D8:3A:14:2B:26:42:27:4E:D0:68:15:2F:F1:22:01```
+
+## Download from supported App-Stores
 <a href='https://play.google.com/store/apps/details?id=com.none.tom.exiferaser&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height='80' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 <a href="https://accrescent.app/app/com.none.tom.exiferaser"><img alt="Get it on Accrescent" height='80' src="https://accrescent.app/badges/get-it-on.png"></a>
 <a href="https://apt.izzysoft.de/fdroid/index/apk/com.none.tom.exiferaser"><img alt="Get it on IzzyOnDroid" height='80' src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"></a>
