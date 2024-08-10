@@ -30,9 +30,10 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
+      # https://github.com/gradle/gradle/issues/29595
       - name: Assemble release
         run: |
-          ./gradlew assembleRelease \
+          ./gradlew --dependency-verification lenient assembleRelease \
             -DKS_BASE_64=${{ env.KS_BASE_64 }} \
             -DKS_PASSWORD=${{ env.KS_PASSWORD }} \
             -DKS_KEY_ALIAS=${{ env.KS_KEY_ALIAS }} \
