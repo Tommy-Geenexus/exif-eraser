@@ -14,7 +14,7 @@ val envKsPassword = "KS_PASSWORD"
 val envKsKeyAlias = "KS_KEY_ALIAS"
 val envKsKeyPassword = "KS_KEY_PASSWORD"
 
-fun loadKeyStoreProperties(): Triple<String, String, String> {
+fun loadKeyStoreProperties(): Triple<String?, String?, String?> {
     val properties = Properties().apply {
         val file = File(projectDir.parent, properties)
         if (file.exists()) {
@@ -37,21 +37,18 @@ fun loadKeyStoreProperties(): Triple<String, String, String> {
     )
 }
 
-fun getOrCreateKeyStoreFile(): File? {
-    val keyStore = projectDir.parentFile.listFiles()?.find { file -> file.extension == "jks" }
-    return if (keyStore?.exists() == true) {
-        keyStore
-    } else {
-        val ks = System.getenv(keyStoreBase64)
-        if (ks == null) {
-            null
-        } else {
+fun getOrCreateKeyStoreFile() = projectDir
+    .parentFile
+    .listFiles()
+    ?.find { file -> file.extension == "jks" }
+    ?.takeIf { it.exists() }
+    ?: System.getenv(keyStoreBase64)
+        ?.takeIf { it.isNotEmpty() }
+        ?.let {
             File(projectDir.parentFile, keyStoreFile).apply {
-                writeBytes(Base64.decode(ks.toByteArray()))
+                writeBytes(Base64.decode(it.toByteArray()))
             }
         }
-    }
-}
 
 plugins {
     alias(libs.plugins.android.application)
@@ -104,7 +101,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
