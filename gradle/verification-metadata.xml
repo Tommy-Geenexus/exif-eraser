@@ -4,8 +4,10 @@
       <verify-metadata>true</verify-metadata>
       <verify-signatures>false</verify-signatures>
       <trusted-artifacts>
-         <trust file="aapt2-8.5.2-11315950-linux.jar" />
-         <trust file="aapt2-8.5.2-11315950.pom" />
+         <trust file="aapt2-8.5.2-11315950-linux.jar"/>
+         <trust file="aapt2-8.5.2-11315950.pom"/>
+         <trust file=".*-javadoc[.]jar" regex="true"/>
+         <trust file=".*-sources[.]jar" regex="true"/>
       </trusted-artifacts>
    </configuration>
    <components>
