@@ -76,4 +76,5 @@ const val TAG_ITEM_HELP_TRANSLATE = TOP_LEVEL_PACKAGE_NAME + "ITEM_HELP_TRANSLAT
 const val TAG_ITEM_FEEDBACK = TOP_LEVEL_PACKAGE_NAME + "ITEM_FEEDBACK"
 
 const val URL_ISSUES = "https://github.com/Tommy-Geenexus/exif-eraser/issues"
-const val URL_LOCALISATION = "https://tomgappdev.oneskyapp.com/collaboration/project?id=375350"
+const val URL_LOCALISATION =
+    "https://crowdin.com/project/exif-eraser/invite?h=7814ed7d3215d8221577cc5b8aa661ee2190921"

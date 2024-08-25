@@ -24,6 +24,8 @@
     <string name="clipboard_content_paste">Paste clipboard image</string>
     <string name="clipboard_content_unsupported">Unsupported clipboard content</string>
 
+    <string name="crowdin" translatable="false">Crowdin</string>
+
     <string name="default_display_name_suffix">Default display name suffix</string>
     <string name="default_path_open">Default open path</string>
     <string name="default_path_save">Default save path</string>
@@ -78,8 +80,6 @@
     <string name="none">None</string>
 
     <string name="of">of</string>
-
-    <string name="onesky" translatable="false">OneSky</string>
 
     <string name="path_save_choose">Choose save path</string>
     <string name="path_save_custom">Custom save path</string>
