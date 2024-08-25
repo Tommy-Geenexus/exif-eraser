@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/github/license/Tommy-Geenexus/exif-eraser)](https://mit-license.org/)
+[![Crowdin](https://badges.crowdin.net/exif-eraser/localized.svg)](https://crowdin.com/project/exif-eraser)
 [![Assemble](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml)
 [![Unit Tests](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml)
 [![Instrumentation Tests](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_instrumented.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_instrumented.yml)
@@ -16,8 +17,8 @@ It relies on [exif-interface-extended](https://github.com/Tommy-Geenexus/exif-in
 - **PNG**: Images will be saved excluding the embedded *ICC Profile, EXIF* and *XMP* metadata
 - **WebP**: Images will be saved excluding the embedded *ICC Profile, EXIF* and *XMP* metadata
 
-## Translations
-- Currently suspended, see https://github.com/Tommy-Geenexus/exif-eraser/issues/80
+## Translations 
+- [Help translate this application into the language of your preference](https://crowdin.com/project/exif-eraser/invite?h=7814ed7d3215d8221577cc5b8aa661ee2190921)
 
 ## Latest release on GitHub
 - [Download here](https://github.com/Tommy-Geenexus/exif-eraser/releases/latest)
