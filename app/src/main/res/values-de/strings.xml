@@ -37,6 +37,8 @@
 
     <string name="help">Hilfe und Feedback</string>
 
+    <string name="icc_profile">ICC-Profil</string>
+
     <string name="image">Bild</string>
     <string name="image_auto_delete">Selbstlöschung</string>
     <string name="image_directory">Bildordner</string>
@@ -44,10 +46,15 @@
     <string name="image_files">Bilddateien</string>
     <string name="image_orientation">Ausrichtung beibehalten</string>
     <string name="image_path">Bildpfad</string>
+    <string name="image_private">Bild ist nicht  öffentlich zugänglich</string>
     <string name="image_selection_legacy">Veraltete Bildauswahl</string>
     <string name="image_selection_legacy_off">Bildauswahl mit Fotopicker</string>
     <string name="image_selection_legacy_on">Bildauswahl mit dem Standard-Dokumentbereitsteller</string>
     <string name="image_share_by_default">Standardmäßig teilen</string>
+    <string name="image_sources_camera_failure">Kamera konnte nicht geöffnet werden</string>
+    <string name="image_sources_put_failure">Bildquellenkonfiguration konnte nicht gespeichert werden</string>
+    <string name="image_sources_put_success">Bildquellenkonfiguration wurde gespeichert</string>
+    <string name="image_sources_save_failure">Bild(er) konnten nicht gespeichert werden</string>
     <string name="image_supported_formats">Unterstützte Bildformate</string>
 
     <string name="images_modified">Bilder modifiziert</string>
@@ -91,6 +98,7 @@
     <string name="share_via">Teile mit</string>
 
     <string name="suffix">Zusatz</string>
+    <string name="suffix_invalid">Zusatz ist leer oder enthält ungültige Zeichen</string>
 
     <string name="summary">Bericht</string>
 
@@ -99,4 +107,7 @@
     <string name="ui">Benutzeroberfläche</string>
 
     <string name="version">Version</string>
+
+    <string name="view_metadata">Metadaten anzeigen</string>
+    <string name="view_path">Pfad anzeigen</string>
 </resources>
