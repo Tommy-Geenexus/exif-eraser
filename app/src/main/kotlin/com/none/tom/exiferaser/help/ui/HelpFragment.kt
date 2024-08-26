@@ -51,18 +51,14 @@ class HelpFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
-            )
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setLayoutParams(
                 (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    topMargin = insets.top
                     bottomMargin = insets.bottom
                 }
             )
             WindowInsetsCompat.CONSUMED
         }
-        setupToolbar(binding.includeToolbar.toolbar, R.string.help)
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

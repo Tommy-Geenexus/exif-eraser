@@ -7,13 +7,6 @@
     android:orientation="vertical"
     android:transitionGroup="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:logo="@drawable/ic_logo" />
-
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"
         style="?attr/linearProgressIndicatorStyle"
@@ -23,7 +16,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"

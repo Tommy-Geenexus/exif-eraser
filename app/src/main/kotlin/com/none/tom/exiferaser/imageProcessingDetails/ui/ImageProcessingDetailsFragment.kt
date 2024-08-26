@@ -26,7 +26,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -100,14 +99,7 @@ class ImageProcessingDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
-            )
-            binding.toolbar.setLayoutParams(
-                (binding.toolbar.layoutParams as LinearLayout.LayoutParams).apply {
-                    topMargin = insets.top
-                }
-            )
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setLayoutParams(
                 (view.layoutParams as FrameLayout.LayoutParams).apply {
                     bottomMargin = insets.bottom
@@ -115,7 +107,6 @@ class ImageProcessingDetailsFragment :
             )
             WindowInsetsCompat.CONSUMED
         }
-        setupToolbar(binding.toolbar, R.string.details)
         binding.details.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = ImageProcessingDetailsAdapter(listener = this@ImageProcessingDetailsFragment)

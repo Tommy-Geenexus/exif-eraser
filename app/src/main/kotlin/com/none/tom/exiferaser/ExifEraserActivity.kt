@@ -27,11 +27,16 @@ import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.WindowMetricsCalculator
@@ -63,41 +68,61 @@ class ExifEraserActivity : AppCompatActivity() {
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        val binding = ActivityExifEraserBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        computeWindowSizeClasses()
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment)
-                .navController
-                .addOnDestinationChangedListener { _, destination, _ ->
-                    if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
-                        val tv = TypedValue()
-                        if (destination.id == R.id.fragment_main) {
-                            theme.resolveAttribute(
-                                com.google.android.material.R.attr.colorSurfaceContainer,
-                                tv,
-                                true
-                            )
-                        } else {
-                            theme.resolveAttribute(
-                                com.google.android.material.R.attr.colorSurface,
-                                tv,
-                                true
-                            )
-                        }
-                        window.navigationBarColor = tv.data
-                    }
-                }
-        }
-        binding.layout.addView(
-            object : View(this) {
-                override fun onConfigurationChanged(newConfig: Configuration?) {
-                    super.onConfigurationChanged(newConfig)
-                    computeWindowSizeClasses()
+        with(ActivityExifEraserBinding.inflate(layoutInflater)) {
+            setContentView(root)
+            computeWindowSizeClasses()
+            val navController = findNavController()
+            navController.addOnDestinationChangedListener { _, navDestination, _ ->
+                if (navDestination.id == R.id.fragment_main) {
+                    toolbar.setLogo(R.drawable.ic_logo)
+                } else {
+                    toolbar.logo = null
                 }
             }
-        )
+            setSupportActionBar(toolbar)
+            setupActionBarWithNavController(navController)
+            ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsetsCompat ->
+                val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
+                root.setLayoutParams(
+                    (root.layoutParams as FrameLayout.LayoutParams).apply { topMargin = insets.top }
+                )
+                windowInsetsCompat
+            }
+            root.addView(
+                object : View(this@ExifEraserActivity) {
+                    override fun onConfigurationChanged(newConfig: Configuration?) {
+                        super.onConfigurationChanged(newConfig)
+                        computeWindowSizeClasses()
+                    }
+                }
+            )
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            findNavController().addOnDestinationChangedListener { _, destination, _ ->
+                if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
+                    val tv = TypedValue()
+                    if (destination.id == R.id.fragment_main) {
+                        theme.resolveAttribute(
+                            com.google.android.material.R.attr.colorSurfaceContainer,
+                            tv,
+                            true
+                        )
+                    } else {
+                        theme.resolveAttribute(
+                            com.google.android.material.R.attr.colorSurface,
+                            tv,
+                            true
+                        )
+                    }
+                    window.navigationBarColor = tv.data
+                }
+            }
+        }
         handleSupportedIntent()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController().navigateUp() || super.onSupportNavigateUp()
     }
 
     private fun computeWindowSizeClasses() {
@@ -128,16 +153,13 @@ class ExifEraserActivity : AppCompatActivity() {
                 uris.addAll(clipData.supportedImageUrisToList())
             }
             if (uris.isNotEmpty()) {
-                (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment)
-                    .navController
-                    .navigate(
-                        R.id.global_to_main,
-                        bundleOf(NAV_ARG_IMAGE_SELECTION to uris.toTypedArray())
-                    )
+                findNavController().navigate(
+                    R.id.global_to_main,
+                    bundleOf(NAV_ARG_IMAGE_SELECTION to uris.toTypedArray())
+                )
             }
         } else if (shortcutIntentActions.contains(intent.action)) {
-            (supportFragmentManager.findFragmentById(R.id.nav_controller) as NavHostFragment)
-                .navController
+            findNavController()
                 .createDeepLink()
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragment_main)
@@ -145,5 +167,10 @@ class ExifEraserActivity : AppCompatActivity() {
                 .createTaskStackBuilder()
                 .startActivities()
         }
+    }
+
+    private fun findNavController(): NavController {
+        return (supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment)
+            .navController
     }
 }

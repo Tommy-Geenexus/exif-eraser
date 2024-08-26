@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preferences"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:transitionGroup="true">
-
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/toolbar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/preferences"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:transitionGroup="true" />
-</LinearLayout>
+    android:transitionGroup="true" />

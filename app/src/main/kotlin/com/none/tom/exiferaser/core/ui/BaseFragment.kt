@@ -23,14 +23,9 @@ package com.none.tom.exiferaser.core.ui
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.none.tom.exiferaser.ExifEraserActivity
-import com.none.tom.exiferaser.R
 
 abstract class BaseFragment<B : ViewBinding>(
     @LayoutRes layoutRes: Int
@@ -51,17 +46,4 @@ abstract class BaseFragment<B : ViewBinding>(
     abstract fun bindLayout(view: View): B
 
     protected fun getWindowSizeClass() = (requireActivity() as ExifEraserActivity).windowSizeClass
-
-    protected fun setupToolbar(toolbar: Toolbar, @StringRes titleRes: Int) {
-        (requireActivity() as? AppCompatActivity)?.setSupportActionBar(toolbar)
-        toolbar.setTitle(titleRes)
-        requireParentFragment()
-            .childFragmentManager
-            .backStackEntryCount
-            .takeIf { count -> count > 0 }
-            ?.let {
-                toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-                toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-            }
-    }
 }

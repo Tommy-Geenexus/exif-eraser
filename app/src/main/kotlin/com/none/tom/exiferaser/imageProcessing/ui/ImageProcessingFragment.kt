@@ -73,12 +73,9 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.navigationBars()
-            )
+            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
             view.setLayoutParams(
                 (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    topMargin = insets.top
                     bottomMargin = insets.bottom
                 }
             )
@@ -107,7 +104,6 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             }
         }
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupToolbar(binding.toolbarInclude.toolbar, R.string.summary)
         setupResponsiveLayout()
         binding.details.setOnClickListener { viewModel.handleImageProcessingDetails() }
         lifecycleScope.launch {

@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     android:transitionGroup="true">
 
-    <include
-        android:id="@+id/toolbar_include"
-        layout="@layout/toolbar" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_progress"
         android:layout_width="wrap_content"

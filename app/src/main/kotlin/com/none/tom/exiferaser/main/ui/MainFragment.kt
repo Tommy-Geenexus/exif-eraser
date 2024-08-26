@@ -31,13 +31,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.MenuProvider
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.draganddrop.DropHelper
@@ -116,15 +113,6 @@ class MainFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.setLayoutParams(
-                (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    topMargin = insets.top
-                }
-            )
-            windowInsetsCompat
-        }
         setupResponsiveAppBarLayout()
         setupResponsiveTitleLayout()
         setupResponsiveImageSourceLayout()
@@ -452,7 +440,6 @@ class MainFragment :
     }
 
     private fun setupResponsiveAppBarLayout() {
-        setupToolbar(binding.toolbar, R.string.app_name)
         val menuProvider = object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
