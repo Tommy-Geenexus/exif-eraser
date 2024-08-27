@@ -25,7 +25,6 @@ import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
@@ -40,6 +39,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import androidx.window.layout.WindowMetricsCalculator
+import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
 import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
@@ -82,9 +82,15 @@ class ExifEraserActivity : AppCompatActivity() {
             setSupportActionBar(toolbar)
             setupActionBarWithNavController(navController)
             ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsetsCompat ->
-                val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.statusBars())
+                val insets = windowInsetsCompat.getInsets(
+                    WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+                )
                 root.setLayoutParams(
-                    (root.layoutParams as FrameLayout.LayoutParams).apply { topMargin = insets.top }
+                    (root.layoutParams as FrameLayout.LayoutParams).apply {
+                        leftMargin = insets.left
+                        topMargin = insets.top
+                        rightMargin = insets.right
+                    }
                 )
                 windowInsetsCompat
             }
@@ -100,21 +106,13 @@ class ExifEraserActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             findNavController().addOnDestinationChangedListener { _, destination, _ ->
                 if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
-                    val tv = TypedValue()
-                    if (destination.id == R.id.fragment_main) {
-                        theme.resolveAttribute(
-                            com.google.android.material.R.attr.colorSurfaceContainer,
-                            tv,
-                            true
-                        )
-                    } else {
-                        theme.resolveAttribute(
-                            com.google.android.material.R.attr.colorSurface,
-                            tv,
-                            true
-                        )
-                    }
-                    window.navigationBarColor = tv.data
+                    window.navigationBarColor = resolveThemeAttribute(
+                        if (destination.id == R.id.fragment_main) {
+                            com.google.android.material.R.attr.colorSurfaceContainer
+                        } else {
+                            com.google.android.material.R.attr.colorSurface
+                        }
+                    )
                 }
             }
         }
