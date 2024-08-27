@@ -78,6 +78,8 @@
     <string name="preserve_image_orientation_off">Verwerfe die ursprüngliche Bildausrichtung</string>
     <string name="preserve_image_orientation_on">Behalte die ursprüngliche Bildausrichtung bei</string>
 
+    <string name="progress_percent">%d %%</string>
+
     <string name="randomize_file_names">Randomisierte Dateinamen</string>
     <string name="randomize_file_names_off">Randomisiere keine Dateinamen von Bildern vor dem Speichern</string>
     <string name="randomize_file_names_on">Randomisiere Dateinamen von Bildern vor dem Speichern</string>
