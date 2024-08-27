@@ -242,7 +242,9 @@ class MainFragment :
                         R.string.image_sources_camera_failure,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.ImageSources.Put.Failure -> {
@@ -252,7 +254,9 @@ class MainFragment :
                         R.string.image_sources_put_failure,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             is MainSideEffect.ImageSources.Camera.Success -> {
@@ -265,7 +269,9 @@ class MainFragment :
                         R.string.image_sources_put_success,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.Images.Delete.Failure -> {
@@ -275,7 +281,9 @@ class MainFragment :
                         R.string.delete_camera_images_failed,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.Images.Delete.Success -> {
@@ -285,7 +293,9 @@ class MainFragment :
                         R.string.delete_camera_images_success,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.Images.Paste.Failure -> {
@@ -296,7 +306,9 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             is MainSideEffect.Images.Paste.Success -> {
@@ -313,7 +325,9 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             is MainSideEffect.Images.Received.Single -> {
@@ -348,7 +362,9 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             is MainSideEffect.Selection.Image.Success -> {
@@ -362,7 +378,9 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.Selection.ImageDirectory.Success -> {
@@ -376,7 +394,9 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(binding.bottomBarLayout)
+                    .setAnchorView(
+                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
+                    )
                     .show()
             }
             MainSideEffect.Selection.Images.Success -> {
