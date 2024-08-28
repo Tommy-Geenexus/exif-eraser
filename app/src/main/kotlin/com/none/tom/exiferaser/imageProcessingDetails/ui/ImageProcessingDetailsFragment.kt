@@ -30,6 +30,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -100,11 +101,7 @@ class ImageProcessingDetailsFragment :
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
             val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.setLayoutParams(
-                (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    bottomMargin = insets.bottom
-                }
-            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
             WindowInsetsCompat.CONSUMED
         }
         binding.details.apply {

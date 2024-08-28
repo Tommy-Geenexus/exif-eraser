@@ -33,6 +33,7 @@ import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -85,13 +86,11 @@ class ExifEraserActivity : AppCompatActivity() {
                 val insets = windowInsetsCompat.getInsets(
                     WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
                 )
-                root.setLayoutParams(
-                    (root.layoutParams as FrameLayout.LayoutParams).apply {
-                        leftMargin = insets.left
-                        topMargin = insets.top
-                        rightMargin = insets.right
-                    }
-                )
+                root.updateLayoutParams<FrameLayout.LayoutParams> {
+                    leftMargin = insets.left
+                    topMargin = insets.top
+                    rightMargin = insets.right
+                }
                 windowInsetsCompat
             }
             root.addView(

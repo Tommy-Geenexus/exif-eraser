@@ -27,6 +27,7 @@ import android.widget.FrameLayout
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
@@ -52,11 +53,7 @@ class HelpFragment :
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
             val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.setLayoutParams(
-                (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    bottomMargin = insets.bottom
-                }
-            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
             WindowInsetsCompat.CONSUMED
         }
         binding.helpAndFeedback.apply {

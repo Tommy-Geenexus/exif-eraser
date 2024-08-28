@@ -74,11 +74,7 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
             val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.setLayoutParams(
-                (view.layoutParams as FrameLayout.LayoutParams).apply {
-                    bottomMargin = insets.bottom
-                }
-            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
             WindowInsetsCompat.CONSUMED
         }
         val menuProvider = object : MenuProvider {
