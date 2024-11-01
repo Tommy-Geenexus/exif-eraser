@@ -1,5 +1,3 @@
-<img alt='Get it on GitHub' width='128' height='128' src='https://github.com/Tommy-Geenexus/exif-eraser/blob/main/art/ic_launcher-playstore.png'/>
-
 # ExifEraser
 [![License](https://img.shields.io/github/license/Tommy-Geenexus/exif-eraser)](https://mit-license.org/)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Tommy-Geenexus/exif-eraser/total)
