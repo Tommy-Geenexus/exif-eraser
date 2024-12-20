@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="all_done">أكتمل!</string>
+
+    <string name="always">دائمًا</string>
+
+    <string name="auto_delete_image_off">لا تحذف الصور بعد التعديل إذا تم تمكين اختيار الصورة القديمة</string>
+    <string name="auto_delete_image_on">احذف الصور بعد التعديل إذا تم تمكين اختيار الصورة القديمة</string>
+
+    <string name="automatically">تلقائيًا</string>
+
+    <string name="become_translator">ساعد في الترجمة</string>
+
+    <string name="camera">الكاميرا</string>
+
+    <string name="choose_image">اختر صورة</string>
+    <string name="choose_image_directory">اختر مجلد الصورة</string>
+    <string name="choose_images">اختر الصور</string>
+    <string name="choose_your">اختر لك</string>
+
+    <string name="clipboard_content_paste">ألصِق صورة في الحافظة</string>
+    <string name="clipboard_content_unsupported">محتوى الحافظة غير مدعوم</string>
+
+    <string name="default_display_name_suffix">لاحقة اسم العرض الافتراضي</string>
+    <string name="default_path_open">المسار المفتوح الافتراضي</string>
+    <string name="default_path_save">مسار الحفظ الافتراضي</string>
+
+    <string name="delete">احذف</string>
+    <string name="delete_camera_images">احذف صور الكاميرا</string>
+    <string name="delete_camera_images_all">احذف جميع صور الكاميرا المأخوذة من داخل هذا التطبيق (الأصلي والمعدل)</string>
+    <string name="delete_camera_images_failed">فشل حذف صور الكاميرا</string>
+    <string name="delete_camera_images_success">حُذفت صور الكاميرا بنجاح</string>
+
+    <string name="details">تفاصيل</string>
+
+    <string name="file_system">‮نظام الملفات</string>
+
+    <string name="help">المساعدة والتعليقات</string>
+
+    <string name="icc_profile">ملف تعريف ICC</string>
+
+    <string name="image">صورة</string>
+    <string name="image_auto_delete">حذف تلقائي</string>
+    <string name="image_directory">مجلد الصورة</string>
+    <string name="image_file">ملف صورة</string>
+    <string name="image_files">ملفات الصور</string>
+    <string name="image_orientation">الحفاظ على الاتجاه</string>
+    <string name="image_path">مسار الصورة</string>
+    <string name="image_private">الصورة غير متاحة للجميع</string>
+    <string name="image_selection_legacy">اختيار الصورة القديمة</string>
+    <string name="image_selection_legacy_off">حدد الصور باستخدام منتقي الصور</string>
+    <string name="image_selection_legacy_on">حدد الصور باستخدام موفر المستند الافتراضي</string>
+    <string name="image_share_by_default">المشاركة افتراضيًا</string>
+    <string name="image_sources_camera_failure">فشل في تشغيل الكاميرا</string>
+    <string name="image_sources_put_failure">فشل في تضبيط مصدر الصورة</string>
+    <string name="image_sources_put_success">حُفظ تضبيط مصدر الصورة بنجاح</string>
+    <string name="image_sources_save_failure">فشل في حفظ الصور/ة</string>
+    <string name="image_supported_formats">صيغ الملفات المدعومة</string>
+
+    <string name="images_modified">صور معدلة</string>
+
+    <string name="low_batt_only">بطارية منخفضه فقط</string>
+
+    <string name="never">أبدًا</string>
+
+    <string name="night_mode">الوضع الليلي</string>
+
+    <string name="none">لا شيء</string>
+
+    <string name="of">من</string>
+
+    <string name="path_save_choose">اختر مسار الحفظ</string>
+    <string name="path_save_custom">مسار حفظ مخصّص</string>
+    <string name="path_save_default">مسار الحفظ الافتراضي</string>
+
+    <string name="preferred_image_source">مصدر الصورة المفضل</string>
+
+    <string name="preserve_image_orientation_off">لا تحافظ على اتجاه الصورة الأصلي</string>
+    <string name="preserve_image_orientation_on">حافظ على اتجاه الصورة الأصلية</string>
+
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">تعديل أسماء الملفات عشوائيًا</string>
+    <string name="randomize_file_names_off">لا تعدل أسماء الملفات الصور عشوائيًا قبل حفظها</string>
+    <string name="randomize_file_names_on">عدّل أسماء الملفات الصور عشوائيًا قبل حفظها</string>
+
+    <string name="reorder_image_source_cards">إعادة ترتيب بطاقات مصدر الصورة</string>
+
+    <string name="report_bug">الإبلاغ عن مشكلة</string>
+
+    <string name="save_path_custom_skip">تخطي إختيار مسار حفظ</string>
+    <string name="save_path_custom_skip_off">لا تتخطى اختيار مسار الحفظ إذا تم تعيين مسار الحفظ الافتراضي</string>
+    <string name="save_path_custom_skip_on">تخطي اختيار مسار الحفظ إذا تم تعيين مسار الحفظ الافتراضي</string>
+
+    <string name="settings">الإعدادات</string>
+
+    <string name="share">شارك</string>
+    <string name="share_images_by_default_off">لا تشارك الصور بشكل افتراضي بعد التعديل</string>
+    <string name="share_images_by_default_on">شارك الصور افتراضيًا بعد التعديل</string>
+    <string name="share_via">شارك عبر</string>
+
+    <string name="suffix">لاحقة</string>
+    <string name="suffix_invalid">اللاحقة فارغة أو تحتوي على أحرف غير صالحة</string>
+
+    <string name="summary">الملخص</string>
+
+    <string name="take_picture">أخذ صورة</string>
+
+    <string name="ui">واجهة المستخدم</string>
+
+    <string name="version">الإصدار</string>
+
+    <string name="view_metadata">عرض البيانات الوصفية</string>
+    <string name="view_path">عرض المسار</string>
+</resources>
