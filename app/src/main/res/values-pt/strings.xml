@@ -4,6 +4,9 @@
 
     <string name="always">Sempre</string>
 
+    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
+
     <string name="automatically">Automaticamente</string>
 
     <string name="become_translator">Ajudar traduzir</string>
@@ -32,13 +35,26 @@
 
     <string name="file_system">Pastas de arquivos</string>
 
+    <string name="help">Help and feedback</string>
+
+    <string name="icc_profile">ICC Profile</string>
+
     <string name="image">Imagem</string>
+    <string name="image_auto_delete">Auto-delete</string>
     <string name="image_directory">Pasta da imagem</string>
     <string name="image_file">Arquivo de imagem</string>
     <string name="image_files">Arquivos de imagens</string>
     <string name="image_orientation">Preservar orientação</string>
     <string name="image_path">Local da imagem</string>
+    <string name="image_private">Image is not publicly accessible</string>
+    <string name="image_selection_legacy">Legacy image selection</string>
+    <string name="image_selection_legacy_off">Select images using the photo picker</string>
+    <string name="image_selection_legacy_on">Select images using the default document provider</string>
     <string name="image_share_by_default">Auto compartilhar</string>
+    <string name="image_sources_camera_failure">Failed to launch camera</string>
+    <string name="image_sources_put_failure">Failed to save image source configuration</string>
+    <string name="image_sources_put_success">Successfully saved image source configuration</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Formatos de imagens suportados</string>
 
     <string name="images_modified">imagens modificadas</string>
@@ -62,7 +78,19 @@
     <string name="preserve_image_orientation_off">Não preservar a orientação original da imagem</string>
     <string name="preserve_image_orientation_on">Preservar a orientação original da imagem</string>
 
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">Randomize file names</string>
+    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
+    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+
+    <string name="reorder_image_source_cards">Reorder image source cards</string>
+
     <string name="report_bug">Relatar os bugs</string>
+
+    <string name="save_path_custom_skip">Skip save path selection</string>
+    <string name="save_path_custom_skip_off">Don\'t skip the save path selection if the default save path is set</string>
+    <string name="save_path_custom_skip_on">Skip the save path selection if the default save path is set</string>
 
     <string name="settings">Configurações</string>
 
@@ -72,6 +100,7 @@
     <string name="share_via">Compartilhar via</string>
 
     <string name="suffix">Sufixo</string>
+    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
 
     <string name="summary">Resumo</string>
 
@@ -80,4 +109,7 @@
     <string name="ui">IU</string>
 
     <string name="version">Versão</string>
+
+    <string name="view_metadata">View metadata</string>
+    <string name="view_path">View path</string>
 </resources>

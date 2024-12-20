@@ -1,25 +1,32 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="all_done">Tümü bitti!</string>
 
     <string name="always">Daima</string>
 
+    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
+
     <string name="automatically">Otomatik olarak</string>
+
+    <string name="become_translator">Çevirmeye yardım et</string>
 
     <string name="camera">Kamera</string>
 
     <string name="choose_image">Görseli seç</string>
     <string name="choose_image_directory">Görselin dizinini seç</string>
     <string name="choose_images">Görselleri seç</string>
+    <string name="choose_your">Choose your</string>
 
     <string name="clipboard_content_paste">Panodaki görseli yapıştır</string>
     <string name="clipboard_content_unsupported">Desteklenmeyen pano içeriği</string>
 
     <string name="default_display_name_suffix">Varsayılan görüntü adı son eki</string>
-    <string name="default_path_open">Varsayılan kaynak lokasyonu</string>
-    <string name="default_path_save">Varsayılan kayıt lokasyonu</string>
+    <string name="default_path_open">Varsayılan kaynak yolu</string>
+    <string name="default_path_save">Varsayılan kayıt yolu</string>
 
     <string name="delete">Sil</string>
+    <string name="delete_camera_images">Delete camera images</string>
     <string name="delete_camera_images_all">Bu uygulamayla oluşturulmuş tüm kamera görsellerini sil (orijinal ve degiştirilmiş)</string>
     <string name="delete_camera_images_failed">Kamera görsellerini silme başarısız oldu</string>
     <string name="delete_camera_images_success">Kamera görselleri başarıyla silindi</string>
@@ -30,29 +37,70 @@
 
     <string name="help">Yardım ve geribildirim</string>
 
+    <string name="icc_profile">ICC Profile</string>
+
     <string name="image">Görsel</string>
+    <string name="image_auto_delete">Otomatik sil</string>
     <string name="image_directory">Görsel dizini</string>
     <string name="image_file">Görsel dosyası</string>
     <string name="image_files">Görsel dosyaları</string>
     <string name="image_orientation">Rotasyonu koru</string>
+    <string name="image_path">Resim yolu</string>
+    <string name="image_private">Image is not publicly accessible</string>
+    <string name="image_selection_legacy">Legacy image selection</string>
+    <string name="image_selection_legacy_off">Select images using the photo picker</string>
+    <string name="image_selection_legacy_on">Select images using the default document provider</string>
+    <string name="image_share_by_default">Share by default</string>
+    <string name="image_sources_camera_failure">Kamerayı başlatırken bir hata oluştu</string>
+    <string name="image_sources_put_failure">Failed to save image source configuration</string>
+    <string name="image_sources_put_success">Successfully saved image source configuration</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Desteklenen dosya biçimleri</string>
+
+    <string name="images_modified">images modified</string>
+
+    <string name="low_batt_only">Low battery only</string>
 
     <string name="never">Asla</string>
 
     <string name="night_mode">Gece modu</string>
 
+    <string name="none">None</string>
+
+    <string name="of">of</string>
+
     <string name="path_save_choose">Kayıt lokasyonunu seç</string>
+    <string name="path_save_custom">Custom save path</string>
     <string name="path_save_default">Varsayılan kayıt lokasyonu</string>
 
-    <string name="preferred_image_source">Tercih edilen görsel kaynağı</string>
+    <string name="preferred_image_source">tercih edilen görsel kaynağı</string>
+
+    <string name="preserve_image_orientation_off">Don\'t preserve the original image orientation</string>
+    <string name="preserve_image_orientation_on">Preserve the original image orientation</string>
+
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">Randomize file names</string>
+    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
+    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+
+    <string name="reorder_image_source_cards">Reorder image source cards</string>
 
     <string name="report_bug">Sorun bildir</string>
+
+    <string name="save_path_custom_skip">Skip save path selection</string>
+    <string name="save_path_custom_skip_off">Don\'t skip the save path selection if the default save path is set</string>
+    <string name="save_path_custom_skip_on">Skip the save path selection if the default save path is set</string>
 
     <string name="settings">Ayarlar</string>
 
     <string name="share">Paylaş</string>
+    <string name="share_images_by_default_off">Don\'t share images by default after modification</string>
+    <string name="share_images_by_default_on">Share images by default after modification</string>
+    <string name="share_via">Share via</string>
 
     <string name="suffix">Son ek</string>
+    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
 
     <string name="summary">Özet</string>
 
@@ -61,4 +109,7 @@
     <string name="ui">Kullanıcı arayüzü</string>
 
     <string name="version">Sürüm</string>
+
+    <string name="view_metadata">View metadata</string>
+    <string name="view_path">View path</string>
 </resources>

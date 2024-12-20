@@ -4,6 +4,9 @@
 
     <string name="always">Sempre</string>
 
+    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
+
     <string name="automatically">Automaticamente</string>
 
     <string name="become_translator">Aiuta a tradurre</string>
@@ -23,24 +26,35 @@
     <string name="default_path_save">Percorso di salvataggio predefinito</string>
 
     <string name="delete">Elimina</string>
-    <string name="delete_camera_images">Elimina immmagini della fotocamera</string>
+    <string name="delete_camera_images">Elimina immagini della fotocamera</string>
     <string name="delete_camera_images_all">Elimina tutte le immagini scattate con la fotocamera di questa app (originali e modificate)</string>
-    <string name="delete_camera_images_failed">Eliminazione delle immmagini della fotocamera non riuscita</string>
+    <string name="delete_camera_images_failed">Eliminazione delle immagini della fotocamera non riuscita</string>
     <string name="delete_camera_images_success">Immagini della fotocamera eliminate con successo</string>
 
-    <string name="details">dettagli</string>
+    <string name="details">Dettagli</string>
 
     <string name="file_system">Filesystem</string>
 
     <string name="help">Aiuto e feedback</string>
 
+    <string name="icc_profile">ICC Profile</string>
+
     <string name="image">Immagine</string>
+    <string name="image_auto_delete">Auto-delete</string>
     <string name="image_directory">Cartella immagine</string>
     <string name="image_file">File immagine</string>
     <string name="image_files">File immagini</string>
     <string name="image_orientation">Mantieni orientamento</string>
     <string name="image_path">Percorso immagine</string>
+    <string name="image_private">Image is not publicly accessible</string>
+    <string name="image_selection_legacy">Legacy image selection</string>
+    <string name="image_selection_legacy_off">Select images using the photo picker</string>
+    <string name="image_selection_legacy_on">Select images using the default document provider</string>
     <string name="image_share_by_default">Condividi per impostazione predefinita</string>
+    <string name="image_sources_camera_failure">Failed to launch camera</string>
+    <string name="image_sources_put_failure">Failed to save image source configuration</string>
+    <string name="image_sources_put_success">Successfully saved image source configuration</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Formati immagine supportati</string>
 
     <string name="images_modified">immagine modificata</string>
@@ -64,6 +78,12 @@
     <string name="preserve_image_orientation_off">Non mantenere l\'orientamento originale dell\'immagine</string>
     <string name="preserve_image_orientation_on">Mantieni l\'orientamento originale dell\'immagine</string>
 
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">Randomize file names</string>
+    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
+    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+
     <string name="reorder_image_source_cards">Riordina le schede di selezione immagine</string>
 
     <string name="report_bug">Segnala un problema</string>
@@ -80,6 +100,7 @@
     <string name="share_via">Condividi tramite</string>
 
     <string name="suffix">Suffisso</string>
+    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
 
     <string name="summary">Sintesi</string>
 
@@ -88,4 +109,7 @@
     <string name="ui">UI</string>
 
     <string name="version">Versione</string>
+
+    <string name="view_metadata">View metadata</string>
+    <string name="view_path">View path</string>
 </resources>

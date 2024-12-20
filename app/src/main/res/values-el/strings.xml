@@ -37,6 +37,8 @@
 
     <string name="help">Βοήθεια και σχόλια</string>
 
+    <string name="icc_profile">ICC Profile</string>
+
     <string name="image">Εικόνα</string>
     <string name="image_auto_delete">Αυτόματη διαγραφή</string>
     <string name="image_directory">Κατάλογος εικόνων</string>
@@ -44,10 +46,15 @@
     <string name="image_files">Αρχεία εικόνας</string>
     <string name="image_orientation">Διατήρηση προσανατολισμού</string>
     <string name="image_path">Διαδρομή εικόνας</string>
+    <string name="image_private">Image is not publicly accessible</string>
     <string name="image_selection_legacy">Επιλογή εικόνας παλαιού τύπου</string>
     <string name="image_selection_legacy_off">Επιλέξτε εικόνες χρησιμοποιώντας το εργαλείο επιλογής φωτογραφιών</string>
     <string name="image_selection_legacy_on">Επιλέξτε εικόνες χρησιμοποιώντας τον προεπιλεγμένο πάροχο εγγράφων</string>
     <string name="image_share_by_default">Κοινή χρήση από προεπιλογή</string>
+    <string name="image_sources_camera_failure">Failed to launch camera</string>
+    <string name="image_sources_put_failure">Failed to save image source configuration</string>
+    <string name="image_sources_put_success">Successfully saved image source configuration</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Υποστηριζόμενες μορφές εικόνας</string>
 
     <string name="images_modified">τροποποιημένες εικόνες</string>
@@ -71,6 +78,8 @@
     <string name="preserve_image_orientation_off">Να μην γίνεται διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
     <string name="preserve_image_orientation_on">Διατήρηση του αρχικού προσανατολισμό της εικόνας</string>
 
+    <string name="progress_percent">%d %%</string>
+
     <string name="randomize_file_names">Τυχαιοποίηση ονομάτων αρχείων</string>
     <string name="randomize_file_names_off">Μη τυχαιοποίηση ονομάτων αρχείων των εικόνων πριν την αποθήκευση</string>
     <string name="randomize_file_names_on">Τυχαιοποίηση ονομάτων αρχείων των εικόνων πριν την αποθήκευση</string>
@@ -91,6 +100,7 @@
     <string name="share_via">Κοινοποίηση μέσω</string>
 
     <string name="suffix">Κατάληξη</string>
+    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
 
     <string name="summary">Περίληψη</string>
 
@@ -99,4 +109,7 @@
     <string name="ui">Διεπαφή Χρήστη</string>
 
     <string name="version">Έκδοση</string>
+
+    <string name="view_metadata">View metadata</string>
+    <string name="view_path">View path</string>
 </resources>

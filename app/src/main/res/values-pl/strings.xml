@@ -4,6 +4,9 @@
 
     <string name="always">Zawsze</string>
 
+    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
+
     <string name="automatically">Automatycznie</string>
 
     <string name="become_translator">Pomóż w tłumaczeniu</string>
@@ -18,23 +21,43 @@
     <string name="clipboard_content_paste">Wklej obraz ze schowka</string>
     <string name="clipboard_content_unsupported">Niewspierana zawartość schowka</string>
 
-    <string name="default_display_name_suffix">"Domyślny sufiks nazwy "</string>
+    <string name="default_display_name_suffix">Domyślny sufiks nazwy</string>
     <string name="default_path_open">Domyślna ścieżka</string>
     <string name="default_path_save">Domyślna ścieżka zapisu</string>
+
+    <string name="delete">Delete</string>
+    <string name="delete_camera_images">Delete camera images</string>
+    <string name="delete_camera_images_all">Delete all camera images taken from within this app (original and modified)</string>
+    <string name="delete_camera_images_failed">Failed to delete camera images</string>
+    <string name="delete_camera_images_success">Successfully deleted camera images</string>
 
     <string name="details">Szczegóły</string>
 
     <string name="file_system">System plików</string>
 
+    <string name="help">Help and feedback</string>
+
+    <string name="icc_profile">ICC Profile</string>
+
     <string name="image">Obraz</string>
+    <string name="image_auto_delete">Auto-delete</string>
     <string name="image_directory">Ścieżka obrazu</string>
     <string name="image_file">Plik obrazu</string>
     <string name="image_files">Pliki obrazu</string>
     <string name="image_orientation">Zachowaj orientację</string>
+    <string name="image_path">Image path</string>
+    <string name="image_private">Image is not publicly accessible</string>
+    <string name="image_selection_legacy">Legacy image selection</string>
+    <string name="image_selection_legacy_off">Select images using the photo picker</string>
+    <string name="image_selection_legacy_on">Select images using the default document provider</string>
     <string name="image_share_by_default">Domyślnie udostępnij</string>
+    <string name="image_sources_camera_failure">Failed to launch camera</string>
+    <string name="image_sources_put_failure">Failed to save image source configuration</string>
+    <string name="image_sources_put_success">Successfully saved image source configuration</string>
+    <string name="image_sources_save_failure">Failed to save image(s)</string>
     <string name="image_supported_formats">Wspierane rozszerzenia obrazów</string>
 
-    <string name="images_modified">Zmodyfikowane obrazy</string>
+    <string name="images_modified">zmodyfikowane obrazy</string>
 
     <string name="low_batt_only">Tylko niski poziom baterii</string>
 
@@ -53,4 +76,40 @@
     <string name="preferred_image_source">preferowane źródło obrazu</string>
 
     <string name="preserve_image_orientation_off">Nie zachowuj oryginalnej orientacji obrazu</string>
+    <string name="preserve_image_orientation_on">Preserve the original image orientation</string>
+
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">Randomize file names</string>
+    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
+    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+
+    <string name="reorder_image_source_cards">Reorder image source cards</string>
+
+    <string name="report_bug">Report issue</string>
+
+    <string name="save_path_custom_skip">Skip save path selection</string>
+    <string name="save_path_custom_skip_off">Don\'t skip the save path selection if the default save path is set</string>
+    <string name="save_path_custom_skip_on">Skip the save path selection if the default save path is set</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="share">Share</string>
+    <string name="share_images_by_default_off">Don\'t share images by default after modification</string>
+    <string name="share_images_by_default_on">Share images by default after modification</string>
+    <string name="share_via">Share via</string>
+
+    <string name="suffix">Suffix</string>
+    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
+
+    <string name="summary">Summary</string>
+
+    <string name="take_picture">Take picture</string>
+
+    <string name="ui">UI</string>
+
+    <string name="version">Version</string>
+
+    <string name="view_metadata">View metadata</string>
+    <string name="view_path">View path</string>
 </resources>
