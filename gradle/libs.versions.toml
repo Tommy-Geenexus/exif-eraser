@@ -1,44 +1,45 @@
 [versions]
 accrescent-bundletool = "0.2.4"
-activity = "1.9.3"
-agp = "8.7.3"
-apache-commons-io = "2.18.0"
+activity = "1.10.1"
+agp = "8.10.1"
+apache-commons-io = "2.19.0"
 app-compat = "1.7.0"
 coil = "2.7.0"
-constraint-layout = "2.2.0"
-core = "1.15.0"
+constraint-layout = "2.2.1"
+core = "1.16.0"
 core-splashscreen = "1.0.1"
-coroutines = "1.10.0"
+coroutines = "1.10.2"
 curtains = "1.2.5"
-dagger-hilt = "2.53.1"
+dagger-hilt = "2.56.2"
 dagger-hilt-vm-compiler = "1.2.0"
-datastore = "1.1.1"
+datastore = "1.1.7"
+detekt = "1.23.8"
+documentfile = "1.1.0"
 drag-and-drop = "1.0.0"
-detekt = "1.23.7"
 exif-interface = "1.0.4"
 flexbox-layout = "3.0.0"
-fragment = "1.8.5"
+fragment = "1.8.7"
 junit = "4.13.2"
 junit-ext = "1.2.1"
-kotlin = "2.1.0"
-ksp = "2.1.0-1.0.29"
-ktlint = "12.1.2"
+kotlin = "2.1.21"
+ksp = "2.1.21-2.0.1"
+ktlint = "12.3.0"
 leakcanary = "2.14"
-lifecycle = "2.8.7"
-material = "1.12.0"
-mockK = "1.13.13"
-navigation = "2.8.5"
-orbit = "9.0.0"
-recyclerview = "1.3.2"
+lifecycle = "2.9.0"
+material = "1.14.0-alpha01"
+mockK = "1.14.2"
+navigation = "2.9.0"
+orbit = "10.0.0"
+recyclerview = "1.4.0"
 roboelectric = "4.14.1"
 rules = "1.6.1"
-spotless = "6.25.0"
+spotless = "7.0.4"
 strikt = "0.35.1"
 timber = "5.0.1"
 turbine = "1.2.0"
-versions = "0.51.0"
-window = "1.3.0"
-wire = "5.1.0"
+versions = "0.52.0"
+window = "1.4.0"
+wire = "5.3.1"
 
 [libraries]
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -56,6 +57,7 @@ dagger-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", ver
 dagger-hilt-vm-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "dagger-hilt-vm-compiler" }
 datastore-prefs = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 datastore-proto = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
+documentfile = { module = "androidx.documentfile:documentfile", version.ref = "documentfile" }
 drag-and-drop = { module = "androidx.draganddrop:draganddrop", version.ref = "drag-and-drop" }
 exif-interface = { module = "io.github.tommy-geenexus:exif-interface-extended", version.ref = "exif-interface" }
 flexbox-layout = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox-layout" }
@@ -95,6 +97,7 @@ implementation = [
     "dagger-hilt",
     "datastore-prefs",
     "datastore-proto",
+    "documentfile",
     "drag-and-drop",
     "exif-interface",
     "flexbox-layout",

@@ -5,10 +5,9 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import java.io.FileInputStream
 import java.util.Properties
 import org.bouncycastle.util.encoders.Base64
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val keyStoreFile = "keystore.jks"
-val properties = "keystore.properties"
+val keyStoreProperties = "keystore.properties"
 val keyStoreBase64 = "KS_BASE_64"
 val envKsPassword = "KS_PASSWORD"
 val envKsKeyAlias = "KS_KEY_ALIAS"
@@ -16,7 +15,7 @@ val envKsKeyPassword = "KS_KEY_PASSWORD"
 
 fun loadKeyStoreProperties(): Triple<String?, String?, String?> {
     val properties = Properties().apply {
-        val file = File(projectDir.parent, properties)
+        val file = File(projectDir.parent, keyStoreProperties)
         if (file.exists()) {
             load(FileInputStream(file))
         }
@@ -119,22 +118,9 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-        }
-    }
-}
-
-// TODO: Remove once https://github.com/google/ksp/issues/1590 is fixed
-androidComponents {
-    onVariants(selector().all()) { variant ->
-        afterEvaluate {
-            val capName = variant.name.replaceFirstChar(Char::uppercase)
-            tasks.getByName<KotlinCompile>("ksp${capName}Kotlin") {
-                setSource(tasks.getByName("generate${capName}Protos").outputs)
-            }
         }
     }
 }
