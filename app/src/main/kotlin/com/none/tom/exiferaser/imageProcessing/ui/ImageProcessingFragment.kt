@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -38,7 +38,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowSizeClass
 import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
@@ -100,7 +100,7 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             }
         }
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupResponsiveLayout()
+        setupAdaptiveLayout()
         binding.details.setOnClickListener { viewModel.handleImageProcessingDetails() }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -173,47 +173,51 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
         }
     }
 
-    private fun setupResponsiveLayout() {
+    private fun setupAdaptiveLayout() {
         binding.image.updateLayoutParams {
-            val dimen = when (getWindowSizeClass().windowHeightSizeClass) {
-                WindowHeightSizeClass.COMPACT -> {
-                    resources.getDimension(R.dimen.icon_compact)
-                }
-                WindowHeightSizeClass.MEDIUM -> {
-                    resources.getDimension(R.dimen.icon_medium)
-                }
-                else -> {
-                    resources.getDimension(R.dimen.icon_expanded)
-                }
-            }.toInt()
+            val dimen = if (isHeightAtLeastBreakpoint(
+                    heightDpBreakpoint = WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                )
+            ) {
+                resources.getDimension(R.dimen.icon_expanded).toInt()
+            } else if (isHeightAtLeastBreakpoint(
+                    heightDpBreakpoint = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+                )
+            ) {
+                resources.getDimension(R.dimen.icon_medium).toInt()
+            } else {
+                resources.getDimension(R.dimen.icon_compact).toInt()
+            }
             height = dimen
             width = dimen
         }
-        when (getWindowSizeClass().windowHeightSizeClass) {
-            WindowHeightSizeClass.COMPACT -> {
-                binding.heading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
-                )
-                binding.subheading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_BodySmall
-                )
-            }
-            WindowHeightSizeClass.MEDIUM -> {
-                binding.heading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
-                )
-                binding.subheading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
-                )
-            }
-            else -> {
-                binding.heading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
-                )
-                binding.subheading.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
-                )
-            }
+        if (isHeightAtLeastBreakpoint(
+                heightDpBreakpoint = WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+            )
+        ) {
+            binding.heading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
+            )
+            binding.subheading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
+            )
+        } else if (isHeightAtLeastBreakpoint(
+                heightDpBreakpoint = WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+            )
+        ) {
+            binding.heading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
+            )
+            binding.subheading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
+            )
+        } else {
+            binding.heading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
+            )
+            binding.subheading.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_BodySmall
+            )
         }
     }
 }

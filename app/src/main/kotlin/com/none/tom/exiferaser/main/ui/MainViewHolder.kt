@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,45 +22,49 @@ package com.none.tom.exiferaser.main.ui
 
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
-import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowSizeClass
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
 
 class MainViewHolder(
     private val binding: ItemImageSourceBinding,
     private val listener: MainAdapter.Listener,
-    private val windowHeightSizeClass: WindowHeightSizeClass
+    private val isHeightAtLeastBreakpoint: (Int) -> Boolean
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
         binding.image.updateLayoutParams {
             binding.image.layoutParams.apply {
-                val dimen = when (windowHeightSizeClass) {
-                    WindowHeightSizeClass.COMPACT -> {
-                        itemView.context.resources.getDimension(R.dimen.icon_compact)
-                    }
-                    WindowHeightSizeClass.MEDIUM -> {
-                        itemView.context.resources.getDimension(R.dimen.icon_medium)
-                    }
-                    else -> {
-                        itemView.context.resources.getDimension(R.dimen.icon_expanded)
-                    }
-                }.toInt()
+                val dimen = if (isHeightAtLeastBreakpoint(
+                        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                    )
+                ) {
+                    itemView.context.resources.getDimension(R.dimen.icon_expanded).toInt()
+                } else if (isHeightAtLeastBreakpoint(
+                        WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+                    )
+                ) {
+                    itemView.context.resources.getDimension(R.dimen.icon_medium).toInt()
+                } else {
+                    itemView.context.resources.getDimension(R.dimen.icon_compact).toInt()
+                }
                 height = dimen
                 width = dimen
             }
         }
         binding.method.setTextAppearance(
-            when (windowHeightSizeClass) {
-                WindowHeightSizeClass.COMPACT -> {
-                    com.google.android.material.R.style.TextAppearance_Material3_BodySmall
-                }
-                WindowHeightSizeClass.MEDIUM -> {
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
-                }
-                else -> {
-                    com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
-                }
+            if (isHeightAtLeastBreakpoint(
+                    WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                )
+            ) {
+                com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
+            } else if (isHeightAtLeastBreakpoint(
+                    WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+                )
+            ) {
+                com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
+            } else {
+                com.google.android.material.R.style.TextAppearance_Material3_BodySmall
             }
         )
         binding.imageSource.setOnClickListener {

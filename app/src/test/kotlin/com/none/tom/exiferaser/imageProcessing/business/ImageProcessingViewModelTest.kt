@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -67,7 +67,6 @@ class ImageProcessingViewModelTest {
                 )
             )
         ) {
-            expectInitialState()
             containerHost.handleImageProcessingDetails()
             expectSideEffect(
                 ImageProcessingSideEffect.Navigate.ToImageProcessingDetails(
@@ -88,7 +87,6 @@ class ImageProcessingViewModelTest {
             testScope = this,
             initialState = ImageProcessingState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getDefaultDisplayNameSuffix()
             } returns ""
@@ -206,7 +204,6 @@ class ImageProcessingViewModelTest {
             testScope = this,
             initialState = ImageProcessingState()
         ) {
-            expectInitialState()
             containerHost.handleUnsupportedSelection().join()
             expectState {
                 copy(imageImageProcessingStep = ImageProcessingStep.FinishedBulk)
@@ -225,7 +222,6 @@ class ImageProcessingViewModelTest {
             testScope = this,
             initialState = ImageProcessingState()
         ) {
-            expectInitialState()
             coEvery {
                 selectionRepository.getSelection(any())
             } returns emptyList()
@@ -260,7 +256,6 @@ class ImageProcessingViewModelTest {
                 imageProcessingSummaries = listOf(testImageProcessingSummary)
             )
         ) {
-            expectInitialState()
             containerHost.shareImages()
             expectSideEffect(ImageProcessingSideEffect.ShareImages(ArrayList(testUris)))
         }

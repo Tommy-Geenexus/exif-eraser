@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -38,7 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.window.core.layout.computeWindowSizeClass
 import androidx.window.layout.WindowMetricsCalculator
 import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
 import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
@@ -104,7 +104,10 @@ class ExifEraserActivity : AppCompatActivity() {
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             findNavController().addOnDestinationChangedListener { _, destination, _ ->
-                if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
+                if (!windowSizeClass.isWidthAtLeastBreakpoint(
+                        widthDpBreakpoint = WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                    )
+                ) {
                     window.navigationBarColor = resolveThemeAttribute(
                         if (destination.id == R.id.fragment_main) {
                             com.google.android.material.R.attr.colorSurfaceContainer
@@ -126,7 +129,7 @@ class ExifEraserActivity : AppCompatActivity() {
         val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
         val widthDp = metrics.bounds.width() / resources.displayMetrics.density
         val heightDp = metrics.bounds.height() / resources.displayMetrics.density
-        windowSizeClass = WindowSizeClass.compute(widthDp, heightDp)
+        windowSizeClass = WindowSizeClass.BREAKPOINTS_V1.computeWindowSizeClass(widthDp, heightDp)
     }
 
     private fun handleSupportedIntent() {

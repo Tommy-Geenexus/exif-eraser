@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -45,5 +45,13 @@ abstract class BaseFragment<B : ViewBinding>(
 
     abstract fun bindLayout(view: View): B
 
-    protected fun getWindowSizeClass() = (requireActivity() as ExifEraserActivity).windowSizeClass
+    protected fun isHeightAtLeastBreakpoint(heightDpBreakpoint: Int) =
+        (requireActivity() as ExifEraserActivity)
+            .windowSizeClass
+            .isHeightAtLeastBreakpoint(heightDpBreakpoint)
+
+    protected fun isWidthAtLeastBreakpoint(widthDpBreakpoint: Int) =
+        (requireActivity() as ExifEraserActivity)
+            .windowSizeClass
+            .isWidthAtLeastBreakpoint(widthDpBreakpoint)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -36,13 +36,13 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.util.Collections
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.util.Collections
 
 @Config(sdk = [ROBOELECTRIC_BUILD_VERSION_CODE])
 @RunWith(RobolectricTestRunner::class)
@@ -65,7 +65,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.isLegacyImageSelectionEnabled()
             } returns false
@@ -102,7 +101,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.isLegacyImageSelectionEnabled()
             } returns false
@@ -139,7 +137,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultOpenPath()
             } returns Result.success(testUri)
@@ -180,7 +177,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.chooseSelectionNavigationRoute(isFromCamera = true).join()
             coEvery {
                 settingsRepository.isSkipSavePathSelectionEnabled()
@@ -211,7 +207,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 mainRepository.deleteCameraImages()
             } returns Result.success(Unit)
@@ -252,7 +247,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.handleDeleteCameraImages()
             expectSideEffect(MainSideEffect.Navigate.ToDeleteCameraImages)
         }
@@ -270,7 +264,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.handleHelp()
             expectSideEffect(MainSideEffect.Navigate.ToHelp)
         }
@@ -288,7 +281,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 mainRepository.getPrimaryClipImageUris()
             } returns Result.success(testUris)
@@ -329,7 +321,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.handleReceivedImages(emptyList()).join()
             containerHost.handleReceivedImages(testUris).join()
             containerHost.handleReceivedImages(testUris2).join()
@@ -351,7 +342,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.handleSettings().join()
             expectSideEffect(MainSideEffect.Navigate.ToSettings)
         }
@@ -369,7 +359,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.handleShortcut("").join()
             expectSideEffect(MainSideEffect.Shortcut.Handle(""))
         }
@@ -387,7 +376,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost.reportShortcutUsed("").join()
             expectSideEffect(MainSideEffect.Shortcut.ReportUsage(""))
         }
@@ -405,7 +393,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 mainRepository.getFileProviderUri()
             } returns Result.success(testUri)
@@ -446,7 +433,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 imageSourcesRepository.putImageSources(testImageSources)
             } returns Result.success(Unit)
@@ -487,7 +473,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 selectionRepository.putSelection(uri = testUri, isFromCamera = false)
             } returns Result.success(Unit)
@@ -553,7 +538,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 selectionRepository.putSelection(testUris)
             } returns Result.success(Unit)
@@ -594,7 +578,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 mainRepository.getChildDocuments(testUri)
             } returns Result.success(testUris)
@@ -652,7 +635,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getDefaultNightMode()
             } returns DEFAULT_NIGHT_MODE
@@ -693,7 +675,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState()
         ) {
-            expectInitialState()
             containerHost
                 .reorderImageSources(
                     imageSources = testImageSources,
@@ -719,7 +700,6 @@ class MainViewModelTest {
             testScope = this,
             initialState = MainState(imageSources = testImageSources)
         ) {
-            expectInitialState()
             containerHost.toggleImageSourceReorderingEnabled().join()
             containerHost.toggleImageSourceReorderingEnabled().join()
             expectState {

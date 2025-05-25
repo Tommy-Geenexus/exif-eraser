@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -55,7 +55,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.isRandomizeFileNamesEnabled()
             } returns true
@@ -125,7 +124,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putRandomizeFileNames(any())
             } returns Result.success(Unit)
@@ -154,7 +152,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultOpenPath()
             } returns Result.success(testUri)
@@ -180,7 +177,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState(defaultOpenPathName = TEST_DEFAULT_PATH_OPEN_NAME)
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultOpenPath()
             } returns Result.success(testUri)
@@ -218,7 +214,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultOpenPath()
             } returns Result.success(testUri)
@@ -264,7 +259,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultSavePath()
             } returns Result.success(testUri)
@@ -290,7 +284,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState(defaultSavePathName = TEST_DEFAULT_PATH_SAVE_NAME)
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultSavePath()
             } returns Result.success(testUri)
@@ -328,7 +321,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getPrivilegedDefaultSavePath()
             } returns Result.success(testUri)
@@ -374,7 +366,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putAutoDelete(any())
             } returns Result.success(Unit)
@@ -403,7 +394,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putPreserveOrientation(any())
             } returns Result.success(Unit)
@@ -432,7 +422,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putShareByDefault(any())
             } returns Result.success(Unit)
@@ -461,7 +450,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getDefaultDisplayNameSuffix()
             } returns TEST_DEFAULT_DISPLAY_NAME_SUFFIX
@@ -486,7 +474,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putDefaultDisplayNameSuffix(any())
             } returns Result.success(Unit)
@@ -515,7 +502,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putSelectImagesLegacy(any())
             } returns Result.success(Unit)
@@ -544,7 +530,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putSavePathSelectionSkip(any())
             } returns Result.success(Unit)
@@ -573,7 +558,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.getDefaultNightMode()
             } returns DEFAULT_NIGHT_MODE
@@ -598,7 +582,6 @@ class SettingsViewModelTest {
             testScope = this,
             initialState = SettingsState()
         ) {
-            expectInitialState()
             coEvery {
                 settingsRepository.putDefaultNightMode(any())
             } returns Result.success(Unit)

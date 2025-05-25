@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -228,8 +228,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keyRandomizeFileNames] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() != false
     }
 
     suspend fun putRandomizeFileNames(value: Boolean): Result<Unit> {
@@ -249,8 +248,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keyLegacyImageSelection] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() == true
     }
 
     suspend fun putSelectImagesLegacy(value: Boolean): Result<Unit> {
@@ -314,8 +312,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keyAutoDelete] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() == true
     }
 
     suspend fun putPreserveOrientation(value: Boolean): Result<Unit> {
@@ -335,8 +332,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keyPreserveOrientation] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() == true
     }
 
     suspend fun putShareByDefault(value: Boolean): Result<Unit> {
@@ -356,8 +352,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keyShareByDefault] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() == true
     }
 
     suspend fun putDefaultDisplayNameSuffix(value: String): Result<Unit> {
@@ -398,8 +393,7 @@ class SettingsRepository @Inject constructor(
             .data
             .catch { exception -> Timber.e(exception) }
             .map { preferences -> preferences[keySavePathSelectionSkip] }
-            .firstOrNull()
-            ?: false
+            .firstOrNull() == true
     }
 
     suspend fun getDefaultNightMode(): Int {

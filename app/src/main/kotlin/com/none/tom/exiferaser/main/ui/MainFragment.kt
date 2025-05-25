@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -46,8 +46,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.window.core.layout.WindowHeightSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.window.core.layout.WindowSizeClass
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.android.material.snackbar.Snackbar
@@ -113,9 +112,9 @@ class MainFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupResponsiveAppBarLayout()
-        setupResponsiveTitleLayout()
-        setupResponsiveImageSourceLayout()
+        setupAdaptiveAppBarLayout()
+        setupAdaptiveTitleLayout()
+        setupAdaptiveImageSourceLayout()
         DropHelper.configureView(
             requireActivity(),
             binding.layout,
@@ -459,7 +458,7 @@ class MainFragment :
             ?.let { info -> sm.reportShortcutUsed(info.id) }
     }
 
-    private fun setupResponsiveAppBarLayout() {
+    private fun setupAdaptiveAppBarLayout() {
         val menuProvider = object : MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -488,21 +487,17 @@ class MainFragment :
                 }
             }
         }
-        if (getWindowSizeClass().windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
-            requireActivity().addMenuProvider(
-                menuProvider,
-                viewLifecycleOwner,
-                Lifecycle.State.STARTED
-            )
-        } else {
+        binding.bottomBarLayout.isVisible =
+            !isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
+        if (binding.bottomBarLayout.isVisible) {
             binding.bottomBar.addMenuProvider(
                 menuProvider,
                 viewLifecycleOwner,
                 Lifecycle.State.STARTED
             )
             binding.bottomBarLayout.doOnLayout {
-                val imageSourcesCoordinates = IntArray(size = 2) { 0 }
-                val bottomBarCoordinates = IntArray(size = 2) { 0 }
+                val imageSourcesCoordinates = IntArray(size = 2)
+                val bottomBarCoordinates = IntArray(size = 2)
                 binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
                 binding.bottomBarLayout.getLocationInWindow(bottomBarCoordinates)
                 val imageSourcesBottomY = imageSourcesCoordinates[1] +
@@ -523,19 +518,23 @@ class MainFragment :
                     viewModel.toggleImageSourceReorderingEnabled()
                 }
             }
+        } else {
+            requireActivity().addMenuProvider(
+                menuProvider,
+                viewLifecycleOwner,
+                Lifecycle.State.STARTED
+            )
         }
-        binding.bottomBarLayout.isVisible =
-            getWindowSizeClass().windowWidthSizeClass != WindowWidthSizeClass.EXPANDED
     }
 
-    private fun setupResponsiveImageSourceLayout() {
+    private fun setupAdaptiveImageSourceLayout() {
         binding.imageSources.apply {
             layoutManager = FlexboxLayoutManager(requireActivity()).apply {
                 justifyContent = JustifyContent.CENTER
             }
             adapter = MainAdapter(
                 listener = this@MainFragment,
-                windowHeightSizeClass = getWindowSizeClass().windowHeightSizeClass
+                isHeightAtLeastBreakpoint = ::isHeightAtLeastBreakpoint
             )
             addItemDecoration(
                 RecyclerViewMarginItemDecoration(
@@ -553,39 +552,42 @@ class MainFragment :
         }
     }
 
-    private fun setupResponsiveTitleLayout() {
-        binding.title.gravity = when (getWindowSizeClass().windowWidthSizeClass) {
-            WindowWidthSizeClass.COMPACT -> Gravity.END
-            else -> Gravity.CENTER
+    private fun setupAdaptiveTitleLayout() {
+        binding.title.gravity = if (!isWidthAtLeastBreakpoint(
+                WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+            )
+        ) {
+            Gravity.END
+        } else {
+            Gravity.CENTER
         }
         binding.title.text = getString(
             R.string.choose_your_preferred_image_source_placeholder,
             getString(R.string.choose_your),
             getString(R.string.preferred_image_source)
         )
-        binding.title.typeface = when (getWindowSizeClass().windowHeightSizeClass) {
-            WindowHeightSizeClass.COMPACT -> {
-                binding.title.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
-                )
-                Typeface.DEFAULT_BOLD
-            }
-            WindowHeightSizeClass.MEDIUM -> {
-                binding.title.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
-                )
-                Typeface.DEFAULT_BOLD
-            }
-            else -> {
-                binding.title.setTextAppearance(
-                    com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
-                )
-                Typeface.DEFAULT_BOLD
-            }
+        binding.title.typeface = if (isHeightAtLeastBreakpoint(
+                WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
+            )
+        ) {
+            binding.title.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge
+            )
+            Typeface.DEFAULT_BOLD
+        } else if (isHeightAtLeastBreakpoint(WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND)) {
+            binding.title.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium
+            )
+            Typeface.DEFAULT_BOLD
+        } else {
+            binding.title.setTextAppearance(
+                com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall
+            )
+            Typeface.DEFAULT_BOLD
         }
         binding.title.doOnLayout {
-            val imageSourcesCoordinates = IntArray(size = 2) { 0 }
-            val titleCoordinates = IntArray(size = 2) { 0 }
+            val imageSourcesCoordinates = IntArray(size = 2)
+            val titleCoordinates = IntArray(size = 2)
             binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
             binding.title.getLocationInWindow(titleCoordinates)
             val titleBottomY = titleCoordinates[1] - binding.title.measuredHeight

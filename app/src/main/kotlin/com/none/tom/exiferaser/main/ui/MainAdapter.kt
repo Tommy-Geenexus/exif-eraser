@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.window.core.layout.WindowHeightSizeClass
 import com.none.tom.exiferaser.ImageDirectoryProto
 import com.none.tom.exiferaser.ImageFileProto
 import com.none.tom.exiferaser.ImageFilesProto
@@ -33,7 +32,7 @@ import com.squareup.wire.AnyMessage
 
 class MainAdapter(
     private val listener: Listener,
-    private val windowHeightSizeClass: WindowHeightSizeClass
+    private val isHeightAtLeastBreakpoint: (Int) -> Boolean
 ) : ListAdapter<AnyMessage, MainViewHolder>(
     object : DiffUtil.ItemCallback<AnyMessage>() {
 
@@ -61,7 +60,7 @@ class MainAdapter(
                 false
             ),
             listener = listener,
-            windowHeightSizeClass = windowHeightSizeClass
+            isHeightAtLeastBreakpoint = isHeightAtLeastBreakpoint
         )
     }
 
