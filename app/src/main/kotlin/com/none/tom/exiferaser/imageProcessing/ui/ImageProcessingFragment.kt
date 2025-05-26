@@ -21,13 +21,9 @@
 package com.none.tom.exiferaser.imageProcessing.ui
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.os.bundleOf
-import androidx.core.view.MenuProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -43,6 +39,7 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractShareImages
+import com.none.tom.exiferaser.core.extension.setupToolbar
 import com.none.tom.exiferaser.core.image.ImageProcessingStep
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.util.NAV_ARG_IMAGE_PROCESSING_SUMMARIES
@@ -72,36 +69,24 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar(toolbar = binding.appbarSmallAction.toolbar, title = R.string.summary)
+        setupAdaptiveLayout()
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding.appbarSmallAction.appbarLayout.setPadding(0, insets.top, 0, 0)
+                bottomMargin = insets.bottom
+            }
             WindowInsetsCompat.CONSUMED
         }
-        val menuProvider = object : MenuProvider {
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_selection, menu)
-            }
-
-            override fun onPrepareMenu(menu: Menu) {
-                menu.findItem(R.id.action_share).apply {
-                    isVisible = binding.done.isVisible &&
-                        viewModel.container.stateFlow.value.imagesSavedCount > 0
-                }
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return if (menuItem.itemId == R.id.action_share) {
-                    viewModel.shareImages()
-                    true
-                } else {
-                    false
-                }
-            }
+        binding.appbarSmallAction.share.setOnClickListener {
+            viewModel.shareImages()
         }
-        requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner)
-        setupAdaptiveLayout()
-        binding.details.setOnClickListener { viewModel.handleImageProcessingDetails() }
+        binding.details.setOnClickListener {
+            viewModel.handleImageProcessingDetails()
+        }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.container.stateFlow.collect { state ->
@@ -139,9 +124,8 @@ class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
             binding.progressLayout.isVisible = false
             binding.detailsLayout.isVisible = state.imageProcessingSummaries.isNotEmpty()
             binding.done.isVisible = true
-            if (state.imagesProcessedCount > 0) {
-                requireActivity().invalidateOptionsMenu()
-            }
+            binding.appbarSmallAction.share.isVisible =
+                viewModel.container.stateFlow.value.imagesSavedCount > 0
         }
     }
 

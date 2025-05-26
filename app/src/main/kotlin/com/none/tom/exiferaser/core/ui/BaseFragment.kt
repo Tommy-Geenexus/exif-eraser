@@ -50,6 +50,7 @@ abstract class BaseFragment<B : ViewBinding>(
             .windowSizeClass
             .isHeightAtLeastBreakpoint(heightDpBreakpoint)
 
+    @Suppress("SameParameterValue")
     protected fun isWidthAtLeastBreakpoint(widthDpBreakpoint: Int) =
         (requireActivity() as ExifEraserActivity)
             .windowSizeClass

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -39,6 +39,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.extension.isNotNullOrEmpty
+import com.none.tom.exiferaser.core.extension.setupToolbar
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.ui.RecyclerViewVerticalDividerItemDecoration
 import com.none.tom.exiferaser.core.util.KEY_DEFAULT_DISPLAY_NAME_SUFFIX
@@ -76,16 +77,22 @@ class SettingsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
-            WindowInsetsCompat.CONSUMED
-        }
+        setupToolbar(toolbar = binding.appbarMediumCollapsing.toolbar, title = R.string.settings)
         binding.preferences.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SettingsAdapter(listener = this@SettingsFragment)
             itemAnimator = null
             addItemDecoration(RecyclerViewVerticalDividerItemDecoration(context))
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding.appbarMediumCollapsing.appbarLayout.setPadding(0, insets.top, 0, 0)
+                bottomMargin = insets.bottom
+            }
+            WindowInsetsCompat.CONSUMED
         }
         setFragmentResultListener(KEY_DEFAULT_DISPLAY_NAME_SUFFIX) { _, bundle: Bundle ->
             val value = bundle

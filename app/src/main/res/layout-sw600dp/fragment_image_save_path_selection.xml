@@ -19,7 +19,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/path_save_default"
-        style="?attr/materialIconButtonFilledStyle"
+        style="@style/Widget.Material3Expressive.Button.TonalButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_large"
@@ -27,7 +27,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/path_save_custom"
-        style="?attr/materialIconButtonFilledTonalStyle"
+        style="@style/Widget.Material3Expressive.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_large"

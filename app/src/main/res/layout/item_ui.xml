@@ -10,11 +10,11 @@
 
     <include
         android:id="@+id/image_selection_legacy"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/save_path_custom_skip"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/night_mode"

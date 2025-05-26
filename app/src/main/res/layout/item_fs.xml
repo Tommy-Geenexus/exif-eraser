@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/randomize_file_names"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/default_path_open"

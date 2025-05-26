@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -22,16 +22,49 @@ package com.none.tom.exiferaser.core.extension
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.util.TypedValue
+import android.view.Gravity
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.none.tom.exiferaser.R
 
 fun Activity.resolveThemeAttribute(@AttrRes attrRes: Int): Int {
     val tv = TypedValue()
     theme.resolveAttribute(attrRes, tv, true)
     return tv.data
+}
+
+fun Activity.setCutoutForegroundColor(@ColorRes colorRes: Int) {
+    ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, windowInsetsCompat ->
+        val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.displayCutout())
+        val drawable = if (insets.left > 0) {
+            LayerDrawable(arrayOf(getColor(colorRes).toDrawable())).apply {
+                setLayerGravity(0, Gravity.START)
+                setLayerWidth(0, insets.left)
+            }
+        } else if (insets.right > 0) {
+            LayerDrawable(arrayOf(getColor(colorRes).toDrawable())).apply {
+                setLayerGravity(0, Gravity.END)
+                setLayerWidth(0, insets.right)
+            }
+        } else {
+            null
+        }
+        window.decorView.foreground = drawable
+        windowInsetsCompat
+    }
 }
 
 fun Context.defaultNightModes() = mutableMapOf(
@@ -49,4 +82,15 @@ fun Context.defaultNightModeDisplayValue() = if (Build.VERSION.SDK_INT >= Build.
     getString(R.string.automatically)
 } else {
     getString(R.string.never)
+}
+
+fun Fragment.setupToolbar(toolbar: Toolbar, @StringRes title: Int) {
+    (requireActivity() as AppCompatActivity).apply {
+        setSupportActionBar(
+            toolbar.apply {
+                setTitle(title)
+            }
+        )
+        setupActionBarWithNavController(findNavController())
+    }
 }

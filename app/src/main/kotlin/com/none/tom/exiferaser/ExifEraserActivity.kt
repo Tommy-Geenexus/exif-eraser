@@ -36,11 +36,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.computeWindowSizeClass
 import androidx.window.layout.WindowMetricsCalculator
 import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
+import com.none.tom.exiferaser.core.extension.setCutoutForegroundColor
 import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGE
 import com.none.tom.exiferaser.core.util.INTENT_ACTION_CHOOSE_IMAGES
@@ -72,23 +72,13 @@ class ExifEraserActivity : AppCompatActivity() {
         with(ActivityExifEraserBinding.inflate(layoutInflater)) {
             setContentView(root)
             computeWindowSizeClasses()
-            val navController = findNavController()
-            navController.addOnDestinationChangedListener { _, navDestination, _ ->
-                if (navDestination.id == R.id.fragment_main) {
-                    toolbar.setLogo(R.drawable.ic_logo)
-                } else {
-                    toolbar.logo = null
-                }
-            }
-            setSupportActionBar(toolbar)
-            setupActionBarWithNavController(navController)
+            setCutoutForegroundColor(colorRes = android.R.color.black)
             ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsetsCompat ->
                 val insets = windowInsetsCompat.getInsets(
                     WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
                 )
                 root.updateLayoutParams<FrameLayout.LayoutParams> {
                     leftMargin = insets.left
-                    topMargin = insets.top
                     rightMargin = insets.right
                 }
                 windowInsetsCompat

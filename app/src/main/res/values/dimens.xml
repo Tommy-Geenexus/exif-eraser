@@ -4,14 +4,12 @@
     <dimen name="spacing_small">8dp</dimen>
     <dimen name="spacing_normal">16dp</dimen>
     <dimen name="spacing_large">24dp</dimen>
-    <dimen name="spacing_preference_category_compact">64dp</dimen>
-    <dimen name="spacing_preference_category_medium_expanded">72dp</dimen>
-    <dimen name="spacing_preference_end_compact">72dp</dimen>
-    <dimen name="spacing_preference_end_medium_expanded">80dp</dimen>
+    <dimen name="spacing_docked_toolbar">32dp</dimen>
 
-    <dimen name="progress_width">240dp</dimen>
+    <dimen name="progress_size">52dp</dimen>
 
     <dimen name="icon_compact">24dp</dimen>
     <dimen name="icon_medium">40dp</dimen>
     <dimen name="icon_expanded">56dp</dimen>
+    <dimen name="icon_docked_toolbar">48dp</dimen>
 </resources>

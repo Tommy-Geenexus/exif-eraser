@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractViewUrl
+import com.none.tom.exiferaser.core.extension.setupToolbar
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.util.URL_ISSUES
 import com.none.tom.exiferaser.core.util.URL_LOCALISATION
@@ -50,14 +51,20 @@ class HelpFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
-            val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.navigationBars())
-            view.updateLayoutParams<FrameLayout.LayoutParams> { bottomMargin = insets.bottom }
-            WindowInsetsCompat.CONSUMED
-        }
+        setupToolbar(toolbar = binding.appbarMediumCollapsing.toolbar, title = R.string.help)
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding.appbarMediumCollapsing.appbarLayout.setPadding(0, insets.top, 0, 0)
+                bottomMargin = insets.bottom
+            }
+            WindowInsetsCompat.CONSUMED
         }
     }
 

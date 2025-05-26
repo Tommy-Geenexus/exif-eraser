@@ -36,13 +36,13 @@ import com.none.tom.exiferaser.settings.data.SettingsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.util.Collections
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.orbitmvi.orbit.test.test
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import java.util.Collections
 
 @Config(sdk = [ROBOELECTRIC_BUILD_VERSION_CODE])
 @RunWith(RobolectricTestRunner::class)

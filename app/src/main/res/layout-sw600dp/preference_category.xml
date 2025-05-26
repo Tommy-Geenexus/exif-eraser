@@ -3,9 +3,8 @@
     android:id="@+id/category"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/spacing_preference_category_medium_expanded"
+    android:layout_marginHorizontal="@dimen/spacing_large"
     android:layout_marginTop="@dimen/spacing_large"
-    android:layout_marginEnd="@dimen/spacing_large"
     android:layout_marginBottom="@dimen/spacing_small"
     android:textAppearance="?attr/textAppearanceTitleSmall"
     android:textColor="?attr/colorSecondary" />

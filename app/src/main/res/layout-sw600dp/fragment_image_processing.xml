@@ -6,12 +6,17 @@
     android:layout_height="match_parent"
     android:transitionGroup="true">
 
+    <include
+        android:id="@+id/appbar_small_action"
+        layout="@layout/appbar_small_action" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:layout_constraintGuide_percent="0.4"
+        app:layout_constraintTop_toBottomOf="@id/appbar_small_action" />
 
     <LinearLayout
         android:id="@+id/progress_layout"
@@ -29,11 +34,12 @@
             android:gravity="center"
             android:textAppearance="?android:textAppearanceLarge" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_indicator"
-            android:layout_width="@dimen/progress_width"
-            android:layout_height="@dimen/progress_width"
-            android:layout_gravity="center" />
+            android:layout_width="@dimen/progress_size"
+            android:layout_height="@dimen/progress_size"
+            android:layout_gravity="center"
+            app:trackThickness="8dp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -89,9 +95,11 @@
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/details"
+                style="@style/Widget.Material3Expressive.FloatingActionButton.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_large"
+                android:layout_margin="@dimen/spacing_normal"
+                android:contentDescription="@string/details"
                 android:text="@string/details"
                 android:transitionName="@string/shared_element_details"
                 app:icon="@drawable/ic_details" />

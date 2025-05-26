@@ -7,23 +7,25 @@
     android:orientation="vertical"
     android:transitionGroup="true">
 
+    <include
+        android:id="@+id/appbar_small"
+        layout="@layout/appbar_small" />
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"
-        style="?attr/linearProgressIndicatorStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/appbar_small" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_normal"
-        android:layout_marginEnd="@dimen/spacing_normal"
+        android:layout_marginHorizontal="@dimen/spacing_normal"
         android:ellipsize="end"
         android:maxLines="2"
         app:layout_constraintBottom_toTopOf="@id/image_sources"
@@ -36,29 +38,123 @@
         android:clipToPadding="false"
         android:paddingHorizontal="12dp"
         android:transitionGroup="true"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar_layout"
+        app:layout_constraintBottom_toTopOf="@id/docked_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/bottom_bar_layout"
+    <com.google.android.material.dockedtoolbar.DockedToolbarLayout
+        android:id="@+id/docked_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:paddingBottomSystemWindowInsets="true">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_bar"
+        <com.google.android.material.overflow.OverflowLinearLayout
+            android:id="@+id/docked_toolbar_child"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/image_sources_reorder"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/reorder_image_source_cards"
-            android:tooltipText="@string/reorder_image_source_cards"
-            app:layout_anchor="@id/bottom_bar" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="@dimen/icon_docked_toolbar"
+                app:layout_overflowIcon="@drawable/ic_help"
+                app:layout_overflowText="@string/help">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_help"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/help"
+                    android:tooltipText="@string/help"
+                    app:icon="@drawable/ic_help" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="@dimen/icon_docked_toolbar"
+                app:layout_overflowIcon="@drawable/ic_folder_delete"
+                app:layout_overflowText="@string/delete_camera_images">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_delete_camera_images"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/delete_camera_images"
+                    android:tooltipText="@string/delete_camera_images"
+                    app:icon="@drawable/ic_folder_delete" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="@dimen/icon_docked_toolbar"
+                app:layout_overflowText="@string/reorder_image_source_cards">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_image_sources_reorder"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="@dimen/icon_docked_toolbar"
+                    android:layout_height="@dimen/icon_docked_toolbar"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/reorder_image_source_cards"
+                    android:gravity="center"
+                    android:tooltipText="@string/reorder_image_source_cards"
+                    app:iconGravity="textStart"
+                    app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="@dimen/icon_docked_toolbar"
+                app:layout_overflowIcon="@drawable/ic_content_paste_go"
+                app:layout_overflowText="@string/clipboard_content_paste">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_clipboard_paste"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/clipboard_content_paste"
+                    android:tooltipText="@string/clipboard_content_paste"
+                    app:icon="@drawable/ic_content_paste_go" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minWidth="@dimen/icon_docked_toolbar"
+                app:layout_overflowIcon="@drawable/ic_settings"
+                app:layout_overflowText="@string/settings">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action_settings"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/settings"
+                    android:tooltipText="@string/settings"
+                    app:icon="@drawable/ic_settings" />
+            </FrameLayout>
+
+        </com.google.android.material.overflow.OverflowLinearLayout>
+    </com.google.android.material.dockedtoolbar.DockedToolbarLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

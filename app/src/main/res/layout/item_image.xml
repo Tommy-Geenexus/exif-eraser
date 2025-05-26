@@ -10,15 +10,15 @@
 
     <include
         android:id="@+id/auto_delete"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/preserve_orientation"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/share_by_default"
-        layout="@layout/preference_check_box" />
+        layout="@layout/preference_switch" />
 
     <include
         android:id="@+id/default_display_name_suffix"

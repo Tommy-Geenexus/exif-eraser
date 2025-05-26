@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -31,26 +31,26 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.button.MaterialButton
 
-inline fun FloatingActionButton.addIconAnimation(
+inline fun MaterialButton.addIconAnimation(
     @DrawableRes animatedVectorDrawable: Int,
     @DrawableRes animatedVectorDrawableInverse: Int,
     crossinline showAnimatedVectorDrawableCondition: () -> Boolean
 ) {
-    setImageResource(animatedVectorDrawable)
+    setIconResource(animatedVectorDrawable)
     val callback = object : Animatable2Compat.AnimationCallback() {
 
         override fun onAnimationEnd(drawableEnd: Drawable?) {
             AnimatedVectorDrawableCompat.unregisterAnimationCallback(drawableEnd, this)
-            setImageResource(
+            setIconResource(
                 if (showAnimatedVectorDrawableCondition()) {
                     animatedVectorDrawable
                 } else {
                     animatedVectorDrawableInverse
                 }
             )
-            AnimatedVectorDrawableCompat.registerAnimationCallback(drawable, this)
+            AnimatedVectorDrawableCompat.registerAnimationCallback(icon, this)
         }
     }
     val lifecycle = findViewTreeLifecycleOwner()?.lifecycle
@@ -61,16 +61,16 @@ inline fun FloatingActionButton.addIconAnimation(
                 when (event) {
                     Lifecycle.Event.ON_START -> {
                         AnimatedVectorDrawableCompat.registerAnimationCallback(
-                            drawable,
+                            icon,
                             callback
                         )
                     }
                     Lifecycle.Event.ON_STOP -> {
-                        if (drawable is Animatable) {
-                            (drawable as Animatable).stop()
+                        if (icon is Animatable) {
+                            (icon as Animatable).stop()
                         }
                         AnimatedVectorDrawableCompat.unregisterAnimationCallback(
-                            drawable,
+                            icon,
                             callback
                         )
                     }

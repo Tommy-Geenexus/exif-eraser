@@ -27,16 +27,16 @@ import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.MenuProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.draganddrop.DropHelper
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -55,6 +55,7 @@ import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractTakePicture
 import com.none.tom.exiferaser.core.extension.addIconAnimation
 import com.none.tom.exiferaser.core.extension.attachTo
+import com.none.tom.exiferaser.core.extension.setupToolbar
 import com.none.tom.exiferaser.core.image.supportedImageFormats
 import com.none.tom.exiferaser.core.receiver.DragAndDropContentReceiver
 import com.none.tom.exiferaser.core.ui.BaseFragment
@@ -112,6 +113,7 @@ class MainFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar(toolbar = binding.appbarSmall.toolbar, title = R.string.app_name)
         setupAdaptiveAppBarLayout()
         setupAdaptiveTitleLayout()
         setupAdaptiveImageSourceLayout()
@@ -123,6 +125,15 @@ class MainFragment :
                 onUrisReceived = { uris -> viewModel.handleReceivedImages(uris) }
             )
         )
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
+            val insets = windowInsetsCompat.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updateLayoutParams<FrameLayout.LayoutParams> {
+                binding.appbarSmall.appbarLayout.setPadding(0, insets.top, 0, 0)
+            }
+            windowInsetsCompat
+        }
         setFragmentResultListener(KEY_CAMERA_IMAGE_DELETE) { _, bundle: Bundle ->
             if (bundle.getBoolean(KEY_CAMERA_IMAGE_DELETE)) {
                 viewModel.deleteCameraImages()
@@ -204,12 +215,14 @@ class MainFragment :
             is MainSideEffect.DefaultNightMode -> {
                 AppCompatDelegate.setDefaultNightMode(sideEffect.value)
             }
+
             is MainSideEffect.ImageSourceReordering -> {
-                (binding.imageSourcesReorder.drawable as? Animatable)?.start()
+                (binding.actionImageSourcesReorder.icon as? Animatable)?.start()
                 if (!sideEffect.isEnabled) {
                     viewModel.putImageSources(sideEffect.imageSources)
                 }
             }
+
             is MainSideEffect.ImageSources.Image -> {
                 if (sideEffect.isLegacyImageSelectionEnabled) {
                     chooseImageLegacy.launch(sideEffect.supportedMimeTypes)
@@ -219,12 +232,15 @@ class MainFragment :
                     )
                 }
             }
+
             MainSideEffect.ImageSources.ImageDirectory.Failure -> {
                 chooseImageDirectory.launch(Uri.EMPTY)
             }
+
             is MainSideEffect.ImageSources.ImageDirectory.Success -> {
                 chooseImageDirectory.launch(sideEffect.uri)
             }
+
             is MainSideEffect.ImageSources.Images -> {
                 if (sideEffect.isLegacyImageSelectionEnabled) {
                     chooseImagesLegacy.launch(sideEffect.supportedMimeTypes)
@@ -234,6 +250,7 @@ class MainFragment :
                     )
                 }
             }
+
             MainSideEffect.ImageSources.Camera.Failure -> {
                 Snackbar
                     .make(
@@ -241,11 +258,10 @@ class MainFragment :
                         R.string.image_sources_camera_failure,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.ImageSources.Put.Failure -> {
                 Snackbar
                     .make(
@@ -253,14 +269,14 @@ class MainFragment :
                         R.string.image_sources_put_failure,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             is MainSideEffect.ImageSources.Camera.Success -> {
                 launchCamera.launch(sideEffect.uri)
             }
+
             MainSideEffect.ImageSources.Put.Success -> {
                 Snackbar
                     .make(
@@ -268,11 +284,10 @@ class MainFragment :
                         R.string.image_sources_put_success,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.Images.Delete.Failure -> {
                 Snackbar
                     .make(
@@ -280,11 +295,10 @@ class MainFragment :
                         R.string.delete_camera_images_failed,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.Images.Delete.Success -> {
                 Snackbar
                     .make(
@@ -292,11 +306,10 @@ class MainFragment :
                         R.string.delete_camera_images_success,
                         Snackbar.LENGTH_SHORT
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.Images.Paste.Failure -> {
                 Snackbar
                     .make(
@@ -305,17 +318,18 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             is MainSideEffect.Images.Paste.Success -> {
                 viewModel.handleReceivedImages(sideEffect.uris)
             }
+
             is MainSideEffect.Images.Received.Multiple -> {
                 viewModel.putImagesSelection(uris = sideEffect.uris)
             }
+
             MainSideEffect.Images.Received.None -> {
                 Snackbar
                     .make(
@@ -324,35 +338,41 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             is MainSideEffect.Images.Received.Single -> {
                 viewModel.putImageSelection(uri = sideEffect.uri)
             }
+
             MainSideEffect.ImageSources.Initialized -> {
                 consumeSharedImages()
                 consumeShortcutDeepLink()
             }
+
             MainSideEffect.Navigate.ToDeleteCameraImages -> {
                 findNavController().navigate(MainFragmentDirections.mainToDeleteCameraImages())
             }
+
             MainSideEffect.Navigate.ToHelp -> {
                 findNavController().navigate(MainFragmentDirections.mainToHelp())
             }
+
             is MainSideEffect.Navigate.ToSelection -> {
                 findNavController().navigate(
                     MainFragmentDirections.mainToImageProcessing(sideEffect.savePath)
                 )
             }
+
             MainSideEffect.Navigate.ToSelectionSavePath -> {
                 findNavController().navigate(MainFragmentDirections.mainToImageSavePathSelection())
             }
+
             MainSideEffect.Navigate.ToSettings -> {
                 findNavController().navigate(MainFragmentDirections.mainToSettings())
             }
+
             MainSideEffect.Selection.Image.Failure -> {
                 Snackbar
                     .make(
@@ -361,14 +381,14 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             is MainSideEffect.Selection.Image.Success -> {
                 viewModel.chooseSelectionNavigationRoute(sideEffect.isFromCamera)
             }
+
             MainSideEffect.Selection.ImageDirectory.Failure -> {
                 Snackbar
                     .make(
@@ -377,14 +397,14 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.Selection.ImageDirectory.Success -> {
                 viewModel.chooseSelectionNavigationRoute()
             }
+
             MainSideEffect.Selection.Images.Failure -> {
                 Snackbar
                     .make(
@@ -393,17 +413,18 @@ class MainFragment :
                         Snackbar.LENGTH_SHORT
 
                     )
-                    .setAnchorView(
-                        if (binding.bottomBarLayout.isVisible) binding.bottomBarLayout else null
-                    )
+                    .setAnchorView(binding.dockedToolbar)
                     .show()
             }
+
             MainSideEffect.Selection.Images.Success -> {
                 viewModel.chooseSelectionNavigationRoute()
             }
+
             is MainSideEffect.Shortcut.Handle -> {
                 handleShortcutIntent(sideEffect.shortcutAction)
             }
+
             is MainSideEffect.Shortcut.ReportUsage -> {
                 reportShortcutUsed(sideEffect.shortcutAction)
             }
@@ -438,12 +459,15 @@ class MainFragment :
             INTENT_ACTION_CHOOSE_IMAGE -> {
                 onImageItemSelected()
             }
+
             INTENT_ACTION_CHOOSE_IMAGES -> {
                 onImagesItemSelected()
             }
+
             INTENT_ACTION_CHOOSE_IMAGE_DIR -> {
                 onImageDirectoryItemSelected()
             }
+
             else -> {
                 onCameraItemSelected()
             }
@@ -459,71 +483,55 @@ class MainFragment :
     }
 
     private fun setupAdaptiveAppBarLayout() {
-        val menuProvider = object : MenuProvider {
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.content_paste -> {
-                        viewModel.handlePasteImages()
-                        true
-                    }
-                    R.id.action_delete_camera_images -> {
-                        viewModel.handleDeleteCameraImages()
-                        true
-                    }
-                    R.id.action_settings -> {
-                        viewModel.handleSettings()
-                        true
-                    }
-                    R.id.action_help -> {
-                        viewModel.handleHelp()
-                        true
-                    }
-                    else -> false
+        (binding.actionClipboardPaste.parent as FrameLayout).setOnClickListener {
+            binding.actionClipboardPaste.performClick()
+        }
+        (binding.actionDeleteCameraImages.parent as FrameLayout).setOnClickListener {
+            binding.actionDeleteCameraImages.performClick()
+        }
+        (binding.actionHelp.parent as FrameLayout).setOnClickListener {
+            binding.actionHelp.performClick()
+        }
+        (binding.actionImageSourcesReorder.parent as FrameLayout).setOnClickListener {
+            binding.actionImageSourcesReorder.performClick()
+        }
+        (binding.actionSettings.parent as FrameLayout).setOnClickListener {
+            binding.actionSettings.performClick()
+        }
+        binding.actionClipboardPaste.setOnClickListener {
+            viewModel.handlePasteImages()
+        }
+        binding.actionDeleteCameraImages.setOnClickListener {
+            viewModel.handleDeleteCameraImages()
+        }
+        binding.actionHelp.setOnClickListener {
+            viewModel.handleHelp()
+        }
+        binding.actionImageSourcesReorder.apply {
+            addIconAnimation(
+                animatedVectorDrawable = R.drawable.avd_drag_to_done_all,
+                animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag,
+                showAnimatedVectorDrawableCondition = {
+                    !viewModel.container.stateFlow.value.isImageSourceReorderingEnabled
                 }
+            )
+            setOnClickListener {
+                viewModel.toggleImageSourceReorderingEnabled()
             }
         }
-        binding.bottomBarLayout.isVisible =
-            !isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
-        if (binding.bottomBarLayout.isVisible) {
-            binding.bottomBar.addMenuProvider(
-                menuProvider,
-                viewLifecycleOwner,
-                Lifecycle.State.STARTED
-            )
-            binding.bottomBarLayout.doOnLayout {
-                val imageSourcesCoordinates = IntArray(size = 2)
-                val bottomBarCoordinates = IntArray(size = 2)
-                binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
-                binding.bottomBarLayout.getLocationInWindow(bottomBarCoordinates)
-                val imageSourcesBottomY = imageSourcesCoordinates[1] +
-                    binding.imageSources.measuredHeight
-                if (imageSourcesBottomY > bottomBarCoordinates[1]) {
-                    binding.bottomBarLayout.isVisible = false
-                }
+        binding.actionSettings.setOnClickListener {
+            viewModel.handleSettings()
+        }
+        binding.dockedToolbar.doOnLayout {
+            val imageSourcesCoordinates = IntArray(size = 2)
+            val bottomBarCoordinates = IntArray(size = 2)
+            binding.imageSources.getLocationInWindow(imageSourcesCoordinates)
+            binding.dockedToolbar.getLocationInWindow(bottomBarCoordinates)
+            val imageSourcesBottomY = imageSourcesCoordinates[1] +
+                binding.imageSources.measuredHeight
+            if (imageSourcesBottomY > bottomBarCoordinates[1]) {
+                binding.dockedToolbar.isVisible = false
             }
-            binding.imageSourcesReorder.apply {
-                addIconAnimation(
-                    animatedVectorDrawable = R.drawable.avd_drag_to_done_all,
-                    animatedVectorDrawableInverse = R.drawable.avd_done_all_to_drag,
-                    showAnimatedVectorDrawableCondition = {
-                        !viewModel.container.stateFlow.value.isImageSourceReorderingEnabled
-                    }
-                )
-                setOnClickListener {
-                    viewModel.toggleImageSourceReorderingEnabled()
-                }
-            }
-        } else {
-            requireActivity().addMenuProvider(
-                menuProvider,
-                viewLifecycleOwner,
-                Lifecycle.State.STARTED
-            )
         }
     }
 
