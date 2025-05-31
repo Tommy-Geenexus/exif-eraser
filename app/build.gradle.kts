@@ -2,9 +2,9 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import org.bouncycastle.util.encoders.Base64
 import java.io.FileInputStream
 import java.util.Properties
-import org.bouncycastle.util.encoders.Base64
 
 val keyStoreFile = "keystore.jks"
 val keyStoreProperties = "keystore.properties"
@@ -66,12 +66,12 @@ plugins {
 
 android {
     namespace = "com.none.tom.exiferaser"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.none.tom.exiferaser"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 39
         versionName = "6.3.0"
 
