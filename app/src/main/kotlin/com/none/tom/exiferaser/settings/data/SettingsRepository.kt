@@ -213,7 +213,7 @@ class SettingsRepository @Inject constructor(
         .data
         .catch { exception -> Timber.e(exception) }
         .map { preferences -> preferences[keyRandomizeFileNames] }
-        .firstOrNull() != false
+        .firstOrNull() == true
 
     suspend fun putRandomizeFileNames(value: Boolean): Result<Unit> = withContext(dispatcherIo) {
         coroutineContext.suspendRunCatching {
