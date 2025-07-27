@@ -27,7 +27,7 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -46,16 +46,16 @@ fun Activity.resolveThemeAttribute(@AttrRes attrRes: Int): Int {
     return tv.data
 }
 
-fun Activity.setCutoutForegroundColor(@ColorRes colorRes: Int) {
+fun Activity.setCutoutForegroundColor(@ColorInt color: Int) {
     ViewCompat.setOnApplyWindowInsetsListener(window.decorView) { _, windowInsetsCompat ->
         val insets = windowInsetsCompat.getInsets(WindowInsetsCompat.Type.displayCutout())
         val drawable = if (insets.left > 0) {
-            LayerDrawable(arrayOf(getColor(colorRes).toDrawable())).apply {
+            LayerDrawable(arrayOf(color.toDrawable())).apply {
                 setLayerGravity(0, Gravity.START)
                 setLayerWidth(0, insets.left)
             }
         } else if (insets.right > 0) {
-            LayerDrawable(arrayOf(getColor(colorRes).toDrawable())).apply {
+            LayerDrawable(arrayOf(color.toDrawable())).apply {
                 setLayerGravity(0, Gravity.END)
                 setLayerWidth(0, insets.right)
             }

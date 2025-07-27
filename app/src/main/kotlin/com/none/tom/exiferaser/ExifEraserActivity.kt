@@ -72,7 +72,11 @@ class ExifEraserActivity : AppCompatActivity() {
         with(ActivityExifEraserBinding.inflate(layoutInflater)) {
             setContentView(root)
             computeWindowSizeClasses()
-            setCutoutForegroundColor(colorRes = android.R.color.black)
+            setCutoutForegroundColor(
+                color = resolveThemeAttribute(
+                    attrRes = com.google.android.material.R.attr.colorSurfaceContainer
+                )
+            )
             ViewCompat.setOnApplyWindowInsetsListener(root) { _, windowInsetsCompat ->
                 val insets = windowInsetsCompat.getInsets(
                     WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
@@ -111,9 +115,8 @@ class ExifEraserActivity : AppCompatActivity() {
         handleSupportedIntent()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return findNavController().navigateUp() || super.onSupportNavigateUp()
-    }
+    override fun onSupportNavigateUp(): Boolean =
+        findNavController().navigateUp() || super.onSupportNavigateUp()
 
     private fun computeWindowSizeClasses() {
         val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
@@ -159,8 +162,7 @@ class ExifEraserActivity : AppCompatActivity() {
         }
     }
 
-    private fun findNavController(): NavController {
-        return (supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment)
+    private fun findNavController(): NavController =
+        (supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment)
             .navController
-    }
 }
