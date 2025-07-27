@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
     <ID>CyclomaticComplexMethod:SettingsFragment.kt$SettingsFragment$private fun handleSideEffect(sideEffect: SettingsSideEffect)</ID>
@@ -22,7 +22,7 @@
     <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
     <ID>TooManyFunctions:ImageProcessingDetailsFragment.kt$ImageProcessingDetailsFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
-    <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ContainerHostViewModel</ID>
+    <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ViewModelContainerHost</ID>
     <ID>TooManyFunctions:SettingsAdapter.kt$SettingsAdapter$Listener</ID>
     <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : BaseFragmentListener</ID>
     <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository</ID>
