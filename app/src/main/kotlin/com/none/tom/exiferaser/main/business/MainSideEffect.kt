@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -28,15 +28,11 @@ import kotlinx.parcelize.Parcelize
 sealed class MainSideEffect : Parcelable {
 
     @Parcelize
-    data class DefaultNightMode(
-        val value: Int
-    ) : MainSideEffect()
+    data class DefaultNightMode(val value: Int) : MainSideEffect()
 
     @Parcelize
-    data class ImageSourceReordering(
-        val imageSources: List<AnyMessage>,
-        val isEnabled: Boolean
-    ) : MainSideEffect()
+    data class ImageSourceReordering(val imageSources: List<AnyMessage>, val isEnabled: Boolean) :
+        MainSideEffect()
 
     sealed class ImageSources : MainSideEffect() {
 
@@ -102,9 +98,7 @@ sealed class MainSideEffect : Parcelable {
             data object Failure : ImageDirectory()
 
             @Parcelize
-            data class Success(
-                val uri: Uri
-            ) : ImageDirectory()
+            data class Success(val uri: Uri) : ImageDirectory()
         }
 
         sealed class Camera : ImageSources() {
@@ -113,9 +107,7 @@ sealed class MainSideEffect : Parcelable {
             data object Failure : Put()
 
             @Parcelize
-            data class Success(
-                val uri: Uri
-            ) : Put()
+            data class Success(val uri: Uri) : Put()
         }
 
         @Parcelize
@@ -148,9 +140,7 @@ sealed class MainSideEffect : Parcelable {
             data object Failure : Paste()
 
             @Parcelize
-            data class Success(
-                val uris: List<Uri>
-            ) : Paste()
+            data class Success(val uris: List<Uri>) : Paste()
         }
 
         sealed class Received : Images() {
@@ -159,14 +149,10 @@ sealed class MainSideEffect : Parcelable {
             data object None : Received()
 
             @Parcelize
-            data class Single(
-                val uri: Uri
-            ) : Received()
+            data class Single(val uri: Uri) : Received()
 
             @Parcelize
-            data class Multiple(
-                val uris: List<Uri>
-            ) : Received()
+            data class Multiple(val uris: List<Uri>) : Received()
         }
     }
 
@@ -179,9 +165,7 @@ sealed class MainSideEffect : Parcelable {
         data object ToHelp : Navigate()
 
         @Parcelize
-        data class ToSelection(
-            val savePath: Uri
-        ) : Navigate()
+        data class ToSelection(val savePath: Uri) : Navigate()
 
         @Parcelize
         data object ToSelectionSavePath : Navigate()
@@ -198,9 +182,7 @@ sealed class MainSideEffect : Parcelable {
             data object Failure : Image()
 
             @Parcelize
-            data class Success(
-                val isFromCamera: Boolean
-            ) : Image()
+            data class Success(val isFromCamera: Boolean) : Image()
         }
 
         sealed class Images : Selection() {
@@ -225,13 +207,9 @@ sealed class MainSideEffect : Parcelable {
     sealed class Shortcut : MainSideEffect() {
 
         @Parcelize
-        data class Handle(
-            val shortcutAction: String
-        ) : Shortcut()
+        data class Handle(val shortcutAction: String) : Shortcut()
 
         @Parcelize
-        data class ReportUsage(
-            val shortcutAction: String
-        ) : Shortcut()
+        data class ReportUsage(val shortcutAction: String) : Shortcut()
     }
 }

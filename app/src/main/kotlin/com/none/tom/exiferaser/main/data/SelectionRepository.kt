@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -47,36 +47,34 @@ class SelectionRepository @Inject constructor(
     @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
-    suspend fun getSelection(fromIndex: Int): List<UserImageSelectionProto> {
-        return dataStore
-            .data
-            .catch { exception ->
-                Timber.e(exception)
-                emit(SelectionProto())
-            }
-            .map { selection ->
-                mutableListOf<UserImageSelectionProto>().apply {
-                    selection
-                        .user_image_selection_proto
-                        ?.let { proto ->
-                            if (fromIndex == 0) {
-                                add(proto)
-                            }
+    suspend fun getSelection(fromIndex: Int): List<UserImageSelectionProto> = dataStore
+        .data
+        .catch { exception ->
+            Timber.e(exception)
+            emit(SelectionProto())
+        }
+        .map { selection ->
+            mutableListOf<UserImageSelectionProto>().apply {
+                selection
+                    .user_image_selection_proto
+                    ?.let { proto ->
+                        if (fromIndex == 0) {
+                            add(proto)
                         }
-                    selection
-                        .user_images_selection_proto
-                        ?.user_images_selection
-                        ?.drop(fromIndex)
-                        ?.let { protos -> addAll(protos) }
-                }
+                    }
+                selection
+                    .user_images_selection_proto
+                    ?.user_images_selection
+                    ?.drop(fromIndex)
+                    ?.let { protos -> addAll(protos) }
             }
-            .flowOn(dispatcherDefault)
-            .firstOrNull()
-            ?: emptyList()
-    }
+        }
+        .flowOn(dispatcherDefault)
+        .firstOrNull()
+        ?: emptyList()
 
-    suspend fun putSelection(uri: Uri?, isFromCamera: Boolean = false): Result<Unit> {
-        return withContext(dispatcherIo) {
+    suspend fun putSelection(uri: Uri?, isFromCamera: Boolean = false): Result<Unit> =
+        withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 check(uri.isNotNullOrEmpty()) {
                     "Empty selection"
@@ -96,30 +94,27 @@ class SelectionRepository @Inject constructor(
                 Result.failure(exception)
             }
         }
-    }
 
-    suspend fun putSelection(uris: List<Uri>): Result<Unit> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                val urisNonEmpty = uris.filter { uri -> uri.isNotEmpty() }
-                check(urisNonEmpty.isNotEmpty()) {
-                    "Empty selection"
-                }
-                dataStore.updateData { proto ->
-                    proto.copy(
-                        user_image_selection_proto = null,
-                        user_images_selection_proto = UserImagesSelectionProto(
-                            user_images_selection = urisNonEmpty.map { uri ->
-                                UserImageSelectionProto(image_path = uri.toString())
-                            }
-                        )
-                    )
-                }
-                Result.success(Unit)
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
+    suspend fun putSelection(uris: List<Uri>): Result<Unit> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            val urisNonEmpty = uris.filter { uri -> uri.isNotEmpty() }
+            check(urisNonEmpty.isNotEmpty()) {
+                "Empty selection"
             }
+            dataStore.updateData { proto ->
+                proto.copy(
+                    user_image_selection_proto = null,
+                    user_images_selection_proto = UserImagesSelectionProto(
+                        user_images_selection = urisNonEmpty.map { uri ->
+                            UserImageSelectionProto(image_path = uri.toString())
+                        }
+                    )
+                )
+            }
+            Result.success(Unit)
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -26,9 +26,8 @@ import androidx.core.view.ContentInfoCompat
 import androidx.core.view.OnReceiveContentListener
 import com.none.tom.exiferaser.core.extension.supportedImageUrisToList
 
-class DragAndDropContentReceiver(
-    private val onUrisReceived: (List<Uri>) -> Unit
-) : OnReceiveContentListener {
+class DragAndDropContentReceiver(private val onUrisReceived: (List<Uri>) -> Unit) :
+    OnReceiveContentListener {
 
     override fun onReceiveContent(view: View, payload: ContentInfoCompat): ContentInfoCompat? {
         val uris = payload.clip.supportedImageUrisToList()

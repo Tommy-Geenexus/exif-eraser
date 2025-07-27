@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -35,8 +35,8 @@ import org.orbitmvi.orbit.viewmodel.container
 class ImageSavePathSelectionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository
-) : ContainerHost<ImageSavePathSelectionState, ImageSavePathSelectionSideEffect>,
-    ViewModel() {
+) : ViewModel(),
+    ContainerHost<ImageSavePathSelectionState, ImageSavePathSelectionSideEffect> {
 
     override val container =
         container<ImageSavePathSelectionState, ImageSavePathSelectionSideEffect>(

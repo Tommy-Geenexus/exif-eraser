@@ -30,9 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToInt
 
 @SuppressLint("UseKtx")
-class RecyclerViewVerticalDividerItemDecoration(
-    context: Context
-) : RecyclerView.ItemDecoration() {
+class RecyclerViewVerticalDividerItemDecoration(context: Context) : RecyclerView.ItemDecoration() {
 
     private val divider: Drawable
     private val bounds = Rect()

@@ -27,9 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.none.tom.exiferaser.ExifEraserActivity
 
-abstract class BaseFragment<B : ViewBinding>(
-    @LayoutRes layoutRes: Int
-) : Fragment(layoutRes) {
+abstract class BaseFragment<B : ViewBinding>(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
 
     private var _binding: B? = null
     protected val binding: B get() = _binding!!

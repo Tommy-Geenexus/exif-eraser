@@ -52,8 +52,8 @@ class MainAdapter(
         fun onImageSourceMoved(imageSources: List<AnyMessage>, oldIndex: Int, newIndex: Int)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        return MainViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder =
+        MainViewHolder(
             binding = ItemImageSourceBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -62,7 +62,6 @@ class MainAdapter(
             listener = listener,
             isHeightAtLeastBreakpoint = isHeightAtLeastBreakpoint
         )
-    }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         when (currentList.getOrNull(position)?.typeUrl) {

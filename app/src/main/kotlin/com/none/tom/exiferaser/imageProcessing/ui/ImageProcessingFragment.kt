@@ -51,9 +51,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ImageProcessingFragment : BaseFragment<FragmentImageProcessingBinding>(
-    R.layout.fragment_image_processing
-) {
+class ImageProcessingFragment :
+    BaseFragment<FragmentImageProcessingBinding>(
+        R.layout.fragment_image_processing
+    ) {
     private val viewModel: ImageProcessingViewModel by viewModels()
     private val activityResultContractShareImages = registerForActivityResult(
         ActivityResultContractShareImages()

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -35,19 +35,20 @@ import com.none.tom.exiferaser.databinding.ItemImageBinding
 import com.none.tom.exiferaser.databinding.ItemUiBinding
 import java.util.concurrent.atomic.AtomicInteger
 
-class SettingsAdapter(
-    private val listener: Listener
-) : ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
-    object : DiffUtil.ItemCallback<Pair<Int, String>>() {
+class SettingsAdapter(private val listener: Listener) :
+    ListAdapter<Pair<Int, String>, RecyclerView.ViewHolder>(
+        object : DiffUtil.ItemCallback<Pair<Int, String>>() {
 
-        override fun areItemsTheSame(oldItem: Pair<Int, String>, newItem: Pair<Int, String>) =
-            oldItem.first == newItem.first
+            override fun areItemsTheSame(oldItem: Pair<Int, String>, newItem: Pair<Int, String>) =
+                oldItem.first == newItem.first
 
-        @Suppress("SameReturnValue")
-        override fun areContentsTheSame(oldItem: Pair<Int, String>, newItem: Pair<Int, String>) =
-            false
-    }
-) {
+            @Suppress("SameReturnValue")
+            override fun areContentsTheSame(
+                oldItem: Pair<Int, String>,
+                newItem: Pair<Int, String>
+            ) = false
+        }
+    ) {
 
     interface Listener {
 
@@ -69,8 +70,8 @@ class SettingsAdapter(
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
             ITEM_TYPE_FS -> {
                 ItemFsViewHolder(
                     binding = ItemFsBinding.inflate(
@@ -102,7 +103,6 @@ class SettingsAdapter(
                 )
             }
         }
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
@@ -152,21 +152,17 @@ class SettingsAdapter(
 
     override fun getItemCount() = 3
 
-    override fun getItemId(position: Int): Long {
-        return when (position) {
-            0 -> ITEM_TYPE_FS.toLong()
-            1 -> ITEM_TYPE_IMAGE.toLong()
-            2 -> ITEM_TYPE_UI.toLong()
-            else -> 0
-        }
+    override fun getItemId(position: Int): Long = when (position) {
+        0 -> ITEM_TYPE_FS.toLong()
+        1 -> ITEM_TYPE_IMAGE.toLong()
+        2 -> ITEM_TYPE_UI.toLong()
+        else -> 0
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> ITEM_TYPE_FS
-            1 -> ITEM_TYPE_IMAGE
-            2 -> ITEM_TYPE_UI
-            else -> 0
-        }
+    override fun getItemViewType(position: Int): Int = when (position) {
+        0 -> ITEM_TYPE_FS
+        1 -> ITEM_TYPE_IMAGE
+        2 -> ITEM_TYPE_UI
+        else -> 0
     }
 }

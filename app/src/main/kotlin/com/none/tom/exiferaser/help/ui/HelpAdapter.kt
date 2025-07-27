@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -25,9 +25,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.none.tom.exiferaser.databinding.PreferenceBinding
 
-class HelpAdapter(
-    private val listener: Listener
-) : RecyclerView.Adapter<HelpViewHolder>() {
+class HelpAdapter(private val listener: Listener) : RecyclerView.Adapter<HelpViewHolder>() {
 
     interface Listener {
 
@@ -69,23 +67,19 @@ class HelpAdapter(
 
     override fun getItemCount() = 4
 
-    override fun getItemId(position: Int): Long {
-        return when (position) {
-            0 -> ITEM_TYPE_IMAGE_FORMATS.toLong()
-            1 -> ITEM_TYPE_TRANSLATE.toLong()
-            2 -> ITEM_TYPE_FEEDBACK.toLong()
-            3 -> ITEM_TYPE_VERSION.toLong()
-            else -> 0
-        }
+    override fun getItemId(position: Int): Long = when (position) {
+        0 -> ITEM_TYPE_IMAGE_FORMATS.toLong()
+        1 -> ITEM_TYPE_TRANSLATE.toLong()
+        2 -> ITEM_TYPE_FEEDBACK.toLong()
+        3 -> ITEM_TYPE_VERSION.toLong()
+        else -> 0
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> ITEM_TYPE_IMAGE_FORMATS
-            1 -> ITEM_TYPE_TRANSLATE
-            2 -> ITEM_TYPE_FEEDBACK
-            3 -> ITEM_TYPE_VERSION
-            else -> 0
-        }
+    override fun getItemViewType(position: Int): Int = when (position) {
+        0 -> ITEM_TYPE_IMAGE_FORMATS
+        1 -> ITEM_TYPE_TRANSLATE
+        2 -> ITEM_TYPE_FEEDBACK
+        3 -> ITEM_TYPE_VERSION
+        else -> 0
     }
 }

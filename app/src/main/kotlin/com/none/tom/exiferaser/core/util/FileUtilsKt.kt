@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,15 +29,12 @@ import java.nio.charset.StandardCharsets
  */
 object FileUtilsKt {
 
-    fun isValidExtFilename(name: String?): Boolean {
-        return name != null && name == buildValidExtFilename(name)
-    }
+    fun isValidExtFilename(name: String?): Boolean =
+        name != null && name == buildValidExtFilename(name)
 
-    private fun isValidExtFilenameChar(c: Char): Boolean {
-        return when (c) {
-            '\u0000', '/' -> false
-            else -> true
-        }
+    private fun isValidExtFilenameChar(c: Char): Boolean = when (c) {
+        '\u0000', '/' -> false
+        else -> true
     }
 
     private fun buildValidExtFilename(name: String): String {

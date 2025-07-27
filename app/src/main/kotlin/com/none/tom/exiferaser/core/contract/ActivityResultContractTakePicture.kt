@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,11 +30,10 @@ class ActivityResultContractTakePicture : ActivityResultContract<Uri?, Uri?>() {
 
     private var uri: Uri? = null
 
-    override fun createIntent(context: Context, input: Uri?): Intent {
-        return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    override fun createIntent(context: Context, input: Uri?): Intent =
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             .putExtra(MediaStore.EXTRA_OUTPUT, input)
             .also { uri = input }
-    }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
         val extras = intent?.extras

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -27,22 +27,21 @@ import androidx.recyclerview.widget.ListAdapter
 import com.none.tom.exiferaser.core.image.ImageProcessingSummary
 import com.none.tom.exiferaser.databinding.ItemImageProcessingDetailsBinding
 
-class ImageProcessingDetailsAdapter(
-    private val listener: Listener
-) : ListAdapter<ImageProcessingSummary, ImageProcessingDetailsViewHolder>(
-    object : DiffUtil.ItemCallback<ImageProcessingSummary>() {
+class ImageProcessingDetailsAdapter(private val listener: Listener) :
+    ListAdapter<ImageProcessingSummary, ImageProcessingDetailsViewHolder>(
+        object : DiffUtil.ItemCallback<ImageProcessingSummary>() {
 
-        override fun areItemsTheSame(
-            oldItem: ImageProcessingSummary,
-            newItem: ImageProcessingSummary
-        ) = oldItem == newItem
+            override fun areItemsTheSame(
+                oldItem: ImageProcessingSummary,
+                newItem: ImageProcessingSummary
+            ) = oldItem == newItem
 
-        override fun areContentsTheSame(
-            oldItem: ImageProcessingSummary,
-            newItem: ImageProcessingSummary
-        ) = oldItem == newItem
-    }
-) {
+            override fun areContentsTheSame(
+                oldItem: ImageProcessingSummary,
+                newItem: ImageProcessingSummary
+            ) = oldItem == newItem
+        }
+    ) {
 
     interface Listener {
         fun onImageThumbnailLoaded(position: Int)
@@ -54,16 +53,14 @@ class ImageProcessingDetailsAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ImageProcessingDetailsViewHolder {
-        return ImageProcessingDetailsViewHolder(
-            ItemImageProcessingDetailsBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            ),
-            listener
-        )
-    }
+    ): ImageProcessingDetailsViewHolder = ImageProcessingDetailsViewHolder(
+        ItemImageProcessingDetailsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        ),
+        listener
+    )
 
     override fun onBindViewHolder(holder: ImageProcessingDetailsViewHolder, position: Int) {
         currentList.getOrNull(position)?.let { summary ->

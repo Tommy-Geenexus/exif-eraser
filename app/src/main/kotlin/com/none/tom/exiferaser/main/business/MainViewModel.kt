@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -43,8 +43,8 @@ class MainViewModel @Inject constructor(
     private val imageSourcesRepository: ImageSourcesRepository,
     private val selectionRepository: SelectionRepository,
     private val settingsRepository: SettingsRepository
-) : ContainerHost<MainState, MainSideEffect>,
-    ViewModel() {
+) : ViewModel(),
+    ContainerHost<MainState, MainSideEffect> {
 
     override val container = container<MainState, MainSideEffect>(
         initialState = MainState(),

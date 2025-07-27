@@ -66,29 +66,27 @@ class ImageProcessingRepository @Inject constructor(
         isAutoDeleteEnabled: Boolean,
         isPreserveOrientationEnabled: Boolean,
         isRandomizeFileNamesEnabled: Boolean
-    ): Flow<ImageProcessingStep> {
-        return flow {
-            protos.forEachIndexed { index, proto ->
-                emit(
-                    removeMetaData(
-                        proto = proto,
-                        treeUri = treeUri,
-                        displayNameSuffix = displayNameSuffix,
-                        isAutoDeleteEnabled = isAutoDeleteEnabled,
-                        isPreserveOrientationEnabled = isPreserveOrientationEnabled,
-                        isRandomizeFileNamesEnabled = isRandomizeFileNamesEnabled,
-                        progress = ImageProcessingProgress.calculate(
-                            index = index,
-                            count = protos.size
-                        )
+    ): Flow<ImageProcessingStep> = flow {
+        protos.forEachIndexed { index, proto ->
+            emit(
+                removeMetaData(
+                    proto = proto,
+                    treeUri = treeUri,
+                    displayNameSuffix = displayNameSuffix,
+                    isAutoDeleteEnabled = isAutoDeleteEnabled,
+                    isPreserveOrientationEnabled = isPreserveOrientationEnabled,
+                    isRandomizeFileNamesEnabled = isRandomizeFileNamesEnabled,
+                    progress = ImageProcessingProgress.calculate(
+                        index = index,
+                        count = protos.size
                     )
                 )
-            }
-            emit(ImageProcessingStep.FinishedBulk)
+            )
         }
-            .buffer()
-            .flowOn(dispatcherIo)
+        emit(ImageProcessingStep.FinishedBulk)
     }
+        .buffer()
+        .flowOn(dispatcherIo)
 
     private suspend fun removeMetaData(
         proto: UserImageSelectionProto,
@@ -171,27 +169,25 @@ class ImageProcessingRepository @Inject constructor(
 
     private suspend fun scanImage(
         sourceUri: Uri
-    ): Result<Pair<ExifInterfaceExtended, ImageMetadataSnapshot>> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                val exifInterfaceExtended: ExifInterfaceExtended
-                checkNotNull(context.contentResolver.openInputStream(sourceUri)).use { source ->
-                    exifInterfaceExtended = ExifInterfaceExtended(source)
-                }
-                Result.success(
-                    value = exifInterfaceExtended to ImageMetadataSnapshot(
-                        isIccProfileContained = exifInterfaceExtended.hasIccProfile(),
-                        isExifContained = exifInterfaceExtended.hasAttributes(true),
-                        isPhotoshopImageResourcesContained =
-                        exifInterfaceExtended.hasPhotoshopImageResources(),
-                        isXmpContained = exifInterfaceExtended.hasXmp(),
-                        isExtendedXmpContained = exifInterfaceExtended.hasExtendedXmp()
-                    )
-                )
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
+    ): Result<Pair<ExifInterfaceExtended, ImageMetadataSnapshot>> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            val exifInterfaceExtended: ExifInterfaceExtended
+            checkNotNull(context.contentResolver.openInputStream(sourceUri)).use { source ->
+                exifInterfaceExtended = ExifInterfaceExtended(source)
             }
+            Result.success(
+                value = exifInterfaceExtended to ImageMetadataSnapshot(
+                    isIccProfileContained = exifInterfaceExtended.hasIccProfile(),
+                    isExifContained = exifInterfaceExtended.hasAttributes(true),
+                    isPhotoshopImageResourcesContained =
+                    exifInterfaceExtended.hasPhotoshopImageResources(),
+                    isXmpContained = exifInterfaceExtended.hasXmp(),
+                    isExtendedXmpContained = exifInterfaceExtended.hasExtendedXmp()
+                )
+            )
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 
@@ -253,77 +249,71 @@ class ImageProcessingRepository @Inject constructor(
         sinkUri: Uri,
         isAutoDeleteEnabled: Boolean,
         isPreserveOrientationEnabled: Boolean
-    ): Result<Unit> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                checkNotNull(context.contentResolver.openInputStream(sourceUri)).use { source ->
-                    checkNotNull(context.contentResolver.openOutputStream(sinkUri)).use { sink ->
-                        exifInterfaceExtended.saveExclusive(
-                            source,
-                            sink,
-                            isPreserveOrientationEnabled
-                        )
-                    }
-                }
-                if (isAutoDeleteEnabled && DocumentsContract.isDocumentUri(context, sourceUri)) {
-                    if (!checkNotNull(DocumentFile.fromSingleUri(context, sourceUri)).delete()) {
-                        Timber.e("Failed to delete %s", sourceUri)
-                    }
-                }
-                Result.success(Unit)
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
-            }
-        }
-    }
-
-    private suspend fun getDisplayName(uri: Uri): Result<String> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                checkNotNull(
-                    context
-                        .contentResolver
-                        .query(uri, null, null, null, null)
-                ).use { cursor ->
-                    check(cursor.moveToFirst())
-                    val baseName = FilenameUtils.getBaseName(
-                        cursor.getString(
-                            cursor.getColumnIndexOrThrow(
-                                MediaStore.Images.ImageColumns.DISPLAY_NAME
-                            )
-                        )
+    ): Result<Unit> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            checkNotNull(context.contentResolver.openInputStream(sourceUri)).use { source ->
+                checkNotNull(context.contentResolver.openOutputStream(sinkUri)).use { sink ->
+                    exifInterfaceExtended.saveExclusive(
+                        source,
+                        sink,
+                        isPreserveOrientationEnabled
                     )
-                    check(baseName.isNotEmpty())
-                    Result.success(baseName)
                 }
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
             }
+            if (isAutoDeleteEnabled && DocumentsContract.isDocumentUri(context, sourceUri)) {
+                if (!checkNotNull(DocumentFile.fromSingleUri(context, sourceUri)).delete()) {
+                    Timber.e("Failed to delete %s", sourceUri)
+                }
+            }
+            Result.success(Unit)
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 
-    suspend fun getLastDocumentPathSegment(uri: Uri): Result<String> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                Result.success(
-                    value = checkNotNull(
-                        DocumentsContract
-                            .findDocumentPath(context.contentResolver, uri)
-                            ?.path
-                            ?.lastOrNull()
+    private suspend fun getDisplayName(uri: Uri): Result<String> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            checkNotNull(
+                context
+                    .contentResolver
+                    .query(uri, null, null, null, null)
+            ).use { cursor ->
+                check(cursor.moveToFirst())
+                val baseName = FilenameUtils.getBaseName(
+                    cursor.getString(
+                        cursor.getColumnIndexOrThrow(
+                            MediaStore.Images.ImageColumns.DISPLAY_NAME
+                        )
                     )
                 )
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
+                check(baseName.isNotEmpty())
+                Result.success(baseName)
             }
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 
-    suspend fun getFileProviderUri(displayName: String, extension: String): Result<Uri> {
-        return withContext(dispatcherIo) {
+    suspend fun getLastDocumentPathSegment(uri: Uri): Result<String> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            Result.success(
+                value = checkNotNull(
+                    DocumentsContract
+                        .findDocumentPath(context.contentResolver, uri)
+                        ?.path
+                        ?.lastOrNull()
+                )
+            )
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
+        }
+    }
+
+    suspend fun getFileProviderUri(displayName: String, extension: String): Result<Uri> =
+        withContext(dispatcherIo) {
             coroutineContext.suspendRunCatching {
                 Result.success(
                     value = CameraFileProvider.getUriForFile(
@@ -345,5 +335,4 @@ class ImageProcessingRepository @Inject constructor(
                 Result.failure(exception)
             }
         }
-    }
 }

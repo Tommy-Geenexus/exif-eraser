@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -44,91 +44,83 @@ class MainRepository @Inject constructor(
     @DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
-    suspend fun deleteCameraImages(): Result<Unit> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                check(CameraFileProvider.getRootDirectory(context).deleteRecursively())
-                Result.success(Unit)
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
-            }
+    suspend fun deleteCameraImages(): Result<Unit> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            check(CameraFileProvider.getRootDirectory(context).deleteRecursively())
+            Result.success(Unit)
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 
-    suspend fun getChildDocuments(treeUri: Uri?): Result<List<Uri>> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                    treeUri,
-                    DocumentsContract.getTreeDocumentId(treeUri)
+    suspend fun getChildDocuments(treeUri: Uri?): Result<List<Uri>> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            val childDocumentsUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                treeUri,
+                DocumentsContract.getTreeDocumentId(treeUri)
+            )
+            checkNotNull(
+                context.contentResolver.query(
+                    childDocumentsUri,
+                    null,
+                    null,
+                    null,
+                    null
                 )
-                checkNotNull(
-                    context.contentResolver.query(
-                        childDocumentsUri,
-                        null,
-                        null,
-                        null,
-                        null
-                    )
-                ).use { cursor ->
-                    val uris = mutableListOf<Uri>()
-                    while (cursor.moveToNext()) {
-                        val columnName = DocumentsContract.Document.COLUMN_DOCUMENT_ID
-                        val id = cursor.getString(cursor.getColumnIndexOrThrow(columnName))
-                        val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, id)
-                        val mimeType = context.contentResolver.getType(uri).orEmpty()
-                        if (supportedImageFormats.map { f -> f.mimeType }.contains(mimeType)) {
-                            uris.add(uri)
-                        }
+            ).use { cursor ->
+                val uris = mutableListOf<Uri>()
+                while (cursor.moveToNext()) {
+                    val columnName = DocumentsContract.Document.COLUMN_DOCUMENT_ID
+                    val id = cursor.getString(cursor.getColumnIndexOrThrow(columnName))
+                    val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, id)
+                    val mimeType = context.contentResolver.getType(uri).orEmpty()
+                    if (supportedImageFormats.map { f -> f.mimeType }.contains(mimeType)) {
+                        uris.add(uri)
                     }
-                    check(uris.isNotEmpty())
-                    Result.success(uris)
                 }
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
-            }
-        }
-    }
-
-    suspend fun getPrimaryClipImageUris(): Result<List<Uri>> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val primaryClip = cm.primaryClip
-                check(cm.hasPrimaryClip())
-                checkNotNull(primaryClip)
-                val uris = primaryClip.supportedImageUrisToList()
                 check(uris.isNotEmpty())
                 Result.success(uris)
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
             }
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 
-    suspend fun getFileProviderUri(): Result<Uri> {
-        return withContext(dispatcherIo) {
-            coroutineContext.suspendRunCatching {
-                Result.success(
-                    value = CameraFileProvider.getUriForFile(
-                        context = context,
-                        displayName = UUID.randomUUID().toString(),
-                        extension = checkNotNull(
-                            MimeTypeMap
-                                .getSingleton()
-                                .getExtensionFromMimeType(
-                                    supportedImageFormats.first().mimeType
-                                )
-                        )
+    suspend fun getPrimaryClipImageUris(): Result<List<Uri>> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            val cm = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val primaryClip = cm.primaryClip
+            check(cm.hasPrimaryClip())
+            checkNotNull(primaryClip)
+            val uris = primaryClip.supportedImageUrisToList()
+            check(uris.isNotEmpty())
+            Result.success(uris)
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
+        }
+    }
+
+    suspend fun getFileProviderUri(): Result<Uri> = withContext(dispatcherIo) {
+        coroutineContext.suspendRunCatching {
+            Result.success(
+                value = CameraFileProvider.getUriForFile(
+                    context = context,
+                    displayName = UUID.randomUUID().toString(),
+                    extension = checkNotNull(
+                        MimeTypeMap
+                            .getSingleton()
+                            .getExtensionFromMimeType(
+                                supportedImageFormats.first().mimeType
+                            )
                     )
                 )
-            }.getOrElse { exception ->
-                Timber.e(exception)
-                Result.failure(exception)
-            }
+            )
+        }.getOrElse { exception ->
+            Timber.e(exception)
+            Result.failure(exception)
         }
     }
 }

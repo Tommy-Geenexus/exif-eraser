@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -55,14 +55,10 @@ sealed class ImageProcessingSideEffect : Parcelable {
                 return imageProcessingSummaries.contentEquals(other.imageProcessingSummaries)
             }
 
-            override fun hashCode(): Int {
-                return imageProcessingSummaries.contentHashCode()
-            }
+            override fun hashCode(): Int = imageProcessingSummaries.contentHashCode()
         }
     }
 
     @Parcelize
-    data class ShareImages(
-        val imageUris: ArrayList<Uri>
-    ) : ImageProcessingSideEffect()
+    data class ShareImages(val imageUris: ArrayList<Uri>) : ImageProcessingSideEffect()
 }
