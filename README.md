@@ -3,6 +3,7 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Tommy-Geenexus/exif-eraser/total)
 [![Crowdin](https://badges.crowdin.net/exif-eraser/localized.svg)](https://crowdin.com/project/exif-eraser)<p>
 ![GitHub Release](https://img.shields.io/github/v/release/Tommy-Geenexus/exif-eraser)
+[![RB Shield](https://shields.rbtlog.dev/simple/com.none.tom.exiferaser)](https://shields.rbtlog.dev/com.none.tom.exiferaser)
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/Tommy-Geenexus/exif-eraser/latest/total)<p>
 [![Assemble](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/assemble.yml)
 [![Unit Tests](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/tests_unit.yml)
