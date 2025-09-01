@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import java.io.FileInputStream
 import java.util.Properties
 import org.bouncycastle.util.encoders.Base64
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 val keyStoreFile = "keystore.jks"
 val keyStoreProperties = "keystore.properties"
@@ -114,10 +115,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -129,9 +126,10 @@ bundletool {
     signingConfig {
         val properties = loadKeyStoreProperties()
         storeFile = getOrCreateKeyStoreFile()
-        storePassword = properties.first
+        storePassword.set(properties.first)
+        keyAlias.set(properties.second)
         keyAlias = properties.second
-        keyPassword = properties.third
+        keyPassword.set(properties.third)
     }
 }
 
@@ -164,6 +162,7 @@ detekt {
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-opt-in=kotlin.contracts.ExperimentalContracts")
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
