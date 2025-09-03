@@ -8,8 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:stateListAnimator="@animator/image_source_selection"
-    app:cardBackgroundColor="?attr/colorPrimaryContainer"
-    app:shapeAppearance="?attr/shapeAppearanceSmallComponent">
+    app:cardBackgroundColor="?attr/colorPrimaryContainer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"

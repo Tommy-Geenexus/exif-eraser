@@ -36,12 +36,12 @@ class MainViewHolder(
         binding.image.updateLayoutParams {
             binding.image.layoutParams.apply {
                 val dimen = if (isHeightAtLeastBreakpoint(
-                        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                        WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
                     )
                 ) {
                     itemView.context.resources.getDimension(R.dimen.icon_expanded).toInt()
                 } else if (isHeightAtLeastBreakpoint(
-                        WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+                        WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND
                     )
                 ) {
                     itemView.context.resources.getDimension(R.dimen.icon_medium).toInt()
@@ -54,17 +54,17 @@ class MainViewHolder(
         }
         binding.method.setTextAppearance(
             if (isHeightAtLeastBreakpoint(
-                    WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+                    WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
                 )
             ) {
-                com.google.android.material.R.style.TextAppearance_Material3_BodyLarge
+                com.google.android.material.R.style.TextAppearance_Material3_BodyLarge_Emphasized
             } else if (isHeightAtLeastBreakpoint(
-                    WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+                    WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND
                 )
             ) {
-                com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
+                com.google.android.material.R.style.TextAppearance_Material3_BodyMedium_Emphasized
             } else {
-                com.google.android.material.R.style.TextAppearance_Material3_BodySmall
+                com.google.android.material.R.style.TextAppearance_Material3_BodySmall_Emphasized
             }
         )
         binding.imageSource.setOnClickListener {
