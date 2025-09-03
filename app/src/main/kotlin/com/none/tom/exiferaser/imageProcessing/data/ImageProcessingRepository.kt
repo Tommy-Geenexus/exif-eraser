@@ -109,7 +109,9 @@ class ImageProcessingRepository @Inject constructor(
             coroutineContext.suspendRunCatching {
                 sourceUri = proto.image_path.toUri()
                 displayName = getDisplayName(sourceUri).getOrThrow()
-                mimeType = checkNotNull(context.contentResolver.getType(sourceUri))
+                mimeType = checkNotNull(context.contentResolver.getType(sourceUri)).also { t ->
+                    check(supportedImageFormats.any { it.mimeType == t })
+                }
                 extension = checkNotNull(
                     MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
                 )
