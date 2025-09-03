@@ -4,8 +4,8 @@
 
     <string name="always">Sempre</string>
 
-    <string name="auto_delete_image_off">Don\'t delete images after modification if legacy image selection is enabled</string>
-    <string name="auto_delete_image_on">Delete images after modification if legacy image selection is enabled</string>
+    <string name="auto_delete_image_off">Non eliminare le immagini dopo la modifica se si usa la selezione immagini legacy</string>
+    <string name="auto_delete_image_on">Elimina le immagini dopo la modifica se si usa la selezione immagini legacy</string>
 
     <string name="automatically">Automaticamente</string>
 
@@ -33,28 +33,28 @@
 
     <string name="details">Dettagli</string>
 
-    <string name="file_system">Filesystem</string>
+    <string name="file_system">Gestione file</string>
 
     <string name="help">Aiuto e feedback</string>
 
-    <string name="icc_profile">ICC Profile</string>
+    <string name="icc_profile">Profilo ICC</string>
 
     <string name="image">Immagine</string>
-    <string name="image_auto_delete">Auto-delete</string>
+    <string name="image_auto_delete">Eliminazione automatica</string>
     <string name="image_directory">Cartella immagine</string>
     <string name="image_file">File immagine</string>
     <string name="image_files">File immagini</string>
     <string name="image_orientation">Mantieni orientamento</string>
     <string name="image_path">Percorso immagine</string>
-    <string name="image_private">Image is not publicly accessible</string>
-    <string name="image_selection_legacy">Legacy image selection</string>
-    <string name="image_selection_legacy_off">Select images using the photo picker</string>
-    <string name="image_selection_legacy_on">Select images using the default document provider</string>
+    <string name="image_private">L’immagine non è accessibile pubblicamente</string>
+    <string name="image_selection_legacy">Selezione immagini legacy</string>
+    <string name="image_selection_legacy_off">Seleziona immagini con il selettore foto</string>
+    <string name="image_selection_legacy_on">Seleziona le immagini dal provider di documenti predefinito</string>
     <string name="image_share_by_default">Condividi per impostazione predefinita</string>
-    <string name="image_sources_camera_failure">Failed to launch camera</string>
-    <string name="image_sources_put_failure">Failed to save image source configuration</string>
-    <string name="image_sources_put_success">Successfully saved image source configuration</string>
-    <string name="image_sources_save_failure">Failed to save image(s)</string>
+    <string name="image_sources_camera_failure">Impossibile avviare la fotocamera</string>
+    <string name="image_sources_put_failure">Impossibile salvare la configurazione dell\'immagine</string>
+    <string name="image_sources_put_success">Configurazione dell\'immagine salvata con successo</string>
+    <string name="image_sources_save_failure">Impossibile salvare le immagini</string>
     <string name="image_supported_formats">Formati immagine supportati</string>
 
     <string name="images_modified">immagine modificata</string>
@@ -80,9 +80,9 @@
 
     <string name="progress_percent">%d %%</string>
 
-    <string name="randomize_file_names">Randomize file names</string>
-    <string name="randomize_file_names_off">Don\'t randomize file names of images before saving them</string>
-    <string name="randomize_file_names_on">Randomize file names of images before saving them</string>
+    <string name="randomize_file_names">Usa nomi di file casuali</string>
+    <string name="randomize_file_names_off">Non usare nomi di file casuali per le immagini prima del salvataggio</string>
+    <string name="randomize_file_names_on">Non usare nomi di file casuali per le immagini prima del salvataggio</string>
 
     <string name="reorder_image_source_cards">Riordina le schede di selezione immagine</string>
 
@@ -100,16 +100,16 @@
     <string name="share_via">Condividi tramite</string>
 
     <string name="suffix">Suffisso</string>
-    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
+    <string name="suffix_invalid">Suffisso vuoto o con caratteri non validi</string>
 
     <string name="summary">Sintesi</string>
 
     <string name="take_picture">Scatta foto</string>
 
-    <string name="ui">UI</string>
+    <string name="ui">Interfaccia utente</string>
 
     <string name="version">Versione</string>
 
-    <string name="view_metadata">View metadata</string>
-    <string name="view_path">View path</string>
+    <string name="view_metadata">Visualizza metadati</string>
+    <string name="view_path">Visualizza percorso</string>
 </resources>
