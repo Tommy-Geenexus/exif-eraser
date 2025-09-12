@@ -24,7 +24,7 @@ It relies on [exif-interface-extended](https://github.com/Tommy-Geenexus/exif-in
 - **WebP**: Images will be saved excluding the embedded *ICC Profile, EXIF* and *XMP* metadata
 
 ## Localization 
-- [Help translate this application into the language of your preference](https://crowdin.com/project/exif-eraser/invite?h=7814ed7d3215d8221577cc5b8aa661ee2190921)
+- [Help translate this application into the language of your preference](https://crowdin.com/project/exif-eraser)
 
 ## Download
 <a href='https://github.com/Tommy-Geenexus/exif-eraser/releases/latest'><img alt='Get it on GitHub' height='80' src='https://s1.ax1x.com/2023/01/12/pSu1a36.png'/></a>
