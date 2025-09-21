@@ -46,7 +46,7 @@
     <string name="image_files">Bilddateien</string>
     <string name="image_orientation">Ausrichtung beibehalten</string>
     <string name="image_path">Bildpfad</string>
-    <string name="image_private">Bild ist nicht  öffentlich zugänglich</string>
+    <string name="image_private">Bild ist nicht öffentlich zugänglich</string>
     <string name="image_selection_legacy">Veraltete Bildauswahl</string>
     <string name="image_selection_legacy_off">Bildauswahl mit Fotopicker</string>
     <string name="image_selection_legacy_on">Bildauswahl mit dem Standard-Dokumentbereitsteller</string>
