@@ -37,7 +37,7 @@
 
     <string name="help">帮助与反馈</string>
 
-    <string name="icc_profile">ICC Profile</string>
+    <string name="icc_profile">ICC 配置文件</string>
 
     <string name="image">图片</string>
     <string name="image_auto_delete">自动删除</string>
@@ -46,15 +46,15 @@
     <string name="image_files">多个图片文件</string>
     <string name="image_orientation">保留图片朝向</string>
     <string name="image_path">图片路径</string>
-    <string name="image_private">Image is not publicly accessible</string>
+    <string name="image_private">图片不可公开访问</string>
     <string name="image_selection_legacy">传统图片选择</string>
     <string name="image_selection_legacy_off">通过照片选择器选择图片</string>
     <string name="image_selection_legacy_on">使用默认的文档提供程序来选择图片</string>
     <string name="image_share_by_default">默认分享</string>
-    <string name="image_sources_camera_failure">Failed to launch camera</string>
-    <string name="image_sources_put_failure">Failed to save image source configuration</string>
-    <string name="image_sources_put_success">Successfully saved image source configuration</string>
-    <string name="image_sources_save_failure">Failed to save image(s)</string>
+    <string name="image_sources_camera_failure">启动相机失败</string>
+    <string name="image_sources_put_failure">保存图片源配置失败</string>
+    <string name="image_sources_put_success">已成功保存图片源配置</string>
+    <string name="image_sources_save_failure">保存图片失败</string>
     <string name="image_supported_formats">支持的图片格式</string>
 
     <string name="images_modified">更改后的图片</string>
@@ -100,7 +100,7 @@
     <string name="share_via">分享至</string>
 
     <string name="suffix">后缀</string>
-    <string name="suffix_invalid">Suffix empty or contains invalid characters</string>
+    <string name="suffix_invalid">后缀为空或包含无效字符</string>
 
     <string name="summary">总结</string>
 
@@ -110,6 +110,6 @@
 
     <string name="version">版本</string>
 
-    <string name="view_metadata">View metadata</string>
-    <string name="view_path">View path</string>
+    <string name="view_metadata">查看元数据</string>
+    <string name="view_path">查看路径</string>
 </resources>
