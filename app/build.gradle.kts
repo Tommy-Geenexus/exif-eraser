@@ -133,6 +133,15 @@ bundletool {
     }
 }
 
+afterEvaluate {
+    tasks.named("kspDebugKotlin") {
+        dependsOn("generateDebugProtos")
+    }
+    tasks.named("kspReleaseKotlin") {
+        dependsOn("generateReleaseProtos")
+    }
+}
+
 tasks.withType<DependencyUpdatesTask>().configureEach {
     fun isNonStable(version: String): Boolean {
         val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { keyWord ->
