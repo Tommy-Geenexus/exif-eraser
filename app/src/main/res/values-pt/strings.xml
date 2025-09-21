@@ -51,7 +51,7 @@
     <string name="image_selection_legacy_off">Select images using the photo picker</string>
     <string name="image_selection_legacy_on">Select images using the default document provider</string>
     <string name="image_share_by_default">Auto compartilhar</string>
-    <string name="image_sources_camera_failure">Failed to launch câmara</string>
+    <string name="image_sources_camera_failure">Failed to launch camera</string>
     <string name="image_sources_put_failure">Failed to save image source configuration</string>
     <string name="image_sources_put_success">Successfully saved image source configuration</string>
     <string name="image_sources_save_failure">Failed to save image(s)</string>
@@ -106,7 +106,7 @@
 
     <string name="take_picture">Tirar uma foto</string>
 
-    <string name="ui">IU</string>
+    <string name="ui">Interface do utilizador</string>
 
     <string name="version">Versão</string>
 
