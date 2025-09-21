@@ -61,9 +61,9 @@ import timber.log.Timber
 
 @Singleton
 class SettingsRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val dataStore: DataStore<Preferences>,
-    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
+    @param:DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     private val keyRandomizeFileNames = booleanPreferencesKey(SETTINGS_KEY_RANDOMIZE_FILE_NAMES)

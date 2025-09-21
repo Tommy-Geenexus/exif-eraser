@@ -43,8 +43,8 @@ import timber.log.Timber
 @Singleton
 class SelectionRepository @Inject constructor(
     private val dataStore: DataStore<SelectionProto>,
-    @DispatcherDefault private val dispatcherDefault: CoroutineDispatcher,
-    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
+    @param:DispatcherDefault private val dispatcherDefault: CoroutineDispatcher,
+    @param:DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     suspend fun getSelection(fromIndex: Int): List<UserImageSelectionProto> = dataStore

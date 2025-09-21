@@ -40,8 +40,8 @@ import timber.log.Timber
 
 @Singleton
 class MainRepository @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
+    @param:ApplicationContext private val context: Context,
+    @param:DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     suspend fun deleteCameraImages(): Result<Unit> = withContext(dispatcherIo) {

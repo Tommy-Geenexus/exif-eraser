@@ -48,7 +48,7 @@ import timber.log.Timber
 @Singleton
 class ImageSourcesRepository @Inject constructor(
     private val dataStore: DataStore<ImageSourcesProto>,
-    @DispatcherIo private val dispatcherIo: CoroutineDispatcher
+    @param:DispatcherIo private val dispatcherIo: CoroutineDispatcher
 ) {
 
     suspend fun getImageSources(): List<AnyMessage> = dataStore
