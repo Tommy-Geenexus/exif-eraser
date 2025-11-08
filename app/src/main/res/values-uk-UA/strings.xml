@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="all_done">Все готово!</string>
+
+    <string name="always">Завжди</string>
+
+    <string name="auto_delete_image_off">Не видаляти зображення після зміни, якщо ввімкнено застарілий вибір зображень</string>
+    <string name="auto_delete_image_on">Видаляти зображення після зміни, якщо ввімкнено застарілий вибір зображень</string>
+
+    <string name="automatically">Автоматично</string>
+
+    <string name="become_translator">Долучитися до перекладу</string>
+
+    <string name="camera">Камера</string>
+
+    <string name="choose_image">Вибрати зображення</string>
+    <string name="choose_image_directory">Вибрати каталог зображень</string>
+    <string name="choose_images">Вибрати зображення</string>
+    <string name="choose_your">Виберіть ваше</string>
+
+    <string name="clipboard_content_paste">Вставити зображення з буфера обміну</string>
+    <string name="clipboard_content_unsupported">Непідтримуваний вміст буфера обміну</string>
+
+    <string name="default_display_name_suffix">Суфікс імені за замовчуванням</string>
+    <string name="default_path_open">Шлях відкриття за замовчуванням</string>
+    <string name="default_path_save">Шлях збереження за замовчуванням</string>
+
+    <string name="delete">Видалити</string>
+    <string name="delete_camera_images">Видалити зображення з камери</string>
+    <string name="delete_camera_images_all">Видалити всі зображення, зроблені цією програмою (оригінальні та змінені)</string>
+    <string name="delete_camera_images_failed">Не вдалося видалити зображення з камери</string>
+    <string name="delete_camera_images_success">Зображення з камери успішно видалено</string>
+
+    <string name="details">Подробиці</string>
+
+    <string name="file_system">Файлова система</string>
+
+    <string name="help">Довідка та зворотний зв\'язок</string>
+
+    <string name="icc_profile">Профіль ICC</string>
+
+    <string name="image">Зображення</string>
+    <string name="image_auto_delete">Автовидалення</string>
+    <string name="image_directory">Каталог зображень</string>
+    <string name="image_file">Файл зображення</string>
+    <string name="image_files">Файли зображень</string>
+    <string name="image_orientation">Зберігати орієнтацію</string>
+    <string name="image_path">Шлях до зображення</string>
+    <string name="image_private">Зображення публічно недоступне</string>
+    <string name="image_selection_legacy">Застарілий вибір зображень</string>
+    <string name="image_selection_legacy_off">Вибір зображень за допомогою вибору фотографій</string>
+    <string name="image_selection_legacy_on">Вибір зображень за допомогою постачальника документів за замовчуванням</string>
+    <string name="image_share_by_default">Поділитись за замовчуванням</string>
+    <string name="image_sources_camera_failure">Не вдалося запустити камеру</string>
+    <string name="image_sources_put_failure">Не вдалося зберегти конфігурацію джерела зображення</string>
+    <string name="image_sources_put_success">Конфігурацію джерела зображення успішно збережено</string>
+    <string name="image_sources_save_failure">Не вдалося зберегти зображення</string>
+    <string name="image_supported_formats">Підтримувані формати зображень</string>
+
+    <string name="images_modified">зображень змінено</string>
+
+    <string name="low_batt_only">Тільки при низькому заряді</string>
+
+    <string name="never">Ніколи</string>
+
+    <string name="night_mode">Нічний режим</string>
+
+    <string name="none">Немає</string>
+
+    <string name="of">з</string>
+
+    <string name="path_save_choose">Виберіть шлях збереження</string>
+    <string name="path_save_custom">Користувацький шлях збереження</string>
+    <string name="path_save_default">Шлях збереження за замовчуванням</string>
+
+    <string name="preferred_image_source">бажане джерело зображення</string>
+
+    <string name="preserve_image_orientation_off">Не зберігати початкову орієнтацію зображення</string>
+    <string name="preserve_image_orientation_on">Зберігати початкову орієнтацію зображення</string>
+
+    <string name="progress_percent">%d %%</string>
+
+    <string name="randomize_file_names">Випадкові імена файлів</string>
+    <string name="randomize_file_names_off">Не змінювати випадковим чином імена файлів зображень перед їх збереженням</string>
+    <string name="randomize_file_names_on">Випадково змінювати імена файлів зображень перед їх збереженням</string>
+
+    <string name="reorder_image_source_cards">Перевпорядкувати карти джерел зображень</string>
+
+    <string name="report_bug">Повідомити про проблему</string>
+
+    <string name="save_path_custom_skip">Пропуск вибору шляху збереження</string>
+    <string name="save_path_custom_skip_off">Не пропускати вибір шляху збереження, якщо встановлено шлях збереження за замовчуванням</string>
+    <string name="save_path_custom_skip_on">Пропускати вибір шляху збереження, якщо встановлено шлях збереження за замовчуванням</string>
+
+    <string name="settings">Налаштування</string>
+
+    <string name="share">Поділитися</string>
+    <string name="share_images_by_default_off">Не ділитися зображеннями за замовчуванням після зміни</string>
+    <string name="share_images_by_default_on">Ділитися зображеннями за замовчуванням після зміни</string>
+    <string name="share_via">Поділитися через</string>
+
+    <string name="suffix">Суфікс</string>
+    <string name="suffix_invalid">Суфікс відсутній або містить неприпустимі символи</string>
+
+    <string name="summary">Підсумок</string>
+
+    <string name="take_picture">Зробити знімок</string>
+
+    <string name="ui">Інтерфейс</string>
+
+    <string name="version">Версія</string>
+
+    <string name="view_metadata">Перегляд метаданих</string>
+    <string name="view_path">Перегляд шляху</string>
+</resources>
