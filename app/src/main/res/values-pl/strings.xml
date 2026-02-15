@@ -70,7 +70,7 @@
     <string name="of">z</string>
 
     <string name="path_save_choose">Wybierz ścieżkę zapisu</string>
-    <string name="path_save_custom">\"Niestandardowa ścieżka zapisu</string>
+    <string name="path_save_custom">Niestandardowa ścieżka zapisu</string>
     <string name="path_save_default">Domyślna ścieżka zapisu</string>
 
     <string name="preferred_image_source">preferowane źródło obrazu</string>
