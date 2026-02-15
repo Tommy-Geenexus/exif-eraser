@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="all_done">C\'est fini !</string>
+
+    <string name="always">Toujours</string>
+
+    <string name="auto_delete_image_off">Ne pas supprimer les images après modification si la conservation des originaux est activé</string>
+    <string name="auto_delete_image_on">Supprimer les images après modification si la conservation des originaux est activé</string>
+
+    <string name="automatically">Automatiquement</string>
+
+    <string name="become_translator">Aider à traduire</string>
+
+    <string name="camera">Appareil photo</string>
+
+    <string name="choose_image">Choisir une photo</string>
+    <string name="choose_image_directory">Choisir un dossier</string>
+    <string name="choose_images">Choisir des images</string>
+    <string name="choose_your">Choisir votre</string>
+
+    <string name="clipboard_content_paste">Copier le contenu du presse-papier</string>
+    <string name="clipboard_content_unsupported">Le contenu du presse-papier ne peut pas être copié</string>
+
+    <string name="default_display_name_suffix">Afficher le suffixe par défaut</string>
+    <string name="default_path_open">Emplacement par défaut</string>
+    <string name="default_path_save">Emplacement d\'enregistrement par défaut</string>
+
+    <string name="delete">Supprimer</string>
+    <string name="delete_camera_images">Supprimer les photos</string>
+    <string name="delete_camera_images_all">Supprimer toutes les photos prises depuis cette application (originales et modifiées)</string>
+    <string name="delete_camera_images_failed">Impossible de supprimer les photos</string>
+    <string name="delete_camera_images_success">Suppression des photos réalisée avec succès</string>
+
+    <string name="details">Détails</string>
+
+    <string name="file_system">Explorateur de fichiers</string>
+
+    <string name="help">Aide et retour</string>
+
+    <string name="icc_profile">Profil ICC</string>
+
+    <string name="image">Image</string>
+    <string name="image_auto_delete">Auto-suppression</string>
+    <string name="image_directory">Dossier d\'image</string>
+    <string name="image_file">Fichier image</string>
+    <string name="image_files">Fichiers image</string>
+    <string name="image_orientation">Conserver l\'orientation</string>
+    <string name="image_path">Emplacement de l\'image</string>
+    <string name="image_private">Impossible d\'accéder à l\'image</string>
+    <string name="image_selection_legacy">Ancien sélectionneur d\'images</string>
+    <string name="image_selection_legacy_off">Sélectionner des photos avec l\'explorateur de fichier</string>
+    <string name="image_selection_legacy_on">Sélectionner les images avec l\'explorateur de fichiers par défaut</string>
+    <string name="image_share_by_default">Partager par défaut</string>
+    <string name="image_sources_camera_failure">Impossible d\'ouvrir l\'appareil photo</string>
+    <string name="image_sources_put_failure">Impossible de configurer l\'emplacement d\'enregistrement par défaut</string>
+    <string name="image_sources_put_success">Emplacement d\'enregistrement par défaut configuré avec succès</string>
+    <string name="image_sources_save_failure">Impossible de sauvegarder les images</string>
+    <string name="image_supported_formats">Formats d\'image pris en charge</string>
+
+    <string name="images_modified">Images modifiées</string>
+
+    <string name="low_batt_only">Batterie faible uniquement</string>
+
+    <string name="never">Jamais</string>
+
+    <string name="night_mode">Mode sombre</string>
+
+    <string name="none">Aucun</string>
+
+    <string name="of">sur</string>
+
+    <string name="path_save_choose">Choisir un emplacement d\'enregistrement</string>
+    <string name="path_save_custom">Emplacement d\'enregistrement personnalisé</string>
+    <string name="path_save_default">Emplacement d\'enregistrement par défaut</string>
+
+    <string name="preferred_image_source">Dossier d\'image par défaut</string>
+
+    <string name="preserve_image_orientation_off">Ne pas conserver l\'orientation originale</string>
+    <string name="preserve_image_orientation_on">Conserver l\'orientation originale</string>
+
+    <string name="progress_percent"/>
+
+    <string name="randomize_file_names">Renommer les fichiers aléatoirement</string>
+    <string name="randomize_file_names_off">Ne pas renommer les fichiers aléatoirement avant de les enregistrer</string>
+    <string name="randomize_file_names_on">Renommer les fichiers aléatoirement avant de les enregistrer</string>
+
+    <string name="reorder_image_source_cards">Réorganiser les emplacements d\'image</string>
+
+    <string name="report_bug">Signaler un problème</string>
+
+    <string name="save_path_custom_skip">Emplacement d\'enregistrement par défaut</string>
+    <string name="save_path_custom_skip_off">Toujours demander l\'emplacement d\'enregistrement</string>
+    <string name="save_path_custom_skip_on">Enregistrer à l\'emplacement par défaut</string>
+
+    <string name="settings">Paramètres</string>
+
+    <string name="share">Partager</string>
+    <string name="share_images_by_default_off">Ne pas partager les images après modification</string>
+    <string name="share_images_by_default_on">Partager les images après modification</string>
+    <string name="share_via">Partager via</string>
+
+    <string name="suffix">Suffixe</string>
+    <string name="suffix_invalid">Le suffixe est vide ou contient des caractères invalides</string>
+
+    <string name="summary">Résumé</string>
+
+    <string name="take_picture">Prendre une photo</string>
+
+    <string name="ui">Interface utilisateur</string>
+
+    <string name="version">Version</string>
+
+    <string name="view_metadata">Voir les métadonnées</string>
+    <string name="view_path">Voir le chemin d\'accès</string>
+</resources>
