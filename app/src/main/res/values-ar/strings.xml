@@ -4,8 +4,8 @@
 
     <string name="always">دائمًا</string>
 
-    <string name="auto_delete_image_off">لا تحذف الصور بعد التعديل إذا تم تمكين اختيار الصورة القديمة</string>
-    <string name="auto_delete_image_on">احذف الصور بعد التعديل إذا تم تمكين اختيار الصورة القديمة</string>
+    <string name="auto_delete_image_off">لا تحذف الصور بعد التعديل إذا فُعِّل اختيار الصورة القديمة</string>
+    <string name="auto_delete_image_on">احذف الصور بعد التعديل إذا فُعِّل اختيار الصورة القديمة</string>
 
     <string name="automatically">تلقائيًا</string>
 
@@ -46,8 +46,8 @@
     <string name="image_files">ملفات الصور</string>
     <string name="image_orientation">الحفاظ على الاتجاه</string>
     <string name="image_path">مسار الصورة</string>
-    <string name="image_private">الصورة غير متاحة للجميع</string>
-    <string name="image_selection_legacy">اختيار الصورة القديمة</string>
+    <string name="image_private">الصورة غير متاحة للعموم</string>
+    <string name="image_selection_legacy">اختيار صورة عتيق</string>
     <string name="image_selection_legacy_off">حدد الصور باستخدام منتقي الصور</string>
     <string name="image_selection_legacy_on">حدد الصور باستخدام موفر المستند الافتراضي</string>
     <string name="image_share_by_default">المشاركة افتراضيًا</string>
@@ -59,7 +59,7 @@
 
     <string name="images_modified">صور معدلة</string>
 
-    <string name="low_batt_only">بطارية منخفضه فقط</string>
+    <string name="low_batt_only">البطارية منخفضة فقط</string>
 
     <string name="never">أبدًا</string>
 
@@ -89,8 +89,8 @@
     <string name="report_bug">الإبلاغ عن مشكلة</string>
 
     <string name="save_path_custom_skip">تخطي إختيار مسار حفظ</string>
-    <string name="save_path_custom_skip_off">لا تتخطى اختيار مسار الحفظ إذا تم تعيين مسار الحفظ الافتراضي</string>
-    <string name="save_path_custom_skip_on">تخطي اختيار مسار الحفظ إذا تم تعيين مسار الحفظ الافتراضي</string>
+    <string name="save_path_custom_skip_off">لا تتخطى اختيار مسار الحفظ إذا عُيّن مسار الحفظ الافتراضي</string>
+    <string name="save_path_custom_skip_on">تخطي اختيار مسار الحفظ إذا عُيّن مسار الحفظ الافتراضي</string>
 
     <string name="settings">الإعدادات</string>
 
@@ -110,6 +110,6 @@
 
     <string name="version">الإصدار</string>
 
-    <string name="view_metadata">عرض البيانات الوصفية</string>
-    <string name="view_path">عرض المسار</string>
+    <string name="view_metadata">اعرض البيانات الوصفية</string>
+    <string name="view_path">اعرض المسار</string>
 </resources>
