@@ -16,10 +16,10 @@
     <string name="choose_image">Wybierz obraz</string>
     <string name="choose_image_directory">Wybierz katalog obrazów</string>
     <string name="choose_images">Wybierz obrazy</string>
-    <string name="choose_your">Wybierz twoje</string>
+    <string name="choose_your">Wybierz</string>
 
     <string name="clipboard_content_paste">Wklej obraz ze schowka</string>
-    <string name="clipboard_content_unsupported">Niewspierana zawartość schowka</string>
+    <string name="clipboard_content_unsupported">Nieobsługiwana zawartość schowka</string>
 
     <string name="default_display_name_suffix">Domyślny sufiks nazwy</string>
     <string name="default_path_open">Domyślna ścieżka</string>
@@ -55,11 +55,11 @@
     <string name="image_sources_put_failure">Nie udało się zapisać konfiguracji źródła obrazu</string>
     <string name="image_sources_put_success">Pomyślnie zapisano konfigurację źródła obrazu</string>
     <string name="image_sources_save_failure">Nie udało się zapisać obrazu(-ów)</string>
-    <string name="image_supported_formats">Wspierane rozszerzenia obrazów</string>
+    <string name="image_supported_formats">Obsługiwane formaty obrazów</string>
 
     <string name="images_modified">zmodyfikowane obrazy</string>
 
-    <string name="low_batt_only">Tylko niski poziom baterii</string>
+    <string name="low_batt_only">Tylko przy niskim poziomie baterii</string>
 
     <string name="never">Nigdy</string>
 
@@ -70,7 +70,7 @@
     <string name="of">z</string>
 
     <string name="path_save_choose">Wybierz ścieżkę zapisu</string>
-    <string name="path_save_custom">Własna ścieżka zapisu</string>
+    <string name="path_save_custom">\"Niestandardowa ścieżka zapisu</string>
     <string name="path_save_default">Domyślna ścieżka zapisu</string>
 
     <string name="preferred_image_source">preferowane źródło obrazu</string>
