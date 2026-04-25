@@ -78,7 +78,7 @@
     <string name="preserve_image_orientation_off">Ne pas conserver l\'orientation originale</string>
     <string name="preserve_image_orientation_on">Conserver l\'orientation originale</string>
 
-    <string name="progress_percent"/>
+    <string name="progress_percent">%d %%</string>
 
     <string name="randomize_file_names">Renommer les fichiers aléatoirement</string>
     <string name="randomize_file_names_off">Ne pas renommer les fichiers aléatoirement avant de les enregistrer</string>

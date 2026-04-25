@@ -2,30 +2,27 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
-    <ID>CyclomaticComplexMethod:SettingsFragment.kt$SettingsFragment$private fun handleSideEffect(sideEffect: SettingsSideEffect)</ID>
-    <ID>EmptyFunctionBlock:MainItemTouchHelperCallback.kt$MainItemTouchHelperCallback${ }</ID>
-    <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt$MainItemTouchUiUtil${ }</ID>
-    <ID>LargeClass:MainViewModelTest.kt$MainViewModelTest</ID>
-    <ID>LongMethod:ImageProcessingRepository.kt$ImageProcessingRepository$private suspend fun removeMetaData( proto: UserImageSelectionProto, treeUri: Uri, displayNameSuffix: String, isAutoDeleteEnabled: Boolean, isPreserveOrientationEnabled: Boolean, isRandomizeFileNamesEnabled: Boolean, progress: ImageProcessingProgress ): ImageProcessingStep.FinishedSingle</ID>
-    <ID>LongMethod:ImageProcessingViewModelTest.kt$ImageProcessingViewModelTest$@Test fun test_handleUserImagesSelection()</ID>
-    <ID>LongMethod:MainFragment.kt$MainFragment$override fun onViewCreated(view: View, savedInstanceState: Bundle?)</ID>
-    <ID>LongMethod:MainFragment.kt$MainFragment$private fun handleSideEffect(sideEffect: MainSideEffect)</ID>
-    <ID>LongMethod:MainViewModelTest.kt$MainViewModelTest$@Test fun test_putImageSelection()</ID>
-    <ID>LongMethod:SettingsViewModelTest.kt$SettingsViewModelTest$@Test fun test_readDefaultValues()</ID>
-    <ID>LongParameterList:ImageProcessingRepository.kt$ImageProcessingRepository$( proto: UserImageSelectionProto, treeUri: Uri, displayNameSuffix: String, isAutoDeleteEnabled: Boolean, isPreserveOrientationEnabled: Boolean, isRandomizeFileNamesEnabled: Boolean, progress: ImageProcessingProgress )</ID>
-    <ID>LongParameterList:ImageProcessingRepository.kt$ImageProcessingRepository$( protos: List&lt;UserImageSelectionProto&gt;, treeUri: Uri, displayNameSuffix: String, isAutoDeleteEnabled: Boolean, isPreserveOrientationEnabled: Boolean, isRandomizeFileNamesEnabled: Boolean )</ID>
-    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$255</ID>
-    <ID>MagicNumber:FileUtilsKt.kt$FileUtilsKt$3</ID>
-    <ID>MagicNumber:HelpAdapter.kt$HelpAdapter$3</ID>
-    <ID>TooGenericExceptionCaught:CoroutineExtensions.kt$exception: Exception</ID>
-    <ID>TooGenericExceptionCaught:HelpViewHolder.kt$HelpViewHolder$e: Exception</ID>
-    <ID>TooManyFunctions:ImageProcessingDetailsFragment.kt$ImageProcessingDetailsFragment : BaseFragmentListener</ID>
-    <ID>TooManyFunctions:MainFragment.kt$MainFragment : BaseFragmentListener</ID>
-    <ID>TooManyFunctions:MainViewModel.kt$MainViewModel : ViewModelContainerHost</ID>
-    <ID>TooManyFunctions:SettingsAdapter.kt$SettingsAdapter$Listener</ID>
-    <ID>TooManyFunctions:SettingsFragment.kt$SettingsFragment : BaseFragmentListener</ID>
-    <ID>TooManyFunctions:SettingsRepository.kt$SettingsRepository</ID>
-    <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModelContainerHost</ID>
+    <ID>CyclomaticComplexMethod:MainFragment.kt:MainFragment$private fun handleSideEffect</ID>
+    <ID>CyclomaticComplexMethod:SettingsFragment.kt:SettingsFragment$private fun handleSideEffect</ID>
+    <ID>EmptyFunctionBlock:MainItemTouchHelperCallback.kt:MainItemTouchHelperCallback${ }</ID>
+    <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt:MainItemTouchUiUtil${ }</ID>
+    <ID>LargeClass:MainViewModelTest.kt:MainViewModelTest</ID>
+    <ID>LongMethod:ImageProcessingRepository.kt:ImageProcessingRepository$private suspend fun removeMetaData: ImageProcessingStep.FinishedSingle</ID>
+    <ID>LongMethod:ImageProcessingViewModelTest.kt:ImageProcessingViewModelTest$@Test fun test_handleUserImagesSelection</ID>
+    <ID>LongMethod:MainFragment.kt:MainFragment$override fun onViewCreated</ID>
+    <ID>LongMethod:MainFragment.kt:MainFragment$private fun handleSideEffect</ID>
+    <ID>LongMethod:MainViewModelTest.kt:MainViewModelTest$@Test fun test_putImageSelection</ID>
+    <ID>LongMethod:SettingsViewModelTest.kt:SettingsViewModelTest$@Test fun test_readDefaultValues</ID>
+    <ID>MagicNumber:FileUtilsKt.kt:FileUtilsKt$255</ID>
+    <ID>MagicNumber:FileUtilsKt.kt:FileUtilsKt$3</ID>
+    <ID>MagicNumber:HelpAdapter.kt:HelpAdapter$3</ID>
+    <ID>TooGenericExceptionCaught:CoroutineExtensions.kt:exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:HelpViewHolder.kt:HelpViewHolder$e: Exception</ID>
+    <ID>TooManyFunctions:MainFragment.kt:MainFragment : BaseFragmentListener</ID>
+    <ID>TooManyFunctions:MainViewModel.kt:MainViewModel : ViewModelContainerHost</ID>
+    <ID>TooManyFunctions:SettingsAdapter.kt:SettingsAdapter$Listener</ID>
+    <ID>TooManyFunctions:SettingsFragment.kt:SettingsFragment : BaseFragmentListener</ID>
+    <ID>TooManyFunctions:SettingsRepository.kt:SettingsRepository</ID>
+    <ID>TooManyFunctions:SettingsViewModel.kt:SettingsViewModel : ViewModelContainerHost</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -36,8 +36,8 @@ import com.none.tom.exiferaser.core.util.INDEX_DEFAULT_IMAGE_FILES
 import com.squareup.wire.AnyMessage
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
@@ -77,7 +77,7 @@ class ImageSourcesRepository @Inject constructor(
         .catch { exception -> Timber.e(exception) }
         .flowOn(dispatcherIo)
         .firstOrNull()
-        ?: coroutineContext.suspendRunCatching {
+        ?: currentCoroutineContext().suspendRunCatching {
             listOf(
                 AnyMessage.pack(ImageFileProto(index = INDEX_DEFAULT_IMAGE_FILE)),
                 AnyMessage.pack(ImageFilesProto(index = INDEX_DEFAULT_IMAGE_FILES)),
