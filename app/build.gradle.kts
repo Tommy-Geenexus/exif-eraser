@@ -1,11 +1,11 @@
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import java.io.FileInputStream
-import java.util.Properties
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import org.bouncycastle.util.encoders.Base64
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 val keyStoreFile = "keystore.jks"
 val keyStoreProperties = "keystore.properties"
@@ -55,7 +55,6 @@ plugins {
     alias(libs.plugins.accrescent.bundletool)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
@@ -130,15 +129,6 @@ bundletool {
         keyAlias.set(properties.second)
         keyAlias = properties.second
         keyPassword.set(properties.third)
-    }
-}
-
-afterEvaluate {
-    tasks.named("kspDebugKotlin") {
-        dependsOn("generateDebugProtos")
-    }
-    tasks.named("kspReleaseKotlin") {
-        dependsOn("generateReleaseProtos")
     }
 }
 
