@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,11 +20,14 @@
 
 package com.none.tom.exiferaser.main.ui
 
+import android.app.Activity
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.core.layout.WindowSizeClass
 import com.none.tom.exiferaser.R
+import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
 import com.none.tom.exiferaser.databinding.ItemImageSourceBinding
+import dagger.hilt.android.internal.managers.ViewComponentManager
 
 class MainViewHolder(
     private val binding: ItemImageSourceBinding,
@@ -67,6 +70,14 @@ class MainViewHolder(
                 com.google.android.material.R.style.TextAppearance_Material3_BodySmall_Emphasized
             }
         )
+        val context = itemView.context
+        if (context is ViewComponentManager.FragmentContextWrapper) {
+            binding.method.setTextColor(
+                (context.baseContext as Activity).resolveThemeAttribute(
+                    attrRes = com.google.android.material.R.attr.colorOnPrimaryContainer
+                )
+            )
+        }
         binding.imageSource.setOnClickListener {
             with(itemView.context) {
                 when (binding.method.text) {

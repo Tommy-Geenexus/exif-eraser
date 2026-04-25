@@ -8,7 +8,7 @@
     <ID>EmptyFunctionBlock:MainItemTouchUiUtil.kt:MainItemTouchUiUtil${ }</ID>
     <ID>LargeClass:MainViewModelTest.kt:MainViewModelTest</ID>
     <ID>LongMethod:ImageProcessingRepository.kt:ImageProcessingRepository$private suspend fun removeMetaData: ImageProcessingStep.FinishedSingle</ID>
-    <ID>LongMethod:ImageProcessingViewModelTest.kt:ImageProcessingViewModelTest$@Test fun test_handleUserImagesSelection</ID>
+    <ID>LongMethod:ImageProcessingViewModelTest.kt:ImageProcessingViewModelTest$@Suppress("UnusedFlow") @Test fun test_handleUserImagesSelection</ID>
     <ID>LongMethod:MainFragment.kt:MainFragment$override fun onViewCreated</ID>
     <ID>LongMethod:MainFragment.kt:MainFragment$private fun handleSideEffect</ID>
     <ID>LongMethod:MainViewModelTest.kt:MainViewModelTest$@Test fun test_putImageSelection</ID>
