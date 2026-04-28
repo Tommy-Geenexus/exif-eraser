@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractViewUrl
-import com.none.tom.exiferaser.core.extension.setupToolbar
+import com.none.tom.exiferaser.core.extension.setToolbarAsActionBar
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.util.URL_ISSUES
 import com.none.tom.exiferaser.core.util.URL_LOCALISATION
@@ -51,7 +51,10 @@ class HelpFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(toolbar = binding.appbarMediumCollapsing.toolbar, title = R.string.help)
+        setToolbarAsActionBar(
+            toolbar = binding.appbarMediumCollapsing.toolbar,
+            title = R.string.help
+        )
         binding.helpAndFeedback.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = HelpAdapter(listener = this@HelpFragment)

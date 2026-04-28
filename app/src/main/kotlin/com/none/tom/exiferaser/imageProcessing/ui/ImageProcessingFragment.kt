@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -39,7 +39,7 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.google.android.material.transition.MaterialSharedAxis
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.contract.ActivityResultContractShareImages
-import com.none.tom.exiferaser.core.extension.setupToolbar
+import com.none.tom.exiferaser.core.extension.setToolbarAsActionBar
 import com.none.tom.exiferaser.core.image.ImageProcessingStep
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.util.NAV_ARG_IMAGE_PROCESSING_SUMMARIES
@@ -70,7 +70,7 @@ class ImageProcessingFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(toolbar = binding.appbarSmallAction.toolbar, title = R.string.summary)
+        setToolbarAsActionBar(toolbar = binding.appbarSmallAction.toolbar, title = R.string.summary)
         setupAdaptiveLayout()
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsetsCompat ->
             val insets = windowInsetsCompat.getInsets(

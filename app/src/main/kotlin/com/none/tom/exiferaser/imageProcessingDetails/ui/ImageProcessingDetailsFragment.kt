@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -40,7 +40,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialContainerTransform
 import com.none.tom.exiferaser.R
 import com.none.tom.exiferaser.core.extension.resolveThemeAttribute
-import com.none.tom.exiferaser.core.extension.setupToolbar
+import com.none.tom.exiferaser.core.extension.setToolbarAsActionBar
 import com.none.tom.exiferaser.core.ui.BaseFragment
 import com.none.tom.exiferaser.core.util.KEY_STATE_REPORT
 import com.none.tom.exiferaser.core.util.MIME_TYPE_IMAGE
@@ -100,7 +100,10 @@ class ImageProcessingDetailsFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar(toolbar = binding.appbarMediumCollapsing.toolbar, title = R.string.details)
+        setToolbarAsActionBar(
+            toolbar = binding.appbarMediumCollapsing.toolbar,
+            title = R.string.details
+        )
         binding.details.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = ImageProcessingDetailsAdapter(listener = this@ImageProcessingDetailsFragment)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -36,8 +36,10 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.AppBarConfiguration
 import com.none.tom.exiferaser.R
 
 fun Activity.resolveThemeAttribute(@AttrRes attrRes: Int): Int {
@@ -84,13 +86,21 @@ fun Context.defaultNightModeDisplayValue() = if (Build.VERSION.SDK_INT >= Build.
     getString(R.string.never)
 }
 
-fun Fragment.setupToolbar(toolbar: Toolbar, @StringRes title: Int) {
-    (requireActivity() as AppCompatActivity).apply {
-        setSupportActionBar(
-            toolbar.apply {
-                setTitle(title)
-            }
-        )
-        setupActionBarWithNavController(findNavController())
+fun Fragment.setToolbarAsActionBar(toolbar: Toolbar, @StringRes title: Int) {
+    val activity = (requireActivity() as AppCompatActivity)
+    activity.setSupportActionBar(toolbar.apply { setTitle(title) })
+    val navController = findNavController()
+    val configuration = AppBarConfiguration.Builder(navController.graph).build()
+    val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+        val isTopLevelDestination = configuration.isTopLevelDestination(destination)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(!isTopLevelDestination)
     }
+    navController.addOnDestinationChangedListener(listener)
+    val callback = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentViewDestroyed(fm: FragmentManager, f: Fragment) {
+            navController.removeOnDestinationChangedListener(listener)
+            parentFragmentManager.unregisterFragmentLifecycleCallbacks(this)
+        }
+    }
+    parentFragmentManager.registerFragmentLifecycleCallbacks(callback, false)
 }
