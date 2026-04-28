@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.settings.ui
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,7 +53,9 @@ class DefaultNightModeFragment : DialogFragment() {
                         .getOrElse(list.checkedItemPosition) { defaultNightMode }
                     parentFragmentManager.setFragmentResult(
                         KEY_DEFAULT_NIGHT_MODE,
-                        bundleOf(KEY_DEFAULT_NIGHT_MODE to defaultNightMode)
+                        Bundle().apply {
+                            putInt(KEY_DEFAULT_NIGHT_MODE, defaultNightMode)
+                        }
                     )
                 }
             }

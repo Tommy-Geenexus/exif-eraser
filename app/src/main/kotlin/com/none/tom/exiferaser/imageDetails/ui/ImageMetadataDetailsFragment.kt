@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.imageDetails.ui
 import android.app.Dialog
 import android.os.Bundle
 import androidx.core.os.BundleCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -55,12 +54,12 @@ class ImageMetadataDetailsFragment : DialogFragment() {
             mimeType: String,
             imageMetadataSnapshot: ImageMetadataSnapshot
         ) = ImageMetadataDetailsFragment().apply {
-            arguments = bundleOf(
-                KEY_DISPLAY_NAME to displayName,
-                KEY_EXTENSION to extension,
-                KEY_MIME_TYPE to mimeType,
-                KEY_IMAGE_METADATA_SNAPSHOT to imageMetadataSnapshot
-            )
+            arguments = Bundle().apply {
+                putString(KEY_DISPLAY_NAME, displayName)
+                putString(KEY_EXTENSION, extension)
+                putString(KEY_MIME_TYPE, mimeType)
+                putParcelable(KEY_IMAGE_METADATA_SNAPSHOT, imageMetadataSnapshot)
+            }
         }
     }
 

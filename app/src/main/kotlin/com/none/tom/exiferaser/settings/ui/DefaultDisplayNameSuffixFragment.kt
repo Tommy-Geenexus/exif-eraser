@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -25,7 +25,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doOnTextChanged
@@ -66,10 +65,12 @@ class DefaultDisplayNameSuffixFragment : DialogFragment() {
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 parentFragmentManager.setFragmentResult(
                     KEY_DEFAULT_DISPLAY_NAME_SUFFIX,
-                    bundleOf(
-                        KEY_DEFAULT_DISPLAY_NAME_SUFFIX to
+                    Bundle().apply {
+                        putString(
+                            KEY_DEFAULT_DISPLAY_NAME_SUFFIX,
                             binding.defaultDisplayNameSuffix.text?.trim().toString()
-                    )
+                        )
+                    }
                 )
             }
             .setNegativeButton(android.R.string.cancel, null)

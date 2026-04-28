@@ -23,7 +23,6 @@ package com.none.tom.exiferaser.imageProcessing.ui
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -140,12 +139,15 @@ class ImageProcessingFragment :
             }
             is ImageProcessingSideEffect.Navigate.ToImageProcessingDetails -> {
                 findNavController().navigate(
-                    R.id.image_processing_to_image_processing_details,
-                    bundleOf(
-                        NAV_ARG_IMAGE_PROCESSING_SUMMARIES to sideEffect.imageProcessingSummaries
-                    ),
-                    null,
-                    FragmentNavigatorExtras(
+                    resId = R.id.image_processing_to_image_processing_details,
+                    args = Bundle().apply {
+                        putParcelableArray(
+                            NAV_ARG_IMAGE_PROCESSING_SUMMARIES,
+                            sideEffect.imageProcessingSummaries
+                        )
+                    },
+                    navOptions = null,
+                    navigatorExtras = FragmentNavigatorExtras(
                         binding.details to getString(R.string.shared_element_details)
                     )
                 )

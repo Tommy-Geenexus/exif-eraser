@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import com.none.tom.exiferaser.core.ui.BaseBottomSheetDialogFragment
 import com.none.tom.exiferaser.core.util.KEY_CAMERA_IMAGE_DELETE
 import com.none.tom.exiferaser.databinding.FragmentDeleteCameraImagesBinding
@@ -37,7 +36,9 @@ class DeleteCameraImagesFragment :
         binding.delete.setOnClickListener {
             parentFragmentManager.setFragmentResult(
                 KEY_CAMERA_IMAGE_DELETE,
-                bundleOf(KEY_CAMERA_IMAGE_DELETE to true)
+                Bundle().apply {
+                    putBoolean(KEY_CAMERA_IMAGE_DELETE, true)
+                }
             )
             dismiss()
         }

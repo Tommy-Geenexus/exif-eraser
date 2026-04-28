@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2025, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -29,7 +29,6 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -147,8 +146,10 @@ class ExifEraserActivity : AppCompatActivity() {
             }
             if (uris.isNotEmpty()) {
                 findNavController().navigate(
-                    R.id.global_to_main,
-                    bundleOf(NAV_ARG_IMAGE_SELECTION to uris.toTypedArray())
+                    resId = R.id.global_to_main,
+                    args = Bundle().apply {
+                        putParcelableArray(NAV_ARG_IMAGE_SELECTION, uris.toTypedArray())
+                    }
                 )
             }
         } else if (shortcutIntentActions.contains(intent.action)) {
@@ -156,7 +157,11 @@ class ExifEraserActivity : AppCompatActivity() {
                 .createDeepLink()
                 .setGraph(R.navigation.nav_graph)
                 .setDestination(R.id.fragment_main)
-                .setArguments(bundleOf(NAV_ARG_SHORTCUT to intent.action))
+                .setArguments(
+                    Bundle().apply {
+                        putString(NAV_ARG_SHORTCUT, intent.action)
+                    }
+                )
                 .createTaskStackBuilder()
                 .startActivities()
         }
