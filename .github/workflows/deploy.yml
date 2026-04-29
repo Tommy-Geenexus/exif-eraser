@@ -1,31 +1,32 @@
-# Required PAT repository permissions:
-# - Actions: RO
-# - Contents: RW
-# - Secrets: RO
 name: Deploy
 on:
-  workflow_run:
+  workflow_run: # zizmor: ignore[dangerous-triggers]
     workflows:
       - Assemble
     types:
-     - completed
+      - completed
 
 jobs:
   setup_env:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       commit_subject: ${{ steps.output1.outputs.commit_subject }}
       release_tag: ${{ steps.output2.outputs.release_tag }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - id: output1
         run: echo "commit_subject=$(git log -1 --format=%s)" >> $GITHUB_OUTPUT
 
       - id: output2
         run: echo "release_tag=$(git log -1 --format=%s | sed 's/.*Release //')" >> $GITHUB_OUTPUT
+
   deploy:
     needs: setup_env
     env:
@@ -35,38 +36,43 @@ jobs:
       RELEASE_TAG: ${{ needs.setup_env.outputs.release_tag }}
     if: ${{ startsWith(needs.setup_env.outputs.commit_subject, 'Release v') }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Download apk
         id: download_apk
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: ${{ env.APK_NAME }}
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GH_DOWNLOAD_TOKEN }}
           repository: ${{ github.repository }}
           run-id: ${{ github.event.workflow_run.id }}
 
       - name: Create tag
-        uses: rickstaa/action-create-tag@v1
         id: tag_create
+        uses: rickstaa/action-create-tag@a1c7777fcb2fee4f19b0f283ba888afa11678b72 # v1.7.2
         with:
+          github_token: ${{ secrets.GH_UPLOAD_TOKEN }}
           message: ${{ env.COMMIT_SUBJECT }}
           tag: ${{ env.RELEASE_TAG }}
 
       - name: Build changelog
         id: build_changelog
-        uses: requarks/changelog-action@v1
+        uses: requarks/changelog-action@b78a3354a01f4a1affb484b9264b506a815c46b1 # v1.10.3
         with:
           includeInvalidCommits: true
           tag: ${{ env.RELEASE_TAG }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ github.token }}
 
       - name: Create release
-        uses: ncipollo/release-action@v1
+        id: create_release
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # zizmor: ignore[superfluous-actions]
         with:
           allowUpdates: true
           artifactContentType: ${{ env.APK_CONTENT_TYPE }}
@@ -75,4 +81,4 @@ jobs:
           draft: false
           makeLatest: true
           tag: ${{ env.RELEASE_TAG }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_UPLOAD_TOKEN }}
