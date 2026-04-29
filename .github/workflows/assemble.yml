@@ -16,7 +16,7 @@ jobs:
       APK_PATH: 'app/build/outputs/apk/release/app-release.apk'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup JDK 17
         id: setup-java
