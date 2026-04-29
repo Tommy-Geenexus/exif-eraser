@@ -72,8 +72,8 @@ android {
         applicationId = "com.none.tom.exiferaser"
         minSdk = 28
         targetSdk = 37
-        versionCode = 42
-        versionName = "6.4.2"
+        versionCode = 43
+        versionName = "6.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
