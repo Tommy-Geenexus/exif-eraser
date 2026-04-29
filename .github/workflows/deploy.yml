@@ -19,7 +19,7 @@ jobs:
       release_tag: ${{ steps.output2.outputs.release_tag }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - id: output1
         run: echo "commit_subject=$(git log -1 --format=%s)" >> $GITHUB_OUTPUT
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
