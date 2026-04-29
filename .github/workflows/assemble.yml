@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload apk
         id: upload_apk
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.APK_NAME }}
           path: ${{ env.APK_PATH }}
