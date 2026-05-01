@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2024-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -30,7 +30,6 @@ const val KEY_EXTENSION = TOP_LEVEL_PACKAGE_NAME + "EXTENSION"
 const val KEY_IMAGE_METADATA_SNAPSHOT = TOP_LEVEL_PACKAGE_NAME + "IMAGE_META_SNAPSHOT"
 const val KEY_IMAGE_PATH = TOP_LEVEL_PACKAGE_NAME + "IMAGE_PATH"
 const val KEY_MIME_TYPE = TOP_LEVEL_PACKAGE_NAME + "MIME_TYPE"
-const val KEY_NAV_DESTINATION_ID = TOP_LEVEL_PACKAGE_NAME + "NAV_DESTINATION_ID"
 const val KEY_STATE_REPORT = TOP_LEVEL_PACKAGE_NAME + "REPORT"
 
 const val IMAGE_PROCESSING_REPORT_IMAGES_MAX = 100

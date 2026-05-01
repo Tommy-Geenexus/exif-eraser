@@ -155,27 +155,23 @@ class MainFragment :
         }
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                findNavController().currentBackStackEntryFlow.collect { navBackStackEntry ->
-                    val prevNavDestinationId = viewModel.navDestinationId
-                    val nextNavDestinationId = navBackStackEntry.destination.id
-                    if (nextNavDestinationId != prevNavDestinationId) {
-                        viewModel.navDestinationId = nextNavDestinationId
-                        exitTransition = if (
-                            nextNavDestinationId == R.id.fragment_image_processing ||
-                            nextNavDestinationId == R.id.fragment_image_save_path_selection
-                        ) {
+                findNavController().visibleEntries.collect { navBackStackEntries ->
+                    if (navBackStackEntries.size > 1) {
+                        val fromDestinationId = navBackStackEntries.firstOrNull()?.destination?.id
+                        val toDestinationId = navBackStackEntries.lastOrNull()?.destination?.id
+                        exitTransition = if (toDestinationId == R.id.fragment_image_processing) {
                             MaterialSharedAxis(MaterialSharedAxis.X, true)
                         } else {
                             MaterialSharedAxis(MaterialSharedAxis.Z, true)
                         }
-                        reenterTransition = if (
-                            prevNavDestinationId == R.id.fragment_image_processing ||
-                            prevNavDestinationId == R.id.fragment_image_save_path_selection
-                        ) {
-                            MaterialSharedAxis(MaterialSharedAxis.X, false)
-                        } else {
-                            MaterialSharedAxis(MaterialSharedAxis.Z, false)
-                        }
+                        reenterTransition =
+                            if (fromDestinationId == R.id.fragment_image_processing ||
+                                toDestinationId == R.id.fragment_image_processing
+                            ) {
+                                MaterialSharedAxis(MaterialSharedAxis.X, false)
+                            } else {
+                                MaterialSharedAxis(MaterialSharedAxis.Z, false)
+                            }
                     }
                 }
             }
