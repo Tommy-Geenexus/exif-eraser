@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2024, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
+ * Copyright (c) 2018-2026, Tom Geiselmann (tomgapplicationsdevelopment@gmail.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -375,7 +375,7 @@ class ImageProcessingInstrumentedTest {
             isPreserveOrientationEnabled = false,
             isRandomizeFileNamesEnabled = false
         ).test {
-            for (index in 0 until protos.size) {
+            for (index in protos.indices) {
                 val item = awaitItem()
                 expectThat(item).isA<ImageProcessingStep.FinishedSingle>()
                 (item as ImageProcessingStep.FinishedSingle)

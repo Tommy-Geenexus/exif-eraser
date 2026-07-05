@@ -25,7 +25,6 @@ import kotlin.contracts.contract
 
 fun Uri.isNotEmpty() = this != Uri.EMPTY
 
-@Suppress("VerboseNullabilityAndEmptiness")
 fun Uri?.isNotNullOrEmpty(): Boolean {
     contract {
         returns(true) implies (this@isNotNullOrEmpty != null)
