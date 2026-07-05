@@ -13,6 +13,10 @@
 [![Spotless](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/spotless.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/spotless.yml)
 [![Crowdin Upload](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/crowdin_upload.yml/badge.svg)](https://github.com/Tommy-Geenexus/exif-eraser/actions/workflows/crowdin_upload.yml)
 
+## Notice
+Since View-based libraries are in [maintenance mode](https://developer.android.com/develop/ui/compose/first), this app is considered to be in maintenance mode as well.
+I have no intentions of rewriting this project leveraging compose, nor adding significant updates beyond bug-fixes.
+
 ## Description
 ExifEraser is a modern, permissionless image metadata erasing application for Android 6.0+.
 
