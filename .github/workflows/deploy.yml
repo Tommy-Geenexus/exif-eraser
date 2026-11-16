@@ -64,7 +64,7 @@ jobs:
 
       - name: Build changelog
         id: build_changelog
-        uses: requarks/changelog-action@b78a3354a01f4a1affb484b9264b506a815c46b1 # v1.10.3
+        uses: requarks/changelog-action@7ce6be4c4d2233ae2a943694ca34f23aeafa1054 # v1.11.0
         with:
           includeInvalidCommits: true
           tag: ${{ env.RELEASE_TAG }}
